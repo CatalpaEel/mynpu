@@ -1,0 +1,12 @@
+{
+  "input_slots": [
+    2147488608,
+    2147490176
+  ],
+  "scratch": 2147489392,
+  "output_packets": 2147490960,
+  "mailbox": 2147491744,
+  "descriptor": 2147484336,
+  "cache_data_bytes": 128,
+  "instructions": 112
+}

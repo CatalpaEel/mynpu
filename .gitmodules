@@ -1,0 +1,3 @@
+[submodule "external/tiny_MNIST"]
+	path = external/tiny_MNIST
+	url = git@github.com:CatalpaEel/tiny_MNIST.git

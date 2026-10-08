@@ -1,0 +1,117 @@
+{
+  "part": "xc7a35tcsg324-1",
+  "vivado": "2025.2",
+  "clock_mhz": 50,
+  "topology": "2x2",
+  "identical_node_hardware": true,
+  "configurations": [
+    {
+      "router_depth": 2,
+      "packet_words": 16
+    },
+    {
+      "router_depth": 1,
+      "packet_words": 4
+    }
+  ],
+  "resources": {
+    "Slice LUTs": 17044,
+    "Slice Registers": 8858,
+    "LUT as Memory": 0,
+    "RAMB36/FIFO*": 2,
+    "RAMB18": 0,
+    "DSPs": 22
+  },
+  "additional_resources": {
+    "Slice LUTs": 3353,
+    "Slice Registers": 1374,
+    "LUT as Memory": 0,
+    "RAMB36/FIFO*": 0,
+    "RAMB18": 0,
+    "DSPs": 0
+  },
+  "wns_ns": 0.414,
+  "whs_ns": 0.098,
+  "tests": {
+    "rtl": {
+      "identical_nodes": 4,
+      "checks": 481,
+      "acknowledged_commands": 23,
+      "ddr_requests": 48,
+      "cycles": 60411
+    },
+    "small_rtl": {
+      "identical_nodes": 4,
+      "checks": 481,
+      "acknowledged_commands": 23,
+      "ddr_requests": 48,
+      "cycles": 69026
+    },
+    "gate": {
+      "identical_nodes": 4,
+      "checks": 481,
+      "acknowledged_commands": 23,
+      "ddr_requests": 48,
+      "cycles": 60411
+    }
+  },
+  "tiny_mnist_prediction": 7,
+  "cnn_concurrent_network_dma_verified": true,
+  "cpu_network_dma_irq21_verified": true,
+  "sram_bytes_per_node": 8192,
+  "extra_sram": false,
+  "network_dma": "native NMC transactions",
+  "ddr_service_model_only": true,
+  "physical_link_verified": false,
+  "ddr_controller_phy_verified": false,
+  "asic_area_verified": false,
+  "source_and_evidence_sha256": {
+    "rtl/nmc.sv": "4ed4ca147f69ddbc62517e007c3b1eb40fd6c7a7b459e827ed6a99a96bcf4ed8",
+    "rtl/npu_matmul.sv": "b7aaafc915f643ac92702a2815e915541671401f2472987554af4c57e4fe44dd",
+    "rtl/npu_vector.sv": "938ba0b40dfd2b20fad1e0dec4f3b6bf564741c0a6fdef7f6cfa9d9afc1bcd0a",
+    "rtl/npu_mmio.sv": "1944c78f5f6eaa90a12b00a6f4d967241f6ad6b4b43b9051871d42956b6a5fa5",
+    "rtl/npu_soc.sv": "e2cffd59308512d6c53edde520753d0a3cca2e72eb3037bd2ab73a057300e371",
+    "rtl/npu_dma_channel.sv": "ccb6c55e7b7149a76f18b520c3a47f6a9244a8ac0ce827a765c97b7568096737",
+    "rtl/npu_clock_gate.sv": "ee845982da1db79155b1b22c17e637cfa71ca01d23df8233801f3ab2571f3643",
+    "rtl/npu_dma_regs.sv": "67450b1c16d9256da4b379a676caba12a796e2db987d3fd094be92a8d393ab3f",
+    "rtl/npu_core.sv": "8adadd52dc91075167f81ac8198507b128684538e556363afb97aab460ada362",
+    "rtl/npu_cnn.sv": "cd7229c51b1dc8d8f70fc40177f2a901a8952e17c2c17bfe7558b0dbb7e2b7bf",
+    "rtl/noc_router.sv": "7a34681ffca7f314ddfee50b22f6eb525ee1d0e4ab816fb9f029c32dda240487",
+    "rtl/noc_endpoint.sv": "aafe38ecb09ca2aed11a80a8090ccc69d1cec30e0b1c8bdb883256e165e9cefc",
+    "rtl/noc_host_arbiter.sv": "f930e2d933e0816236adb76bbd549303c8251d320b627e2d195a1cd3025ae4ef",
+    "rtl/npu_noc_soc.sv": "d9c9b241946ec04fb126ee7b856f89ca56cb1b9b821a88e0f859d232b358dbf0",
+    "rtl/npu_noc_core.sv": "2ee03976e3a81d1c0e5287525b6984c46e6c3072d66a8b0305fac9db89423d5e",
+    "noc/firmware.py": "ebba8b739030f167873f7802a93b87cd702f913eec086f1ff515919297776fea",
+    "noc/gate_adapter.py": "b58e65a53e13435eb4836f41fd22ce6b62db80c46d59248577920a885696750e",
+    "noc/validate.py": "3789bf31a5c07b75b0449c144b8ea14538d9e5ecc88ccdf763d4ef3f0fa4cceb",
+    "scripts/simulate_noc.sh": "98a6c08273f84252ffa63abd7193d3169320b888ed9583739c0ff89c4e7f1502",
+    "scripts/build_noc.tcl": "0c51c836a265c556a11ac79551c9a86cb11c93b640b1bdcce2cd5842020f015e",
+    "scripts/build_noc.sh": "41feacd057e97a762b9538745e11e7ed7ff3bd39a3961f323548a05e6fcb5fba",
+    "scripts/finish_noc.tcl": "08212582b5f75d104ec43025764c0d0fa5e2044d44d1617ac5af9965f2c278a0",
+    "scripts/simulate_noc_netlist.sh": "915238d372ced081c78c2ae81ae47edc8017e24979b40cd5cd603e06deb2e03c",
+    "scripts/create_noc_project.tcl": "41a1f6e119244ee926210578a1f0bfbde0feee1f45a9142e69ba71b0665095bf",
+    "tb/tb_noc_mesh.sv": "a19c0657667e49a402ea086b55ec4e243c368e932180c194e86f6a61f8b4e92b",
+    "sw/npu.h": "93bf7213d5d2b10cbce5aa9f76214ca3c0cbf483dc1d28f6853c99feee256182",
+    "constraints/noc_ooc.xdc": "f86c67ddc03393600627c7d2c0c704199e771e0abca9765154e7297ef9fcc165",
+    "mnist/artifacts/noc_boot.hex": "63e29925e90e30f086cf317b03a9b1e4909772fe93f22bafb93bd35c5309dea6",
+    "mnist/artifacts/sram7.hex": "fc2bf2bfda67a0ecbe536644a6bd87f7505c1457972706a52d6e3a452ffe92e9",
+    "build/asic_sources.f": "525ed4762cbf6667e5f0a332f6ff723153d6e6e239459cf80cf6799730b672b3",
+    "reports/noc/synthesis_inputs.json": "3f75a1090903571879555d6149d89d40f15ca12b1ad74628496e088f526b8f09",
+    "reports/noc/node_synth.v": "5b8a109c22ac4b6b10a4c2b49e53473ec1b87da8eea2a586ab006d7999dc0fcc",
+    "reports/noc/node_routed.dcp": "6d4efcf54ae3569da357c38fcad29c410871b700d15df2e17daa4c52c2cd9943",
+    "reports/noc/utilization_routed.rpt": "38041c981879ad0b331f9acd6579087bbfd94a457c4d895d2d8f76bd986a4d68",
+    "reports/noc/timing_routed.rpt": "aef73af29c8357210924e1a99891af4c4a538a866323aab278226f8101bce1e6",
+    "reports/noc/drc_routed.rpt": "249339381c1c03704144e52c2f19aa3d71a45275ce48b470ed63ccea8c993fc3",
+    "build/noc/gate/gate_port_adapter.sv": "449c57960fdd163eca622bc102e46465bb94ea1c4cd52e58329c3e0c306b1ffb",
+    "build/noc/asic_lint.log": "5626557f8c46186b3c688cb767336bb6b571fcc906e2da3a01c87f68f2a6a048",
+    "mnist/artifacts/gold7_0.hex": "4f98cb9b6c367803a8334c2687e1b05bbc3bf36e14b24e148843ad767abfbca9",
+    "mnist/artifacts/gold7_1.hex": "345540f696ff3c07235c5f6dfbcc1ff49323678e85b94f47f8d16689e2abd181",
+    "mnist/artifacts/gold7_2.hex": "dc3654f6ca26313605718b74cd91909356768663445bffb01388c45c8d63c733",
+    "mnist/artifacts/gold7_3.hex": "17ef0daf5da411c21e41dfcfcc758b9c54d716280215c07da0c34699098a5609",
+    "mnist/artifacts/gold7_4.hex": "b46db84411cc246e8d27b83869002dfbac94ab19f3a15a280dc24c86164bcaed",
+    "mnist/artifacts/gold7_5.hex": "0318f17382d00d478525e935a3f96c7e46f8d8d63f86ab71b724b90ecdc6b0f1",
+    "build/noc/mesh.log": "ee64b4a384b7afda00d2a5804943111e7a140e7668e898e37f7d39aaa0f51233",
+    "build/noc/small_mesh.log": "202052dfb501c92839159d5e123de55123bbc2a2296c1d31dbc88d507ba6ee29",
+    "build/noc/gate/noc_gate.log": "8f2acad833d44eae669c886e406c44bb6e5890f33a88f6e0d8aa7dc2c81e9ebc"
+  }
+}
