@@ -42,6 +42,19 @@ iverilog -g2012 -s tb_cnn_npu_sp -o build/tb_cnn_npu_sp.vvp \
   sim/tb_cnn_npu_sp.sv cnn_npu_int8/rtl/cnn_npu_sp_top.sv \
   rtl/mynpu_sram_2048x32_fpga.sv
 vvp build/tb_cnn_npu_sp.vvp
+
+# 完整 MNIST 测试集的 PyTorch INT8 / RTL 整数参考，以及 64 张随机样本的 RTL 回灌
+conda run -n eeml python tools/mnist_regression.py --layout 8k --random-vectors 64
+
+# AXI 随机 burst + 每响应拍随机 RREADY/BREADY（在 VCS 主机上运行）
+vcs -full64 -sverilog -assert svaext -timescale=1ns/1ps \
+  +incdir+third_party/lab3/soc/rtl/include +incdir+third_party/lab3/soc/rtl \
+  third_party/lab3/soc/rtl/axi/axi_pkg.sv \
+  third_party/lab3/soc/rtl/axi/axi_intf.sv \
+  third_party/lab3/soc/rtl/axi/axi2mem.sv sim/tb_axi2mem_backpressure.sv \
+  -top tb_axi2mem_backpressure -pvalue+tb_axi2mem_backpressure.TRANSACTIONS=1000 \
+  -o build/vcs-axi-bp/simv
+build/vcs-axi-bp/simv +ntb_random_seed=14596
 ```
 
 成功标志是 `[SOC] PASS`，脚本会检查该标志，不能只依据模拟器退出码判断成功。日志在 `build/vcs-<layout>-<lanes>/`。Vivado 2023.2 XSim 对原始 AXI 源码中的 `default disable iff` 不支持，因此当前验证使用 VCS。

@@ -49,4 +49,32 @@ VCS 启动时出现原 CPU `unique case` 在 time 0 未匹配的 warning，复�
 
 EGo1 `xc7a35tcsg324-1` 工程已用 Vivado 完成综合、实现和 bitstream 生成，加入 descriptor 防护后的 50 MHz MMCM 时钟实现后 WNS 为 `+1.191 ns`，TNS 和 failing endpoints 均为 0，Vivado DRC error 为 0。实现日志仍有 RAM 异步控制信号的 `REQP-1839` warning；上板时需要观察复位期间 BRAM 内容和启动行为。尚未连接真实 EGo1、FT232H 探针并完成 bitstream 下载与 OpenOCD/GDB 联调。
 
-尚未覆盖大量随机输入、全 MNIST 测试集、异常 descriptor、AXI 随机压力、多 hart、真实探针下载、OpenOCD/GDB 联调或物理 SRAM 宏的 STA。FBGEMM bit-exact、面积/功耗/最高频率也尚未完成。
+## 全 MNIST 与 AXI 随机压力
+
+2026-10-10 使用 `eeml` conda 环境中的 PyTorch 2.8.0+cpu / torchvision 0.23.0，下载并遍历了 MNIST 完整 10,000 张测试集。`tools/mnist_regression.py` 同时运行 checkpoint 的 FBGEMM INT8 模型和 NPU 的 descriptor/INT8/Q31 整数参考：两者准确率均为 **99.01%**，输入 code 范围为 0..127，整数输出范围为 0..127，只有 4/10,000 张的最终 argmax 不同。这 4 张属于 PyTorch/FBGEMM 与 RTL 半向上 Q31 舍入的边界差异；整数参考与固定镜像的 `tools/build_firmware.py` 结果一致。脚本默认用 seed=14596 选择 64 张样本，并把 NPU 输入/10-byte 输出写入 `build/mnist-regression/`。
+
+这 64 张样本又通过 `sim/tb_cnn_npu_mnist.sv` 逐张写入 NPU 本地 SRAM、启动六层单端口 FPGA BRAM NPU、读回 10 个输出并对整数 golden 比较。VCS 结果为 `[CNN-MNIST] PASS vectors=64 input_bytes=784`，仿真时间为 184,844,250,000 ps。该 testbench 每个样本都走和 CPU 相同的本地 SRAM 总线，不使用 activation backdoor。
+
+`sim/tb_axi2mem_backpressure.sv` 对 SoC 使用的 `axi2mem` 做了 1,000 笔随机读写 burst（长度 1..8 个 32-bit beat、随机地址、随机 VALID 空闲间隔），并在每个响应周期独立随机化 `RREADY` 和 `BREADY`。响应数据在同步 SRAM 模型中逐拍检查，VCS 结果为 `[AXI-BP] PASS transactions=1000 randomized RREADY/BREADY every response cycle`，仿真时间为 224,250,000 ps。测试同时检查 RDATA 在 RREADY=0 时保持、ID/RESP/LAST 正确和 byte-enable 写入。
+
+复现命令（需要能运行 VCS 的 Linux 主机）：
+
+```sh
+conda run -n eeml python tools/mnist_regression.py --layout 8k --random-vectors 64
+vcs -full64 -sverilog -timescale=1ns/1ps \
+  rtl/mynpu_sram_2048x32_fpga.sv cnn_npu_int8/rtl/cnn_npu_sp_top.sv \
+  sim/tb_cnn_npu_mnist.sv -top tb_cnn_npu_mnist \
+  -pvalue+tb_cnn_npu_mnist.VECTORS=64 -o build/vcs-cnn-mnist/simv
+build/vcs-cnn-mnist/simv
+
+vcs -full64 -sverilog -assert svaext -timescale=1ns/1ps \
+  +incdir+third_party/lab3/soc/rtl/include +incdir+third_party/lab3/soc/rtl \
+  third_party/lab3/soc/rtl/axi/axi_pkg.sv \
+  third_party/lab3/soc/rtl/axi/axi_intf.sv \
+  third_party/lab3/soc/rtl/axi/axi2mem.sv \
+  sim/tb_axi2mem_backpressure.sv -top tb_axi2mem_backpressure \
+  -pvalue+tb_axi2mem_backpressure.TRANSACTIONS=1000 -o build/vcs-axi-bp/simv
+build/vcs-axi-bp/simv +ntb_random_seed=14596
+```
+
+仍未覆盖多 hart、真实探针下载、OpenOCD/GDB 联调、物理 SRAM 宏的 STA，以及 FBGEMM 的逐元素 bit-exact 复现。全 MNIST 的 RTL 逐样本回灌可以提高 `--random-vectors`；软件整数参考已经覆盖全部 10,000 张。
