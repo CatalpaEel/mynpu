@@ -20,3 +20,29 @@ CPU debug-halted, and LED4 changes when external TCK activity arrives. The
 board's USB configuration JTAG does not drive the RISC-V Debug Module. Wire an
 external FT232H adapter to J5 as described in `ego1_openocd.cfg`, start
 OpenOCD, and connect RISC-V GDB to port 3333.
+
+## Lab 6 host setup
+
+Open an **Administrator PowerShell** window in the repository and attach the
+external FT232H after plugging it in:
+
+```powershell
+.\fpga\ego1\attach_ft232h.ps1
+```
+
+The script only accepts VID:PID `0403:6014`, binds the adapter with
+`usbipd-win`, and attaches it to the default WSL distribution. In Ubuntu WSL,
+verify that it is visible and install the Linux tools if this is a new distro:
+
+```bash
+lsusb | grep 0403:6014
+bash fpga/ego1/setup_wsl.sh
+bash fpga/ego1/start_openocd.sh
+```
+
+In a second WSL terminal, use `bash fpga/ego1/start_gdb.sh` and run
+`target remote :3333`. The supplied config uses the command names supported by
+Ubuntu OpenOCD 0.12. The FPGA RTL does not need an OpenOCD-specific change:
+the current top already exposes the Lab 6 `tck_i/tms_i/td_i/td_o` pins to the
+Debug Module. The USB-JTAG port used by Vivado only programs the bitstream;
+the FT232H/J5 wiring is the separate RISC-V JTAG path.
