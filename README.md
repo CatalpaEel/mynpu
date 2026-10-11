@@ -2,7 +2,7 @@
 
 本工程在独立目录中整合了 **CV32E40P CPU、3×4 AXI crossbar、原有 JTAG/Debug Module、Boot RAM、CPU SRAM 和 INT8 CNN NPU**。默认配置是 CPU 8KB + NPU 8KB，NPU 同时计算 8 个输出通道。原始 `lab3-ST` 未修改；复用源码保存在 `third_party/lab3`，新增集成顶层是 `rtl/mynpu_soc_top.sv`。
 
-这是已通过完整 SoC 功能仿真和 FPGA BRAM 后端仿真的 RTL 工程。默认功能 backend 适合算法基线；`USE_FPGA_BRAM=1` 会同时替换 CPU/NPU 为同步单端口 BRAM 后端，`USE_ASIC_SRAM=1` 会同时替换为 RA1SHD wrapper，并由 `cnn_npu_sp_top` 采用逐拍单端口调度。尚未完成 FPGA bitstream 下载或 0.18µm 工艺综合、时序和物理签核。
+这是已通过完整 SoC 功能仿真、FPGA BRAM 后端仿真和 EGo1 Vivado bitstream 生成的 RTL 工程。默认功能 backend 适合算法基线；`USE_FPGA_BRAM=1` 会同时替换 CPU/NPU 为同步单端口 BRAM 后端，`USE_ASIC_SRAM=1` 会同时替换为 RA1SHD wrapper，并由 `cnn_npu_sp_top` 采用逐拍单端口调度。EGo1 工程已经完成综合、实现、时序和 bitstream 生成；真实板卡下载、FT232H/OpenOCD/GDB 联调以及 0.18µm 工艺综合、时序和物理签核仍需在对应硬件和 PDK 环境完成。
 
 ## 架构
 

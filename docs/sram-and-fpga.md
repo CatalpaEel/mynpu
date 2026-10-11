@@ -16,7 +16,7 @@ CPU 8KB 宏的 FPGA 映射约需要两块 36-Kbit BRAM；CPU 和 NPU 两块 8KB 
 
 ## Vivado 第一轮
 
-创建 `xc7a35tcsg324-1` 工程，加入 `sim/soc.f` 中的 RTL、`fpga/ego1/ego1_soc_top.sv`、`fpga/ego1/ego1.xdc` 和 `generated/8k/cpu.hex`，设置 top 为 `ego1_soc_top`。先综合并查看 RAM 是否进入 Block RAM，随后 implementation、timing 和 bitstream。LED0 是 heartbeat，LED1 是 NPU IRQ，LED2 是 CPU debug-halted。板载配置 JTAG 不会自动驱动顶层的 RISC-V `tck_i/tms_i/td_i/td_o`；课程文档也将配置 JTAG、RISC-V DMI 和用户 UART 视为不同路径。
+直接运行 `fpga/ego1/create_project.tcl` 会创建 `xc7a35tcsg324-1` 工程，加入 `sim/soc.f` 中的 RTL、EGo1 顶层、XDC 和 CPU hex；`build_bitstream.tcl` 会综合、实现并把 bitstream 放到 `fpga/ego1/build/`。顶层使用 P17 的 100 MHz 输入，经 MMCM 生成 50 MHz，等待 `locked` 后同步释放复位。LED0 是 locked，LED1 是 heartbeat，LED2 是 NPU IRQ，LED3 是 CPU debug-halted，LED4 是 TCK activity。J5 的 E15/E16/D15/C15 接 RISC-V `tck_i/td_i/td_o/tms_i`；板载配置 JTAG 仍只负责下载 bitstream。
 
 第一版上板验收顺序如下：
 

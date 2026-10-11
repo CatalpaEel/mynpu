@@ -7,12 +7,16 @@ and reset polarity before programming. The shell sets `LANES=1`, preloads the
 The NPU is the `LANES=1` single-port schedule, matching the storage timing
 used by the FPGA integration smoke test.
 
-Create a Vivado project with part `xc7a35tcsg324-1`, add the repository RTL
-listed in `sim/soc.f`, add this top and `ego1.xdc`, and add
-`generated/8k/cpu.hex` as a synthesis/simulation source. Set the top to
-`ego1_soc_top`, run synthesis, implementation, and bitstream generation.
+From the repository root, run `vivado -mode batch -source
+fpga/ego1/create_project.tcl`, then
+`vivado -mode batch -source fpga/ego1/build_bitstream.tcl`. The scripts create
+the `xc7a35tcsg324-1` project, add the RTL in `sim/soc.f`, copy the CPU hex,
+set `ego1_soc_top` as top, and generate
+`fpga/ego1/build/ego1_soc_top.bit`. The top uses an MMCM to make 50 MHz from
+the P17 100 MHz oscillator and synchronously releases reset after `locked`.
 
-The first expected behavior is LED0 toggling. LED1 is the NPU interrupt and
-LED2 is the CPU debug-halted status. The board's USB configuration JTAG does
-not automatically drive `tck_i/tms_i/td_i/td_o`; use an external GPIO probe or
-add a Xilinx BSCAN-to-DMI bridge if CPU Debug Module testing is required.
+LED0 is MMCM locked, LED1 is the heartbeat, LED2 is the NPU interrupt, LED3 is
+CPU debug-halted, and LED4 changes when external TCK activity arrives. The
+board's USB configuration JTAG does not drive the RISC-V Debug Module. Wire an
+external FT232H adapter to J5 as described in `ego1_openocd.cfg`, start
+OpenOCD, and connect RISC-V GDB to port 3333.

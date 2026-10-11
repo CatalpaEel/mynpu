@@ -38,7 +38,8 @@ module cnn_npu_sp_top #(
     S_BIAS_REQ, S_BIAS_WAIT, S_TERM_PREP, S_TERM_SKIP,
     S_ACT_REQ, S_ACT_WAIT, S_WEIGHT_REQ, S_WEIGHT_WAIT, S_TERM_ADV,
     S_MULT_REQ, S_MULT_WAIT, S_SHIFT_REQ, S_SHIFT_WAIT,
-    S_REQUANT, S_OUT_WRITE, S_OUT_ADV, S_DONE, S_ERROR
+    S_REQUANT_MUL, S_REQUANT_SHIFT, S_REQUANT_CLAMP,
+    S_OUT_WRITE, S_OUT_ADV, S_DONE, S_ERROR
   } state_t;
   state_t state_q;
 
@@ -55,6 +56,8 @@ module cnn_npu_sp_top #(
   logic [7:0] flags_q;
   logic [31:0] desc_words_q [0:8];
   logic signed [31:0] acc_q, multiplier_q;
+  logic signed [63:0] product_q;
+  integer scaled_q, quant_q;
   logic [7:0] shift_q, activation_q, output_q;
 
   logic eng_req, eng_we;
@@ -68,8 +71,7 @@ module cnn_npu_sp_top #(
   logic [31:0] mem_wdata;
   integer bus_byte_addr, eng_byte_addr, act_addr_i, weight_addr_i;
   integer iy_i, ix_i, byte_lane_i;
-  integer a_i, w_i, product_i, scaled_i, quant_i;
-  logic signed [63:0] product64_i;
+  integer a_i, w_i;
 
   function automatic [7:0] byte_of(input logic [31:0] word, input integer lane);
     byte_of = word[lane*8 +: 8];
@@ -236,11 +238,24 @@ module cnn_npu_sp_top #(
         S_MULT_REQ: state_q<=S_MULT_WAIT;
         S_MULT_WAIT: begin multiplier_q<=$signed(mem_rdata); state_q<=S_SHIFT_REQ; end
         S_SHIFT_REQ: state_q<=S_SHIFT_WAIT;
-        S_SHIFT_WAIT: begin shift_q<=byte_of(mem_rdata,(shift_base_q+oc_q)&3); state_q<=S_REQUANT; end
-        S_REQUANT: begin
-          product64_i=$signed(acc_q)*$signed(multiplier_q); scaled_i=round_shift(product64_i,shift_q);
-          quant_i=scaled_i+output_zp_q; if ((flags_q&FLAG_RELU)&&(quant_i<output_zp_q)) quant_i=output_zp_q;
-          output_q<=clamp_i(quant_i,0,qmax_q); state_q<=S_OUT_WRITE;
+        S_SHIFT_WAIT: begin shift_q<=byte_of(mem_rdata,(shift_base_q+oc_q)&3); state_q<=S_REQUANT_MUL; end
+        // Keep the Q31 path physically pipelineable in the FPGA version:
+        // multiply, arithmetic shift, and clamp are separate cycles.  The
+        // ASIC macro uses the same schedule, so this is also the timing model
+        // to carry into the foundry implementation.
+        S_REQUANT_MUL: begin
+          product_q <= $signed(acc_q) * $signed(multiplier_q);
+          state_q <= S_REQUANT_SHIFT;
+        end
+        S_REQUANT_SHIFT: begin
+          scaled_q <= round_shift(product_q,shift_q);
+          state_q <= S_REQUANT_CLAMP;
+        end
+        S_REQUANT_CLAMP: begin
+          quant_q = scaled_q + output_zp_q;
+          if ((flags_q&FLAG_RELU)&&(quant_q<output_zp_q)) quant_q=output_zp_q;
+          output_q <= clamp_i(quant_q,0,qmax_q);
+          state_q <= S_OUT_WRITE;
         end
         S_OUT_WRITE: state_q<=S_OUT_ADV;
         S_OUT_ADV: begin

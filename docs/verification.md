@@ -41,6 +41,8 @@ checkpoint 的元数据记录 FP32 accuracy=99.07%、INT8 accuracy=99.01%、下�
 
 VCS 启动时出现原 CPU `unique case` 在 time 0 未匹配的 warning，复位后自测通过。测试编译定义 `SYNTHESIS`，用于避开原项目中非必要的仿真辅助逻辑；新增 testbench 的断言、逐层比较和 CPU 自测仍实际执行。Vivado 2023.2 XSim elaboration 失败于原 AXI 的 `default disable iff`，未将其列为通过的后端。
 
-`sim/tb_cnn_npu_sp.sv` 另外用 FPGA BRAM 后端连续运行 5 次，重新装载输入并检查 10 个 FC 输出，报告 474675 次状态轮询和 284802 个 NPU cycle。`sim/tb_mynpu_soc_fpga.sv` 在 VCS 中用 CPU BRAM + NPU 单端口 BRAM 跑同一份五轮固件；已通过，NPU cycle 为 284802。ASIC wrapper 已用课程提供的 RA1SHD Verilog model 完成 VCS 编译检查；该模型包含大量 timing checks，完整仿真需要在 PDK/宏仿真环境中按实际时钟约束运行，公开仓库不携带该 proprietary 文件。
+`sim/tb_cnn_npu_sp.sv` 另外用 FPGA BRAM 后端连续运行 5 次，重新装载输入并检查 10 个 FC 输出，报告 480655 次状态轮询和 288390 个 NPU cycle。`sim/tb_mynpu_soc_fpga.sv` 在 VCS 中用 CPU BRAM + NPU 单端口 BRAM 跑同一份五轮固件；已通过，NPU cycle 为 288390。最新 RTL 在乘法、右移和 clamp 之间插入了三个时序阶段，以适应 FPGA/ASIC 中的乘法和组合路径。ASIC wrapper 已用课程提供的 RA1SHD Verilog model 完成 VCS 编译检查；该模型包含大量 timing checks，完整仿真需要在 PDK/宏仿真环境中按实际时钟约束运行，公开仓库不携带该 proprietary 文件。
 
-尚未覆盖大量随机输入、全 MNIST 测试集、异常 descriptor、AXI 随机压力、多 hart、真实探针、FPGA bitstream 下载或物理 SRAM 宏的 STA。FBGEMM bit-exact、面积/功耗/最高频率也尚未完成。
+EGo1 `xc7a35tcsg324-1` 工程已用 Vivado 完成综合、实现和 bitstream 生成，50 MHz MMCM 时钟的实现后 WNS 为 `+2.261 ns`，TNS 和 failing endpoints 均为 0，Vivado DRC error 为 0。实现日志仍有 RAM 异步控制信号的 `REQP-1839` warning；上板时需要观察复位期间 BRAM 内容和启动行为。尚未连接真实 EGo1、FT232H 探针并完成 bitstream 下载与 OpenOCD/GDB 联调。
+
+尚未覆盖大量随机输入、全 MNIST 测试集、异常 descriptor、AXI 随机压力、多 hart、真实探针下载、OpenOCD/GDB 联调或物理 SRAM 宏的 STA。FBGEMM bit-exact、面积/功耗/最高频率也尚未完成。

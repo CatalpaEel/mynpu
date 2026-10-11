@@ -17,6 +17,8 @@ ucli.key
 *.zip
 *.tgz
 *.tar.gz
+fpga/ego1/vivado/
+fpga/ego1/build/
 *.elf
 *.bin
 .venv*/
