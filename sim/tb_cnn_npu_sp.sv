@@ -3,12 +3,14 @@
 // Standalone check for the real single-port SRAM schedule.  The word-packed
 // image is loaded into the FPGA BRAM model; the same test can be compiled with
 // the foundry .v model and MEM_BACKEND=2 in an ASIC simulation.
-module tb_cnn_npu_sp;
+module tb_cnn_npu_sp #(
+  parameter integer RUNS = 5,
+  parameter bit STRESS_MODE = 1'b1
+);
   localparam integer LOCAL_BASE=14'h1000;
   localparam integer DESC_BASE=7168;
   localparam integer OUTPUT_BASE=5120;
   localparam integer INPUT_BYTES=784;
-  localparam integer RUNS=5;
   logic clk=0, rst_ni=0, ena=0, wea=0;
   logic [3:0] be=4'hf;
   logic [13:0] addra=0;
@@ -49,6 +51,29 @@ module tb_cnn_npu_sp;
   initial begin
     repeat(4) @(posedge clk); rst_ni=1; repeat(2) @(posedge clk);
     bus_write(4, DESC_BASE); bus_write(5, 6);
+    if (STRESS_MODE) begin
+      // Invalid layer count and descriptor base must enter ERROR and recover
+      // after the documented control clear, without wrapping the SRAM port.
+      bus_write(5, 255); bus_write(0, 1);
+      status=0;
+      for (i=0; i<100; i=i+1) begin
+        bus_read(1,status);
+      end
+      if (!status[2]) $fatal(1,"single-port invalid layer count did not error");
+      bus_write(0, 4); bus_read(1,status);
+      if (status[2]) $fatal(1,"single-port layer-count error did not clear");
+
+      bus_write(5, 6); bus_write(4, 8190); bus_write(0, 1);
+      status=0;
+      for (i=0; i<100; i=i+1) begin
+        bus_read(1,status);
+      end
+      if (!status[2]) $fatal(1,"single-port invalid descriptor base did not error");
+      bus_write(0, 4); bus_read(1,status);
+      if (status[2]) $fatal(1,"single-port descriptor error did not clear");
+      bus_write(4, DESC_BASE);
+      $display("[CNN-SP-STRESS] invalid layer/descriptor inputs rejected and cleared");
+    end
     errors=0; polls=0;
     for (run=0; run<RUNS; run=run+1) begin
       if (run>0) reload_input;

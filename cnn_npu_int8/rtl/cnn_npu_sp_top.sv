@@ -84,6 +84,39 @@ module cnn_npu_sp_top #(
     if (s <= 0) round_shift=x;
     else begin half=64'sd1 <<< (s-1); round_shift=(x+half)>>>s; end
   endfunction
+  function automatic logic range_valid(input integer base, input integer bytes);
+    range_valid = (base >= 0) && (bytes >= 0) &&
+                  (base <= SRAM_BYTES) && (bytes <= SRAM_BYTES - base);
+  endfunction
+  function automatic logic descriptor_valid_words(
+      input logic [31:0] w0, input logic [31:0] w1,
+      input logic [31:0] w2, input logic [31:0] w3,
+      input logic [31:0] w4, input logic [31:0] w5,
+      input logic [31:0] w6, input logic [31:0] w7,
+      input logic [31:0] w8);
+    integer ib, ob, wb, bb, mb, sb;
+    integer ih, iw, ic, oc, oh, ow, stride, flags;
+    integer in_bytes, out_bytes, weight_bytes;
+    logic valid;
+    begin
+      ib=w0; ob=w1; wb=w2; bb=w3; mb=w4; sb=w5;
+      ih=w6[7:0]; iw=w6[15:8]; ic=w6[23:16]; oc=w6[31:24];
+      oh=w7[7:0]; ow=w7[15:8]; stride=w7[23:16]; flags=w7[31:24];
+      valid = (ih > 0) && (iw > 0) && (ic > 0) && (oc > 0) &&
+              (oh > 0) && (ow > 0) && (stride > 0) &&
+              ((flags & ~8'h03) == 0);
+      if (flags & FLAG_FC) begin
+        valid = valid && (ih == 1) && (iw == 1) && (oh == 1) && (ow == 1);
+        in_bytes=ic; out_bytes=oc; weight_bytes=oc*ic;
+      end else begin
+        in_bytes=ih*iw*ic; out_bytes=oh*ow*oc; weight_bytes=oc*ic*9;
+      end
+      valid = valid && range_valid(ib,in_bytes) && range_valid(ob,out_bytes) &&
+              range_valid(wb,weight_bytes) && range_valid(bb,oc*4) &&
+              range_valid(mb,oc*4) && range_valid(sb,oc);
+      descriptor_valid_words = valid;
+    end
+  endfunction
 
   assign bus_local = (addra >= LOCAL_BASE_WORD) &&
                      (addra < LOCAL_BASE_WORD + LOCAL_WORDS);
@@ -171,17 +204,28 @@ module cnn_npu_sp_top #(
         case (addra)
           REG_CONTROL: begin
             irq_en_q<=dina[1];
-            if (dina[2]) begin done_q<=0; error_q<=0; end
+            if (dina[2]) begin
+              done_q<=0; error_q<=0;
+              if (!busy_q && (state_q == S_ERROR)) state_q<=S_IDLE;
+            end
             if (dina[0] && !busy_q) begin
-              busy_q<=1; done_q<=0; error_q<=0; cycle_q<=0; layer_q<=0;
-              desc_index_q<=0; state_q<=S_DESC_REQ;
+              done_q<=0;
+              if (layer_count_q > MAX_LAYERS) begin
+                busy_q<=0; error_q<=1; state_q<=S_ERROR;
+              end else begin
+                busy_q<=1; error_q<=0; cycle_q<=0; layer_q<=0;
+                desc_index_q<=0; state_q<=S_DESC_REQ;
+              end
             end
           end
           REG_IN_BASE: in_base_reg<=dina;
           REG_OUT_BASE: out_base_reg<=dina;
           REG_DESC_BASE: desc_base_reg<=dina;
           REG_LAYER_CFG: layer_count_q <= (dina[7:0]==0)?MAX_LAYERS:dina[7:0];
-          REG_ERROR: error_q<=0;
+          REG_ERROR: begin
+            error_q<=0;
+            if (!busy_q && (state_q == S_ERROR)) state_q<=S_IDLE;
+          end
           default: ;
         endcase
       end
@@ -189,21 +233,36 @@ module cnn_npu_sp_top #(
 
       case (state_q)
         S_IDLE: ;
-        S_DESC_REQ: state_q<=S_DESC_WAIT;
+        S_DESC_REQ: begin
+          if (desc_base_reg > SRAM_BYTES)
+            state_q<=S_ERROR;
+          else if ((layer_count_q > MAX_LAYERS) ||
+                   (layer_count_q*DESC_BYTES > SRAM_BYTES-desc_base_reg))
+            state_q<=S_ERROR;
+          else if (desc_base_reg + layer_q*DESC_BYTES + desc_index_q*4 + 3 > SRAM_BYTES)
+            state_q<=S_ERROR;
+          else state_q<=S_DESC_WAIT;
+        end
         S_DESC_WAIT: begin
           desc_words_q[desc_index_q] <= mem_rdata;
           if (desc_index_q==8) state_q<=S_INIT;
           else begin desc_index_q<=desc_index_q+1; state_q<=S_DESC_REQ; end
         end
         S_INIT: begin
-          in_base_q<=desc_words_q[0]; out_base_q<=desc_words_q[1]; weight_base_q<=desc_words_q[2];
-          bias_base_q<=desc_words_q[3]; mult_base_q<=desc_words_q[4]; shift_base_q<=desc_words_q[5];
-          in_h_q<=desc_words_q[6][7:0]; in_w_q<=desc_words_q[6][15:8];
-          in_c_q<=desc_words_q[6][23:16]; out_c_q<=desc_words_q[6][31:24];
-          out_h_q<=desc_words_q[7][7:0]; out_w_q<=desc_words_q[7][15:8]; stride_q<=desc_words_q[7][23:16]; flags_q<=desc_words_q[7][31:24];
-          input_zp_q<=desc_words_q[8][7:0]; output_zp_q<=desc_words_q[8][15:8];
-          qmax_q<=(desc_words_q[8][23:16]==0)?DEFAULT_QMAX:desc_words_q[8][23:16];
-          oc_q<=0; oy_q<=0; ox_q<=0; state_q<=S_BIAS_REQ;
+          if (!descriptor_valid_words(desc_words_q[0],desc_words_q[1],desc_words_q[2],
+                                     desc_words_q[3],desc_words_q[4],desc_words_q[5],
+                                     desc_words_q[6],desc_words_q[7],desc_words_q[8])) begin
+            state_q<=S_ERROR;
+          end else begin
+            in_base_q<=desc_words_q[0]; out_base_q<=desc_words_q[1]; weight_base_q<=desc_words_q[2];
+            bias_base_q<=desc_words_q[3]; mult_base_q<=desc_words_q[4]; shift_base_q<=desc_words_q[5];
+            in_h_q<=desc_words_q[6][7:0]; in_w_q<=desc_words_q[6][15:8];
+            in_c_q<=desc_words_q[6][23:16]; out_c_q<=desc_words_q[6][31:24];
+            out_h_q<=desc_words_q[7][7:0]; out_w_q<=desc_words_q[7][15:8]; stride_q<=desc_words_q[7][23:16]; flags_q<=desc_words_q[7][31:24];
+            input_zp_q<=desc_words_q[8][7:0]; output_zp_q<=desc_words_q[8][15:8];
+            qmax_q<=(desc_words_q[8][23:16]==0)?DEFAULT_QMAX:desc_words_q[8][23:16];
+            oc_q<=0; oy_q<=0; ox_q<=0; state_q<=S_BIAS_REQ;
+          end
         end
         S_BIAS_REQ: state_q<=S_BIAS_WAIT;
         S_BIAS_WAIT: begin acc_q<=$signed(mem_rdata); ci_q<=0; ky_q<=0; kx_q<=0; state_q<=S_TERM_PREP; end
@@ -238,7 +297,10 @@ module cnn_npu_sp_top #(
         S_MULT_REQ: state_q<=S_MULT_WAIT;
         S_MULT_WAIT: begin multiplier_q<=$signed(mem_rdata); state_q<=S_SHIFT_REQ; end
         S_SHIFT_REQ: state_q<=S_SHIFT_WAIT;
-        S_SHIFT_WAIT: begin shift_q<=byte_of(mem_rdata,(shift_base_q+oc_q)&3); state_q<=S_REQUANT_MUL; end
+        S_SHIFT_WAIT: begin
+          if (byte_of(mem_rdata,(shift_base_q+oc_q)&3) > 63) state_q<=S_ERROR;
+          else begin shift_q<=byte_of(mem_rdata,(shift_base_q+oc_q)&3); state_q<=S_REQUANT_MUL; end
+        end
         // Keep the Q31 path physically pipelineable in the FPGA version:
         // multiply, arithmetic shift, and clamp are separate cycles.  The
         // ASIC macro uses the same schedule, so this is also the timing model
@@ -269,7 +331,14 @@ module cnn_npu_sp_top #(
           end else begin layer_q<=layer_q+1; desc_index_q<=0; state_q<=S_DESC_REQ; end
         end
         S_DONE: ;
-        S_ERROR: begin busy_q<=0; error_q<=1; end
+        S_ERROR: begin
+          busy_q<=0;
+          // A clear arriving while in S_ERROR must win over the sticky error
+          // assignment; otherwise the state machine can never recover.
+          if (!(ena && wea && !bus_local &&
+                ((addra == REG_CONTROL && dina[2]) || (addra == REG_ERROR))))
+            error_q<=1;
+        end
         default: state_q<=S_ERROR;
       endcase
     end

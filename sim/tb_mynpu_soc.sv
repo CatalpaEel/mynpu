@@ -2,7 +2,10 @@
 module tb_mynpu_soc #(
   parameter integer LANES = 8,
   parameter integer NPU_SRAM_BYTES = 8192,
-  parameter integer INFERENCE_RUNS = 5
+  parameter integer INFERENCE_RUNS = 5,
+  parameter bit STRESS_MODE = 1'b0,
+  parameter integer STRESS_SBA_WORDS = 32,
+  parameter integer STRESS_HALT_ROUNDS = 3
 );
   localparam CPU_IMAGE = (NPU_SRAM_BYTES == 8192) ? "generated/8k/cpu.hex" : "generated/16k/cpu.hex";
   localparam GOLDEN_IMAGE = (NPU_SRAM_BYTES == 8192) ? "generated/8k/integer_layers.hex" : "generated/16k/integer_layers.hex";
@@ -128,13 +131,24 @@ module tb_mynpu_soc #(
     $fatal(1,"Abstract command timeout");
   endtask
 
-  logic [31:0] value, saved_register;
+  logic [31:0] value, saved_register, expected_stress;
+  logic stress_done;
   logic [40:0] scan_response;
   bit discard;
   initial begin
     repeat(10) @(posedge clk);
     @(negedge clk) rst_n=1;
     repeat(10) @(posedge clk);
+    // Exercise asynchronous reset assertion and synchronous release before
+    // any debug transaction. This catches stale DMI/AXI state at boot.
+    if (STRESS_MODE) begin
+      repeat (2) begin
+        @(negedge clk) rst_n=1'b0;
+        repeat(3) @(posedge clk);
+        @(negedge clk) rst_n=1'b1;
+        repeat(4) @(posedge clk);
+      end
+    end
     repeat(6) tick(1,0,discard);
     tick(0,0,discard);
     select_ir(5'h01);
@@ -149,6 +163,49 @@ module tb_mynpu_soc #(
     sba_read(32'h70005ffc,value);
     if (value !== 32'h89abcdef) $fatal(1,"NPU SRAM SBA mismatch %h",value);
     $display("[SOC] JTAG DMI + SBA CPU/NPU read/write passed");
+
+    // Fill and read back a larger NPU SRAM window through the real DMI/SBA
+    // path. The firmware overwrites this area later, so it does not affect
+    // the model image. This also stresses back-to-back SBA completion.
+    if (STRESS_MODE) begin
+      for (integer k=0; k<STRESS_SBA_WORDS; k=k+1) begin
+        expected_stress = 32'ha5000000 ^ (k * 32'h01020305);
+        sba_write(32'h70004000 + k*4, expected_stress);
+        sba_read(32'h70004000 + k*4, value);
+        if (value !== expected_stress)
+          $fatal(1,"Stress NPU SBA mismatch word=%0d hw=%h ref=%h",k,value,expected_stress);
+      end
+      $display("[SOC-STRESS] %0d NPU SRAM SBA words passed", STRESS_SBA_WORDS);
+
+      // Malformed control/descriptor inputs must fail cleanly instead of
+      // wrapping a physical SRAM address or looping forever on a zero-sized
+      // tensor. The firmware later restores the valid configuration.
+      sba_write(32'h70000014,32'h000000ff); // layer count > MAX_LAYERS
+      sba_write(32'h70000000,32'h00000001);
+      value=0;
+      for (integer k=0; k<20; k=k+1) begin
+        sba_read(32'h70000004,value);
+        if (value[2]) break;
+      end
+      if (!value[2]) $fatal(1,"Stress invalid layer count did not set ERROR");
+      sba_write(32'h70000000,32'h00000004); // clear error
+      sba_read(32'h70000004,value);
+      if (value[2]) $fatal(1,"Stress layer-count ERROR did not clear status=%h",value);
+
+      sba_write(32'h70000014,32'h00000006);
+      sba_write(32'h70000010,32'h00001ffc); // descriptor region out of SRAM
+      sba_write(32'h70000000,32'h00000001);
+      value=0;
+      for (integer k=0; k<20; k=k+1) begin
+        sba_read(32'h70000004,value);
+        if (value[2]) break;
+      end
+      if (!value[2]) $fatal(1,"Stress invalid descriptor base did not set ERROR");
+      sba_write(32'h70000000,32'h00000004); // restore idle/error state
+      sba_read(32'h70000004,value);
+      if (value[2]) $fatal(1,"Stress descriptor ERROR did not clear status=%h",value);
+      $display("[SOC-STRESS] invalid layer/descriptor inputs rejected");
+    end
 
     @(negedge clk) boot_ready=1;
     wait(dut.i_mainmem.mem['h1fc0/4] === 32'h12345678);
@@ -168,8 +225,55 @@ module tb_mynpu_soc #(
     if (value !== 32'h5a123456) $fatal(1,"CPU register debug mismatch %h",value);
     dmi_write(7'h04,saved_register);
     dmi_write(7'h17,32'h0023101f); wait_abstract();
+    // Halt and resume the CPU while the NPU is running. SBA remains usable
+    // while the hart is halted, and the NPU must continue without corrupting
+    // its state. The normal firmware later checks every output and IRQ.
+    if (STRESS_MODE) begin
+      stress_done=1'b0;
+      fork : stress_halt_worker
+        begin : stress_halt_body
+          integer wait_cycles;
+          for (integer k=0; k<STRESS_HALT_ROUNDS; k=k+1) begin
+            wait_cycles=0;
+            while ((dut.i_npu_subsystem.g_functional.i_core.busy_q !== 1'b1) &&
+                   (wait_cycles < 200000)) begin
+              @(posedge clk);
+              wait_cycles=wait_cycles+1;
+            end
+            if (dut.i_npu_subsystem.g_functional.i_core.busy_q !== 1'b1)
+              $fatal(1,"Stress timeout waiting for NPU busy round=%0d mailbox=%h fail=%h handled=%h npu=%b%b%b irq=%0d state=%0d",k,
+                     dut.i_mainmem.mem['h1fc0/4],dut.i_mainmem.mem['h1fc4/4],dut.i_mainmem.mem['h1ff8/4],
+                     dut.i_npu_subsystem.g_functional.i_core.busy_q,
+                     dut.i_npu_subsystem.g_functional.i_core.done_q,
+                     dut.i_npu_subsystem.g_functional.i_core.error_q,
+                     dut.i_npu_subsystem.g_functional.i_core.irq_en_q,
+                     dut.i_npu_subsystem.g_functional.i_core.state_q);
+
+            dmi_write(7'h10,32'h80000001); // halt request
+            for (integer j=0;j<80;j=j+1) begin
+              dmi_read(7'h11,value);
+              if (value[9]) break;
+              if (j==79) $fatal(1,"Stress CPU halt timeout round=%0d",k);
+            end
+            if (!debug_halted) $fatal(1,"Stress debug halt output missing round=%0d",k);
+            sba_read(32'h70000004,value); // NPU STATUS while CPU is halted
+            dmi_write(7'h10,32'h40000001); // resume request
+            for (integer j=0;j<80;j=j+1) begin
+              dmi_read(7'h11,value);
+              if (!value[9]) break;
+              if (j==79) $fatal(1,"Stress CPU resume timeout round=%0d",k);
+            end
+        end
+          stress_done=1'b1;
+        end
+      join_none
+    end
     dmi_write(7'h10,32'h40000001); // resume request
     $display("[SOC] CPU halt/register read-write/resume passed");
+    if (STRESS_MODE) begin
+      wait(stress_done);
+      $display("[SOC-STRESS] %0d halt/resume rounds during NPU activity passed", STRESS_HALT_ROUNDS);
+    end
 
     wait(dut.i_mainmem.mem['h1fc0/4] === 32'hc0dec0de || dut.i_mainmem.mem['h1fc0/4] === 32'hdeadbeef);
     if (dut.i_mainmem.mem['h1fc0/4] === 32'hdeadbeef)

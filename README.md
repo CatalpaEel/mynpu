@@ -35,6 +35,8 @@ python3 tools/verify_assets.py
 python3 tools/run_sim.py --backend vcs --layout 8k --lanes 8
 python3 tools/run_sim.py --backend vcs --layout 16k --lanes 16
 python3 tools/run_sim.py --backend vcs --layout 8k --lanes 1
+# SoC stress: reset pulses, 64 SBA words, invalid-config recovery, 3 halt/resume rounds
+python3 tools/run_sim.py --backend vcs --layout 8k --lanes 8 --stress
 # FPGA BRAM / single-port schedule regression (Icarus)
 iverilog -g2012 -s tb_cnn_npu_sp -o build/tb_cnn_npu_sp.vvp \
   sim/tb_cnn_npu_sp.sv cnn_npu_int8/rtl/cnn_npu_sp_top.sv \

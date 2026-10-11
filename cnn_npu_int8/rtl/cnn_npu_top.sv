@@ -54,6 +54,44 @@ module cnn_npu_top #(
       rd32 = {mem[a+3],mem[a+2],mem[a+1],mem[a]};
     else rd32 = 32'd0;
   endfunction
+  function automatic logic range_valid(input integer base, input integer bytes);
+    range_valid = (base >= 0) && (bytes >= 0) &&
+                  (base <= SRAM_BYTES) && (bytes <= SRAM_BYTES - base);
+  endfunction
+  function automatic logic descriptor_valid(input integer base);
+    integer ib, ob, wb, bb, mb, sb;
+    integer ih, iw, ic, oc, oh, ow, stride, flags;
+    integer in_bytes, out_bytes, weight_bytes, i;
+    logic valid;
+    begin
+      ib = rd32(base+0); ob = rd32(base+4); wb = rd32(base+8);
+      bb = rd32(base+12); mb = rd32(base+16); sb = rd32(base+20);
+      ih = rd8(base+24); iw = rd8(base+25); ic = rd8(base+26); oc = rd8(base+27);
+      oh = rd8(base+28); ow = rd8(base+29); stride = rd8(base+30);
+      flags = rd8(base+31);
+      valid = (ih > 0) && (iw > 0) && (ic > 0) && (oc > 0) &&
+              (oh > 0) && (ow > 0) && (stride > 0) &&
+              ((flags & ~8'h03) == 0);
+      if (flags & FLAG_FC) begin
+        valid = valid && (ih == 1) && (iw == 1) && (oh == 1) && (ow == 1);
+        in_bytes = ic;
+        out_bytes = oc;
+        weight_bytes = oc * ic;
+      end else begin
+        in_bytes = ih * iw * ic;
+        out_bytes = oh * ow * oc;
+        weight_bytes = oc * ic * 9;
+      end
+      valid = valid && range_valid(ib, in_bytes) && range_valid(ob, out_bytes) &&
+              range_valid(wb, weight_bytes) && range_valid(bb, oc*4) &&
+              range_valid(mb, oc*4) && range_valid(sb, oc);
+      // round_shift uses a 64-bit intermediate; reject an impossible shift
+      // before it can create an undefined variable shift in simulation/RTL.
+      for (i=0; i<oc; i=i+1)
+        valid = valid && (rd8(sb+i) <= 63);
+      descriptor_valid = valid;
+    end
+  endfunction
   function automatic integer clamp_i(input integer x, input integer lo, input integer hi);
     if (x < lo) clamp_i=lo; else if (x > hi) clamp_i=hi; else clamp_i=x;
   endfunction
@@ -132,17 +170,28 @@ module cnn_npu_top #(
           case (addra)
             REG_CONTROL: begin
               irq_en_q <= dina[1];
-              if (dina[2]) begin done_q<=1'b0; error_q<=1'b0; end
+              if (dina[2]) begin
+                done_q<=1'b0; error_q<=1'b0;
+                if (!busy_q && (state_q == ERROR)) state_q<=IDLE;
+              end
               if (dina[0] && !busy_q) begin
-                busy_q<=1'b1; done_q<=1'b0; error_q<=1'b0;
-                cycle_q<=0; layer_q<=0; state_q<=LOAD_DESC;
+                done_q<=1'b0;
+                if (layer_count_q > MAX_LAYERS) begin
+                  busy_q<=1'b0; error_q<=1'b1; state_q<=ERROR;
+                end else begin
+                  busy_q<=1'b1; error_q<=1'b0;
+                  cycle_q<=0; layer_q<=0; state_q<=LOAD_DESC;
+                end
               end
             end
             REG_IN_BASE:    in_base_reg   <= dina;
             REG_OUT_BASE:   out_base_reg  <= dina;
             REG_DESC_BASE:  desc_base_reg <= dina;
             REG_LAYER_CFG:  layer_count_q <= (dina[7:0]==0) ? MAX_LAYERS : dina[7:0];
-            REG_ERROR:      error_q       <= 1'b0;
+            REG_ERROR: begin
+              error_q <= 1'b0;
+              if (!busy_q && (state_q == ERROR)) state_q<=IDLE;
+            end
             default: ;
           endcase
         end
@@ -168,8 +217,15 @@ module cnn_npu_top #(
       case (state_q)
         IDLE: ;
         LOAD_DESC: begin
-          if (layer_q >= layer_count_q) begin
+          if (desc_base_reg > SRAM_BYTES) begin
+            busy_q<=1'b0; error_q<=1'b1; state_q<=ERROR;
+          end else if ((layer_count_q > MAX_LAYERS) ||
+                       (layer_count_q*DESC_BYTES > SRAM_BYTES-desc_base_reg)) begin
+            busy_q<=1'b0; error_q<=1'b1; state_q<=ERROR;
+          end else if (layer_q >= layer_count_q) begin
             busy_q<=1'b0; done_q<=1'b1; state_q<=DONE;
+          end else if (!descriptor_valid(desc_base_reg + layer_q*DESC_BYTES)) begin
+            busy_q<=1'b0; error_q<=1'b1; state_q<=ERROR;
           end else begin
             desc_addr = desc_base_reg + layer_q*DESC_BYTES;
             in_base_q    <= rd32(desc_addr+0);
@@ -266,7 +322,14 @@ module cnn_npu_top #(
           end else begin layer_q<=layer_q+1; state_q<=LOAD_DESC; end
         end
         DONE: ;
-        ERROR: begin busy_q<=0; error_q<=1; end
+        ERROR: begin
+          busy_q<=0;
+          // A clear arriving while in ERROR must win over the sticky error
+          // assignment; otherwise the state machine can never recover.
+          if (!(ena && wea && !bus_local &&
+                ((addra == REG_CONTROL && dina[2]) || (addra == REG_ERROR))))
+            error_q<=1;
+        end
         default: state_q<=ERROR;
       endcase
     end

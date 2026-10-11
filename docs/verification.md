@@ -43,6 +43,10 @@ VCS 启动时出现原 CPU `unique case` 在 time 0 未匹配的 warning，复�
 
 `sim/tb_cnn_npu_sp.sv` 另外用 FPGA BRAM 后端连续运行 5 次，重新装载输入并检查 10 个 FC 输出，报告 480655 次状态轮询和 288390 个 NPU cycle。`sim/tb_mynpu_soc_fpga.sv` 在 VCS 中用 CPU BRAM + NPU 单端口 BRAM 跑同一份五轮固件；已通过，NPU cycle 为 288390。最新 RTL 在乘法、右移和 clamp 之间插入了三个时序阶段，以适应 FPGA/ASIC 中的乘法和组合路径。ASIC wrapper 已用课程提供的 RA1SHD Verilog model 完成 VCS 编译检查；该模型包含大量 timing checks，完整仿真需要在 PDK/宏仿真环境中按实际时钟约束运行，公开仓库不携带该 proprietary 文件。
 
-EGo1 `xc7a35tcsg324-1` 工程已用 Vivado 完成综合、实现和 bitstream 生成，50 MHz MMCM 时钟的实现后 WNS 为 `+2.261 ns`，TNS 和 failing endpoints 均为 0，Vivado DRC error 为 0。实现日志仍有 RAM 异步控制信号的 `REQP-1839` warning；上板时需要观察复位期间 BRAM 内容和启动行为。尚未连接真实 EGo1、FT232H 探针并完成 bitstream 下载与 OpenOCD/GDB 联调。
+压力回归将 `tb_mynpu_soc` 的 `STRESS_MODE` 设为 1，额外执行复位脉冲、64/128/256 个连续 SBA SRAM 写读、非法 layer count、越界 descriptor base、以及 NPU 运行期间 CPU Debug halt/resume。VCS 已通过以下组合：8KB/LANES=8（64 个 SBA word、3 次 halt/resume，周期 10704）、8KB/LANES=1（256 个 SBA word、5 次 halt/resume，周期 54132）、16KB/LANES=16（128 个 SBA word、5 次 halt/resume，周期 9882）。单口 FPGA NPU 的独立 testbench 也会检查非法配置进入 ERROR、控制清错后回到 IDLE，再连续执行五轮推理。
+
+这次压力测试发现并修复了一个错误恢复问题：原先 NPU 进入 `ERROR` 后，控制寄存器清除 `error_q`，但 `S_ERROR/ERROR` 状态仍在每个周期重新置位错误，导致后续合法 START 不能恢复。现在清错请求在空闲错误状态下同时将状态机退回 `IDLE`，且 sticky-error 逻辑不会覆盖同周期的清除操作。
+
+EGo1 `xc7a35tcsg324-1` 工程已用 Vivado 完成综合、实现和 bitstream 生成，加入 descriptor 防护后的 50 MHz MMCM 时钟实现后 WNS 为 `+1.191 ns`，TNS 和 failing endpoints 均为 0，Vivado DRC error 为 0。实现日志仍有 RAM 异步控制信号的 `REQP-1839` warning；上板时需要观察复位期间 BRAM 内容和启动行为。尚未连接真实 EGo1、FT232H 探针并完成 bitstream 下载与 OpenOCD/GDB 联调。
 
 尚未覆盖大量随机输入、全 MNIST 测试集、异常 descriptor、AXI 随机压力、多 hart、真实探针下载、OpenOCD/GDB 联调或物理 SRAM 宏的 STA。FBGEMM bit-exact、面积/功耗/最高频率也尚未完成。
