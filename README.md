@@ -46,6 +46,13 @@ vvp build/tb_cnn_npu_sp.vvp
 # 完整 MNIST 测试集的 PyTorch INT8 / RTL 整数参考，以及 64 张随机样本的 RTL 回灌
 conda run -n eeml python tools/mnist_regression.py --layout 8k --random-vectors 64
 
+# CPU-in-loop：CPU AXI 写模型、Debug SBA 注入输入、CPU IRQ 读回结果
+python tools/build_stream_firmware.py --runs 1000
+vcs -full64 -sverilog -assert svaext -timescale=1ns/1ps +define+SYNTHESIS \\
+  -f sim/soc.f sim/tb_mynpu_soc_stream.sv -top tb_mynpu_soc_stream \\
+  -pvalue+tb_mynpu_soc_stream.VECTORS=64 -o build/vcs-soc-stream/simv
+build/vcs-soc-stream/simv
+
 # AXI 随机 burst + 每响应拍随机 RREADY/BREADY（在 VCS 主机上运行）
 vcs -full64 -sverilog -assert svaext -timescale=1ns/1ps \
   +incdir+third_party/lab3/soc/rtl/include +incdir+third_party/lab3/soc/rtl \

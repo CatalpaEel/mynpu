@@ -55,12 +55,19 @@ EGo1 `xc7a35tcsg324-1` 工程已用 Vivado 完成综合、实现和 bitstream �
 
 这 64 张样本又通过 `sim/tb_cnn_npu_mnist.sv` 逐张写入 NPU 本地 SRAM、启动六层单端口 FPGA BRAM NPU、读回 10 个输出并对整数 golden 比较。VCS 结果为 `[CNN-MNIST] PASS vectors=64 input_bytes=784`，仿真时间为 184,844,250,000 ps。该 testbench 每个样本都走和 CPU 相同的本地 SRAM 总线，不使用 activation backdoor。
 
+上面的 standalone NPU 回归不包含 CPU。为验证真正的 CPU-in-loop 路径，新增 `sw/main_stream.c` 和 `sim/tb_mynpu_soc_stream.sv`：CPU 启动后先通过自己的 AXI 数据口写入参数和 descriptor，写入 READY mailbox；testbench 再通过 JTAG/DMI/SBA 把每张量化输入写进 NPU SRAM，并写入 command mailbox。CPU 轮询 command，启动 NPU，接收 NPU IRQ，清 DONE，读回 10 个 code 并写入 DONE mailbox；下一张输入前 host 与 CPU 继续共享同一个 3×4 crossbar。VCS 已通过 64 张随机样本，日志为 `[SOC-STREAM] PASS CPU-in-loop vectors=64, Debug SBA input injection, CPU AXI model load, NPU IRQ and result readback`，仿真时间为 340,288,760,000 ps（CPU time 489.190 s）。
+
 `sim/tb_axi2mem_backpressure.sv` 对 SoC 使用的 `axi2mem` 做了 1,000 笔随机读写 burst（长度 1..8 个 32-bit beat、随机地址、随机 VALID 空闲间隔），并在每个响应周期独立随机化 `RREADY` 和 `BREADY`。响应数据在同步 SRAM 模型中逐拍检查，VCS 结果为 `[AXI-BP] PASS transactions=1000 randomized RREADY/BREADY every response cycle`，仿真时间为 224,250,000 ps。测试同时检查 RDATA 在 RREADY=0 时保持、ID/RESP/LAST 正确和 byte-enable 写入。
 
 复现命令（需要能运行 VCS 的 Linux 主机）：
 
 ```sh
 conda run -n eeml python tools/mnist_regression.py --layout 8k --random-vectors 64
+python tools/build_stream_firmware.py --runs 1000
+vcs -full64 -sverilog -assert svaext -timescale=1ns/1ps +define+SYNTHESIS \\
+  -f sim/soc.f sim/tb_mynpu_soc_stream.sv -top tb_mynpu_soc_stream \\
+  -pvalue+tb_mynpu_soc_stream.VECTORS=64 -o build/vcs-soc-stream/simv
+build/vcs-soc-stream/simv
 vcs -full64 -sverilog -timescale=1ns/1ps \
   rtl/mynpu_sram_2048x32_fpga.sv cnn_npu_int8/rtl/cnn_npu_sp_top.sv \
   sim/tb_cnn_npu_mnist.sv -top tb_cnn_npu_mnist \
