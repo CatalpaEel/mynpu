@@ -41,7 +41,7 @@ checkpoint 的元数据记录 FP32 accuracy=99.07%、INT8 accuracy=99.01%、下�
 
 VCS 启动时出现原 CPU `unique case` 在 time 0 未匹配的 warning，复位后自测通过。测试编译定义 `SYNTHESIS`，用于避开原项目中非必要的仿真辅助逻辑；新增 testbench 的断言、逐层比较和 CPU 自测仍实际执行。Vivado 2023.2 XSim elaboration 失败于原 AXI 的 `default disable iff`，未将其列为通过的后端。
 
-`sim/tb_cnn_npu_sp.sv` 另外用 FPGA BRAM 后端连续运行 5 次，重新装载输入并检查 10 个 FC 输出，报告 480655 次状态轮询和 288390 个 NPU cycle。`sim/tb_mynpu_soc_fpga.sv` 在 VCS 中用 CPU BRAM + NPU 单端口 BRAM 跑同一份五轮固件；已通过，NPU cycle 为 288390。最新 RTL 在乘法、右移和 clamp 之间插入了三个时序阶段，以适应 FPGA/ASIC 中的乘法和组合路径。ASIC wrapper 已用课程提供的 RA1SHD Verilog model 完成 VCS 编译检查；该模型包含大量 timing checks，完整仿真需要在 PDK/宏仿真环境中按实际时钟约束运行，公开仓库不携带该 proprietary 文件。
+`sim/tb_cnn_npu_sp.sv` 另外用 FPGA BRAM 后端连续运行 5 次，重新装载输入并检查 10 个 FC 输出，报告 480655 次状态轮询和 288390 个 NPU cycle。`sim/tb_mynpu_soc_fpga.sv` 在 VCS 中用 CPU BRAM + NPU 单端口 BRAM 跑同一份五轮固件；已通过，NPU cycle 为 288390。最新 RTL 在乘法、右移和 clamp 之间插入了三个时序阶段，以适应 FPGA/ASIC 中的乘法和组合路径。ASIC wrapper 已用课程提供的 RA1SHD Verilog model 完成功能编译和回归；宏模型的 timing notifier 在功能回归中用 `+notimingchecks +no_notifier` 屏蔽，公开仓库不携带该 proprietary 文件。
 
 压力回归将 `tb_mynpu_soc` 的 `STRESS_MODE` 设为 1，额外执行复位脉冲、64/128/256 个连续 SBA SRAM 写读、非法 layer count、越界 descriptor base、以及 NPU 运行期间 CPU Debug halt/resume。VCS 已通过以下组合：8KB/LANES=8（64 个 SBA word、3 次 halt/resume，周期 10704）、8KB/LANES=1（256 个 SBA word、5 次 halt/resume，周期 54132）、16KB/LANES=16（128 个 SBA word、5 次 halt/resume，周期 9882）。单口 FPGA NPU 的独立 testbench 也会检查非法配置进入 ERROR、控制清错后回到 IDLE，再连续执行五轮推理。
 
@@ -68,11 +68,11 @@ ASIC 主路径还增加了 `sim/tb_mynpu_soc_asic_stress.sv`。它把 CPU 镜像
 1. **P0：SBA 忙状态和真实跨模块竞争。** ASIC 回归已强制保持 SBA grant 为低，在 `sbbusy=1` 时再次写 `SBAddress`，检查 `sbbusyerror`、释放请求、W1C 清错并继续访问；同时在 CPU 轮询和 NPU 运行期间执行 128 组随机 Debug mailbox/status 读。还测试了 SBA 请求保持期间的 DMI/AXI 复位。3 次完整启动均通过。还需增加更长的随机 burst 和 starvation 统计，独立 `axi2mem` backpressure 仍不能替代 crossbar 覆盖。
 2. **P0：单端口 NPU 的 BUSY 期间主机访问。** ASIC 回归曾捕获本地读返回旧的 `0x00000001`。现在单口 backend 对 BUSY 本地读返回确定的 `0xdead_b001`，并在 `REG_ERROR` 记录该违规；BUSY 本地写保持 AXI 完成但不落 SRAM，同一模型的 3 次 ASIC 启动和 FPGA BRAM SoC 回归均通过。正常驱动仍必须在访问参数、descriptor 和数据前检查 BUSY。
 3. **P0：随机相位复位。** ASIC 回归已在 JTAG 活动期间复位一次，并在 NPU 运行期间同时施加随机相位复位和 TCK 活动；复位后重新激活 `dmactive`、重新加载 CPU 镜像，3 次启动通过。仍需扩大随机种子和在每个 AXI response 状态注入复位的次数。
-4. **P1：宏接口和 byte-enable。** `sim/tb_mynpu_sram_masks.sv` 已在 FPGA BRAM 和 ASIC RA1SHD model 上遍历 16 种 `WEN[3:0]` 组合、地址 0/1023/2047、连续读写和 byte 保持，均通过。复位前后真实宏未知状态以及 PDK timing corner 仍需门级验证。
+4. **P1：宏接口和 byte-enable。** `sim/tb_mynpu_sram_masks.sv` 已在 FPGA BRAM 和 ASIC RA1SHD model 上遍历 16 种 `WEN[3:0]` 组合、地址 0/1023/2047、连续读写和 byte 保持，均通过。复位前后真实宏未知状态属于宏集成阶段问题；本次功能回归不覆盖 PDK timing corner。
 5. **P1：量化数值边界。** `sim/tb_cnn_npu_sp_edges.sv` 已在两个 backend 逐元素通过 activation `0/127/255`、weight `-128/127`、`shift=0/63`、`qmax=127/255`、ReLU、非零 zero-point 和奇数 FC 通道。最大 bias/accumulator 溢出、`shift=1/31` 的系统组合和 FBGEMM bit-exact 舍入仍未穷举。
 6. **P1：descriptor 和存储边界。** 同一 edge test 已通过 descriptor 恰好剩余 32B 的越界拒绝、8 层合法 FC descriptor 链、3×3 卷积 stride=1 和 3×3→2×2 卷积 stride=2。更大的 FC/卷积混合、奇数 H/W/C、区域重叠策略和每个非法字段的独立恢复路径仍需补测。
 7. **P1：IRQ/控制竞态。** `tb_cnn_npu_sp_edges.sv` 已在两个 backend 测试 BUSY 时重复 `START`、DONE 未清除时直接重启、IRQ 保持和 CLEAR；两次完成恰好产生两次 IRQ，CLEAR 后 IRQ 拉低。CPU halt/resume 与真实 CPU handler 已由 SoC 回归覆盖；IRQ enable/disable 与 halt 同周期的更多组合仍需补测。
-8. **P2：长时间和物理实现。** `tb_cnn_npu_sp.sv` 已在 FPGA BRAM 和 ASIC RA1SHD model 各连续运行 100 次，均报告 `cycles=288390` 且无状态泄漏。1,000/10,000 次持续推理、cycle counter 接近 32-bit 回绕仍未执行；还需要使用 PDK `.lib/.sdf` 做多 corner 门级仿真、宏 timing check 不加 `+no_notifier` 的回归、以及 STA/IR/EM/CDC/RDC。当前 VCS 宏回归不能替代这些签核。
+8. **P2：长时间功能稳定性。** `tb_cnn_npu_sp.sv` 已在 FPGA BRAM 和 ASIC RA1SHD model 各连续运行 100 次，均报告 `cycles=288390` 且无状态泄漏。`tb_cnn_npu_sp_edges.sv` 又在两个 backend 上把运行中的计数器强制置于 `0xfffffff0`，验证回绕后的完成、清错和重新启动，均通过。1,000/10,000 次持续推理尚未执行；真实宏 timing check、PDK `.lib/.sdf` 门级仿真和 STA/IR/EM/CDC/RDC 不属于本次功能验证范围。
 
 ASIC 宏回归的基本复现命令如下；`$RA1SHD_V` 必须指向课程压缩包里的私有 `RA1SHD_2048x32M8.v`，该文件不放入公开仓库：
 
@@ -112,4 +112,4 @@ vcs -full64 -sverilog -assert svaext -timescale=1ns/1ps \
 build/vcs-axi-bp/simv +ntb_random_seed=14596
 ```
 
-仍未覆盖多 hart、真实探针下载、OpenOCD/GDB 联调、物理 SRAM 宏的 STA，以及 FBGEMM 的逐元素 bit-exact 复现。上面的 P0/P1/P2 清单是下一批回归的边界；全 MNIST 的 RTL 逐样本回灌可以提高 `--random-vectors`，软件整数参考已经覆盖全部 10,000 张。
+仍未覆盖多 hart、真实探针下载、OpenOCD/GDB 联调，以及 FBGEMM 的逐元素 bit-exact 复现；物理 SRAM 宏 STA/PDK 签核按本次任务约定不执行。上面的 P0/P1/P2 清单是功能回归边界；全 MNIST 的 RTL 逐样本回灌可以提高 `--random-vectors`，软件整数参考已经覆盖全部 10,000 张。

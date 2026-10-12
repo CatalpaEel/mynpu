@@ -227,6 +227,33 @@ module tb_cnn_npu_sp_edges #(
       $fatal(1,"conv stride2 outputs=%h",value);
     bus_write(0,4);
   endtask
+  task automatic cycle_wrap_case;
+    bus_write(LOCAL_BASE+0,128); bus_write(LOCAL_BASE+1,256);
+    bus_write(LOCAL_BASE+2,WEIGHT_BASE); bus_write(LOCAL_BASE+3,BIAS_BASE);
+    bus_write(LOCAL_BASE+4,MULT_BASE); bus_write(LOCAL_BASE+5,SHIFT_BASE);
+    bus_write(LOCAL_BASE+6,32'h03030101); bus_write(LOCAL_BASE+7,32'h01010101);
+    bus_write(LOCAL_BASE+8,32'h00ff0000); bus_write(5,1); bus_write(4,0);
+    write_byte(128,0); write_byte(129,127); write_byte(130,255);
+    for (integer k=0;k<9;k++) write_signed_byte(WEIGHT_BASE+k,0);
+    write_signed_byte(WEIGHT_BASE+0,1); write_signed_byte(WEIGHT_BASE+4,1); write_signed_byte(WEIGHT_BASE+8,1);
+    for (integer k=0;k<3;k++) bus_write(LOCAL_BASE+BIAS_BASE/4+k,0);
+    for (integer k=0;k<3;k++) bus_write(LOCAL_BASE+MULT_BASE/4+k,1);
+    for (integer k=0;k<3;k++) write_byte(SHIFT_BASE+k,0);
+    bus_write(0,1); status=0;
+    for (integer k=0;k<1000;k++) begin
+      bus_read(1,status); if (status[0]) break;
+    end
+    if (!status[0]) $fatal(1,"cycle-wrap case did not enter BUSY");
+    force dut.cycle_q = 32'hfffffff0;
+    repeat(4) @(posedge clk);
+    release dut.cycle_q;
+    for (integer k=0;k<10000;k++) begin
+      bus_read(1,status); if (status[1] || status[2]) break;
+    end
+    if (!status[1] || status[2]) $fatal(1,"cycle-wrap case failed status=%h",status);
+    bus_write(0,4);
+    $display("[CNN-EDGES] cycle counter wrap recovery passed");
+  endtask
 
   initial begin
     repeat(4) @(posedge clk); rst_ni=1; repeat(2) @(posedge clk);
@@ -260,6 +287,7 @@ module tb_cnn_npu_sp_edges #(
     irq_restart_race();
     conv_stride1_case();
     conv_stride2_case();
+    cycle_wrap_case();
 
     if (errors) $fatal(1,"quantization edge regression errors=%0d",errors);
     $display("[CNN-EDGES] PASS backend=%0d shift=0/63, signed extremes, ReLU/qmax, odd FC channels",MEM_BACKEND);
