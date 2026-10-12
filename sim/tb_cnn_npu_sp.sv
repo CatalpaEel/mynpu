@@ -5,7 +5,8 @@
 // the foundry .v model and MEM_BACKEND=2 in an ASIC simulation.
 module tb_cnn_npu_sp #(
   parameter integer RUNS = 5,
-  parameter bit STRESS_MODE = 1'b1
+  parameter bit STRESS_MODE = 1'b1,
+  parameter integer MEM_BACKEND = 1
 );
   localparam integer LOCAL_BASE=14'h1000;
   localparam integer DESC_BASE=7168;
@@ -19,12 +20,16 @@ module tb_cnn_npu_sp #(
   integer polls, i, run, word_addr, byte_lane, got, expected, errors;
   logic [31:0] value, status;
   logic [7:0] input_image [0:INPUT_BYTES-1];
+  logic [31:0] init_words [0:2047];
   always #5 clk=~clk;
-  initial $readmemh("cnn_npu_int8/generated/8k/input_codes.hex",input_image);
+  initial begin
+    $readmemh("cnn_npu_int8/generated/8k/input_codes.hex",input_image);
+    if (MEM_BACKEND==2) $readmemh("cnn_npu_int8/generated/8k/npu_word.hex",init_words);
+  end
 
   cnn_npu_sp_top #(
-    .LANES(1), .SRAM_BYTES(8192), .MAX_LAYERS(8), .MEM_BACKEND(1),
-    .MEM_INIT_FILE("cnn_npu_int8/generated/8k/npu_word.hex")
+    .LANES(1), .SRAM_BYTES(8192), .MAX_LAYERS(8), .MEM_BACKEND(MEM_BACKEND),
+    .MEM_INIT_FILE(MEM_BACKEND==1 ? "cnn_npu_int8/generated/8k/npu_word.hex" : "")
   ) dut (.clka(clk),.rst_ni(rst_ni),.ena(ena),.wea(wea),.be_i(be),
          .addra(addra),.dina(dina),.douta(douta),.irq_o(irq));
 
@@ -50,6 +55,8 @@ module tb_cnn_npu_sp #(
 
   initial begin
     repeat(4) @(posedge clk); rst_ni=1; repeat(2) @(posedge clk);
+    if (MEM_BACKEND==2)
+      for (i=0;i<2048;i=i+1) bus_write(LOCAL_BASE+i,init_words[i]);
     bus_write(4, DESC_BASE); bus_write(5, 6);
     if (STRESS_MODE) begin
       // Invalid layer count and descriptor base must enter ERROR and recover
@@ -96,7 +103,7 @@ module tb_cnn_npu_sp #(
       bus_write(0, 4);
     end
     if(errors) $fatal(1,"single-port NPU output errors=%0d",errors);
-    $display("[CNN-SP] PASS %0d repeated runs, single-port FPGA SRAM schedule polls=%0d cycles=%0d",RUNS,polls,dut.cycle_q);
+    $display("[CNN-SP] PASS backend=%0d %0d repeated runs, single-port SRAM schedule polls=%0d cycles=%0d",MEM_BACKEND,RUNS,polls,dut.cycle_q);
     $finish;
   end
 endmodule

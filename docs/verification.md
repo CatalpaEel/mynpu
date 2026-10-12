@@ -72,7 +72,7 @@ ASIC 主路径还增加了 `sim/tb_mynpu_soc_asic_stress.sv`。它把 CPU 镜像
 5. **P1：量化数值边界。** `sim/tb_cnn_npu_sp_edges.sv` 已在两个 backend 逐元素通过 activation `0/127/255`、weight `-128/127`、`shift=0/63`、`qmax=127/255`、ReLU、非零 zero-point 和奇数 FC 通道。最大 bias/accumulator 溢出、`shift=1/31` 的系统组合和 FBGEMM bit-exact 舍入仍未穷举。
 6. **P1：descriptor 和存储边界。** 同一 edge test 已通过 descriptor 恰好剩余 32B 的越界拒绝、8 层合法 FC descriptor 链、3×3 卷积 stride=1 和 3×3→2×2 卷积 stride=2。更大的 FC/卷积混合、奇数 H/W/C、区域重叠策略和每个非法字段的独立恢复路径仍需补测。
 7. **P1：IRQ/控制竞态。** `tb_cnn_npu_sp_edges.sv` 已在两个 backend 测试 BUSY 时重复 `START`、DONE 未清除时直接重启、IRQ 保持和 CLEAR；两次完成恰好产生两次 IRQ，CLEAR 后 IRQ 拉低。CPU halt/resume 与真实 CPU handler 已由 SoC 回归覆盖；IRQ enable/disable 与 halt 同周期的更多组合仍需补测。
-8. **P2：长时间和物理实现。** 需要 1,000/10,000 次持续推理、cycle counter 接近 32-bit 回绕、长时间随机 reset；还需要使用 PDK `.lib/.sdf` 做多 corner 门级仿真、宏 timing check 不加 `+no_notifier` 的回归、以及 STA/IR/EM/CDC/RDC。当前 VCS 宏回归不能替代这些签核。
+8. **P2：长时间和物理实现。** `tb_cnn_npu_sp.sv` 已在 FPGA BRAM 和 ASIC RA1SHD model 各连续运行 100 次，均报告 `cycles=288390` 且无状态泄漏。1,000/10,000 次持续推理、cycle counter 接近 32-bit 回绕仍未执行；还需要使用 PDK `.lib/.sdf` 做多 corner 门级仿真、宏 timing check 不加 `+no_notifier` 的回归、以及 STA/IR/EM/CDC/RDC。当前 VCS 宏回归不能替代这些签核。
 
 ASIC 宏回归的基本复现命令如下；`$RA1SHD_V` 必须指向课程压缩包里的私有 `RA1SHD_2048x32M8.v`，该文件不放入公开仓库：
 
