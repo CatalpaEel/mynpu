@@ -31,7 +31,12 @@ set xdc_file [file normalize [file join $script_dir ego1_autonomous.xdc]]
 add_files -norecurse -fileset $constr_set $xdc_file
 set hex_src [file normalize [file join $repo_root generated 8k cpu.hex]]
 add_files -norecurse -fileset $source_set $hex_src
-set_property generic "CPU_INIT_FILE=\"$hex_src\"" $source_set
+if {[info exists ::AUTONOMOUS_NPU_LANES]} {
+  set npu_lanes $::AUTONOMOUS_NPU_LANES
+} else {
+  set npu_lanes 1
+}
+set_property generic "CPU_INIT_FILE=\"$hex_src\" NPU_LANES=$npu_lanes" $source_set
 set_property top ego1_autonomous_top $source_set
 set_property top_auto_set 0 $source_set
 set_property target_language Verilog [current_project]

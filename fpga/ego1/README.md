@@ -41,6 +41,25 @@ mailbox `0xc0dec0de` 的 PASS，LED7 表示 firmware error 或 watchdog timeout�
 这个 bitstream 已在本机连接的 `xc7a35tcsg324-1` 上实际下载并验证：4 次
 启动、20 次推理均得到 class 2、4 次 IRQ、288390 个 NPU 周期。
 
+### 8-lane 参数实验
+
+可以用 `fpga/ego1/build_autonomous_8lane.tcl` 生成并下载带
+`NPU_LANES=8` 的独立 bitstream：
+
+```powershell
+& E:\Vivado\2023.2\bin\vivado.bat -mode batch `
+  -source fpga/ego1/build_autonomous_8lane.tcl
+& E:\Vivado\2023.2\bin\vivado.bat -mode batch `
+  -source fpga/ego1/program_autonomous.tcl -tclargs --program 3 8lane
+```
+
+当前单端口 BRAM/ASIC backend 的状态机每拍只取一个 32-bit SRAM word，
+所以 `NPU_LANES=8` 在这个版本只是参数可配置性验证，不会得到 8 个并行
+MAC；应观察到和 1-lane 接近的 288390 周期。真正的 8-lane FPGA 版本需要
+把 NPU SRAM 分成至少 8 个 bank（或加入权重/activation cache），并将读请求
+调度成 8 路。这个实验能证明参数传递和 CPU/NPU 功能仍正确，但不能替代
+banked-memory 版本的吞吐验证。
+
 ## Lab 6 外部 JTAG 版本
 
 This shell targets the XC7A35T EGo1 board. The board clock is 100 MHz on P17;

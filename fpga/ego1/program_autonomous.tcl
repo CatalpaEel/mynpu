@@ -1,17 +1,23 @@
 # List the connected FPGA, or program its volatile configuration SRAM.
 # Usage: vivado -mode batch -source fpga/ego1/program_autonomous.tcl
 #        vivado -mode batch -source fpga/ego1/program_autonomous.tcl -tclargs --program 3
+#        vivado -mode batch -source fpga/ego1/program_autonomous.tcl -tclargs --program 3 8lane
 set script_dir [file dirname [file normalize [info script]]]
 set do_program 0
 set reset_rounds 3
-if {[llength $argv] >= 1 && [lindex $argv 0] eq "--program" && [llength $argv] <= 2} {
+set build_tag ""
+if {[llength $argv] >= 1 && [lindex $argv 0] eq "--program" && [llength $argv] <= 3} {
     set do_program 1
     if {[llength $argv] == 2} { set reset_rounds [lindex $argv 1] }
+    if {[llength $argv] == 3} {
+        set reset_rounds [lindex $argv 1]
+        set build_tag "_[lindex $argv 2]"
+    }
     if {![string is integer -strict $reset_rounds] || $reset_rounds < 0 || $reset_rounds > 1000} {
         error "Reset rounds must be an integer from 0 to 1000"
     }
 } elseif {[llength $argv] != 0} {
-    error "Expected no arguments (detect only) or --program ?reset_rounds?"
+    error "Expected no arguments (detect only) or --program ?reset_rounds? ?tag?"
 }
 
 proc named_probe {vio pattern} {
@@ -74,8 +80,8 @@ if {[llength $devices] != 1 || ![string match "xc7a35t*" [lindex $devices 0]]} {
 set device [lindex $devices 0]
 refresh_hw_device $device
 if {$do_program} {
-    set bit_file [file normalize [file join $script_dir build ego1_autonomous_top.bit]]
-    set ltx_file [file normalize [file join $script_dir build ego1_autonomous_top.ltx]]
+    set bit_file [file normalize [file join $script_dir build ego1_autonomous_top${build_tag}.bit]]
+    set ltx_file [file normalize [file join $script_dir build ego1_autonomous_top${build_tag}.ltx]]
     if {![file exists $bit_file] || ![file exists $ltx_file]} { error "Build the autonomous bitstream and probes first" }
     set_property PROBES.FILE $ltx_file $device
     set_property PROGRAM.FILE $bit_file $device

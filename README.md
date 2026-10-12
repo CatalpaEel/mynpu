@@ -146,3 +146,8 @@ Manager 下载 bitstream，并通过 VIO 读取 mailbox、IRQ 和分类结果、
 它不使用 OpenOCD/GDB，也不需要 RISC-V JTAG 的 FT232H 或杜邦线。该路径已在
 真实 `xc7a35tcsg324-1` 上完成 4 次启动、20 次推理回归。具体命令和 LED 定义见
 [EGo1 FPGA README](fpga/ego1/README.md)。
+
+当前 FPGA/ASIC 单端口存储 backend 以 `LANES=1` 为真实吞吐配置；它接受
+`NPU_LANES=8` 参数但仍按单端口串行访问。`fpga/ego1/build_autonomous_8lane.tcl`
+可以生成 8-lane 参数实验 bitstream，用于检查功能和参数传递；要获得真正
+8 路并行，下一版需要 banked SRAM 或权重缓存。
