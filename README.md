@@ -136,3 +136,13 @@ python tools/build_firmware.py --layout 16k --gcc /path/to/riscv64-unknown-elf-g
 编译器须支持 `-march=rv32imc_zicsr -mabi=ilp32`，匹配的 objcopy 默认从 gcc 路径推导，也可以传 `--objcopy`。固件、模型常量共约 6.3KB，另保留 1KB 栈和 64B mailbox。模型数据先在 CPU RAM 的只读区，再由 CPU 写入 NPU RAM。
 
 详细验证数据见 [docs/verification.md](docs/verification.md)，JTAG/存储/流片边界见 [docs/integration.md](docs/integration.md)，SRAM 宏与 FPGA 替身见 [docs/sram-and-fpga.md](docs/sram-and-fpga.md)，上板指导见 [EGO1 指导](cnn_npu_int8/docs/fpga-ego1-guide.md)。
+
+## EGo1 无 Debug Module 上板自测
+
+`fpga/ego1/ego1_autonomous_top.sv` 是独立的 EGo1 顶层：CPU 和 NPU 都使用
+FPGA BRAM，CPU 固件自动加载模型并连续完成五轮推理，外部只需要板载
+USB-JTAG 配置口。`fpga/ego1/program_autonomous.tcl` 用 Vivado Hardware
+Manager 下载 bitstream，并通过 VIO 读取 mailbox、IRQ 和分类结果、控制软复位；
+它不使用 OpenOCD/GDB，也不需要 RISC-V JTAG 的 FT232H 或杜邦线。该路径已在
+真实 `xc7a35tcsg324-1` 上完成 4 次启动、20 次推理回归。具体命令和 LED 定义见
+[EGo1 FPGA README](fpga/ego1/README.md)。

@@ -10,13 +10,18 @@ module mynpu_soc_top #(
     parameter bit USE_FPGA_BRAM = 1'b0,
     parameter bit USE_ASIC_SRAM = 1'b0,
     parameter CPU_INIT_FILE = "",
-    parameter NPU_INIT_FILE = ""
+    parameter NPU_INIT_FILE = "",
+    parameter logic [31:0] FIRMWARE_MAILBOX_ADDR = 32'h8000_1fc0
 ) (
     input   logic   clk_i,
     input   logic   rst_ni,
     input   logic   boot_ready_i,
     output  logic   npu_irq_o,
     output  logic   cpu_debug_halted_o,
+    output  logic [31:0] firmware_status_o,
+    output  logic [31:0] firmware_error_o,
+    output  logic [31:0] firmware_result_o,
+    output  logic [31:0] firmware_cycles_o,
     input   logic   tck_i,
     input   logic   tms_i,
     input   logic   td_i,
@@ -421,6 +426,26 @@ module mynpu_soc_top #(
   logic [31:0] sram_wdata;
   logic [3:0]  sram_be;
   logic [31:0] sram_rdata;
+
+  // Observe accepted SRAM writes for board self-test reporting. This does not
+  // create another memory port or alter CPU/AXI behavior. The address must
+  // match the firmware mailbox when changing the CPU memory layout.
+  always_ff @(posedge clk_i or negedge ndmreset_n) begin
+    if (!ndmreset_n) begin
+      firmware_status_o <= '0;
+      firmware_error_o <= '0;
+      firmware_result_o <= '0;
+      firmware_cycles_o <= '0;
+    end else if (sram_req && sram_we && (&sram_be)) begin
+      case (sram_addr)
+        FIRMWARE_MAILBOX_ADDR:       firmware_status_o <= sram_wdata;
+        FIRMWARE_MAILBOX_ADDR + 4:   firmware_error_o <= sram_wdata;
+        FIRMWARE_MAILBOX_ADDR + 8:   firmware_result_o <= sram_wdata;
+        FIRMWARE_MAILBOX_ADDR + 12:  firmware_cycles_o <= sram_wdata;
+        default: ;
+      endcase
+    end
+  end
 
   mynpu_sram #(
       .SRAM_BYTES(CPU_SRAM_BYTES), .INIT_FILE(CPU_INIT_FILE),
