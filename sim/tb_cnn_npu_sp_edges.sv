@@ -23,9 +23,10 @@ module tb_cnn_npu_sp_edges #(
   logic [31:0] dina=0, douta;
   logic irq;
   logic [31:0] status, value;
-  integer errors;
+  integer errors, irq_edges;
 
   always #5 clk=~clk;
+  always @(posedge irq) irq_edges++;
 
   cnn_npu_sp_top #(
     .LANES(1), .SRAM_BYTES(8192), .MAX_LAYERS(8),
@@ -156,6 +157,33 @@ module tb_cnn_npu_sp_edges #(
     end
     bus_write(0,32'd4);
   endtask
+  task automatic irq_restart_race;
+    // One-layer identity model; reuse the already programmed weights.
+    integer got;
+    program_descriptor(8'h01,8'd0,8'd0,8'd255);
+    program_common_weights(8'sd1,8'sd0,8'sd0);
+    write_signed_byte(WEIGHT_BASE+3,0); write_signed_byte(WEIGHT_BASE+4,1); write_signed_byte(WEIGHT_BASE+5,0);
+    write_signed_byte(WEIGHT_BASE+6,0); write_signed_byte(WEIGHT_BASE+7,0); write_signed_byte(WEIGHT_BASE+8,1);
+    irq_edges=0; bus_write(0,32'd4); bus_write(0,32'd3); // START + IRQ enable
+    bus_write(0,32'd3); // repeated START while BUSY must be ignored
+    status=0;
+    for (integer k=0;k<10000;k++) begin
+      bus_read(1,status); if (status[1] || status[2]) break;
+    end
+    if (!status[1] || status[2] || !irq) $fatal(1,"first IRQ race completion failed status=%h irq=%b",status,irq);
+    // Restart directly while DONE is still set. The START edge must clear
+    // DONE and create exactly one new completion interrupt.
+    bus_write(0,32'd3); status=0;
+    for (integer k=0;k<10000;k++) begin
+      bus_read(1,status); if (status[1] || status[2]) break;
+    end
+    if (!status[1] || status[2] || irq_edges!==2)
+      $fatal(1,"IRQ restart race failed status=%h edges=%0d",status,irq_edges);
+    bus_write(0,32'd4);
+    if (irq) $fatal(1,"IRQ did not clear after DONE clear");
+    read_output(0,got); if (got!==0) $fatal(1,"IRQ race output0=%0d",got);
+    $display("[CNN-EDGES] IRQ START/DONE/CLEAR race passed edges=%0d",irq_edges);
+  endtask
 
   initial begin
     repeat(4) @(posedge clk); rst_ni=1; repeat(2) @(posedge clk);
@@ -186,6 +214,7 @@ module tb_cnn_npu_sp_edges #(
 
     invalid_descriptor_tail();
     max_layer_chain();
+    irq_restart_race();
 
     if (errors) $fatal(1,"quantization edge regression errors=%0d",errors);
     $display("[CNN-EDGES] PASS backend=%0d shift=0/63, signed extremes, ReLU/qmax, odd FC channels",MEM_BACKEND);
