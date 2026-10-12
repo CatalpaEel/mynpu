@@ -70,7 +70,7 @@ ASIC 主路径还增加了 `sim/tb_mynpu_soc_asic_stress.sv`。它把 CPU 镜像
 3. **P0：随机相位复位。** ASIC 回归已在 JTAG 活动期间复位一次，并在 NPU 运行期间同时施加随机相位复位和 TCK 活动；复位后重新激活 `dmactive`、重新加载 CPU 镜像，3 次启动通过。仍需扩大随机种子和在每个 AXI response 状态注入复位的次数。
 4. **P1：宏接口和 byte-enable。** `sim/tb_mynpu_sram_masks.sv` 已在 FPGA BRAM 和 ASIC RA1SHD model 上遍历 16 种 `WEN[3:0]` 组合、地址 0/1023/2047、连续读写和 byte 保持，均通过。复位前后真实宏未知状态以及 PDK timing corner 仍需门级验证。
 5. **P1：量化数值边界。** `sim/tb_cnn_npu_sp_edges.sv` 已在两个 backend 逐元素通过 activation `0/127/255`、weight `-128/127`、`shift=0/63`、`qmax=127/255`、ReLU、非零 zero-point 和奇数 FC 通道。最大 bias/accumulator 溢出、`shift=1/31` 的系统组合和 FBGEMM bit-exact 舍入仍未穷举。
-6. **P1：descriptor 和存储边界。** 同一 edge test 已通过 descriptor 恰好剩余 32B 的越界拒绝，以及 8 层合法 FC descriptor 链。FC/卷积混合、stride=1/2、1×1/奇数 H/W/C 的更多组合、区域重叠策略和每个非法字段的独立恢复路径仍需补测。
+6. **P1：descriptor 和存储边界。** 同一 edge test 已通过 descriptor 恰好剩余 32B 的越界拒绝、8 层合法 FC descriptor 链、3×3 卷积 stride=1 和 3×3→2×2 卷积 stride=2。更大的 FC/卷积混合、奇数 H/W/C、区域重叠策略和每个非法字段的独立恢复路径仍需补测。
 7. **P1：IRQ/控制竞态。** `tb_cnn_npu_sp_edges.sv` 已在两个 backend 测试 BUSY 时重复 `START`、DONE 未清除时直接重启、IRQ 保持和 CLEAR；两次完成恰好产生两次 IRQ，CLEAR 后 IRQ 拉低。CPU halt/resume 与真实 CPU handler 已由 SoC 回归覆盖；IRQ enable/disable 与 halt 同周期的更多组合仍需补测。
 8. **P2：长时间和物理实现。** 需要 1,000/10,000 次持续推理、cycle counter 接近 32-bit 回绕、长时间随机 reset；还需要使用 PDK `.lib/.sdf` 做多 corner 门级仿真、宏 timing check 不加 `+no_notifier` 的回归、以及 STA/IR/EM/CDC/RDC。当前 VCS 宏回归不能替代这些签核。
 

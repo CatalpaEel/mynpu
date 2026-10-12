@@ -184,6 +184,49 @@ module tb_cnn_npu_sp_edges #(
     read_output(0,got); if (got!==0) $fatal(1,"IRQ race output0=%0d",got);
     $display("[CNN-EDGES] IRQ START/DONE/CLEAR race passed edges=%0d",irq_edges);
   endtask
+  task automatic conv_stride1_case;
+    integer got;
+    bus_write(LOCAL_BASE+0,1024); bus_write(LOCAL_BASE+1,2048);
+    bus_write(LOCAL_BASE+2,WEIGHT_BASE); bus_write(LOCAL_BASE+3,BIAS_BASE);
+    bus_write(LOCAL_BASE+4,MULT_BASE); bus_write(LOCAL_BASE+5,SHIFT_BASE);
+    bus_write(LOCAL_BASE+6,32'h03010303); // 3x3x1 -> 1x1x3
+    bus_write(LOCAL_BASE+7,32'h00010101); // stride 1, convolution
+    bus_write(LOCAL_BASE+8,32'h00ff0000); bus_write(5,1); bus_write(4,0);
+    for (integer k=0;k<9;k++) write_byte(1024+k,k);
+    for (integer k=0;k<9;k++) write_signed_byte(WEIGHT_BASE+k,1);
+    for (integer k=0;k<9;k++) write_signed_byte(WEIGHT_BASE+9+k,-1);
+    for (integer k=0;k<9;k++) write_signed_byte(WEIGHT_BASE+18+k,0);
+    write_signed_byte(WEIGHT_BASE+22,1);
+    for (integer k=0;k<3;k++) bus_write(LOCAL_BASE+BIAS_BASE/4+k,0);
+    for (integer k=0;k<3;k++) bus_write(LOCAL_BASE+MULT_BASE/4+k,1);
+    for (integer k=0;k<3;k++) write_byte(SHIFT_BASE+k,0);
+    bus_write(0,1); status=0;
+    for (integer k=0;k<10000;k++) begin bus_read(1,status); if (status[1]||status[2]) break; end
+    if (!status[1] || status[2]) $fatal(1,"stride1 convolution failed status=%h",status);
+    bus_read(LOCAL_BASE+(2048>>2),value); got=value[7:0]; if (got!==8) $fatal(1,"conv stride1 out0=%0d",got);
+    bus_read(LOCAL_BASE+(2048>>2),value); got=value[15:8]; if (got!==0) $fatal(1,"conv stride1 out1=%0d",got);
+    bus_read(LOCAL_BASE+(2048>>2),value); got=value[23:16]; if (got!==0) $fatal(1,"conv stride1 out2=%0d",got);
+    bus_write(0,4);
+  endtask
+  task automatic conv_stride2_case;
+    integer got;
+    bus_write(LOCAL_BASE+0,1024); bus_write(LOCAL_BASE+1,2048);
+    bus_write(LOCAL_BASE+2,WEIGHT_BASE); bus_write(LOCAL_BASE+3,BIAS_BASE);
+    bus_write(LOCAL_BASE+4,MULT_BASE); bus_write(LOCAL_BASE+5,SHIFT_BASE);
+    bus_write(LOCAL_BASE+6,32'h01010303); // 3x3x1 -> 2x2x1
+    bus_write(LOCAL_BASE+7,32'h00020202); // stride 2, convolution
+    bus_write(LOCAL_BASE+8,32'h00ff0000); bus_write(5,1); bus_write(4,0);
+    for (integer k=0;k<9;k++) write_byte(1024+k,k);
+    for (integer k=0;k<9;k++) write_signed_byte(WEIGHT_BASE+k,1);
+    bus_write(LOCAL_BASE+BIAS_BASE/4,0); bus_write(LOCAL_BASE+MULT_BASE/4,1); write_byte(SHIFT_BASE,0);
+    bus_write(0,1); status=0;
+    for (integer k=0;k<10000;k++) begin bus_read(1,status); if (status[1]||status[2]) break; end
+    if (!status[1] || status[2]) $fatal(1,"stride2 convolution failed status=%h",status);
+    bus_read(LOCAL_BASE+(2048>>2),value);
+    if (value[7:0]!==8 || value[15:8]!==12 || value[23:16]!==20 || value[31:24]!==24)
+      $fatal(1,"conv stride2 outputs=%h",value);
+    bus_write(0,4);
+  endtask
 
   initial begin
     repeat(4) @(posedge clk); rst_ni=1; repeat(2) @(posedge clk);
@@ -215,6 +258,8 @@ module tb_cnn_npu_sp_edges #(
     invalid_descriptor_tail();
     max_layer_chain();
     irq_restart_race();
+    conv_stride1_case();
+    conv_stride2_case();
 
     if (errors) $fatal(1,"quantization edge regression errors=%0d",errors);
     $display("[CNN-EDGES] PASS backend=%0d shift=0/63, signed extremes, ReLU/qmax, odd FC channels",MEM_BACKEND);
