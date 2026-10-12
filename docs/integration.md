@@ -29,7 +29,7 @@ DTM 的 IR 是 5 bit，DMIACCESS 指令为 `0x11`，DMI DR 是 41 bit，包含 7
 
 本模型 A 最大使用 784B、B 最大使用 392B，最大同时有效激活量为 1176B。每层通过 descriptor 指定输入和输出地址，在 A/B 之间交替。存储偏移、形状、zero-point、qmax 由 descriptor 决定，通道并行数由 RTL 参数决定。改变模型后须重新计算地址和峰值活跃量，确保区域不重叠。
 
-BUSY 期间主机不应写 NPU 参数、描述符或数据。当前实现会对本地数组写入返回总线完成但忽略写入；它没有“等待空闲再写”的 backpressure。正常驱动应先检查 BUSY。CPU 读本地数组目前仍可能与 NPU 同时发生，因此这不是单口宏控制器。
+BUSY 期间主机不应写 NPU 参数、描述符或数据。单口 backend 对违规本地写保持 AXI 完成但不修改 SRAM，并在 `REG_ERROR` 返回 `0xdead_b001`；违规本地读也返回该确定标记，避免把上一次 SRAM/状态数据误当成读结果。它没有等待空闲的 backpressure，正常驱动仍应先检查 BUSY。CPU 读本地数组在 BUSY 期间同样属于违规访问。
 
 ## FPGA 与 0.18µm 后续工作
 

@@ -28,6 +28,7 @@ module cnn_npu_sp_top #(
   localparam integer LOCAL_BASE_WORD = 14'h1000;
   localparam integer LOCAL_WORDS = SRAM_BYTES / 4;
   localparam integer DESC_BYTES = 36;
+  localparam logic [31:0] HOST_BUSY_ERROR = 32'hdead_b001;
   localparam integer REG_CONTROL=0, REG_STATUS=1, REG_IN_BASE=2,
                      REG_OUT_BASE=3, REG_DESC_BASE=4, REG_LAYER_CFG=5,
                      REG_CYCLE=6, REG_ERROR=7;
@@ -43,7 +44,7 @@ module cnn_npu_sp_top #(
   } state_t;
   state_t state_q;
 
-  logic busy_q, done_q, error_q, irq_en_q;
+  logic busy_q, done_q, error_q, irq_en_q, host_busy_error_seen_q;
   logic [31:0] douta_q;
   logic [31:0] in_base_reg, out_base_reg, desc_base_reg, cycle_q;
   logic [7:0] layer_count_q;
@@ -64,7 +65,7 @@ module cnn_npu_sp_top #(
   logic [3:0] eng_be;
   logic [10:0] eng_addr;
   logic [31:0] eng_wdata, mem_rdata;
-  logic bus_mem_req, bus_rd_pending_q, bus_local;
+  logic bus_mem_req, bus_rd_pending_q, bus_local, host_busy_error_q;
   logic mem_req, mem_we;
   logic [3:0] mem_be;
   logic [10:0] mem_addr;
@@ -125,7 +126,14 @@ module cnn_npu_sp_top #(
   // The synchronous FPGA/foundry SRAM word becomes valid during the cycle
   // between the request and the host response edge.  Expose it while the
   // pending flag is set so AXI sees the correct word without an extra port.
-  always_comb douta = bus_rd_pending_q ? mem_rdata : douta_q;
+  always_comb begin
+    if (host_busy_error_q || (ena && bus_local && busy_q && !wea))
+      douta = HOST_BUSY_ERROR;
+    else if (bus_rd_pending_q)
+      douta = mem_rdata;
+    else
+      douta = douta_q;
+  end
 
   // Engine request addresses are byte offsets; the macro/BRAM is word addressed.
   always_comb begin
@@ -147,8 +155,9 @@ module cnn_npu_sp_top #(
     eng_addr = eng_byte_addr >> 2;
   end
 
-  // The host owns the local SRAM while the engine is idle.  During a run,
-  // status registers remain readable but local data writes are ignored.
+  // The host owns the local SRAM while the engine is idle. During a run,
+  // status registers remain readable; local data writes are ignored and set
+  // REG_ERROR to HOST_BUSY_ERROR, while local reads return the same marker.
   always_comb begin
     bus_mem_req = ena && bus_local && !bus_rd_pending_q && !busy_q;
     mem_req = eng_req ? 1'b1 : bus_mem_req;
@@ -178,14 +187,23 @@ module cnn_npu_sp_top #(
       state_q<=S_IDLE; busy_q<=0; done_q<=0; error_q<=0; irq_en_q<=0;
       douta_q<=0; in_base_reg<=0; out_base_reg<=0; desc_base_reg<=0;
       layer_count_q<=MAX_LAYERS; cycle_q<=0; bus_rd_pending_q<=0;
+      host_busy_error_q<=1'b0; host_busy_error_seen_q<=1'b0;
       layer_q<=0; desc_index_q<=0; oc_q<=0; oy_q<=0; ox_q<=0; ci_q<=0; ky_q<=0; kx_q<=0;
       acc_q<=0; multiplier_q<=0; shift_q<=0; activation_q<=0; output_q<=0;
     end else begin
+      host_busy_error_q <= 1'b0;
       if (bus_rd_pending_q) begin
         douta_q <= mem_rdata;
         bus_rd_pending_q <= 1'b0;
       end else if (bus_mem_req && !wea) begin
         bus_rd_pending_q <= 1'b1;
+      end else if (ena && bus_local && busy_q && !wea) begin
+        // A single-port SRAM cannot service host data reads while the engine
+        // owns the port. Return a deterministic marker instead of the last
+        // status/data word and record the violation in REG_ERROR without
+        // converting a debug probe into a false NPU computation failure.
+        host_busy_error_seen_q <= 1'b1;
+        host_busy_error_q <= 1'b1;
       end else if (ena && !wea && !bus_local) begin
         case (addra)
           REG_CONTROL: douta_q <= {30'd0,irq_en_q,1'b0};
@@ -195,7 +213,7 @@ module cnn_npu_sp_top #(
           REG_DESC_BASE: douta_q <= desc_base_reg;
           REG_LAYER_CFG: douta_q <= {24'd0,layer_count_q};
           REG_CYCLE: douta_q <= cycle_q;
-          REG_ERROR: douta_q <= {31'd0,error_q};
+          REG_ERROR: douta_q <= host_busy_error_seen_q ? HOST_BUSY_ERROR : {31'd0,error_q};
           default: douta_q <= 0;
         endcase
       end
@@ -205,7 +223,7 @@ module cnn_npu_sp_top #(
           REG_CONTROL: begin
             irq_en_q<=dina[1];
             if (dina[2]) begin
-              done_q<=0; error_q<=0;
+              done_q<=0; error_q<=0; host_busy_error_seen_q<=1'b0;
               if (!busy_q && (state_q == S_ERROR)) state_q<=S_IDLE;
             end
             if (dina[0] && !busy_q) begin
@@ -228,6 +246,10 @@ module cnn_npu_sp_top #(
           end
           default: ;
         endcase
+      end else if (ena && wea && bus_local && busy_q) begin
+        // Keep the write response finite (axi2mem has no target-side error
+        // channel), but make the ignored write observable to software/debug.
+        host_busy_error_seen_q <= 1'b1;
       end
       if (busy_q) cycle_q<=cycle_q+1'b1;
 

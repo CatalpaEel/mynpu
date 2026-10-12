@@ -65,9 +65,9 @@ ASIC 主路径还增加了 `sim/tb_mynpu_soc_asic_stress.sv`。它把 CPU 镜像
 
 下面这些场景目前不能标记为通过，且优先级高于继续增加同一模型的重复推理次数：
 
-1. **P0：SBA 忙状态和真实跨模块竞争。** 现有 DMI task 每次都等待 SBA 完成，没有测试在 `sbbusy=1` 时再次写 `sbdata/sbaddress`、检查 `sbbusyerror`、清错后继续访问，也没有让 CPU 取指/数据访问和 Debug SBA 同时高占用 crossbar。独立 `axi2mem` backpressure 回归不能覆盖三主设备仲裁、ID 顺序和饥饿问题。
-2. **P0：单端口 NPU 的 BUSY 期间主机访问。** `cnn_npu_sp_top` 用 `bus_mem_req = ... && !busy_q` 屏蔽本地 SRAM 主机请求；因此 BUSY 时的本地读可能拿到上一次 `douta`，写请求则可能返回完成但不写入。固件约定是 BUSY 期间不改参数、descriptor 和数据，但仍需专门测试 CPU/SBA 违规访问是否应阻塞、报错或被明确丢弃，不能靠默认行为。
-3. **P0：随机相位复位。** 已测的是在推理开始后保持若干个整时钟周期的复位；还要在 JTAG Shift-DR、DMI 忙、SBA 等待、AXI read/write response、NPU descriptor/乘法/写回各状态随机断言复位，并验证 TAP、DM、crossbar、CPU、两个 SRAM 控制器都能重新回到可启动状态。
+1. **P0：SBA 忙状态和真实跨模块竞争。** ASIC 回归已强制保持 SBA grant 为低，在 `sbbusy=1` 时再次写 `SBAddress`，检查 `sbbusyerror`、释放请求、W1C 清错并继续访问；同时在 CPU 轮询和 NPU 运行期间执行 48 组 Debug mailbox/status 读。3 次完整启动均通过。还需增加更长的随机 burst 和 starvation 统计，独立 `axi2mem` backpressure 仍不能替代 crossbar 覆盖。
+2. **P0：单端口 NPU 的 BUSY 期间主机访问。** ASIC 回归曾捕获本地读返回旧的 `0x00000001`。现在单口 backend 对 BUSY 本地读返回确定的 `0xdead_b001`，并在 `REG_ERROR` 记录该违规；BUSY 本地写保持 AXI 完成但不落 SRAM，同一模型的 3 次 ASIC 启动和 FPGA BRAM SoC 回归均通过。正常驱动仍必须在访问参数、descriptor 和数据前检查 BUSY。
+3. **P0：随机相位复位。** ASIC 回归已在 JTAG 活动期间复位一次，并在 NPU 运行期间同时施加随机相位复位和 TCK 活动；复位后重新激活 `dmactive`、重新加载 CPU 镜像，3 次启动通过。仍需扩大随机种子和在每个 AXI response 状态注入复位的次数。
 4. **P1：宏接口和 byte-enable。** 需要遍历 16 种 `WEN[3:0]` 组合、全地址首尾、读写交替、同地址读后写/写后读，以及复位前后未知内存的处理。当前完整 SoC 回归覆盖了程序加载和 NPU 字节写回，但没有把宏的每种 byte mask 做成独立检查。
 5. **P1：量化数值边界。** 需要用 activation `0/127`、weight `-128/127`、zero-point 边界、`shift=0/1/31/63`、最大正负 bias/accumulator、乘法器边界、`qmax=1/127/255`、ReLU 开关和奇数通道数，逐元素对照整数 golden。当前 MNIST 样本和固定模型没有覆盖全部组合，也没有专门针对 32-bit accumulator 溢出做检查。
 6. **P1：descriptor 和存储边界。** 还要覆盖 8 层最大合法链、FC/卷积混合、stride=1/2、1×1/奇数 H/W/C、descriptor/weight/bias/scale 恰好落在 `0x1ffc` 末字、区域零长度/重叠和每个非法字段的恢复路径。

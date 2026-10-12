@@ -88,13 +88,14 @@ CPU 固件当前对应 8KB CPU SRAM、中断 16；改变这两项须同步修改
 | `0x8000_0000 .. 0x8000_1fff` | 默认 CPU SRAM |
 | `0x7000_0000` | NPU CONTROL：START bit0、IRQ enable bit1、清状态 bit2 |
 | `0x7000_0004` | STATUS：BUSY bit0、DONE bit1、ERROR bit2 |
+| `0x7000_001c` | ERROR：普通 NPU 错误为 bit0；单口 SRAM 在 BUSY 期间的违规本地访问返回 `0xdead_b001` |
 | `0x7000_0010` | 本地 SRAM 中的描述符字节偏移 |
 | `0x7000_0014` | 推理层数，本模型为 6 |
 | `0x7000_0018` | NPU 运行周期计数 |
 | `0x7000_4000` 起 | NPU SRAM 的 32-bit、小端访问窗口 |
 | `0x8000_1fc0 .. 0x8000_1fff` | 自测结果 mailbox |
 
-当前默认 VCS 回归仍使用高并行功能 backend；FPGA/ASIC 版本通过 `USE_FPGA_BRAM=1` 或 `USE_ASIC_SRAM=1` 选择 CPU 与 NPU 的同步单端口 SRAM backend，此时建议 `NPU_LANES=1`。`SHARED_SRAM=1` 只规定 NPU BUSY 时忽略主机写本地存储，不代表 CPU 主存与 NPU 已共用一个物理 SRAM。
+当前默认 VCS 回归仍使用高并行功能 backend；FPGA/ASIC 版本通过 `USE_FPGA_BRAM=1` 或 `USE_ASIC_SRAM=1` 选择 CPU 与 NPU 的同步单端口 SRAM backend，此时建议 `NPU_LANES=1`。`SHARED_SRAM=1` 规定 NPU BUSY 时主机本地写不落 SRAM、违规本地读返回确定错误标记，不代表 CPU 主存与 NPU 已共用一个物理 SRAM。
 
 ## 模型及整数运算
 

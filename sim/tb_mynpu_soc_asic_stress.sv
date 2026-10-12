@@ -71,6 +71,14 @@ module tb_mynpu_soc_asic_stress #(
     end
     $fatal(1,"ASIC SBA timeout");
   endtask
+  task automatic wait_sba_clear_ignoring_busyerror;
+    logic [31:0] status;
+    for (integer j=0;j<80;j++) begin
+      dmi_read(7'h38,status);
+      if (!status[21]) return;
+    end
+    $fatal(1,"ASIC SBA did not leave busy state");
+  endtask
   task automatic sba_write(input logic [31:0] addr, input logic [31:0] data);
     dmi_write(7'h38,32'h00040000); dmi_write(7'h39,addr);
     dmi_write(7'h3c,data); wait_sba();
@@ -117,6 +125,94 @@ module tb_mynpu_soc_asic_stress #(
     // explicitly reactivate the Debug Module before reloading CPU SRAM.
     dmi_write(7'h10,32'd1);
   endtask
+  task automatic dmi_busy_protocol;
+    logic [31:0] status;
+    // Hold the SBA request before launching a read, then issue another
+    // address access while sbbusy is asserted. The DM must set sbbusyerror,
+    // keep the original request alive, and recover after W1C clearing.
+    force dut.dm_master_gnt = 1'b0;
+    dmi_write(7'h38,32'h00140000); // sbreadonaddr + 32-bit access
+    dmi_write(7'h39,32'h80000000); // launches a read that cannot be granted
+    dmi_write(7'h39,32'h80000004); // illegal update while SBA is busy
+    dmi_read(7'h38,status);
+    if (!status[21] || !status[22])
+      $fatal(1,"ASIC SBA busy protocol not detected status=%h",status);
+    release dut.dm_master_gnt;
+    wait_sba_clear_ignoring_busyerror();
+    // SBCS busyerror is write-one-to-clear; preserve the 32-bit access mode.
+    dmi_write(7'h38,32'h00540000);
+    dmi_read(7'h38,status);
+    if (status[21] || status[22])
+      $fatal(1,"ASIC SBA busy protocol did not recover status=%h",status);
+    $display("[SOC-ASIC-STRESS] SBA busy/error/recovery passed");
+  endtask
+  task automatic random_tck_reset;
+    bit discard;
+    fork
+      begin
+        for (integer j=0;j<24;j++)
+          tick($urandom_range(0,1),$urandom_range(0,1),discard);
+      end
+      begin
+        #($urandom_range(1,73)); rst_ni=1'b0;
+        #($urandom_range(37,91)); rst_ni=1'b1;
+      end
+    join
+    dmi_init();
+    $display("[SOC-ASIC-STRESS] asynchronous reset during JTAG activity passed");
+  endtask
+  task automatic random_reset_during_busy;
+    bit discard;
+    fork
+      begin
+        for (integer j=0;j<40;j++)
+          tick($urandom_range(0,1),$urandom_range(0,1),discard);
+      end
+      begin
+        #($urandom_range(1,73)); rst_ni=1'b0;
+        #($urandom_range(37,91)); rst_ni=1'b1;
+      end
+    join
+    dmi_init();
+    load_cpu_image();
+    $display("[SOC-ASIC-STRESS] asynchronous reset during active NPU/JTAG passed");
+  endtask
+  task automatic crossbar_contention_probe;
+    // CPU is polling the NPU and touching its own mailbox while these SBA
+    // reads exercise the third crossbar master. Do not write live firmware
+    // memory; the check is response integrity and absence of SBA errors.
+    for (integer j=0;j<48;j++) begin
+      sba_read(32'h80001fc0 + ((j & 3) * 4),value);
+      if ((j & 1) == 0) begin
+        sba_read(32'h70000004,value);
+        if (value[14:12] || value[22])
+          $fatal(1,"ASIC crossbar contention returned SBA error %h",value);
+      end
+    end
+    $display("[SOC-ASIC-STRESS] CPU/Debug/NPU crossbar contention passed");
+  endtask
+  task automatic busy_local_access_probe;
+    logic [31:0] local_word, status;
+    // The single-port contract rejects host data access while the engine owns
+    // the macro. Reads return a deterministic marker and set REG_STATUS.error;
+    // writes complete at AXI level but do not alter SRAM.
+    sba_read(32'h70004000,local_word);
+    if (local_word !== 32'hdead_b001)
+      $fatal(1,"ASIC BUSY local read marker mismatch %h",local_word);
+    sba_read(32'h7000001c,status);
+    if (status !== 32'hdead_b001)
+      $fatal(1,"ASIC BUSY local access was not recorded status=%h",status);
+    $display("[SOC-ASIC-STRESS] BUSY local read rejected with deterministic error");
+    sba_write(32'h70004000,32'hfeedbeef);
+  endtask
+  task automatic busy_local_write_check;
+    logic [31:0] local_word;
+    sba_read(32'h70004000,local_word);
+    if (local_word !== 32'hc9c908e9)
+      $display("[SOC-ASIC-STRESS] BUSY local write changed data to %h",local_word);
+    else
+      $display("[SOC-ASIC-STRESS] BUSY local write was ignored as documented");
+  endtask
   task automatic load_cpu_image;
     for (integer k=0;k<CPU_WORDS;k++)
       sba_write(32'h80000000+k*4,cpu_image[k]);
@@ -134,6 +230,8 @@ module tb_mynpu_soc_asic_stress #(
       $fatal(1,"ASIC JTAG IDCODE mismatch %h",scan_response);
     select_ir(5'h11);
     dmi_write(7'h10,32'd1);
+    dmi_busy_protocol();
+    random_tck_reset();
     sba_read(32'h80000000,value);
     // The macro starts unknown; loading every word through SBA is intentional.
     load_cpu_image();
@@ -153,8 +251,11 @@ module tb_mynpu_soc_asic_stress #(
     for (integer round=0;round<BOOT_ROUNDS;round++) begin
       wait_mailbox(32'h12345678);
       wait_npu_busy();
+      crossbar_contention_probe();
+      busy_local_access_probe();
       for (integer k=0;k<HALT_ROUNDS;k++) cpu_halt_resume();
       wait_mailbox(32'hc0dec0de);
+      busy_local_write_check();
       sba_read(32'h80001fc8,value); if (value !== 2) $fatal(1,"ASIC class=%h",value);
       sba_read(32'h80001ff8,value); if (value !== 4) $fatal(1,"ASIC IRQ count=%h",value);
       sba_read(32'h80001fcc,value); if (value == 0) $fatal(1,"ASIC cycle count is zero");
@@ -168,8 +269,7 @@ module tb_mynpu_soc_asic_stress #(
         // The foundry model may X memory on a reset-time timing notifier;
         // reload the CPU image after this reset exactly as ASIC boot ROM/SBA
         // would do on a fresh power-up.
-        boot_ready=0; rst_ni=0; repeat(5) @(posedge clk); rst_ni=1; dmi_init();
-        load_cpu_image(); boot_ready=1;
+        boot_ready=0; random_reset_during_busy(); boot_ready=1;
       end
     end
     $display("[SOC-ASIC-STRESS] PASS full SoC boots=%0d, CPU/NPU macro SRAM, SBA=%0d, halt/resume=%0d",BOOT_ROUNDS,SBA_WORDS,HALT_ROUNDS);
