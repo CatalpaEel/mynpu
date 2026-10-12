@@ -65,7 +65,7 @@ ASIC 主路径还增加了 `sim/tb_mynpu_soc_asic_stress.sv`。它把 CPU 镜像
 
 下面这些场景目前不能标记为通过，且优先级高于继续增加同一模型的重复推理次数：
 
-1. **P0：SBA 忙状态和真实跨模块竞争。** ASIC 回归已强制保持 SBA grant 为低，在 `sbbusy=1` 时再次写 `SBAddress`，检查 `sbbusyerror`、释放请求、W1C 清错并继续访问；同时在 CPU 轮询和 NPU 运行期间执行 48 组 Debug mailbox/status 读。3 次完整启动均通过。还需增加更长的随机 burst 和 starvation 统计，独立 `axi2mem` backpressure 仍不能替代 crossbar 覆盖。
+1. **P0：SBA 忙状态和真实跨模块竞争。** ASIC 回归已强制保持 SBA grant 为低，在 `sbbusy=1` 时再次写 `SBAddress`，检查 `sbbusyerror`、释放请求、W1C 清错并继续访问；同时在 CPU 轮询和 NPU 运行期间执行 128 组随机 Debug mailbox/status 读。还测试了 SBA 请求保持期间的 DMI/AXI 复位。3 次完整启动均通过。还需增加更长的随机 burst 和 starvation 统计，独立 `axi2mem` backpressure 仍不能替代 crossbar 覆盖。
 2. **P0：单端口 NPU 的 BUSY 期间主机访问。** ASIC 回归曾捕获本地读返回旧的 `0x00000001`。现在单口 backend 对 BUSY 本地读返回确定的 `0xdead_b001`，并在 `REG_ERROR` 记录该违规；BUSY 本地写保持 AXI 完成但不落 SRAM，同一模型的 3 次 ASIC 启动和 FPGA BRAM SoC 回归均通过。正常驱动仍必须在访问参数、descriptor 和数据前检查 BUSY。
 3. **P0：随机相位复位。** ASIC 回归已在 JTAG 活动期间复位一次，并在 NPU 运行期间同时施加随机相位复位和 TCK 活动；复位后重新激活 `dmactive`、重新加载 CPU 镜像，3 次启动通过。仍需扩大随机种子和在每个 AXI response 状态注入复位的次数。
 4. **P1：宏接口和 byte-enable。** 需要遍历 16 种 `WEN[3:0]` 组合、全地址首尾、读写交替、同地址读后写/写后读，以及复位前后未知内存的处理。当前完整 SoC 回归覆盖了程序加载和 NPU 字节写回，但没有把宏的每种 byte mask 做成独立检查。
