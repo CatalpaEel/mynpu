@@ -47,7 +47,7 @@ VCS 启动时出现原 CPU `unique case` 在 time 0 未匹配的 warning，复�
 
 这次压力测试发现并修复了一个错误恢复问题：原先 NPU 进入 `ERROR` 后，控制寄存器清除 `error_q`，但 `S_ERROR/ERROR` 状态仍在每个周期重新置位错误，导致后续合法 START 不能恢复。现在清错请求在空闲错误状态下同时将状态机退回 `IDLE`，且 sticky-error 逻辑不会覆盖同周期的清除操作。
 
-EGo1 `xc7a35tcsg324-1` 工程已用 Vivado 完成综合、实现和 bitstream 生成，加入 descriptor 防护后的 50 MHz MMCM 时钟实现后 WNS 为 `+1.191 ns`，TNS 和 failing endpoints 均为 0，Vivado DRC error 为 0。实现日志仍有 RAM 异步控制信号的 `REQP-1839` warning；上板时需要观察复位期间 BRAM 内容和启动行为。尚未连接真实 EGo1、FT232H 探针并完成 bitstream 下载与 OpenOCD/GDB 联调。
+EGo1 `xc7a35tcsg324-1` 工程已用 Vivado 完成综合、实现和 bitstream 生成，加入 descriptor 防护后的 50 MHz MMCM 时钟实现后 WNS 为 `+1.191 ns`，TNS 和 failing endpoints 均为 0，Vivado DRC error 为 0。实现日志仍有 RAM 异步控制信号的 `REQP-1839` warning；EGo1 已完成无外部 Debug Module 的 VIO 自测，OpenOCD/GDB 真实探针链路仍未联调。
 
 ## 全 MNIST 与 AXI 随机压力
 
@@ -58,6 +58,34 @@ EGo1 `xc7a35tcsg324-1` 工程已用 Vivado 完成综合、实现和 bitstream �
 上面的 standalone NPU 回归不包含 CPU。为验证真正的 CPU-in-loop 路径，新增 `sw/main_stream.c` 和 `sim/tb_mynpu_soc_stream.sv`：CPU 启动后先通过自己的 AXI 数据口写入参数和 descriptor，写入 READY mailbox；testbench 再通过 JTAG/DMI/SBA 把每张量化输入写进 NPU SRAM，并写入 command mailbox。CPU 轮询 command，启动 NPU，接收 NPU IRQ，清 DONE，读回 10 个 code 并写入 DONE mailbox；下一张输入前 host 与 CPU 继续共享同一个 3×4 crossbar。VCS 已通过 64 张随机样本，日志为 `[SOC-STREAM] PASS CPU-in-loop vectors=64, Debug SBA input injection, CPU AXI model load, NPU IRQ and result readback`，仿真时间为 340,288,760,000 ps（CPU time 489.190 s）。
 
 `sim/tb_axi2mem_backpressure.sv` 对 SoC 使用的 `axi2mem` 做了 1,000 笔随机读写 burst（长度 1..8 个 32-bit beat、随机地址、随机 VALID 空闲间隔），并在每个响应周期独立随机化 `RREADY` 和 `BREADY`。响应数据在同步 SRAM 模型中逐拍检查，VCS 结果为 `[AXI-BP] PASS transactions=1000 randomized RREADY/BREADY every response cycle`，仿真时间为 224,250,000 ps。测试同时检查 RDATA 在 RREADY=0 时保持、ID/RESP/LAST 正确和 byte-enable 写入。
+
+ASIC 主路径还增加了 `sim/tb_mynpu_soc_asic_stress.sv`。它把 CPU 镜像通过真实 JTAG→DMI→SBA 写入 `USE_ASIC_SRAM=1` 的 CPU 宏，把模型和输入由 CPU 写入 NPU 宏，然后执行 3 次完整启动、64 个 NPU SRAM SBA 写读、3 次 CPU halt/resume、非法 layer count 恢复，以及 NPU 运行中的系统复位。每次复位后 testbench 都重新写 `dmactive=1` 并重新加载 CPU 镜像；这是宏没有 `$readmemh` 且 Debug Module 复位会清掉 `dmactive` 时必须的启动动作。该回归在课程 RA1SHD Verilog model 上通过，日志为 `[SOC-ASIC-STRESS] PASS full SoC boots=3, CPU/NPU macro SRAM, SBA=64, halt/resume=3`。运行使用 `+notimingchecks +no_notifier`，所以它是宏功能模型回归，不是 PDK 的 STA/SDF 签核。
+
+## 尚未覆盖、但需要补测的压力项
+
+下面这些场景目前不能标记为通过，且优先级高于继续增加同一模型的重复推理次数：
+
+1. **P0：SBA 忙状态和真实跨模块竞争。** 现有 DMI task 每次都等待 SBA 完成，没有测试在 `sbbusy=1` 时再次写 `sbdata/sbaddress`、检查 `sbbusyerror`、清错后继续访问，也没有让 CPU 取指/数据访问和 Debug SBA 同时高占用 crossbar。独立 `axi2mem` backpressure 回归不能覆盖三主设备仲裁、ID 顺序和饥饿问题。
+2. **P0：单端口 NPU 的 BUSY 期间主机访问。** `cnn_npu_sp_top` 用 `bus_mem_req = ... && !busy_q` 屏蔽本地 SRAM 主机请求；因此 BUSY 时的本地读可能拿到上一次 `douta`，写请求则可能返回完成但不写入。固件约定是 BUSY 期间不改参数、descriptor 和数据，但仍需专门测试 CPU/SBA 违规访问是否应阻塞、报错或被明确丢弃，不能靠默认行为。
+3. **P0：随机相位复位。** 已测的是在推理开始后保持若干个整时钟周期的复位；还要在 JTAG Shift-DR、DMI 忙、SBA 等待、AXI read/write response、NPU descriptor/乘法/写回各状态随机断言复位，并验证 TAP、DM、crossbar、CPU、两个 SRAM 控制器都能重新回到可启动状态。
+4. **P1：宏接口和 byte-enable。** 需要遍历 16 种 `WEN[3:0]` 组合、全地址首尾、读写交替、同地址读后写/写后读，以及复位前后未知内存的处理。当前完整 SoC 回归覆盖了程序加载和 NPU 字节写回，但没有把宏的每种 byte mask 做成独立检查。
+5. **P1：量化数值边界。** 需要用 activation `0/127`、weight `-128/127`、zero-point 边界、`shift=0/1/31/63`、最大正负 bias/accumulator、乘法器边界、`qmax=1/127/255`、ReLU 开关和奇数通道数，逐元素对照整数 golden。当前 MNIST 样本和固定模型没有覆盖全部组合，也没有专门针对 32-bit accumulator 溢出做检查。
+6. **P1：descriptor 和存储边界。** 还要覆盖 8 层最大合法链、FC/卷积混合、stride=1/2、1×1/奇数 H/W/C、descriptor/weight/bias/scale 恰好落在 `0x1ffc` 末字、区域零长度/重叠和每个非法字段的恢复路径。
+7. **P1：IRQ/控制竞态。** 需要在 DONE 的同一窗口交替执行 `START`、`CLEAR`、IRQ enable/disable、CPU halt/resume，并验证 IRQ 只产生一次、不丢失、不重复，下一轮不会继承旧的 `done/error`。
+8. **P2：长时间和物理实现。** 需要 1,000/10,000 次持续推理、cycle counter 接近 32-bit 回绕、长时间随机 reset；还需要使用 PDK `.lib/.sdf` 做多 corner 门级仿真、宏 timing check 不加 `+no_notifier` 的回归、以及 STA/IR/EM/CDC/RDC。当前 VCS 宏回归不能替代这些签核。
+
+ASIC 宏回归的基本复现命令如下；`$RA1SHD_V` 必须指向课程压缩包里的私有 `RA1SHD_2048x32M8.v`，该文件不放入公开仓库：
+
+```sh
+vcs -full64 -sverilog -assert svaext -timescale=1ns/1ps +define+SYNTHESIS \
+  -f sim/soc.f rtl/mynpu_sram_2048x32_asic.sv "$RA1SHD_V" \
+  sim/tb_mynpu_soc_asic_stress.sv -top tb_mynpu_soc_asic_stress \
+  -pvalue+tb_mynpu_soc_asic_stress.BOOT_ROUNDS=3 \
+  -pvalue+tb_mynpu_soc_asic_stress.SBA_WORDS=64 \
+  -pvalue+tb_mynpu_soc_asic_stress.HALT_ROUNDS=3 \
+  -o build/vcs-asic-stress/simv
+build/vcs-asic-stress/simv +notimingchecks +no_notifier +ntb_random_seed=14596
+```
 
 复现命令（需要能运行 VCS 的 Linux 主机）：
 
@@ -84,4 +112,4 @@ vcs -full64 -sverilog -assert svaext -timescale=1ns/1ps \
 build/vcs-axi-bp/simv +ntb_random_seed=14596
 ```
 
-仍未覆盖多 hart、真实探针下载、OpenOCD/GDB 联调、物理 SRAM 宏的 STA，以及 FBGEMM 的逐元素 bit-exact 复现。全 MNIST 的 RTL 逐样本回灌可以提高 `--random-vectors`；软件整数参考已经覆盖全部 10,000 张。
+仍未覆盖多 hart、真实探针下载、OpenOCD/GDB 联调、物理 SRAM 宏的 STA，以及 FBGEMM 的逐元素 bit-exact 复现。上面的 P0/P1/P2 清单是下一批回归的边界；全 MNIST 的 RTL 逐样本回灌可以提高 `--random-vectors`，软件整数参考已经覆盖全部 10,000 张。
