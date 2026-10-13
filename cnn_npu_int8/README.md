@@ -2,7 +2,7 @@
 
 此目录保留 NPU 核心、模型导出器、数据镜像和独立 testbench。完整 CPU/AXI/JTAG SoC 已整合在仓库根目录的 `rtl/mynpu_soc_top.sv`，使用方法见 [主 README](../README.md)。
 
-核心支持输出通道并行 `LANES`、INT32 累加/bias、Q31 multiplier/shift、3×3 卷积、FC/GEMV、CHW 激活、stride 1/2、固定 padding=1 和 ReLU。模型结构由层 descriptor 决定。当前本地存储是功能数组，尚未替换为物理 SRAM 控制器。
+核心支持输出通道并行 `LANES`、INT32 累加/bias、Q31 multiplier/shift、3×3 卷积、FC/GEMV、CHW 激活、stride 1/2、固定 padding=1 和 ReLU。模型结构由层 descriptor 决定。`cnn_npu_top` 是功能数组基线，`cnn_npu_sp_top` 是原单口 1-lane 核心，`cnn_npu_sp_lanes` 是 ASIC/FPGA 共用的单口向量核心；4-lane 配合 packed4 权重在同拍更新四个独立 MAC，见 [单口向量架构](../docs/npu-single-port-vector.md)。
 
 ## MMIO
 

@@ -16,13 +16,13 @@ DTM 的 IR 是 5 bit，DMIACCESS 指令为 `0x11`，DMI DR 是 41 bit，包含 7
 
 启动流程可以是：保持 `boot_ready_i=0` → JTAG 激活 DM → 通过 SBA 将固件写入 `0x80000000` → 置 `boot_ready_i=1`。Boot RAM 跳转到 SRAM 中的 `_start`。固件通过 `0x70004000` 窗口加载模型和输入、配置 descriptor 地址与层数、发 START、轮询或等待 IRQ、读输出。
 
-本仓库 testbench 为 CPU SRAM 使用预置程序镜像，同时实际通过 JTAG 测试 SRAM 读写和 CPU 调试。尚未实测 OpenOCD、真实探针、从 JTAG 加载整段固件或 FPGA BSCAN 桥。FPGA 的配置 JTAG 不会自动连接逻辑中的 RISC-V TAP；需扩展 GPIO 接外部探针，或实现并验证 BSCAN 桥。
+ASIC SoC testbench 不预置宏内容，而是通过 JTAG→DMI→SBA 装载整段 CPU 固件；每次复位后重新设置 `dmactive=1` 并重装固件。FPGA BRAM 自运行路径使用 CPU hex 初始化。真实 OpenOCD/外部探针和 FPGA BSCAN→RISC-V TAP 桥仍未联调；板载配置 JTAG 不会自动连接逻辑中的 RISC-V TAP。EGo1 自运行版本用配置 JTAG 下载 bitstream，并通过 VIO 检查 CPU mailbox，无需外部 Debug 探针。
 
 ## NPU 本地存储规划
 
 | 区域 | 8KB NPU | 16KB NPU |
 |---|---|---|
-| 权重、bias、multiplier、shift | 从 `0x0000` 起，使用 3984B | 同左 |
+| 权重、bias、multiplier、shift | 原 `8k` 为 3984B；向量 `8k-p4` 为 4288B | 原 `16k` 为 3984B |
 | Activation A | `0x1400`，到 B 前预留 1536B | `0x2000`，预留 2048B |
 | Activation B | `0x1a00`，到 descriptor 前预留 512B | `0x2800`，预留 2048B |
 | Descriptor | `0x1c00`，6×36=216B | `0x3000`，216B |
@@ -33,10 +33,10 @@ BUSY 期间主机不应写 NPU 参数、描述符或数据。单口 backend 对�
 
 ## FPGA 与 0.18µm 后续工作
 
-当前功能数组同周期可以读取 9 个 descriptor word、多个 lane 权重、bias 和 multiplier，也可以写多个输出。容量为 8KB 并不表示一块物理 8KB SRAM 可以满足这些访问。下一步需建立同步端口、处理读延迟，再选择权重分 bank/预取、激活广播、参数缓存与输出打包写回。该修改会改变周期数，必须再次运行同一 golden 检查。
+功能数组保留作算法基线；单口向量核心已经实现同步端口、读延迟、packed4 权重读取、activation 广播、word cache 与通道组参数缓存。4-lane ASIC 和 FPGA 功能回归均为 65732 cycles，原 1-lane 为 288390。输出仍按 CHW 逐 byte 写回，requant 共享一个乘法器，详见 [单口向量 NPU](npu-single-port-vector.md)。
 
 如果最终只用两个 8KB 宏，逻辑布局可以继续采用 CPU 8KB + NPU 8KB，但 NPU 宏带宽需通过分拍或 bank/cache 解决。如果要求 CPU/NPU 共用同一物理存储，还需统一地址空间、仲裁取指/数据/NPU请求，并重新安排程序、模型和激活区域；这项尚未实现。
 
-datapath 中部分索引和临时量目前使用 `integer`，应结合综合结果收窄。完整 uint8 code 减任意 uint8 zero-point 需要 signed 9 bit；INT8 权重乘积需 signed 17 bit；累加为 32 bit；Q31 requant 为 32×32→64 bit。需要决定 requant 乘法器是否共享、流水线级数和目标频率。
+向量核心已把本地 base 收窄到 13 bit、形状和主要循环计数器到 8 bit。完整 uint8 code 减任意 uint8 zero-point 使用 signed 9 bit，INT8 权重乘积为 signed 17 bit，累加为 32 bit；Q31 requant 共享 32×32→64 bit 乘法器并分三个阶段执行。
 
-当前 ERROR 标志不构成完整的 descriptor/越界校验；主机须提供有效模型布局。综合后还需检查 RAM/DSP/LUT、时序，再进行 CDC/RDC、复位、DFT、SRAM 宏替换与物理实现。现有周期数据只对应功能存储后端，不能用于承诺真实 SRAM 版本的频率、面积或推理时延。
+descriptor 校验覆盖形状非零、flags、存储范围、packed4 对齐和填充容量；主机仍须提供不破坏参数/输入的区域规划。周期已在真实单口宏功能模型上测量，频率/面积则不能由功能仿真或 FPGA 报告推定。本任务按约定只做 RTL/功能模型验证，不执行真实宏 timing check/PDK 签核。

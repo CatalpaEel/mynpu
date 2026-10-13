@@ -65,14 +65,18 @@ def integer_inference(codes: np.ndarray, memory: bytearray, metadata: dict) -> n
             memoryview(memory)[mult_base : mult_base + 4 * oc], dtype="<u4"
         ).astype(np.int64)
         shift = np.frombuffer(memoryview(memory)[shift_base : shift_base + oc], dtype=np.uint8)
+        terms = ic * (1 if flags & 1 else 9)
+        if flags & 4:
+            packed = np.frombuffer(memoryview(memory)[weight_base:weight_base+((oc+3)//4)*terms*4], dtype=np.int8)
+            weight_matrix = packed.reshape(-1,terms,4).transpose(0,2,1).reshape(-1,terms)[:oc].astype(np.int64)
+        else:
+            weight_matrix = np.frombuffer(memoryview(memory)[weight_base:weight_base+oc*terms],dtype=np.int8).reshape(oc,terms).astype(np.int64)
 
         if flags & 1:  # FC: 1x1xCin, one output vector per image.
             if x.shape[1:] != (1, 1, ic):
                 x = x.reshape(x.shape[0], -1)[:, None, None, :]
             flat = x.reshape(x.shape[0], ic).astype(np.int64)
-            weights = np.frombuffer(
-                memoryview(memory)[weight_base : weight_base + oc * ic], dtype=np.int8
-            ).reshape(oc, ic).astype(np.int64)
+            weights = weight_matrix
             raw = (flat - iz) @ weights.T + bias[None, :]
             pixels = 1
         else:
@@ -81,9 +85,7 @@ def integer_inference(codes: np.ndarray, memory: bytearray, metadata: dict) -> n
                     f"layer {layer_index} shape mismatch: got {x.shape[1:]}, "
                     f"expected {(ic, ih, iw)}"
                 )
-            weights = np.frombuffer(
-                memoryview(memory)[weight_base : weight_base + oc * ic * 9], dtype=np.int8
-            ).reshape(oc, ic, 3, 3).astype(np.int64)
+            weights = weight_matrix.reshape(oc,ic,3,3)
             # The RTL treats padding as the input zero point and stores tensors
             # channel-major.  Build an im2col matrix in that same order.
             padded = np.full(
@@ -134,7 +136,7 @@ def write_vectors(path: Path, vectors: np.ndarray):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--layout", choices=("8k", "16k"), default="8k")
+    parser.add_argument("--layout", choices=("8k", "16k", "8k-p4"), default="8k")
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--random-vectors", type=int, default=64)
     parser.add_argument("--seed", type=int, default=14596)

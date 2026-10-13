@@ -6,6 +6,7 @@
 // shift=0/63, ReLU, qmax and odd FC channel count.
 module tb_cnn_npu_sp_edges #(
   parameter integer MEM_BACKEND = 1,
+  parameter integer LANES = 4,
   parameter MEM_INIT_FILE = ""
 );
   localparam integer LOCAL_BASE = 14'h1000;
@@ -28,8 +29,12 @@ module tb_cnn_npu_sp_edges #(
   always #5 clk=~clk;
   always @(posedge irq) irq_edges++;
 
+`ifdef NPU_LEGACY_SCALAR
   cnn_npu_sp_top #(
-    .LANES(1), .SRAM_BYTES(8192), .MAX_LAYERS(8),
+`else
+  cnn_npu_sp_lanes #(
+`endif
+    .LANES(LANES), .SRAM_BYTES(8192), .MAX_LAYERS(8),
     .MEM_BACKEND(MEM_BACKEND), .MEM_INIT_FILE(MEM_INIT_FILE)
   ) dut (
     .clka(clk), .rst_ni(rst_ni), .ena(ena), .wea(wea), .be_i(be),
@@ -251,8 +256,32 @@ module tb_cnn_npu_sp_edges #(
       bus_read(1,status); if (status[1] || status[2]) break;
     end
     if (!status[1] || status[2]) $fatal(1,"cycle-wrap case failed status=%h",status);
+    bus_read(6,value);
+    if ($isunknown(value) || value>10000) $fatal(1,"counter did not wrap value=%h",value);
     bus_write(0,4);
+    run_and_check(0,127,255);
     $display("[CNN-EDGES] cycle counter wrap recovery passed");
+  endtask
+  task automatic error_start_recovery;
+    integer got;
+    // The preceding identity FC leaves inputs and weights ready. A legal
+    // START must have priority over the old sticky ERROR state in the same
+    // edge, including the driver's combined CLEAR+START encoding.
+    for(integer mode=0;mode<2;mode++) begin
+      bus_write(5,255);bus_write(0,1);status=0;
+      for(integer k=0;k<100;k++) begin bus_read(1,status);if(status[2]) break;end
+      if(!status[2]) $fatal(1,"Recovery setup did not enter ERROR");
+      bus_write(5,1);bus_write(0,(mode==0)?5:1);bus_read(1,status);
+      if(!status[0] || status[2]) $fatal(1,"ERROR->START lost BUSY/error clear mode=%0d status=%h",mode,status);
+      for(integer k=0;k<10000;k++) begin bus_read(1,status);if(status[1]||status[2]) break;end
+      if(!status[1] || status[2]) $fatal(1,"ERROR->START did not finish mode=%0d",mode);
+      for(integer k=0;k<3;k++) begin
+        read_output(k,got);
+        if(got!==((k==0)?0:((k==1)?127:255))) $fatal(1,"ERROR->START output mismatch");
+      end
+      bus_write(0,4);
+    end
+    $display("[CNN-EDGES] ERROR->CLEAR+START / START priority recovery passed");
   endtask
 
   initial begin
@@ -288,9 +317,10 @@ module tb_cnn_npu_sp_edges #(
     conv_stride1_case();
     conv_stride2_case();
     cycle_wrap_case();
+    error_start_recovery();
 
     if (errors) $fatal(1,"quantization edge regression errors=%0d",errors);
-    $display("[CNN-EDGES] PASS backend=%0d shift=0/63, signed extremes, ReLU/qmax, odd FC channels",MEM_BACKEND);
+    $display("[CNN-EDGES] PASS backend=%0d lanes=%0d shift=0/63, signed extremes, ReLU/qmax, odd FC channels",MEM_BACKEND,LANES);
     $finish;
   end
 endmodule

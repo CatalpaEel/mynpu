@@ -2,6 +2,18 @@
 
 日期：2026-10-08。模拟器：VCS Q-2020.03-SP2-7，Linux。PyTorch checkpoint 重新导出使用 2.2.2+cpu / FBGEMM，生成的 8KB 参数镜像与仓库镜像逐字节相同。
 
+## 2026-10-12：实际单口 4-lane ASIC/FPGA 主配置
+
+新 `cnn_npu_sp_lanes` 共用 RA1SHD/BRAM 同步单口接口，以 packed4 权重和 activation 广播驱动四个独立 `cnn_npu_lane_mac`，共享 requant 乘法器。CPU 宏 8KB + NPU 宏 8KB 不变。4-lane 实测 **65732 cycles**，相对原 1-lane **288390 cycles** 加速 **4.39×**；2/8-lane ASIC NPU 分别是 113490/55723 cycles。
+
+两个 4-lane backend 均通过 100 次连续推理（179400 个逐层 byte 严格对照整数 golden、PyTorch 差值 ≤1）、200 组随机算子和全部 8KB SRAM 内容保持检查、边界/IRQ/回绕回归、64 张 MNIST 的独立 NPU 仿真；完整 ASIC SoC 和 FPGA BRAM SoC 均通过三次 CPU 启动、每次五轮推理及运行中复位。ASIC SoC 另覆盖 SBA busy/W1C、64-word 读写、128 组竞争、BUSY 违规访问和 halt/resume。
+
+两套完整 SoC 另各通过 64 张不同 MNIST 的 CPU-in-loop：CPU AXI 写模型、Debug SBA 注入每张输入、CPU 启动/处理中断/清 DONE/读回结果。随机测试修复了 ReLU signed/unsigned 比较，追加边界测试修复了 ERROR 状态清理覆盖 START 的 BUSY 更新；原 1-lane 与新 4-lane、ASIC 与 FPGA 四组 ERROR→CLEAR+START/START 恢复回归均通过。
+
+修复后两套 4-lane 完整 SoC 以 seed=777 再回归均通过。EGo1 4-lane bitstream 已重新生成，50MHz 的 WNS=+1.036ns、WHS=+0.028ns、TNS/THS=0，bitgen DRC error=0；当前 Hardware Manager 未检测到板卡，因此尚无新版 4-lane 的实体上板 PASS。
+
+packed 镜像和 PyTorch 的完整 10000 张 MNIST 参考重新执行，准确率均为 99.01%，argmax 差异仍是四张。架构、压力覆盖、复现命令见 [单口向量验证记录](npu-single-port-vector.md)。下面早期 54132/10704/9882 周期来自功能数组，与本次物理单口路径有明确区别；真实宏 timing check/PDK 签核不在本任务范围。
+
 ## 完整 SoC 参数配置
 
 | CPU SRAM | NPU SRAM | LANES | 结果 | 单轮 NPU CYCLE |
@@ -61,9 +73,9 @@ EGo1 `xc7a35tcsg324-1` 工程已用 Vivado 完成综合、实现和 bitstream �
 
 ASIC 主路径还增加了 `sim/tb_mynpu_soc_asic_stress.sv`。它把 CPU 镜像通过真实 JTAG→DMI→SBA 写入 `USE_ASIC_SRAM=1` 的 CPU 宏，把模型和输入由 CPU 写入 NPU 宏，然后执行 3 次完整启动、64 个 NPU SRAM SBA 写读、3 次 CPU halt/resume、非法 layer count 恢复，以及 NPU 运行中的系统复位。每次复位后 testbench 都重新写 `dmactive=1` 并重新加载 CPU 镜像；这是宏没有 `$readmemh` 且 Debug Module 复位会清掉 `dmactive` 时必须的启动动作。该回归在课程 RA1SHD Verilog model 上通过，日志为 `[SOC-ASIC-STRESS] PASS full SoC boots=3, CPU/NPU macro SRAM, SBA=64, halt/resume=3`。运行使用 `+notimingchecks +no_notifier`，所以它是宏功能模型回归，不是 PDK 的 STA/SDF 签核。
 
-## 尚未覆盖、但需要补测的压力项
+## 1-lane 版本的压力覆盖边界（历史记录）
 
-下面这些场景目前不能标记为通过，且优先级高于继续增加同一模型的重复推理次数：
+下面记录 4-lane 改造前的覆盖状态；新版新增的随机算子、shift1/31、累加回绕等覆盖以本文件开头及单口向量验证记录为准，随机回归不表示穷举全部输入：
 
 1. **P0：SBA 忙状态和真实跨模块竞争。** ASIC 回归已强制保持 SBA grant 为低，在 `sbbusy=1` 时再次写 `SBAddress`，检查 `sbbusyerror`、释放请求、W1C 清错并继续访问；同时在 CPU 轮询和 NPU 运行期间执行 128 组随机 Debug mailbox/status 读。还测试了 SBA 请求保持期间的 DMI/AXI 复位。3 次完整启动均通过。还需增加更长的随机 burst 和 starvation 统计，独立 `axi2mem` backpressure 仍不能替代 crossbar 覆盖。
 2. **P0：单端口 NPU 的 BUSY 期间主机访问。** ASIC 回归曾捕获本地读返回旧的 `0x00000001`。现在单口 backend 对 BUSY 本地读返回确定的 `0xdead_b001`，并在 `REG_ERROR` 记录该违规；BUSY 本地写保持 AXI 完成但不落 SRAM，同一模型的 3 次 ASIC 启动和 FPGA BRAM SoC 回归均通过。正常驱动仍必须在访问参数、descriptor 和数据前检查 BUSY。

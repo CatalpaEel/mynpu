@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--layout", choices=("8k",), default="8k")
+    parser.add_argument("--layout", choices=("8k", "8k-p4"), default="8k")
     parser.add_argument("--runs", type=int, default=1000)
     parser.add_argument("--gcc", default=os.environ.get("RISCV_GCC", "riscv64-unknown-elf-gcc"))
     parser.add_argument("--objcopy", default=os.environ.get("RISCV_OBJCOPY", "riscv64-unknown-elf-objcopy"))

@@ -1,7 +1,8 @@
 # Build the EGo1 no-Debug autonomous bitstream.
 set script_dir [file dirname [file normalize [info script]]]
 if {![info exists ::AUTONOMOUS_BUILD_TAG]} { set ::AUTONOMOUS_BUILD_TAG "" }
-set project_dir [file normalize [file join $script_dir vivado_autonomous]]
+if {![info exists ::AUTONOMOUS_PROJECT_DIR]} { set ::AUTONOMOUS_PROJECT_DIR vivado_autonomous }
+set project_dir [file normalize [file join $script_dir $::AUTONOMOUS_PROJECT_DIR]]
 set project_file [file join $project_dir ego1_mynpu_autonomous.xpr]
 # Recreate the source/IP configuration so changes to the project script are
 # picked up on every build, including an already-existing local project.

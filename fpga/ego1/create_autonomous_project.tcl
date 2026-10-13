@@ -1,7 +1,8 @@
 # Create the EGo1 project that does not expose Debug Module pins.
 set script_dir [file dirname [file normalize [info script]]]
 set repo_root [file normalize [file join $script_dir ../..]]
-set project_dir [file normalize [file join $script_dir vivado_autonomous]]
+if {![info exists ::AUTONOMOUS_PROJECT_DIR]} { set ::AUTONOMOUS_PROJECT_DIR vivado_autonomous }
+set project_dir [file normalize [file join $script_dir $::AUTONOMOUS_PROJECT_DIR]]
 set project_name ego1_mynpu_autonomous
 set part_name xc7a35tcsg324-1
 
@@ -29,7 +30,8 @@ set_property include_dirs $include_dirs $source_set
 
 set xdc_file [file normalize [file join $script_dir ego1_autonomous.xdc]]
 add_files -norecurse -fileset $constr_set $xdc_file
-set hex_src [file normalize [file join $repo_root generated 8k cpu.hex]]
+if {![info exists ::AUTONOMOUS_MODEL_LAYOUT]} { set ::AUTONOMOUS_MODEL_LAYOUT 8k }
+set hex_src [file normalize [file join $repo_root generated $::AUTONOMOUS_MODEL_LAYOUT cpu.hex]]
 add_files -norecurse -fileset $source_set $hex_src
 if {[info exists ::AUTONOMOUS_NPU_LANES]} {
   set npu_lanes $::AUTONOMOUS_NPU_LANES

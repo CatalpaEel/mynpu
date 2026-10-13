@@ -9,10 +9,11 @@ module tb_mynpu_soc_stream #(
   parameter integer VECTORS = 64,
   parameter integer NPU_SRAM_BYTES = 8192,
   parameter integer LANES = 8,
-  parameter INPUT_HEX = "build/mnist-regression/mnist_input_codes_8k.hex",
-  parameter GOLDEN_HEX = "build/mnist-regression/mnist_integer_outputs_8k.hex"
+  parameter integer MEM_BACKEND = 0,
+  parameter CPU_IMAGE = (MEM_BACKEND==0 || LANES==1) ? "generated/8k/cpu_stream.hex" : "generated/8k-p4/cpu_stream.hex",
+  parameter INPUT_HEX = (MEM_BACKEND==0 || LANES==1) ? "build/mnist-regression/mnist_input_codes_8k.hex" : "build/mnist-regression/mnist_input_codes_8k-p4.hex",
+  parameter GOLDEN_HEX = (MEM_BACKEND==0 || LANES==1) ? "build/mnist-regression/mnist_integer_outputs_8k.hex" : "build/mnist-regression/mnist_integer_outputs_8k-p4.hex"
 );
-  localparam CPU_IMAGE = "generated/8k/cpu_stream.hex";
   localparam integer INPUT_BYTES = 784;
   localparam integer OUTPUT_BYTES = 10;
   localparam integer NPU_INPUT_ADDR = 32'h70004000 + 5120;
@@ -24,6 +25,7 @@ module tb_mynpu_soc_stream #(
   logic tck=0, tms=1, tdi=0, tdo, npu_irq, debug_halted;
   logic [7:0] input_codes [0:VECTORS*INPUT_BYTES-1];
   logic [7:0] golden_codes [0:VECTORS*OUTPUT_BYTES-1];
+  logic [31:0] cpu_image [0:2047];
   integer run, word, lane, i, errors;
   logic [31:0] value, expected;
   logic [40:0] scan_response;
@@ -32,11 +34,13 @@ module tb_mynpu_soc_stream #(
   initial begin
     $readmemh(INPUT_HEX, input_codes);
     $readmemh(GOLDEN_HEX, golden_codes);
+    if (MEM_BACKEND==2) $readmemh(CPU_IMAGE,cpu_image);
   end
 
   mynpu_soc_top #(
     .CPU_SRAM_BYTES(8192), .NPU_SRAM_BYTES(NPU_SRAM_BYTES), .NPU_LANES(LANES),
-    .CPU_INIT_FILE(CPU_IMAGE), .NPU_INIT_FILE("")
+    .USE_FPGA_BRAM(MEM_BACKEND==1), .USE_ASIC_SRAM(MEM_BACKEND==2),
+    .CPU_INIT_FILE(MEM_BACKEND==2 ? "" : CPU_IMAGE), .NPU_INIT_FILE("")
   ) dut (
     .clk_i(clk), .rst_ni(rst_n), .boot_ready_i(boot_ready),
     .tck_i(tck), .tms_i(tms), .td_i(tdi), .td_o(tdo),
@@ -112,6 +116,8 @@ module tb_mynpu_soc_stream #(
     if (scan_response[31:0] !== 32'h00000001) $fatal(1,"JTAG IDCODE mismatch %h",scan_response);
     select_ir(5'h11);
     dmi_write(7'h10,32'd1); // dmactive
+    if (MEM_BACKEND==2)
+      for (integer k=0;k<2048;k++) sba_write(32'h80000000+k*4,cpu_image[k]);
     @(negedge clk) boot_ready=1;
 
     // The stream firmware does CPU-side model loading before advertising READY.
@@ -145,7 +151,7 @@ module tb_mynpu_soc_stream #(
       if ((run % 8)==0) $display("[SOC-STREAM] vector=%0d/%0d CPU IRQ/NPU result passed",run,VECTORS);
     end
     if (errors) $fatal(1,"CPU-in-loop random regression errors=%0d",errors);
-    $display("[SOC-STREAM] PASS CPU-in-loop vectors=%0d, Debug SBA input injection, CPU AXI model load, NPU IRQ and result readback",VECTORS);
+    $display("[SOC-STREAM] PASS backend=%0d lanes=%0d CPU-in-loop vectors=%0d, Debug SBA input injection, CPU AXI model load, NPU IRQ and result readback",MEM_BACKEND,LANES,VECTORS);
     $finish;
   end
   initial begin #1000000000; $fatal(1,"CPU-in-loop stream timeout"); end

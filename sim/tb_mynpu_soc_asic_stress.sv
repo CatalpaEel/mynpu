@@ -7,12 +7,16 @@ module tb_mynpu_soc_asic_stress #(
   parameter integer BOOT_ROUNDS = 3,
   parameter integer SBA_WORDS = 64,
   parameter integer HALT_ROUNDS = 3,
-  parameter integer CONTENTION_ROUNDS = 128
+  parameter integer CONTENTION_ROUNDS = 128,
+  parameter integer NPU_LANES = 4,
+  parameter CPU_IMAGE = (NPU_LANES==1) ? "generated/8k/cpu.hex" : "generated/8k-p4/cpu.hex",
+  parameter MODEL_HEX = (NPU_LANES==1) ? "cnn_npu_int8/generated/8k/npu_word.hex" : "cnn_npu_int8/generated/8k-p4/npu_word.hex"
 );
   localparam integer CPU_WORDS = 2048;
   logic clk=0, rst_ni=0, boot_ready=0;
   logic tck=0, tms=1, tdi=0, tdo, npu_irq, debug_halted;
   logic [31:0] cpu_image [0:CPU_WORDS-1];
+  logic [31:0] model_image [0:2047];
   logic [31:0] value, expected;
   integer irq_edges;
 
@@ -20,7 +24,7 @@ module tb_mynpu_soc_asic_stress #(
   always @(posedge npu_irq) irq_edges++;
 
   mynpu_soc_top #(
-    .CPU_SRAM_BYTES(8192), .NPU_SRAM_BYTES(8192), .NPU_LANES(1),
+    .CPU_SRAM_BYTES(8192), .NPU_SRAM_BYTES(8192), .NPU_LANES(NPU_LANES),
     .USE_ASIC_SRAM(1'b1), .CPU_INIT_FILE("")
   ) dut (
     .clk_i(clk), .rst_ni(rst_ni), .boot_ready_i(boot_ready),
@@ -89,8 +93,9 @@ module tb_mynpu_soc_asic_stress #(
     wait_sba(); dmi_read(7'h3c,data);
   endtask
   task automatic wait_mailbox(input logic [31:0] want);
-    // One ASIC single-port inference is about 288k system cycles. Each SBA
-    // poll is intentionally slow because it goes through the DMI scan chain.
+    // Each inference uses the physical single-port vector schedule.
+    // Each SBA poll is intentionally slow because it goes through the DMI
+    // scan chain.
     for (integer j=0;j<6000;j++) begin
       sba_read(32'h80001fc0,value);
       if (value == 32'hdeadbeef)
@@ -217,7 +222,7 @@ module tb_mynpu_soc_asic_stress #(
   task automatic busy_local_access_probe;
     logic [31:0] local_word, status;
     // The single-port contract rejects host data access while the engine owns
-    // the macro. Reads return a deterministic marker and set REG_STATUS.error;
+    // the macro. Reads return a deterministic marker and record REG_ERROR;
     // writes complete at AXI level but do not alter SRAM.
     sba_read(32'h70004000,local_word);
     if (local_word !== 32'hdead_b001)
@@ -231,8 +236,8 @@ module tb_mynpu_soc_asic_stress #(
   task automatic busy_local_write_check;
     logic [31:0] local_word;
     sba_read(32'h70004000,local_word);
-    if (local_word !== 32'hc9c908e9)
-      $display("[SOC-ASIC-STRESS] BUSY local write changed data to %h",local_word);
+    if (local_word !== model_image[0])
+      $fatal(1,"[SOC-ASIC-STRESS] BUSY local write changed data to %h expected=%h",local_word,model_image[0]);
     else
       $display("[SOC-ASIC-STRESS] BUSY local write was ignored as documented");
   endtask
@@ -244,7 +249,8 @@ module tb_mynpu_soc_asic_stress #(
   initial begin
     bit discard;
     logic [40:0] scan_response;
-    $readmemh("generated/8k/cpu.hex",cpu_image);
+    $readmemh(CPU_IMAGE,cpu_image);
+    $readmemh(MODEL_HEX,model_image);
     repeat(10) @(posedge clk); rst_ni=1;
     repeat(10) @(posedge clk);
     repeat(6) tick(1,0,discard); tick(0,0,discard);
@@ -275,8 +281,8 @@ module tb_mynpu_soc_asic_stress #(
     for (integer round=0;round<BOOT_ROUNDS;round++) begin
       wait_mailbox(32'h12345678);
       wait_npu_busy();
-      crossbar_contention_probe();
       busy_local_access_probe();
+      crossbar_contention_probe();
       for (integer k=0;k<HALT_ROUNDS;k++) cpu_halt_resume();
       wait_mailbox(32'hc0dec0de);
       busy_local_write_check();
@@ -296,7 +302,7 @@ module tb_mynpu_soc_asic_stress #(
         boot_ready=0; random_reset_during_busy(); boot_ready=1;
       end
     end
-    $display("[SOC-ASIC-STRESS] PASS full SoC boots=%0d, CPU/NPU macro SRAM, SBA=%0d, halt/resume=%0d",BOOT_ROUNDS,SBA_WORDS,HALT_ROUNDS);
+    $display("[SOC-ASIC-STRESS] PASS full SoC lanes=%0d boots=%0d, CPU/NPU macro SRAM, SBA=%0d, halt/resume=%0d",NPU_LANES,BOOT_ROUNDS,SBA_WORDS,HALT_ROUNDS);
     $finish;
   end
   initial begin #1000000000; $fatal(1,"ASIC full-SoC timeout"); end

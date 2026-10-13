@@ -12,7 +12,7 @@ def main():
         path=ROOT/'third_party/lab3'/item['path']
         assert hashlib.sha256(path.read_bytes()).hexdigest()==item['sha256'], path
     print(f'lab3: {len(records)} imported files match original SHA256')
-    for layout in ('8k','16k'):
+    for layout in ('8k','16k','8k-p4'):
         folder=ROOT/f'cnn_npu_int8/generated/{layout}'
         meta=json.loads((folder/'golden.json').read_text())
         image=bytes(int(v,16) for v in (folder/'cnn_npu_mem.hex').read_text().split())

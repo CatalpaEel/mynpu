@@ -9,9 +9,11 @@ module tb_cnn_npu_mnist #(
   parameter integer VECTORS = 64,
   parameter integer INPUT_BYTES = 784,
   parameter integer OUTPUT_BYTES = 10,
-  parameter INPUT_HEX = "build/mnist-regression/mnist_input_codes_8k.hex",
-  parameter GOLDEN_HEX = "build/mnist-regression/mnist_integer_outputs_8k.hex",
-  parameter MEM_HEX = "cnn_npu_int8/generated/8k/npu_word.hex"
+  parameter integer LANES = 1,
+  parameter integer MEM_BACKEND = 1,
+  parameter INPUT_HEX = (LANES==1) ? "build/mnist-regression/mnist_input_codes_8k.hex" : "build/mnist-regression/mnist_input_codes_8k-p4.hex",
+  parameter GOLDEN_HEX = (LANES==1) ? "build/mnist-regression/mnist_integer_outputs_8k.hex" : "build/mnist-regression/mnist_integer_outputs_8k-p4.hex",
+  parameter MEM_HEX = (LANES==1) ? "cnn_npu_int8/generated/8k/npu_word.hex" : "cnn_npu_int8/generated/8k-p4/npu_word.hex"
 );
   localparam integer LOCAL_BASE = 14'h1000;
   localparam integer INPUT_BASE = 5120;
@@ -30,20 +32,22 @@ module tb_cnn_npu_mnist #(
   integer run, word, lane, poll, output_word, output_lane, got, expected;
   integer errors;
   logic [31:0] word_data, value, status;
+  logic [31:0] init_words [0:2047];
 
   always #5 clk = ~clk;
   initial $readmemh(INPUT_HEX, input_codes);
   initial $readmemh(GOLDEN_HEX, expected_codes);
+  initial if (MEM_BACKEND==2) $readmemh(MEM_HEX,init_words);
 
-  cnn_npu_sp_top #(
-    .LANES(1),
+  cnn_npu_subsystem #(
+    .LANES(LANES),
     .SRAM_BYTES(8192),
     .MAX_LAYERS(8),
-    .MEM_BACKEND(1),
-    .MEM_INIT_FILE(MEM_HEX)
+    .MEM_BACKEND(MEM_BACKEND),
+    .MEM_INIT_FILE(MEM_BACKEND==1 ? MEM_HEX : "")
   ) dut (
-    .clka(clk), .rst_ni(rst_ni), .ena(ena), .wea(wea), .be_i(be),
-    .addra(addra), .dina(dina), .douta(douta), .irq_o(irq)
+    .clk_i(clk), .rst_ni(rst_ni), .req_i(ena), .we_i(wea), .be_i(be),
+    .addr_i({16'd0,addra,2'b00}), .wdata_i(dina), .rdata_o(douta), .irq_o(irq)
   );
 
   task automatic bus_write(input integer address, input logic [31:0] data);
@@ -79,6 +83,8 @@ module tb_cnn_npu_mnist #(
     repeat (4) @(posedge clk);
     rst_ni = 1'b1;
     repeat (2) @(posedge clk);
+    if (MEM_BACKEND==2)
+      for (integer k=0;k<2048;k++) bus_write(LOCAL_BASE+k,init_words[k]);
     bus_write(4, 7168); // descriptor base in the 8 KB image
     bus_write(5, 6);    // six CNN layers
     errors = 0;
@@ -111,7 +117,7 @@ module tb_cnn_npu_mnist #(
 
     if (errors != 0)
       $fatal(1, "MNIST random vector regression failed errors=%0d", errors);
-    $display("[CNN-MNIST] PASS vectors=%0d input_bytes=%0d", VECTORS, INPUT_BYTES);
+    $display("[CNN-MNIST] PASS backend=%0d lanes=%0d vectors=%0d input_bytes=%0d", MEM_BACKEND, LANES, VECTORS, INPUT_BYTES);
     $finish;
   end
 endmodule

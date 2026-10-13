@@ -41,7 +41,35 @@ mailbox `0xc0dec0de` 的 PASS，LED7 表示 firmware error 或 watchdog timeout�
 这个 bitstream 已在本机连接的 `xc7a35tcsg324-1` 上实际下载并验证：4 次
 启动、20 次推理均得到 class 2、4 次 IRQ、288390 个 NPU 周期。
 
-### 8-lane 参数实验
+### 4-lane 单口向量版本
+
+新 4-lane 使用和 ASIC 相同的 `cnn_npu_sp_lanes` 与四个 MAC 实例，NPU
+仍为一块逻辑 8KB 单口 SRAM/BRAM。配套 packed4 CPU 镜像放在
+`generated/8k-p4/cpu.hex`，工程目录为 `vivado_autonomous_4lane`，不覆盖原 1-lane 工程。
+
+```powershell
+& E:\Vivado\2023.2\bin\vivado.bat -mode batch `
+  -source fpga/ego1/build_autonomous_4lane.tcl
+# 生成 bit/ltx 后，可用同一个板载 USB-JTAG/VIO 路径下载和复位回归：
+& E:\Vivado\2023.2\bin\vivado.bat -mode batch `
+  -source fpga/ego1/program_autonomous.tcl -tclargs --program 3 4lane
+```
+
+输出为 `fpga/ego1/build/ego1_autonomous_top_4lane.bit/.ltx`。4-lane VCS
+BRAM/ASIC 回归测得 65732 cycles；实际下载结果与 FPGA 时序报告单独记录，
+不能把上面旧 1-lane 的板上 PASS 当作新 4-lane 的上板证据。
+
+2026-10-12 已使用 Vivado 2023.2 重新生成包含 ERROR→START 修复的 4-lane
+bitstream。50MHz 约束下 WNS=+1.036ns、WHS=+0.028ns，TNS/THS 和 failing
+endpoints 均为 0，bitgen DRC error=0。完整 SoC（含 VIO/debug hub）使用
+12385 LUT、9030 FF、17 DSP、4 RAMB36。独立 NPU 综合另检查到四个
+`cnn_npu_lane_mac` 实例，占 2909 LUT、1302 FF、12 DSP、2 RAMB36；这些
+是 FPGA 资源，不能据此估计 ASIC 面积或频率。
+
+本次 Hardware Manager 检测返回 `No matching targets found`，因此**新版
+4-lane 尚未实际上板下载**。上述结果为 RTL/宏功能模型、FPGA 综合和实现证据。
+
+### 8-lane 参数实验（旧版上板记录）
 
 可以用 `fpga/ego1/build_autonomous_8lane.tcl` 生成并下载带
 `NPU_LANES=8` 的独立 bitstream：
@@ -53,12 +81,11 @@ mailbox `0xc0dec0de` 的 PASS，LED7 表示 firmware error 或 watchdog timeout�
   -source fpga/ego1/program_autonomous.tcl -tclargs --program 3 8lane
 ```
 
-当前单端口 BRAM/ASIC backend 的状态机每拍只取一个 32-bit SRAM word，
-所以 `NPU_LANES=8` 在这个版本只是参数可配置性验证，不会得到 8 个并行
-MAC；应观察到和 1-lane 接近的 288390 周期。真正的 8-lane FPGA 版本需要
-把 NPU SRAM 分成至少 8 个 bank（或加入权重/activation cache），并将读请求
-调度成 8 路。这个实验能证明参数传递和 CPU/NPU 功能仍正确，但不能替代
-banked-memory 版本的吞吐验证。
+之前上板的 8-lane 参数 bitstream 使用旧串行核心，实际为 288390 cycles。
+当前 RTL 已增加真正的向量核心；重新运行 8-lane 脚本会走 legacy OIHW
+兼容预取路径，不再代表旧 bitstream。推荐先用上面的 4-lane packed4
+工程；ASIC 的 8-lane packed4 NPU 功能回归为 55723 cycles，尚未以该
+配置替代 4-lane 的完整 SoC/上板主回归。
 
 ## Lab 6 外部 JTAG 版本
 

@@ -8,7 +8,7 @@
 
 EGo1 使用 XC7A35T-1CSG324C，板载 100 MHz 时钟在 P17，复位输入在 P15；USB 接口同时提供配置 JTAG 和 UART。[EGo1 手册](https://e-elements.readthedocs.io/zh/ego1_v2.2/EGo1.html) 还列出板载 IS61WV12816BLL，它是异步 16-bit 外部 SRAM，与这个同步 32-bit ASIC macro 不是同一种接口。因此第一版内部 SoC 验证使用 Artix-7 片上 BRAM，不使用板载异步 SRAM。
 
-`rtl/mynpu_sram_2048x32_fpga.sv` 是一个同接口的 2048×32 同步 BRAM 推断模型。它保持单端口、逐字节写和无 memory reset；`rtl/mynpu_sram.sv` 通过 `FPGA_BRAM=1` 选择它。NPU 也有 `cnn_npu_sp_top.sv`，通过同一个单端口 SRAM backend 执行 descriptor、activation、weight、requant 和 byte-write。EGo1 shell `fpga/ego1/ego1_soc_top.sv` 使用 CPU 8KB、NPU 8KB、`LANES=1` 和 `generated/8k/cpu.hex` 预加载 CPU。
+`rtl/mynpu_sram_2048x32_fpga.sv` 是一个同接口的 2048×32 同步 BRAM 推断模型。它保持单端口、逐字节写和无 memory reset；`rtl/mynpu_sram.sv` 通过 `FPGA_BRAM=1` 选择它。NPU 的原串行核心 `cnn_npu_sp_top.sv` 和新向量核心 `cnn_npu_sp_lanes.sv` 都使用同一个同步单口接口。当前 EGo1 主验证工程由 `build_autonomous_4lane.tcl` 创建，CPU/NPU 各 8KB BRAM、`NPU_LANES=4`、packed4 CPU 镜像。原外部 Debug shell `ego1_soc_top.sv` 保留 1-lane 基线。
 
 同步 RAM 的主机读路径也按一拍 SRAM 延迟处理：NPU 的 pending read 在 SRAM 输出有效的周期直接送给 AXI response，避免把 FPGA BRAM 的第二拍数据错当成旧数据。这个路径由 `sim/tb_mynpu_soc_fpga.sv` 覆盖；它让 CPU BRAM 与 NPU 单口 BRAM 连续执行固件的 5 次推理。
 
@@ -28,12 +28,12 @@ CPU 8KB 宏的 FPGA 映射约需要两块 36-Kbit BRAM；CPU 和 NPU 两块 8KB 
 
 ## 面向流片的下一步
 
-不能把当前 NPU 的 `logic [7:0] mem[...]` 直接替换成一个 macro 实例。当前 MAC 同一拍可能读取多个 activation、多个 lane weight、bias 和 multiplier；`RA1SHD` 每拍只有一个 32-bit 地址。因此需要先定义 `req/we/be/addr/wdata/rdata/rvalid` 的 SRAM backend，再把 NPU FSM 改成：descriptor 分拍读取 → bias/scale 缓存 → activation/weight 分拍读取 → MAC → requant → 四个 byte 打包写回。
+历史功能数组 `cnn_npu_top` 同一拍可能读取多个 activation、weight、bias 和 multiplier，不能直接替换成一个 RA1SHD 实例。物理单口版本已另行实现：descriptor 分拍读取 → 每组 bias/scale 缓存 → activation/weight 预取 → 同拍多 lane MAC → 共享 requant → byte-enable 写回；每周期最多发出一个 32-bit SRAM 请求。
 
-推荐先实现 `LANES=1` 的单端口版本，使 FPGA BRAM 和 ASIC macro 的周期/读延迟完全相同，再增加权重预取或 bank/cache 扩展到 `LANES=4/8`。如果仍只允许 CPU 8KB + NPU 8KB 两块宏，不能假设 8 lane 每拍都能从一块单端口宏得到 8 个独立权重；要么增加周期，要么改变存储分 bank/加入小型权重缓存。
+原 `LANES=1` 单端口版本保留作基线。当前 `cnn_npu_sp_lanes` 已在同一个 32-bit 单口上实现 2/4/8-lane：packed4 格式每次读出四个权重，activation 广播给 lane，参数组和 activation word 用寄存器缓存。4-lane 不增加宏；8-lane 权重需两个 word 分拍供给，实测加速收益低于计算数量增长。ASIC 主配置和完整回归采用 4-lane，详见 [单口向量 NPU](npu-single-port-vector.md)。
 
 ASIC 综合时使用 `.lib`（TT/SS/FF corners）和 macro black-box wrapper；P&R 使用 `.lef/.vclef`，LVS 使用 `.cdl`，门级仿真使用 `.v` 和相应 SDF。宏的 VDD/VSS 是物理 PG pin，RTL 仿真模型不会显示这些 pin。综合、宏放置、CTS、STA、IR/EM、LVS/DRC 都必须在换成真实 macro 后重新进行。
 
-公开工程中的 `rtl/mynpu_sram_2048x32_asic.sv` 只包含 wrapper。ASIC flow 需要额外加入课程提供的 `RA1SHD_2048x32M8.v`，并把顶层参数 `USE_ASIC_SRAM=1`；默认 VCS/FPGA flow 保持 `USE_ASIC_SRAM=0`。综合时还要将对应 corner `.lib` 加入 link library，不能只编译 Verilog model。
+公开工程中的 `rtl/mynpu_sram_2048x32_asic.sv` 只包含 wrapper。ASIC 功能回归需要额外加入课程提供的 `RA1SHD_2048x32M8.v`，并把 SoC 顶层参数设为 `USE_ASIC_SRAM=1`、`USE_FPGA_BRAM=0`、`NPU_LANES=4`，CPU/NPU 容量各 8192B；配套 CPU 镜像为 `generated/8k-p4/cpu.hex`。完整 ASIC SoC 压力测试和 64 张 CPU-in-loop 已通过。综合时还要将对应 corner `.lib` 加入 link library，不能只编译 Verilog model；真实宏 timing check/PDK 签核按约定不在本次任务范围。
 
 宏 RTL 仿真可以用 `sim/tb_mynpu_soc_asic.sv` 做 smoke test：把压缩包中的 `.v` 放在受控 PDK/build 目录，额外加入 `rtl/mynpu_sram_2048x32_asic.sv` 和该宏文件编译。宏模型有 timing checks，零延迟 RTL 回归应按 PDK 时钟约束决定是否使用仿真器的 timing-check 选项；不能把该选项当成 STA 或流片 signoff。

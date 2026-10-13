@@ -70,5 +70,7 @@ rtl/mynpu_sram_2048x32_fpga.sv
 rtl/mynpu_sram.sv
 cnn_npu_int8/rtl/cnn_npu_top.sv
 cnn_npu_int8/rtl/cnn_npu_sp_top.sv
+cnn_npu_int8/rtl/cnn_npu_lane_mac.sv
+cnn_npu_int8/rtl/cnn_npu_sp_lanes.sv
 cnn_npu_int8/rtl/cnn_npu_subsystem.sv
 rtl/mynpu_soc_top.sv

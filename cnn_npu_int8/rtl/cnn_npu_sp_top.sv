@@ -354,12 +354,15 @@ module cnn_npu_sp_top #(
         end
         S_DONE: ;
         S_ERROR: begin
-          busy_q<=0;
-          // A clear arriving while in S_ERROR must win over the sticky error
-          // assignment; otherwise the state machine can never recover.
-          if (!(ena && wea && !bus_local &&
-                ((addra == REG_CONTROL && dina[2]) || (addra == REG_ERROR))))
-            error_q<=1;
+          // The register decoder already handled START. ERROR cleanup must
+          // not overwrite its BUSY/error updates, including CLEAR+START.
+          if (!(ena && wea && !bus_local && !busy_q &&
+                addra==REG_CONTROL && dina[0])) begin
+            busy_q<=0;
+            if (!(ena && wea && !bus_local &&
+                  ((addra == REG_CONTROL && dina[2]) || (addra == REG_ERROR))))
+              error_q<=1;
+          end
         end
         default: state_q<=S_ERROR;
       endcase

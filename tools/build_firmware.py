@@ -40,6 +40,10 @@ def integer_golden(image, metadata):
                                     yy, xx = y*stride+ky-1, x*stride+kx-1
                                     a = mem[src+ci*ih*iw+yy*iw+xx] if 0 <= yy < ih and 0 <= xx < iw else iz
                                     wa = wb+((co*ic+ci)*3+ky)*3+kx
+                                if flags & 4:
+                                    terms = ic * (1 if flags & 1 else 9)
+                                    term = ci if flags & 1 else ci*9+ky*3+kx
+                                    wa = wb + ((co//4)*terms+term)*4 + co%4
                                 w = mem[wa] if mem[wa] < 128 else mem[wa]-256
                                 acc += (a-iz)*w
                     acc = ((acc+(1 << 31)) % (1 << 32))-(1 << 31)
@@ -62,7 +66,7 @@ def c_words(name, data):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--layout', choices=['8k','16k'], default='8k')
+    ap.add_argument('--layout', choices=['8k','16k','8k-p4'], default='8k')
     ap.add_argument('--gcc', default=os.environ.get('RISCV_GCC', 'riscv64-unknown-elf-gcc'))
     ap.add_argument('--objcopy', default=os.environ.get('RISCV_OBJCOPY'))
     args = ap.parse_args()

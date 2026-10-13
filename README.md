@@ -1,8 +1,8 @@
 # mynpu：tiny MNIST INT8 完整 SoC
 
-本工程在独立目录中整合了 **CV32E40P CPU、3×4 AXI crossbar、原有 JTAG/Debug Module、Boot RAM、CPU SRAM 和 INT8 CNN NPU**。默认配置是 CPU 8KB + NPU 8KB，NPU 同时计算 8 个输出通道。原始 `lab3-ST` 未修改；复用源码保存在 `third_party/lab3`，新增集成顶层是 `rtl/mynpu_soc_top.sv`。
+本工程在独立目录中整合了 **CV32E40P CPU、3×4 AXI crossbar、原有 JTAG/Debug Module、Boot RAM、CPU SRAM 和 INT8 CNN NPU**。流片主配置为 CPU 8KB RA1SHD + NPU 8KB RA1SHD、`USE_ASIC_SRAM=1`、`NPU_LANES=4`，四个 MAC 同拍计算。顶层的历史默认值仍保留功能数组/8 lanes，实际流片配置必须显式设置参数。原始 `lab3-ST` 未修改；复用源码保存在 `third_party/lab3`，新增集成顶层是 `rtl/mynpu_soc_top.sv`。
 
-这是已通过完整 SoC 功能仿真、FPGA BRAM 后端仿真和 EGo1 Vivado bitstream 生成的 RTL 工程。默认功能 backend 适合算法基线；`USE_FPGA_BRAM=1` 会同时替换 CPU/NPU 为同步单端口 BRAM 后端，`USE_ASIC_SRAM=1` 会同时替换为 RA1SHD wrapper，并由 `cnn_npu_sp_top` 采用逐拍单端口调度。EGo1 工程已经完成综合、实现、时序和 bitstream 生成；真实板卡下载、FT232H/OpenOCD/GDB 联调以及 0.18µm 工艺综合、时序和物理签核仍需在对应硬件和 PDK 环境完成。
+这是已通过完整 ASIC SoC 宏功能模型、FPGA BRAM SoC 压力仿真和 EGo1 Vivado bitstream 生成的 RTL 工程。`USE_FPGA_BRAM=1` 同时将 CPU/NPU 替换为同步单口 BRAM，`USE_ASIC_SRAM=1` 同时替换为 RA1SHD wrapper；NPU 在 1 lane 时使用原串行核心，在 2/4/8 lanes 时使用 `cnn_npu_sp_lanes` 向量核心。原 1-lane 已实际上板；新版 4-lane 的下载记录单独列在 FPGA README。真实宏 timing check/PDK 签核按约定不在本次任务范围，FT232H/OpenOCD/GDB 探针链路仍未联调。
 
 ## 架构
 
@@ -32,6 +32,12 @@ NPU 是 AXI 从设备；它从本地存储读取参数、输入和层描述符�
 git clone https://github.com/one-bite-one-pig/mynpu.git
 cd mynpu
 python3 tools/verify_assets.py
+# 流片主配置：完整 ASIC SoC，CPU/NPU 各一块 8KB 宏，4 lanes
+python3 tools/run_single_port_regression.py --memory asic \
+  --macro-model /private/path/RA1SHD_2048x32M8.v --lanes 4 --suite soc
+# 同一 4-lane 数据通路的 FPGA BRAM 完整 SoC 回归
+python3 tools/run_single_port_regression.py --memory fpga --lanes 4 --suite soc
+# 下面保留早期功能数组的对照回归：
 python3 tools/run_sim.py --backend vcs --layout 8k --lanes 8
 python3 tools/run_sim.py --backend vcs --layout 16k --lanes 16
 python3 tools/run_sim.py --backend vcs --layout 8k --lanes 1
@@ -74,7 +80,7 @@ build/vcs-axi-bp/simv +ntb_random_seed=14596
 |---|---:|---|
 | `CPU_SRAM_BYTES` | 8192 | CPU 程序、数据和栈容量 |
 | `NPU_SRAM_BYTES` | 8192 | NPU 参数、激活和描述符容量 |
-| `NPU_LANES` | 8 | 功能数组 backend 的输出通道并行数；单端口 FPGA/ASIC backend 当前按 `LANES=1` 使用 |
+| `NPU_LANES` | 8 | 功能数组的输出通道并行数；单端口 ASIC/FPGA 支持 1-lane 基线或 2/4/8-lane 向量核心，主配置推荐 4 |
 | `NPU_IRQ_ID` | 16 | 接入 CV32E40P 的中断编号 |
 | `CPU_INIT_FILE` | 空 | CPU RAM 仿真/FPGA 初始镜像 |
 | `NPU_INIT_FILE` | 空 | 可选 NPU RAM 初始镜像 |
@@ -95,7 +101,9 @@ CPU 固件当前对应 8KB CPU SRAM、中断 16；改变这两项须同步修改
 | `0x7000_4000` 起 | NPU SRAM 的 32-bit、小端访问窗口 |
 | `0x8000_1fc0 .. 0x8000_1fff` | 自测结果 mailbox |
 
-当前默认 VCS 回归仍使用高并行功能 backend；FPGA/ASIC 版本通过 `USE_FPGA_BRAM=1` 或 `USE_ASIC_SRAM=1` 选择 CPU 与 NPU 的同步单端口 SRAM backend，此时建议 `NPU_LANES=1`。`SHARED_SRAM=1` 规定 NPU BUSY 时主机本地写不落 SRAM、违规本地读返回确定错误标记，不代表 CPU 主存与 NPU 已共用一个物理 SRAM。
+当前默认 VCS 回归仍使用高并行功能 backend；FPGA/ASIC 版本通过 `USE_FPGA_BRAM=1` 或 `USE_ASIC_SRAM=1` 选择 CPU 与 NPU 的同步单端口 SRAM backend。流片主配置为 `NPU_LANES=4`、CPU 8KB + NPU 8KB，搭配 `generated/8k-p4/cpu.hex`；四个 MAC 同拍更新，权重按四通道打包，不增加 SRAM 端口。`SHARED_SRAM=1` 规定 NPU BUSY 时主机本地写不落 SRAM、违规本地读返回确定错误标记，不代表 CPU 主存与 NPU 已共用一个物理 SRAM。
+
+4-lane 单口版本在 ASIC 宏功能模型和 FPGA BRAM 上都是 **65732 cycles**，相对 1-lane 的 288390 cycles 加速 **4.39×**。各通过 100 次逐层推理、200 组随机算子/SRAM 全区检查、64 张 MNIST 的 NPU 回归、64 张 CPU-in-loop 完整 SoC 回归及复位/竞争/错误恢复压力测试。架构、镜像协议和复现命令见 [单口向量 NPU](docs/npu-single-port-vector.md)。
 
 ## 模型及整数运算
 
@@ -148,7 +156,7 @@ Manager 下载 bitstream，并通过 VIO 读取 mailbox、IRQ 和分类结果、
 真实 `xc7a35tcsg324-1` 上完成 4 次启动、20 次推理回归。具体命令和 LED 定义见
 [EGo1 FPGA README](fpga/ego1/README.md)。
 
-当前 FPGA/ASIC 单端口存储 backend 以 `LANES=1` 为真实吞吐配置；它接受
-`NPU_LANES=8` 参数但仍按单端口串行访问。`fpga/ego1/build_autonomous_8lane.tcl`
-可以生成 8-lane 参数实验 bitstream，用于检查功能和参数传递；要获得真正
-8 路并行，下一版需要 banked SRAM 或权重缓存。
+`fpga/ego1/build_autonomous_4lane.tcl` 为真正 4-lane 单口 BRAM 配置创建独立
+Vivado 工程，并使用 packed4 CPU 镜像；它与 ASIC 共用向量核心。原 1-lane
+工程和曾上板的 bitstream 保留。新旧镜像不能混淆：原 `8k` 用于 1-lane
+基线，`8k-p4` 用于向量核心的打包权重路径。
