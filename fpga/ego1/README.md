@@ -66,8 +66,33 @@ endpoints 均为 0，bitgen DRC error=0。完整 SoC（含 VIO/debug hub）使�
 `cnn_npu_lane_mac` 实例，占 2909 LUT、1302 FF、12 DSP、2 RAMB36；这些
 是 FPGA 资源，不能据此估计 ASIC 面积或频率。
 
-本次 Hardware Manager 检测返回 `No matching targets found`，因此**新版
-4-lane 尚未实际上板下载**。上述结果为 RTL/宏功能模型、FPGA 综合和实现证据。
+2026-10-12 的 Hardware Manager 曾未检测到板卡。2026-10-13 接入 EGo1
+后，已实际下载上述 4-lane bitstream，并执行一次初始启动和 20 次 VIO
+软复位，**21 次启动、105 次六层推理全部通过**。每次 mailbox 为
+`0xc0dec0de`、error=0、class=2、IRQ edges=4、NPU cycles=65732。
+每次启动的第一轮用轮询，后四轮由真实 CPU ISR 完成；CPU 每轮重新写
+输入并严格检查全部 10 个输出 code，另检查与 PyTorch code 的差值 ≤1。
+复位保持期间还检查 mailbox/IRQ 观察值归零。
+
+这次使用固定自测输入，属于实体板上的重复启动/推理回归；64 张不同
+MNIST 的 CPU-in-loop 记录仍属于 VCS 仿真。下载和观测都经板载 USB-JTAG
+与 VIO，外部 RISC-V Debug Module 链路没有参与，不需要 FT232H 或杜邦线。
+完整本机日志为 `build/ego1-4lane-board-20261013.log`，复现命令：
+
+```powershell
+& E:\Vivado\2023.2\bin\vivado.bat -mode batch `
+  -source fpga/ego1/program_autonomous.tcl `
+  -log build/ego1-4lane-board-20261013.log `
+  -journal build/ego1-4lane-board-20261013.jou `
+  -tclargs --program 20 4lane
+```
+
+```text
+BOARD_SELFTEST PASS round=0 status=c0dec0de irq_edges=4 class=2 cycles=65732
+... round=1..19 均相同 ...
+BOARD_SELFTEST PASS round=20 status=c0dec0de irq_edges=4 class=2 cycles=65732
+BOARD_REGRESSION PASS boots=21 inferences=105
+```
 
 ### 8-lane 参数实验（旧版上板记录）
 

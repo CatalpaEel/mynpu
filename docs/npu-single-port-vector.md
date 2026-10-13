@@ -110,4 +110,6 @@ done
 
 EGo1 的独立 4-lane 工程脚本为 `fpga/ego1/build_autonomous_4lane.tcl`，目录 `vivado_autonomous_4lane`；器件仍为 `xc7a35tcsg324-1`，CPU 镜像为 `generated/8k-p4/cpu.hex`。输出 bit/ltx 使用 `_4lane` 后缀。它通过原 USB-JTAG/VIO 自测，不要求外部 RISC-V Debug 探针。板上实测结果以 `fpga/ego1/README.md` 的记录为准，VCS BRAM 仿真不能代替实际下载。
 
-修复后的完整 bitstream 已生成，50MHz 约束下 WNS=+1.036ns、WHS=+0.028ns，setup/hold failing endpoints=0；整机使用 12385 LUT、9030 FF、17 DSP、4 RAMB36。独立 NPU 综合脚本还断言保留四个 MAC 实例。当前未检测到 FPGA target，新 4-lane 尚未下载到实体板，原 1-lane 板上 PASS 不能代替本版验证。
+修复后的完整 bitstream 已生成，50MHz 约束下 WNS=+1.036ns、WHS=+0.028ns，setup/hold failing endpoints=0；整机使用 12385 LUT、9030 FF、17 DSP、4 RAMB36。独立 NPU 综合脚本还断言保留四个 MAC 实例。
+
+2026-10-13 新 4-lane 已实际下载至 EGo1 XC7A35T，经板载 USB-JTAG/VIO 通过 21 次启动、105 次固定输入推理；每次 class=2、IRQ edges=4、error=0、NPU cycles=65732。CPU 每轮严格对照 10-byte 整数 golden，检查 PyTorch 差值 ≤1，并在 20 次复位保持期间检查 mailbox/IRQ 归零。外部 RISC-V Debug 下载器没有参与；64 张不同 MNIST 的 CPU-in-loop 仍是 VCS 仿真覆盖。本机完整日志为 `build/ego1-4lane-board-20261013.log`，命令和板上记录见 FPGA README。

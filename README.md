@@ -160,3 +160,7 @@ Manager 下载 bitstream，并通过 VIO 读取 mailbox、IRQ 和分类结果、
 Vivado 工程，并使用 packed4 CPU 镜像；它与 ASIC 共用向量核心。原 1-lane
 工程和曾上板的 bitstream 保留。新旧镜像不能混淆：原 `8k` 用于 1-lane
 基线，`8k-p4` 用于向量核心的打包权重路径。
+
+2026-10-13 新 4-lane 已实际下载到 EGo1，以板载 USB-JTAG/VIO 完成
+21 次启动、105 次固定输入推理。每次 class=2、IRQ edges=4、error=0、
+NPU cycles=65732，CPU 每轮检查全部 10 个输出。无需外部 Debug 下载器。

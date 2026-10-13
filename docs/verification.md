@@ -10,7 +10,9 @@
 
 两套完整 SoC 另各通过 64 张不同 MNIST 的 CPU-in-loop：CPU AXI 写模型、Debug SBA 注入每张输入、CPU 启动/处理中断/清 DONE/读回结果。随机测试修复了 ReLU signed/unsigned 比较，追加边界测试修复了 ERROR 状态清理覆盖 START 的 BUSY 更新；原 1-lane 与新 4-lane、ASIC 与 FPGA 四组 ERROR→CLEAR+START/START 恢复回归均通过。
 
-修复后两套 4-lane 完整 SoC 以 seed=777 再回归均通过。EGo1 4-lane bitstream 已重新生成，50MHz 的 WNS=+1.036ns、WHS=+0.028ns、TNS/THS=0，bitgen DRC error=0；当前 Hardware Manager 未检测到板卡，因此尚无新版 4-lane 的实体上板 PASS。
+修复后两套 4-lane 完整 SoC 以 seed=777 再回归均通过。EGo1 4-lane bitstream 已重新生成，50MHz 的 WNS=+1.036ns、WHS=+0.028ns、TNS/THS=0，bitgen DRC error=0。
+
+2026-10-13 实体 EGo1 已下载该 4-lane bitstream，经板载 USB-JTAG/VIO 通过 21 次启动、105 次固定输入六层推理，class=2、IRQ edges=4、NPU cycles=65732、error=0。CPU 每轮对全部 10 个输出严格检查整数 golden、检查 PyTorch 差值 ≤1；20 次软复位保持期间 mailbox/IRQ 归零。未使用外部 RISC-V Debug 下载器。记录见 [EGo1 上板结果](../fpga/ego1/README.md)，64 张不同 MNIST 的 CPU-in-loop 仍是仿真记录。
 
 packed 镜像和 PyTorch 的完整 10000 张 MNIST 参考重新执行，准确率均为 99.01%，argmax 差异仍是四张。架构、压力覆盖、复现命令见 [单口向量验证记录](npu-single-port-vector.md)。下面早期 54132/10704/9882 周期来自功能数组，与本次物理单口路径有明确区别；真实宏 timing check/PDK 签核不在本任务范围。
 
