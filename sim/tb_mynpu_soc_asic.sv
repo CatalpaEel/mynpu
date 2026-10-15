@@ -17,11 +17,11 @@ module tb_mynpu_soc_asic;
   );
   initial begin
     repeat(10) @(posedge clk); rst_ni=1;
-    wait(dut.i_mainmem.g_asic_macro.i_macro.i_macro.mem['h1fc0/4] === 32'hc0dec0de ||
-         dut.i_mainmem.g_asic_macro.i_macro.i_macro.mem['h1fc0/4] === 32'hdeadbeef);
-    if (dut.i_mainmem.g_asic_macro.i_macro.i_macro.mem['h1fc0/4] === 32'hdeadbeef)
-      $fatal(1,"ASIC-SRAM CPU firmware failed code=%h",dut.i_mainmem.g_asic_macro.i_macro.i_macro.mem['h1fc4/4]);
-    $display("[SOC-ASIC] PASS CPU + NPU foundry SRAM wrappers, NPU cycles=%0d", dut.i_npu_subsystem.g_single_port.i_core.cycle_q);
+    wait(dut.g_private.i_mainmem.g_asic_macro.i_macro.i_macro.mem['h1fc0/4] === 32'hc0dec0de ||
+         dut.g_private.i_mainmem.g_asic_macro.i_macro.i_macro.mem['h1fc0/4] === 32'hdeadbeef);
+    if (dut.g_private.i_mainmem.g_asic_macro.i_macro.i_macro.mem['h1fc0/4] === 32'hdeadbeef)
+      $fatal(1,"ASIC-SRAM CPU firmware failed code=%h",dut.g_private.i_mainmem.g_asic_macro.i_macro.i_macro.mem['h1fc4/4]);
+    $display("[SOC-ASIC] PASS CPU + NPU foundry SRAM wrappers, NPU cycles=%0d", dut.g_private.i_npu_subsystem.g_single_port.i_core.cycle_q);
     $finish;
   end
   initial begin #100000000; $fatal(1,"ASIC backend timeout"); end

@@ -17,26 +17,31 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--cases',type=int,default=200)
     ap.add_argument('--seed',type=int,default=14596)
+    ap.add_argument('--banked',action='store_true',help='16KB striped-bank engine, packed4 weights')
     args=ap.parse_args()
     rng=random.Random(args.seed)
-    folder=ROOT/'build/npu-vector-stress'
+    folder=ROOT/('build/npu-banked-stress' if args.banked else 'build/npu-vector-stress')
     folder.mkdir(parents=True,exist_ok=True)
     with (folder/'input.hex').open('w') as source, (folder/'expected.hex').open('w') as expected:
         records=[]
         for case in range(args.cases):
-            fc=(case%3==0); packed=(case%2==0)
+            fc=(case%3==0); packed=args.banked or (case%2==0)
             ih=iw=1 if fc else rng.choice([1,3,5,7])
+            if args.banked and not fc:iw=rng.choice([1,3,5,7])
             ic=rng.randint(1,31 if fc else 5)
             oc=[1,2,3,4,5,7,8,9,10,11][case%10]
             stride=1 if fc else rng.choice([1,2])
-            oh=ow=1 if fc else (ih+stride-1)//stride
-            ib=2048+(case%4); ob=4096+((case//4)%4)
-            wb=512; bb=1536; mb=1600; sb=1664
+            oh=1 if fc else (ih+stride-1)//stride
+            ow=1 if fc else (iw+stride-1)//stride
+            ib=(8192 if args.banked else 2048)+(case%8 if args.banked else case%4)
+            ob=(12288 if args.banked else 4096)+((case//4)%8 if args.banked else (case//4)%4)
+            wb=512+(4*(case%2) if args.banked else 0); bb=1536; mb=1600; sb=1664
+            if args.banked:bb,mb,sb=2560,2624,2688
             iz=rng.choice([0,17,127,255]); oz=rng.choice([0,10,75,127])
             qmax=rng.choice([127,255]); relu=(case%4==0)
             flags=int(fc)|(2 if relu else 0)|(4 if packed else 0)
             terms=ic*(1 if fc else 9)
-            mem=bytearray([0xa5]*8192)
+            mem=bytearray([0xa5]*(16384 if args.banked else 8192))
             weights=[[rng.randint(-128,127) for _ in range(terms)] for _ in range(oc)]
             for co in range(oc):
                 for term in range(terms):
@@ -74,8 +79,8 @@ def main():
                         q=i32(scaled+oz)
                         if relu:q=max(q,oz)
                         gold[ob+co*oh*ow+y*ow+x]=min(max(q,0),qmax)
-            source.write(''.join(f'{w:08x}\n' for w in struct.unpack('<2048I',mem)))
-            expected.write(''.join(f'{w:08x}\n' for w in struct.unpack('<2048I',gold)))
+            source.write(''.join(f'{w:08x}\n' for w in struct.unpack('<%dI'%(len(mem)//4),mem)))
+            expected.write(''.join(f'{w:08x}\n' for w in struct.unpack('<%dI'%(len(gold)//4),gold)))
             records.append(dict(case=case,packed=packed,fc=fc,ih=ih,ic=ic,oc=oc,stride=stride))
     (folder/'cases.json').write_text(json.dumps(dict(seed=args.seed,cases=records),indent=2))
     print(f'Random NPU stress: {args.cases} cases, seed={args.seed}, full SRAM preservation golden')

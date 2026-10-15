@@ -1,17 +1,21 @@
 `timescale 1ns/1ps
 
 // EGo1 autonomous prototype.  No external RISC-V Debug Module signals are
-// required: the CPU image contains the model constants in BRAM, and the CPU
-// loads the NPU SRAM over AXI before inference. The
-// existing firmware runs the fixed five-inference self-test after reset.
+// required. The private-memory firmware copies model constants to NPU BRAM;
+// the shared-bank firmware uses preinitialized physical bank images instead.
+// Both firmware variants run five fixed-input inferences after reset.
 // LED[3:0] is a saturating count of NPU completion IRQs; the expected value
-// after the self-test is 4. LED[6] is CPU-verified PASS; LED[7] is FAIL/timeout.
+// is 4 for the private-memory image and 5 for shared banks.
+// LED[6] is CPU-verified PASS; LED[7] is FAIL/timeout.
 module ego1_autonomous_top #(
   parameter integer CPU_SRAM_BYTES = 8192,
   parameter integer NPU_SRAM_BYTES = 8192,
   parameter integer NPU_LANES = 1,
   parameter bit USE_FPGA_BRAM = 1'b1,
+  parameter bit DUAL_BANK_SHARED = 1'b0,
+  parameter integer NPU_ACT_CACHE_WORDS = 1,
   parameter CPU_INIT_FILE = "generated/8k/cpu.hex",
+  parameter NPU_INIT_FILE = "",
   parameter integer SELFTEST_TIMEOUT_CYCLES = 250000000
 ) (
   input  logic fpga_clk_i,
@@ -72,7 +76,9 @@ module ego1_autonomous_top #(
   mynpu_soc_top #(
       .CPU_SRAM_BYTES(CPU_SRAM_BYTES), .NPU_SRAM_BYTES(NPU_SRAM_BYTES),
       .NPU_LANES(NPU_LANES), .USE_FPGA_BRAM(USE_FPGA_BRAM),
-      .CPU_INIT_FILE(CPU_INIT_FILE), .NPU_INIT_FILE("")
+      .DUAL_BANK_SHARED(DUAL_BANK_SHARED),
+      .NPU_ACT_CACHE_WORDS(NPU_ACT_CACHE_WORDS),
+      .CPU_INIT_FILE(CPU_INIT_FILE), .NPU_INIT_FILE(NPU_INIT_FILE)
   ) i_soc (
       .clk_i(clk_sys), .rst_ni(sys_rst_ni), .boot_ready_i(1'b1),
       .npu_irq_o(npu_irq), .cpu_debug_halted_o(cpu_debug_halted),

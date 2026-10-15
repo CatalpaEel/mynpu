@@ -6,6 +6,7 @@ set script_dir [file dirname [file normalize [info script]]]
 set do_program 0
 set reset_rounds 3
 set build_tag ""
+set ::expected_irq_count 4
 if {[llength $argv] >= 1 && [lindex $argv 0] eq "--program" && [llength $argv] <= 3} {
     set do_program 1
     if {[llength $argv] == 2} { set reset_rounds [lindex $argv 1] }
@@ -19,6 +20,7 @@ if {[llength $argv] >= 1 && [lindex $argv 0] eq "--program" && [llength $argv] <
 } elseif {[llength $argv] != 0} {
     error "Expected no arguments (detect only) or --program ?reset_rounds? ?tag?"
 }
+if {$build_tag eq "_dual_bank"} { set ::expected_irq_count 5 }
 
 proc named_probe {vio pattern} {
     set matches {}
@@ -54,7 +56,7 @@ proc check_selftest {vio status_probe error_probe irq_probe result_probe cycle_p
             set irqs [probe_int $irq_probe]
             set result [probe_int $result_probe]
             set cycles [probe_int $cycle_probe]
-            if {$irqs != 4 || $result != 2 || $code != 0 || $cycles == 0} {
+            if {$irqs != $::expected_irq_count || $result != 2 || $code != 0 || $cycles == 0} {
                 error "Board completed with unexpected IRQ count/result/error/cycles: $irqs/$result/$code/$cycles"
             }
             puts [format "BOARD_SELFTEST PASS round=%d status=%08x irq_edges=%d class=%d cycles=%d" $round $status $irqs $result $cycles]

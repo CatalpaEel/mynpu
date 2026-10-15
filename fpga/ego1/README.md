@@ -1,6 +1,55 @@
 # EGo1 FPGA smoke test
 
-## 无 Debug Module 自运行版本（当前上板路径）
+## 双 8KB 共享 bank、4-lane 版本（当前分支上板路径）
+
+`feature/dual-bank-shared-sram` 使用完整 CPU/NPU SoC，共享两块逻辑 8KB 单口
+BRAM，对应 ASIC 的两块 RA1SHD 宏。CPU 程序、单份模型权重、描述符和激活
+已经按物理 bank 放入 `generated/dual-bank/cpu_bank0.hex` / `cpu_bank1.hex`，
+CPU 启动后直接使用，不再从固件复制整份模型。默认激活缓存 4B，NPU 为 4 lane。
+存储映射、仲裁和 ASIC 加载方式见 [共享 bank 架构](../../docs/shared-bank-npu.md)。
+
+使用板载 USB-JTAG 下载，通过 VIO 读取 CPU mailbox 并发出软复位，不需要
+FT232H、杜邦线、OpenOCD 或外接 RISC-V Debug Module 探针：
+
+```powershell
+& E:\Vivado\2023.2\bin\vivado.bat -mode batch `
+  -source fpga/ego1/build_autonomous_dual_bank.tcl
+& E:\Vivado\2023.2\bin\vivado.bat -mode batch `
+  -source fpga/ego1/program_autonomous.tcl `
+  -log build/ego1-dual-bank-board-20261015.log `
+  -journal build/ego1-dual-bank-board-20261015.jou `
+  -tclargs --program 20 dual_bank
+```
+
+独立工程目录为 `vivado_autonomous_dual_bank`，输出
+`build/ego1_autonomous_top_dual_bank.bit/.ltx`，器件为 `xc7a35tcsg324-1`。
+2026-10-15 已实际下载并完成 **21 次启动、105 次推理**，每次 class=2、
+error=0、IRQ=5、NPU cycles=35570，即 50MHz 下 0.7114ms 的 NPU 计算时间。
+每次推理由真实 CPU 检查全部 10 个整数输出码；复位期间检查 mailbox/IRQ 清零。
+全部五轮均使用 CPU WFI/IRQ，所以 LED0..3 的最终值为二进制 `0101`。
+LED4 心跳、LED5 时钟锁定、LED6 PASS、LED7 FAIL/timeout。
+
+```text
+BOARD_SELFTEST PASS round=0 status=c0dec0de irq_edges=5 class=2 cycles=35570
+... round=1..19 均相同 ...
+BOARD_SELFTEST PASS round=20 status=c0dec0de irq_edges=5 class=2 cycles=35570
+BOARD_REGRESSION PASS boots=21 inferences=105
+```
+
+最终布线报告：50MHz 约束下 WNS=+1.265ns、WHS=+0.029ns，setup/hold
+failing endpoints 均为 0。含完整 SoC、VIO/debug hub：11567 LUT、8745 FF、
+17 DSP、4 RAMB36E1。两个 RAMB36E1 组成一块逻辑 8KB bank，总共两块；
+这不代表 ASIC 需要四块 SRAM。记录及文件 SHA256 见
+[板测记录](../../docs/dual-bank-fpga-board.json)。
+
+板测为固定输入重复回归；64 张不同 MNIST 输入及 ASIC 冷加载属于 VCS
+完整 SoC 验证。匹配物理 BRAM 初值且无 SBA 轮询的仿真同样为 35570 周期；
+带 SBA mailbox 轮询的 SoC 测试为 35574 周期。外接 RISC-V DM 链路仍需
+具备探针后联调；此板测通过同一 SoC 中的 CPU 执行推理。
+
+以下保留原独立 CPU/NPU SRAM 的旧版工程与板测说明。
+
+## 原独立 SRAM 自运行版本（旧版基线）
 
 如果没有 FT232H、下载器转接线或杜邦线，使用 `ego1_autonomous_top`。它把
 `tck_i/tms_i/td_i` 固定在 TAP 空闲状态，CPU 从 BRAM 自动启动，先把模型参数和

@@ -1,6 +1,7 @@
 """Check source provenance and regenerate the independent integer reference."""
 import hashlib
 import json
+import struct
 from pathlib import Path
 from build_firmware import integer_golden
 
@@ -30,6 +31,26 @@ def main():
             delta=[abs(x-y) for x,y in zip(a,b)]
             assert max(delta)<=1
             print(f'{layout} layer {index}: {len(a)} codes, {sum(d!=0 for d in delta)} PyTorch differences, max={max(delta)}')
+    banked=ROOT/'generated/dual-bank'
+    if banked.is_dir():
+        meta=json.loads((banked/'golden.json').read_text())
+        words=[int(v,16)for v in(banked/'model_word.hex').read_text().split()]
+        image=struct.pack('<4096I',*words)
+        layers=integer_golden(image,meta)
+        assert bytes(v for layer in layers for v in layer)==bytes(int(v,16)for v in(banked/'integer_layers.hex').read_text().split())
+        assert meta['parameter_bytes']==4288,'Unexpected duplicated or altered weights'
+        for i in range(6):
+            d=struct.unpack_from('<9I',image,meta['descriptor_base']+36*i)
+            assert (d[7]>>24)&~7==0,'Unsupported/mirrored weights'
+        for name in('cpu','cpu_stream'):
+            cpu=[int(v,16)for v in(banked/(name+'.hex')).read_text().split()]
+            banks=[[int(v,16)for v in(banked/(name+'_bank%d.hex'%b)).read_text().split()]for b in range(2)]
+            assert len(cpu)==2048 and all(len(b)==2048 for b in banks)
+            assert banks[0][:512]==cpu[:512],'Model overwrote CPU program reservation'
+            assert all(v==0 for v in banks[0][0x1bc0//4:]),'Model overlaps stack/mailbox'
+            for off in range(meta['parameter_base'],meta['model_load_end'],4):
+                assert banks[(off>>2)&1][off>>3]==words[off>>2]
+        print('dual-bank: single 4288B parameter copy, all integer layers and both physical FPGA images PASS')
     print('Asset checks PASS')
 
 if __name__=='__main__': main()

@@ -1,0 +1,615 @@
+{
+  "date": "2026-10-15",
+  "current_source_sha256": {
+    "cnn_npu_int8/rtl/cnn_npu_banked.sv": "3196610e3b90985dc42d5a50428e959073b11935eeafcae13175f6d5e84564c5",
+    "rtl/mynpu_banked_sram.sv": "56727045394ef1b76f48a5c616918c0b939f89443c9ff22a9851a2b24ff9a022",
+    "rtl/mynpu_shared_subsystem.sv": "a6dd0b28ba1f78d309784c756a37e0c064d3dd418c3544914e51a784f8d41d33",
+    "rtl/mynpu_axi_shared.sv": "1b07b67375fe1c2692e2e8c8a000f66775ea223fd48dddaa81e48c47e558d5db",
+    "rtl/mynpu_soc_top.sv": "55e0f574f5e8db81652f87cd26d5dd4b7e47496bf6e632727f5a95a4f9b36fa9"
+  },
+  "notes": "Per-directory seeds and configurations retained. No timing checks/PDK signoff. Cache sweep 424242 predates address-register timing optimization; cycles preserved by final c1/c32 checks.",
+  "records": [
+    {
+      "directory": "build/db-asic-l1-c1-fixed-s8675309",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=1 runs=2 cycles=110446 dual_bank_cycles=19438 MACs=81540"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=2 same_bank_terms=1640 different_bank_terms=1640 cache_hits=3444 engine_wait_cycles=1668",
+        "[DB-PROFILE] layer=1 runs=2 same_bank_terms=6400 different_bank_terms=6400 cache_hits=12800 engine_wait_cycles=6400",
+        "[DB-PROFILE] layer=2 runs=2 same_bank_terms=6464 different_bank_terms=6336 cache_hits=12800 engine_wait_cycles=6464",
+        "[DB-PROFILE] layer=3 runs=2 same_bank_terms=2176 different_bank_terms=2176 cache_hits=3840 engine_wait_cycles=2176",
+        "[DB-PROFILE] layer=4 runs=2 same_bank_terms=2464 different_bank_terms=2464 cache_hits=7616 engine_wait_cycles=2464",
+        "[DB-PROFILE] layer=5 runs=2 same_bank_terms=360 different_bank_terms=360 cache_hits=2160 engine_wait_cycles=360"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l1-c1-random-s8675309",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=2 lanes=1 cases=50 full16KB compare IRQs=50 dual=4601"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l2-c1-fixed-s8675309",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=2 runs=2 cycles=59013 dual_bank_cycles=9758 MACs=81540"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=2 same_bank_terms=820 different_bank_terms=820 cache_hits=1722 engine_wait_cycles=836",
+        "[DB-PROFILE] layer=1 runs=2 same_bank_terms=3200 different_bank_terms=3200 cache_hits=6400 engine_wait_cycles=3200",
+        "[DB-PROFILE] layer=2 runs=2 same_bank_terms=3232 different_bank_terms=3168 cache_hits=6400 engine_wait_cycles=3232",
+        "[DB-PROFILE] layer=3 runs=2 same_bank_terms=1088 different_bank_terms=1088 cache_hits=1920 engine_wait_cycles=1088",
+        "[DB-PROFILE] layer=4 runs=2 same_bank_terms=1232 different_bank_terms=1232 cache_hits=3808 engine_wait_cycles=1232",
+        "[DB-PROFILE] layer=5 runs=2 same_bank_terms=180 different_bank_terms=180 cache_hits=1080 engine_wait_cycles=180"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l2-c1-random-s8675309",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=2 lanes=2 cases=50 full16KB compare IRQs=50 dual=2584"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c1-edges-s8675309",
+      "pass_lines": [
+        "[DB-EDGES] PASS backend=2 lanes=4 cache=1 invalid descriptor/shift/flags + ERROR recovery + BUSY START + byte masks + resets"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c1-edges-s8675313",
+      "pass_lines": [
+        "[DB-EDGES] PASS backend=2 lanes=4 cache=1 invalid descriptor/shift/flags + ERROR recovery + BUSY START + byte masks + resets"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c1-fabric-s8675309",
+      "pass_lines": [
+        "[DB-FABRIC] PASS backend=2 cycles=20000 checks=19107 dual=9887 masks/conflicts/reset/preservation"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c1-fixed-s424242",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=4 runs=1 cycles=35569 dual_bank_cycles=2636 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=410 different_bank_terms=410 cache_hits=861 engine_wait_cycles=410",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=800 different_bank_terms=800 cache_hits=1600 engine_wait_cycles=800",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=808 different_bank_terms=792 cache_hits=1600 engine_wait_cycles=808",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=272 different_bank_terms=272 cache_hits=480 engine_wait_cycles=272",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=308 different_bank_terms=308 cache_hits=952 engine_wait_cycles=308",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=54 different_bank_terms=54 cache_hits=324 engine_wait_cycles=54"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l4-c1-fixed-s8675309",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=4 runs=100 cycles=35577 dual_bank_cycles=267100 MACs=4077000"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=100 same_bank_terms=41000 different_bank_terms=41000 cache_hits=86100 engine_wait_cycles=41800",
+        "[DB-PROFILE] layer=1 runs=100 same_bank_terms=80000 different_bank_terms=80000 cache_hits=160000 engine_wait_cycles=80000",
+        "[DB-PROFILE] layer=2 runs=100 same_bank_terms=80800 different_bank_terms=79200 cache_hits=160000 engine_wait_cycles=80800",
+        "[DB-PROFILE] layer=3 runs=100 same_bank_terms=27200 different_bank_terms=27200 cache_hits=48000 engine_wait_cycles=27200",
+        "[DB-PROFILE] layer=4 runs=100 same_bank_terms=30800 different_bank_terms=30800 cache_hits=95200 engine_wait_cycles=30800",
+        "[DB-PROFILE] layer=5 runs=100 same_bank_terms=5400 different_bank_terms=5400 cache_hits=32400 engine_wait_cycles=5400"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l4-c1-fixed-s8675313",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=4 runs=200 cycles=35577 dual_bank_cycles=534200 MACs=8154000"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=200 same_bank_terms=82000 different_bank_terms=82000 cache_hits=172200 engine_wait_cycles=83600",
+        "[DB-PROFILE] layer=1 runs=200 same_bank_terms=160000 different_bank_terms=160000 cache_hits=320000 engine_wait_cycles=160000",
+        "[DB-PROFILE] layer=2 runs=200 same_bank_terms=161600 different_bank_terms=158400 cache_hits=320000 engine_wait_cycles=161600",
+        "[DB-PROFILE] layer=3 runs=200 same_bank_terms=54400 different_bank_terms=54400 cache_hits=96000 engine_wait_cycles=54400",
+        "[DB-PROFILE] layer=4 runs=200 same_bank_terms=61600 different_bank_terms=61600 cache_hits=190400 engine_wait_cycles=61600",
+        "[DB-PROFILE] layer=5 runs=200 same_bank_terms=10800 different_bank_terms=10800 cache_hits=64800 engine_wait_cycles=10800"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l4-c1-fixed-s8675314",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=4 runs=1 cycles=35569 dual_bank_cycles=2636 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=410 different_bank_terms=410 cache_hits=861 engine_wait_cycles=410",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=800 different_bank_terms=800 cache_hits=1600 engine_wait_cycles=800",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=808 different_bank_terms=792 cache_hits=1600 engine_wait_cycles=808",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=272 different_bank_terms=272 cache_hits=480 engine_wait_cycles=272",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=308 different_bank_terms=308 cache_hits=952 engine_wait_cycles=308",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=54 different_bank_terms=54 cache_hits=324 engine_wait_cycles=54"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l4-c1-random-s8675309",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=2 lanes=4 cases=200 full16KB compare IRQs=200 dual=12561"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c1-random-s8675313",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=2 lanes=4 cases=200 full16KB compare IRQs=200 dual=12561"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c1-soc-s8675309",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=2 lanes=4 stream=0 vectors=64 boots=3 dual=39777 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c1-soc-s8675313",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=2 lanes=4 cache=1 stream=0 vectors=64 boots=3 dual=39777 concurrent_writes=0 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c1-stream-s8675309",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=2 lanes=4 stream=1 vectors=64 boots=3 dual=169189 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c1-stream-s8675310",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=2 lanes=4 cache=1 stream=1 vectors=64 boots=1 dual=169190 concurrent_writes=512 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c1-stream-s8675313",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=2 lanes=4 cache=1 stream=1 vectors=64 boots=1 dual=169190 concurrent_writes=512 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c16-fixed-s424242",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=4 runs=1 cycles=34519 dual_bank_cycles=1546 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=112 different_bank_terms=84 cache_hits=1485 engine_wait_cycles=112",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=382 different_bank_terms=378 cache_hits=2440 engine_wait_cycles=382",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=736 different_bank_terms=726 cache_hits=1738 engine_wait_cycles=736",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=242 different_bank_terms=238 cache_hits=544 engine_wait_cycles=242",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=76 different_bank_terms=66 cache_hits=1426 engine_wait_cycles=76",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=54 different_bank_terms=54 cache_hits=324 engine_wait_cycles=54"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l4-c32-edges-s8675309",
+      "pass_lines": [
+        "[DB-EDGES] PASS backend=2 lanes=4 cache=32 invalid descriptor/shift/flags + ERROR recovery + BUSY START + byte masks + resets"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c32-fixed-s424242",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=4 runs=1 cycles=33534 dual_bank_cycles=589 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=112 different_bank_terms=84 cache_hits=1485 engine_wait_cycles=112",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=52 different_bank_terms=46 cache_hits=3102 engine_wait_cycles=52",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=296 different_bank_terms=296 cache_hits=2608 engine_wait_cycles=296",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=122 different_bank_terms=128 cache_hits=774 engine_wait_cycles=122",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=9 different_bank_terms=9 cache_hits=1550 engine_wait_cycles=9",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=26 different_bank_terms=26 cache_hits=380 engine_wait_cycles=26"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l4-c32-fixed-s8675313",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=4 runs=1 cycles=33534 dual_bank_cycles=589 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=112 different_bank_terms=84 cache_hits=1485 engine_wait_cycles=112",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=52 different_bank_terms=46 cache_hits=3102 engine_wait_cycles=52",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=296 different_bank_terms=296 cache_hits=2608 engine_wait_cycles=296",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=122 different_bank_terms=128 cache_hits=774 engine_wait_cycles=122",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=9 different_bank_terms=9 cache_hits=1550 engine_wait_cycles=9",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=26 different_bank_terms=26 cache_hits=380 engine_wait_cycles=26"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l4-c32-fixed-s8675314",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=4 runs=1 cycles=33534 dual_bank_cycles=589 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=112 different_bank_terms=84 cache_hits=1485 engine_wait_cycles=112",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=52 different_bank_terms=46 cache_hits=3102 engine_wait_cycles=52",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=296 different_bank_terms=296 cache_hits=2608 engine_wait_cycles=296",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=122 different_bank_terms=128 cache_hits=774 engine_wait_cycles=122",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=9 different_bank_terms=9 cache_hits=1550 engine_wait_cycles=9",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=26 different_bank_terms=26 cache_hits=380 engine_wait_cycles=26"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l4-c32-random-s8675309",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=2 lanes=4 cases=200 full16KB compare IRQs=200 dual=1286"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c32-random-s8675313",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=2 lanes=4 cases=200 full16KB compare IRQs=200 dual=1286"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c32-soc-s8675309",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=2 lanes=4 stream=0 vectors=64 boots=3 dual=8988 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c32-soc-s8675313",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=2 lanes=4 cache=32 stream=0 vectors=64 boots=3 dual=8988 concurrent_writes=0 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l4-c4-fixed-s424242",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=4 runs=1 cycles=35225 dual_bank_cycles=2251 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=164 different_bank_terms=123 cache_hits=1394 engine_wait_cycles=164",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=702 different_bank_terms=702 cache_hits=1796 engine_wait_cycles=702",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=808 different_bank_terms=792 cache_hits=1600 engine_wait_cycles=808",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=272 different_bank_terms=272 cache_hits=480 engine_wait_cycles=272",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=308 different_bank_terms=308 cache_hits=952 engine_wait_cycles=308",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=54 different_bank_terms=54 cache_hits=324 engine_wait_cycles=54"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l4-c8-fixed-s424242",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=4 runs=1 cycles=34968 dual_bank_cycles=1968 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=137 different_bank_terms=84 cache_hits=1460 engine_wait_cycles=137",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=508 different_bank_terms=504 cache_hits=2188 engine_wait_cycles=508",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=772 different_bank_terms=762 cache_hits=1666 engine_wait_cycles=772",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=272 different_bank_terms=272 cache_hits=480 engine_wait_cycles=272",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=308 different_bank_terms=292 cache_hits=968 engine_wait_cycles=308",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=54 different_bank_terms=54 cache_hits=324 engine_wait_cycles=54"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l8-c1-fixed-s8675309",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=8 runs=10 cycles=30859 dual_bank_cycles=19670 MACs=407700"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=10 same_bank_terms=4100 different_bank_terms=4100 cache_hits=8610 engine_wait_cycles=4180",
+        "[DB-PROFILE] layer=1 runs=10 same_bank_terms=8000 different_bank_terms=8000 cache_hits=16000 engine_wait_cycles=8000",
+        "[DB-PROFILE] layer=2 runs=10 same_bank_terms=4040 different_bank_terms=3960 cache_hits=8000 engine_wait_cycles=4040",
+        "[DB-PROFILE] layer=3 runs=10 same_bank_terms=1360 different_bank_terms=1360 cache_hits=2400 engine_wait_cycles=1410",
+        "[DB-PROFILE] layer=4 runs=10 same_bank_terms=1540 different_bank_terms=1540 cache_hits=4760 engine_wait_cycles=1540",
+        "[DB-PROFILE] layer=5 runs=10 same_bank_terms=360 different_bank_terms=360 cache_hits=2160 engine_wait_cycles=360"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l8-c1-fixed-s8675313",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=2 lanes=8 runs=10 cycles=30859 dual_bank_cycles=19670 MACs=407700"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=10 same_bank_terms=4100 different_bank_terms=4100 cache_hits=8610 engine_wait_cycles=4180",
+        "[DB-PROFILE] layer=1 runs=10 same_bank_terms=8000 different_bank_terms=8000 cache_hits=16000 engine_wait_cycles=8000",
+        "[DB-PROFILE] layer=2 runs=10 same_bank_terms=4040 different_bank_terms=3960 cache_hits=8000 engine_wait_cycles=4040",
+        "[DB-PROFILE] layer=3 runs=10 same_bank_terms=1360 different_bank_terms=1360 cache_hits=2400 engine_wait_cycles=1410",
+        "[DB-PROFILE] layer=4 runs=10 same_bank_terms=1540 different_bank_terms=1540 cache_hits=4760 engine_wait_cycles=1540",
+        "[DB-PROFILE] layer=5 runs=10 same_bank_terms=360 different_bank_terms=360 cache_hits=2160 engine_wait_cycles=360"
+      ]
+    },
+    {
+      "directory": "build/db-asic-l8-c1-random-s8675309",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=2 lanes=8 cases=200 full16KB compare IRQs=200 dual=8519"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l8-c1-random-s8675313",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=2 lanes=8 cases=200 full16KB compare IRQs=200 dual=8519"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l8-c1-soc-s8675309",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=2 lanes=8 stream=0 vectors=64 boots=3 dual=29238 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-asic-l8-c1-soc-s8675313",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=2 lanes=8 cache=1 stream=0 vectors=64 boots=3 dual=29238 concurrent_writes=0 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-axi-s8675309",
+      "pass_lines": [
+        "[DB-AXI] PASS transactions=1000 randomized RREADY/BREADY, WVALID gaps, byte masks, FIXED/INCR, concurrent AR/AW"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-edges-s8675309",
+      "pass_lines": [
+        "[DB-EDGES] PASS backend=1 lanes=4 cache=1 invalid descriptor/shift/flags + ERROR recovery + BUSY START + byte masks + resets"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-edges-s8675313",
+      "pass_lines": [
+        "[DB-EDGES] PASS backend=1 lanes=4 cache=1 invalid descriptor/shift/flags + ERROR recovery + BUSY START + byte masks + resets"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-fabric-s8675309",
+      "pass_lines": [
+        "[DB-FABRIC] PASS backend=1 cycles=20000 checks=19107 dual=9887 masks/conflicts/reset/preservation"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-fixed-s8675309",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=1 lanes=4 runs=100 cycles=35577 dual_bank_cycles=267100 MACs=4077000"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=100 same_bank_terms=41000 different_bank_terms=41000 cache_hits=86100 engine_wait_cycles=41800",
+        "[DB-PROFILE] layer=1 runs=100 same_bank_terms=80000 different_bank_terms=80000 cache_hits=160000 engine_wait_cycles=80000",
+        "[DB-PROFILE] layer=2 runs=100 same_bank_terms=80800 different_bank_terms=79200 cache_hits=160000 engine_wait_cycles=80800",
+        "[DB-PROFILE] layer=3 runs=100 same_bank_terms=27200 different_bank_terms=27200 cache_hits=48000 engine_wait_cycles=27200",
+        "[DB-PROFILE] layer=4 runs=100 same_bank_terms=30800 different_bank_terms=30800 cache_hits=95200 engine_wait_cycles=30800",
+        "[DB-PROFILE] layer=5 runs=100 same_bank_terms=5400 different_bank_terms=5400 cache_hits=32400 engine_wait_cycles=5400"
+      ]
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-fixed-s8675313",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=1 lanes=4 runs=200 cycles=35577 dual_bank_cycles=534200 MACs=8154000"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=200 same_bank_terms=82000 different_bank_terms=82000 cache_hits=172200 engine_wait_cycles=83600",
+        "[DB-PROFILE] layer=1 runs=200 same_bank_terms=160000 different_bank_terms=160000 cache_hits=320000 engine_wait_cycles=160000",
+        "[DB-PROFILE] layer=2 runs=200 same_bank_terms=161600 different_bank_terms=158400 cache_hits=320000 engine_wait_cycles=161600",
+        "[DB-PROFILE] layer=3 runs=200 same_bank_terms=54400 different_bank_terms=54400 cache_hits=96000 engine_wait_cycles=54400",
+        "[DB-PROFILE] layer=4 runs=200 same_bank_terms=61600 different_bank_terms=61600 cache_hits=190400 engine_wait_cycles=61600",
+        "[DB-PROFILE] layer=5 runs=200 same_bank_terms=10800 different_bank_terms=10800 cache_hits=64800 engine_wait_cycles=10800"
+      ]
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-fixed-s8675314",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=1 lanes=4 runs=1 cycles=35569 dual_bank_cycles=2636 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=410 different_bank_terms=410 cache_hits=861 engine_wait_cycles=410",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=800 different_bank_terms=800 cache_hits=1600 engine_wait_cycles=800",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=808 different_bank_terms=792 cache_hits=1600 engine_wait_cycles=808",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=272 different_bank_terms=272 cache_hits=480 engine_wait_cycles=272",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=308 different_bank_terms=308 cache_hits=952 engine_wait_cycles=308",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=54 different_bank_terms=54 cache_hits=324 engine_wait_cycles=54"
+      ]
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-preinit-s8675314",
+      "pass_lines": [
+        "[DB-PREINIT] PASS boots=21 inferences=105 physical FPGA bank images + CPU WFI/IRQ, no SBA"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-random-s8675309",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=1 lanes=4 cases=200 full16KB compare IRQs=200 dual=12561"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-random-s8675313",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=1 lanes=4 cases=200 full16KB compare IRQs=200 dual=12561"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-soc-s8675309",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=1 lanes=4 stream=0 vectors=64 boots=3 dual=39777 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-soc-s8675313",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=1 lanes=4 cache=1 stream=0 vectors=64 boots=3 dual=39777 concurrent_writes=0 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-stream-s8675309",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=1 lanes=4 stream=1 vectors=64 boots=3 dual=169189 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-stream-s8675310",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=1 lanes=4 cache=1 stream=1 vectors=64 boots=1 dual=169190 concurrent_writes=512 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c1-stream-s8675313",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=1 lanes=4 cache=1 stream=1 vectors=64 boots=1 dual=169190 concurrent_writes=512 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c32-edges-s8675309",
+      "pass_lines": [
+        "[DB-EDGES] PASS backend=1 lanes=4 cache=32 invalid descriptor/shift/flags + ERROR recovery + BUSY START + byte masks + resets"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c32-fixed-s8675313",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=1 lanes=4 runs=1 cycles=33534 dual_bank_cycles=589 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=112 different_bank_terms=84 cache_hits=1485 engine_wait_cycles=112",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=52 different_bank_terms=46 cache_hits=3102 engine_wait_cycles=52",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=296 different_bank_terms=296 cache_hits=2608 engine_wait_cycles=296",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=122 different_bank_terms=128 cache_hits=774 engine_wait_cycles=122",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=9 different_bank_terms=9 cache_hits=1550 engine_wait_cycles=9",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=26 different_bank_terms=26 cache_hits=380 engine_wait_cycles=26"
+      ]
+    },
+    {
+      "directory": "build/db-fpga-l4-c32-fixed-s8675314",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=1 lanes=4 runs=1 cycles=33534 dual_bank_cycles=589 MACs=40770"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=1 same_bank_terms=112 different_bank_terms=84 cache_hits=1485 engine_wait_cycles=112",
+        "[DB-PROFILE] layer=1 runs=1 same_bank_terms=52 different_bank_terms=46 cache_hits=3102 engine_wait_cycles=52",
+        "[DB-PROFILE] layer=2 runs=1 same_bank_terms=296 different_bank_terms=296 cache_hits=2608 engine_wait_cycles=296",
+        "[DB-PROFILE] layer=3 runs=1 same_bank_terms=122 different_bank_terms=128 cache_hits=774 engine_wait_cycles=122",
+        "[DB-PROFILE] layer=4 runs=1 same_bank_terms=9 different_bank_terms=9 cache_hits=1550 engine_wait_cycles=9",
+        "[DB-PROFILE] layer=5 runs=1 same_bank_terms=26 different_bank_terms=26 cache_hits=380 engine_wait_cycles=26"
+      ]
+    },
+    {
+      "directory": "build/db-fpga-l4-c32-random-s8675309",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=1 lanes=4 cases=200 full16KB compare IRQs=200 dual=1286"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c32-random-s8675313",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=1 lanes=4 cases=200 full16KB compare IRQs=200 dual=1286"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c32-soc-s8675309",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=1 lanes=4 stream=0 vectors=64 boots=3 dual=8988 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l4-c32-soc-s8675313",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=1 lanes=4 cache=32 stream=0 vectors=64 boots=3 dual=8988 concurrent_writes=0 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l8-c1-fixed-s8675309",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=1 lanes=8 runs=10 cycles=30859 dual_bank_cycles=19670 MACs=407700"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=10 same_bank_terms=4100 different_bank_terms=4100 cache_hits=8610 engine_wait_cycles=4180",
+        "[DB-PROFILE] layer=1 runs=10 same_bank_terms=8000 different_bank_terms=8000 cache_hits=16000 engine_wait_cycles=8000",
+        "[DB-PROFILE] layer=2 runs=10 same_bank_terms=4040 different_bank_terms=3960 cache_hits=8000 engine_wait_cycles=4040",
+        "[DB-PROFILE] layer=3 runs=10 same_bank_terms=1360 different_bank_terms=1360 cache_hits=2400 engine_wait_cycles=1410",
+        "[DB-PROFILE] layer=4 runs=10 same_bank_terms=1540 different_bank_terms=1540 cache_hits=4760 engine_wait_cycles=1540",
+        "[DB-PROFILE] layer=5 runs=10 same_bank_terms=360 different_bank_terms=360 cache_hits=2160 engine_wait_cycles=360"
+      ]
+    },
+    {
+      "directory": "build/db-fpga-l8-c1-fixed-s8675313",
+      "pass_lines": [
+        "[DB-NPU] PASS backend=1 lanes=8 runs=10 cycles=30859 dual_bank_cycles=19670 MACs=407700"
+      ],
+      "profiles": [
+        "[DB-PROFILE] layer=0 runs=10 same_bank_terms=4100 different_bank_terms=4100 cache_hits=8610 engine_wait_cycles=4180",
+        "[DB-PROFILE] layer=1 runs=10 same_bank_terms=8000 different_bank_terms=8000 cache_hits=16000 engine_wait_cycles=8000",
+        "[DB-PROFILE] layer=2 runs=10 same_bank_terms=4040 different_bank_terms=3960 cache_hits=8000 engine_wait_cycles=4040",
+        "[DB-PROFILE] layer=3 runs=10 same_bank_terms=1360 different_bank_terms=1360 cache_hits=2400 engine_wait_cycles=1410",
+        "[DB-PROFILE] layer=4 runs=10 same_bank_terms=1540 different_bank_terms=1540 cache_hits=4760 engine_wait_cycles=1540",
+        "[DB-PROFILE] layer=5 runs=10 same_bank_terms=360 different_bank_terms=360 cache_hits=2160 engine_wait_cycles=360"
+      ]
+    },
+    {
+      "directory": "build/db-fpga-l8-c1-random-s8675309",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=1 lanes=8 cases=200 full16KB compare IRQs=200 dual=8519"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l8-c1-random-s8675313",
+      "pass_lines": [
+        "[DB-RANDOM] PASS backend=1 lanes=8 cases=200 full16KB compare IRQs=200 dual=8519"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l8-c1-soc-s8675309",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=1 lanes=8 stream=0 vectors=64 boots=3 dual=29238 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/db-fpga-l8-c1-soc-s8675313",
+      "pass_lines": [
+        "[DB-SOC] PASS backend=1 lanes=8 cache=1 stream=0 vectors=64 boots=3 dual=29238 concurrent_writes=0 CPU WFI/IRQ + JTAG/SBA + halt/resume"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/sp-asic-l4-soc-s8675309",
+      "pass_lines": [
+        "[SOC-ASIC-STRESS] PASS full SoC lanes=4 boots=3, CPU/NPU macro SRAM, SBA=64, halt/resume=3"
+      ],
+      "profiles": []
+    },
+    {
+      "directory": "build/sp-fpga-l4-soc-s8675309",
+      "pass_lines": [
+        "[SOC-FPGA] PASS lanes=4 boots=3, reset during inference, CPU BRAM + NPU BRAM, no DMI"
+      ],
+      "profiles": []
+    }
+  ]
+}

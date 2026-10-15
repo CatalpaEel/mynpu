@@ -7,6 +7,8 @@ module mynpu_soc_top #(
     parameter integer NPU_SRAM_BYTES = 8192,
     parameter integer NPU_LANES = 8,
     parameter integer NPU_IRQ_ID = 16,
+    parameter bit DUAL_BANK_SHARED = 1'b0,
+    parameter integer NPU_ACT_CACHE_WORDS = 1,
     parameter bit USE_FPGA_BRAM = 1'b0,
     parameter bit USE_ASIC_SRAM = 1'b0,
     parameter CPU_INIT_FILE = "",
@@ -56,11 +58,11 @@ module mynpu_soc_top #(
       .AXI_DATA_WIDTH (32),
       .AXI_ID_WIDTH   (4),
       .AXI_USER_WIDTH (1)
-  ) master[3:0]();
+  ) master[(DUAL_BANK_SHARED ? 3 : 4)-1:0]();
 
   localparam axi_pkg::xbar_cfg_t AXI_XBAR_CFG = '{
       NoSlvPorts:         3,
-      NoMstPorts:         4,
+      NoMstPorts:         DUAL_BANK_SHARED ? 3 : 4,
       MaxMstTrans:        1,
       MaxSlvTrans:        1,
       FallThrough:        1'b0,
@@ -77,12 +79,12 @@ module mynpu_soc_top #(
 
   localparam int IDX_BOOT = 0;
   localparam int IDX_SRAM = 1;
-  localparam int IDX_NPU  = 2;
-  localparam int IDX_DM   = 3;
+  localparam int IDX_NPU  = DUAL_BANK_SHARED ? 1 : 2;
+  localparam int IDX_DM   = DUAL_BANK_SHARED ? 2 : 3;
 
   assign addr_map = '{
       '{ idx: IDX_BOOT, start_addr: BOOT_BASE, end_addr: BOOT_BASE + 64 },
-      '{ idx: IDX_SRAM, start_addr: SRAM_BASE, end_addr: SRAM_BASE + CPU_SRAM_BYTES },
+      '{ idx: IDX_SRAM, start_addr: SRAM_BASE, end_addr: SRAM_BASE + (DUAL_BANK_SHARED ? 16384 : CPU_SRAM_BYTES) },
       '{ idx: IDX_NPU,  start_addr: NPU_BASE,  end_addr: NPU_BASE  + NPU_LENGTH  },
       '{ idx: IDX_DM,   start_addr: DM_BASE,   end_addr: DM_BASE   + DM_LENGTH   }
   };
@@ -420,6 +422,32 @@ module mynpu_soc_top #(
       .data_i (boot_rdata)
   );
 
+  generate if (DUAL_BANK_SHARED) begin : g_shared
+    logic req,we,gnt,rv,err,host_write;
+    logic [31:0] addr,wd,rd,host_addr,host_wd;
+    logic [3:0] be,host_be;
+    mynpu_axi_shared #(.ID_WIDTH(4)) i_bridge(
+      .clk_i(clk_i),.rst_ni(ndmreset_n),.slave(master[IDX_NPU]),
+      .req_o(req),.we_o(we),.addr_o(addr),.wdata_o(wd),.be_o(be),
+      .gnt_i(gnt),.rvalid_i(rv),.rdata_i(rd),.error_i(err));
+    mynpu_shared_subsystem #(.LANES(NPU_LANES),.MEM_BACKEND(NPU_MEM_BACKEND),.ACT_CACHE_WORDS(NPU_ACT_CACHE_WORDS),
+      .BANK0_INIT_FILE(CPU_INIT_FILE),.BANK1_INIT_FILE(NPU_INIT_FILE)) i_subsystem(
+      .clk_i(clk_i),.rst_ni(ndmreset_n),.req_i(req),.we_i(we),.addr_i(addr),
+      .wdata_i(wd),.be_i(be),.gnt_o(gnt),.rvalid_o(rv),.rdata_o(rd),.error_o(err),
+      .irq_o(npu_irq_o),.host_write_o(host_write),.host_addr_o(host_addr),
+      .host_wdata_o(host_wd),.host_be_o(host_be));
+    always_ff @(posedge clk_i or negedge ndmreset_n) begin
+      if(!ndmreset_n)begin
+        firmware_status_o<=0;firmware_error_o<=0;firmware_result_o<=0;firmware_cycles_o<=0;
+      end else if(host_write&&(&host_be))case(host_addr)
+        FIRMWARE_MAILBOX_ADDR:firmware_status_o<=host_wd;
+        FIRMWARE_MAILBOX_ADDR+4:firmware_error_o<=host_wd;
+        FIRMWARE_MAILBOX_ADDR+8:firmware_result_o<=host_wd;
+        FIRMWARE_MAILBOX_ADDR+12:firmware_cycles_o<=host_wd;
+        default:;
+      endcase
+    end
+  end else begin : g_private
   logic        sram_req;
   logic        sram_we;
   logic [31:0] sram_addr;
@@ -523,5 +551,5 @@ module mynpu_soc_top #(
       .irq_o  (npu_irq_o)
   );
   // ==========================================================================
-
+  end endgenerate
 endmodule

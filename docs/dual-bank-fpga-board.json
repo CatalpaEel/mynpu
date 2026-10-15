@@ -1,0 +1,194 @@
+{
+  "date": "2026-10-15",
+  "device": "xc7a35tcsg324-1",
+  "clock_hz": 50000000,
+  "DUAL_BANK_SHARED": 1,
+  "NPU_LANES": 4,
+  "NPU_ACT_CACHE_WORDS": 1,
+  "logical_single_port_banks": 2,
+  "bytes_per_bank": 8192,
+  "weight_copies": 1,
+  "transport": "Board USB-JTAG configuration + Vivado VIO; external RISC-V DM JTAG not used",
+  "fixed_input_class": 2,
+  "boots": 21,
+  "inferences": 105,
+  "irqs_per_boot": 5,
+  "cycles_per_inference": 35570,
+  "inference_ms": 0.7114,
+  "setup_wns_ns": 1.265,
+  "hold_whs_ns": 0.029,
+  "setup_failing_endpoints": 0,
+  "hold_failing_endpoints": 0,
+  "resources_including_soc_vio_debug_hub": {
+    "LUT": 11567,
+    "FF": 8745,
+    "DSP": 17,
+    "RAMB36E1": 4
+  },
+  "limitations": "Fixed-input board regression with CPU checking all 10 integer output codes on every inference. Diverse MNIST CPU-in-loop and ASIC cold loading are VCS simulations. FPGA timing/resource results are not ASIC physical signoff.",
+  "core_source_sha256": {
+    "cnn_npu_int8/rtl/cnn_npu_banked.sv": "3196610e3b90985dc42d5a50428e959073b11935eeafcae13175f6d5e84564c5",
+    "rtl/mynpu_banked_sram.sv": "56727045394ef1b76f48a5c616918c0b939f89443c9ff22a9851a2b24ff9a022",
+    "rtl/mynpu_shared_subsystem.sv": "a6dd0b28ba1f78d309784c756a37e0c064d3dd418c3544914e51a784f8d41d33",
+    "rtl/mynpu_axi_shared.sv": "1b07b67375fe1c2692e2e8c8a000f66775ea223fd48dddaa81e48c47e558d5db",
+    "rtl/mynpu_soc_top.sv": "55e0f574f5e8db81652f87cd26d5dd4b7e47496bf6e632727f5a95a4f9b36fa9"
+  },
+  "artifacts_sha256": {
+    "fpga/ego1/build/ego1_autonomous_top_dual_bank.bit": "7ed42f11cf439a865390eb0a426ad64d2be93164bd2450a8b11066d27d01746f",
+    "fpga/ego1/build/ego1_autonomous_top_dual_bank.ltx": "ee79d488e491db86d8a1b565f3d193af3c5795eadef41c96a7c1b21561c8b2d9",
+    "fpga/ego1/build/ego1_autonomous_top_dual_bank_timing.rpt": "719c2d4da3159e4e162c8f38b28ccaf7d144d29a5ceb9e0338b1952e1f09c072",
+    "fpga/ego1/build/ego1_autonomous_top_dual_bank_utilization.rpt": "54e1249af8d89168710f08578e8b939b6be20f21b1f500f4bb0637beb1a0b3b9",
+    "generated/dual-bank/cpu_bank0.hex": "327d66454e4c265199b81294e64294df1c37eae9b3735d907588f3ebb6baf465",
+    "generated/dual-bank/cpu_bank1.hex": "efa8421c3f14d9b995640e53b7fe7328bea0dda527db035858fe954ea388f8c7",
+    "build/ego1-dual-bank-board-console-20261015.log": "caf14baa454deeb2cb2c5b28ede8e311485f0b1d264967614c695b41bf3ae0e9"
+  },
+  "board_pass_records": [
+    {
+      "round": 0,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 1,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 2,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 3,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 4,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 5,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 6,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 7,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 8,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 9,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 10,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 11,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 12,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 13,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 14,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 15,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 16,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 17,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 18,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 19,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    },
+    {
+      "round": 20,
+      "status": "c0dec0de",
+      "irq_edges": 5,
+      "predicted_class": 2,
+      "cycles": 35570
+    }
+  ]
+}

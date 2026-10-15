@@ -38,7 +38,7 @@ module tb_mynpu_soc #(
   // Compare every layer before ping-pong buffers are reused by the next layer.
   always @(negedge clk) begin
     if (previous_state == 5 &&
-        (dut.i_npu_subsystem.g_functional.i_core.state_q == 1 || dut.i_npu_subsystem.g_functional.i_core.state_q == 6)) begin
+        (dut.g_private.i_npu_subsystem.g_functional.i_core.state_q == 1 || dut.g_private.i_npu_subsystem.g_functional.i_core.state_q == 6)) begin
       case (previous_layer)
         0: begin offset=0; count=392; end
         1: begin offset=392; count=784; end
@@ -49,7 +49,7 @@ module tb_mynpu_soc #(
         default: $fatal(1, "Invalid layer");
       endcase
       for (i=0;i<count;i++) begin
-        actual=dut.i_npu_subsystem.g_functional.i_core.mem[dut.i_npu_subsystem.g_functional.i_core.out_base_q+i];
+        actual=dut.g_private.i_npu_subsystem.g_functional.i_core.mem[dut.g_private.i_npu_subsystem.g_functional.i_core.out_base_q+i];
         if (actual !== golden[offset+i])
           $fatal(1, "Layer %0d byte %0d integer mismatch hw=%0d ref=%0d", previous_layer, i, actual, golden[offset+i]);
         delta=actual-integer'(pytorch_golden[offset+i]);
@@ -59,8 +59,8 @@ module tb_mynpu_soc #(
       layer_checks++;
       $display("[SOC] layer %0d exact integer + PyTorch delta <= 1: %0d bytes", previous_layer, count);
     end
-    previous_state=dut.i_npu_subsystem.g_functional.i_core.state_q;
-    previous_layer=dut.i_npu_subsystem.g_functional.i_core.layer_q;
+    previous_state=dut.g_private.i_npu_subsystem.g_functional.i_core.state_q;
+    previous_layer=dut.g_private.i_npu_subsystem.g_functional.i_core.layer_q;
   end
 
   task automatic tick(input bit ms, input bit di, output bit sample);
@@ -208,7 +208,7 @@ module tb_mynpu_soc #(
     end
 
     @(negedge clk) boot_ready=1;
-    wait(dut.i_mainmem.mem['h1fc0/4] === 32'h12345678);
+    wait(dut.g_private.i_mainmem.mem['h1fc0/4] === 32'h12345678);
     dmi_write(7'h10,32'h80000001); // halt request
     for(integer j=0;j<50;j++) begin
       dmi_read(7'h11,value);
@@ -235,19 +235,19 @@ module tb_mynpu_soc #(
           integer wait_cycles;
           for (integer k=0; k<STRESS_HALT_ROUNDS; k=k+1) begin
             wait_cycles=0;
-            while ((dut.i_npu_subsystem.g_functional.i_core.busy_q !== 1'b1) &&
+            while ((dut.g_private.i_npu_subsystem.g_functional.i_core.busy_q !== 1'b1) &&
                    (wait_cycles < 200000)) begin
               @(posedge clk);
               wait_cycles=wait_cycles+1;
             end
-            if (dut.i_npu_subsystem.g_functional.i_core.busy_q !== 1'b1)
+            if (dut.g_private.i_npu_subsystem.g_functional.i_core.busy_q !== 1'b1)
               $fatal(1,"Stress timeout waiting for NPU busy round=%0d mailbox=%h fail=%h handled=%h npu=%b%b%b irq=%0d state=%0d",k,
-                     dut.i_mainmem.mem['h1fc0/4],dut.i_mainmem.mem['h1fc4/4],dut.i_mainmem.mem['h1ff8/4],
-                     dut.i_npu_subsystem.g_functional.i_core.busy_q,
-                     dut.i_npu_subsystem.g_functional.i_core.done_q,
-                     dut.i_npu_subsystem.g_functional.i_core.error_q,
-                     dut.i_npu_subsystem.g_functional.i_core.irq_en_q,
-                     dut.i_npu_subsystem.g_functional.i_core.state_q);
+                     dut.g_private.i_mainmem.mem['h1fc0/4],dut.g_private.i_mainmem.mem['h1fc4/4],dut.g_private.i_mainmem.mem['h1ff8/4],
+                     dut.g_private.i_npu_subsystem.g_functional.i_core.busy_q,
+                     dut.g_private.i_npu_subsystem.g_functional.i_core.done_q,
+                     dut.g_private.i_npu_subsystem.g_functional.i_core.error_q,
+                     dut.g_private.i_npu_subsystem.g_functional.i_core.irq_en_q,
+                     dut.g_private.i_npu_subsystem.g_functional.i_core.state_q);
 
             dmi_write(7'h10,32'h80000001); // halt request
             for (integer j=0;j<80;j=j+1) begin
@@ -275,12 +275,12 @@ module tb_mynpu_soc #(
       $display("[SOC-STRESS] %0d halt/resume rounds during NPU activity passed", STRESS_HALT_ROUNDS);
     end
 
-    wait(dut.i_mainmem.mem['h1fc0/4] === 32'hc0dec0de || dut.i_mainmem.mem['h1fc0/4] === 32'hdeadbeef);
-    if (dut.i_mainmem.mem['h1fc0/4] === 32'hdeadbeef)
-      $fatal(1,"CPU firmware failed code=%h",dut.i_mainmem.mem['h1fc4/4]);
-    if (layer_checks != 6*INFERENCE_RUNS || irq_edges != INFERENCE_RUNS-1 || dut.i_mainmem.mem['h1ff8/4] != INFERENCE_RUNS-1)
-      $fatal(1,"Coverage mismatch layers=%0d irq=%0d handled=%0d",layer_checks,irq_edges,dut.i_mainmem.mem['h1ff8/4]);
-    $display("[SOC] PASS lanes=%0d npu_sram=%0d: CPU boot, JTAG/SBA, %0d repeated runs (%0d exact layers), polling + CPU IRQ, cycles=%0d",LANES,NPU_SRAM_BYTES,INFERENCE_RUNS,layer_checks,dut.i_mainmem.mem['h1fcc/4]);
+    wait(dut.g_private.i_mainmem.mem['h1fc0/4] === 32'hc0dec0de || dut.g_private.i_mainmem.mem['h1fc0/4] === 32'hdeadbeef);
+    if (dut.g_private.i_mainmem.mem['h1fc0/4] === 32'hdeadbeef)
+      $fatal(1,"CPU firmware failed code=%h",dut.g_private.i_mainmem.mem['h1fc4/4]);
+    if (layer_checks != 6*INFERENCE_RUNS || irq_edges != INFERENCE_RUNS-1 || dut.g_private.i_mainmem.mem['h1ff8/4] != INFERENCE_RUNS-1)
+      $fatal(1,"Coverage mismatch layers=%0d irq=%0d handled=%0d",layer_checks,irq_edges,dut.g_private.i_mainmem.mem['h1ff8/4]);
+    $display("[SOC] PASS lanes=%0d npu_sram=%0d: CPU boot, JTAG/SBA, %0d repeated runs (%0d exact layers), polling + CPU IRQ, cycles=%0d",LANES,NPU_SRAM_BYTES,INFERENCE_RUNS,layer_checks,dut.g_private.i_mainmem.mem['h1fcc/4]);
     $finish;
   end
   initial begin #50000000; $fatal(1,"Global SoC timeout"); end

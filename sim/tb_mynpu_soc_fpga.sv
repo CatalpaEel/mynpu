@@ -27,8 +27,8 @@ module tb_mynpu_soc_fpga #(
     .tck_i(1'b0), .tms_i(1'b1), .td_i(1'b0), .td_o()
   );
   generate
-    if (NPU_LANES==1) assign npu_cycle=dut.i_npu_subsystem.g_single_port.i_core.cycle_q;
-    else assign npu_cycle=dut.i_npu_subsystem.g_multi_lane_single_port.i_core.cycle_q;
+    if (NPU_LANES==1) assign npu_cycle=dut.g_private.i_npu_subsystem.g_single_port.i_core.cycle_q;
+    else assign npu_cycle=dut.g_private.i_npu_subsystem.g_multi_lane_single_port.i_core.cycle_q;
   endgenerate
   always @(posedge clk or negedge rst_ni) begin
     if (!rst_ni) begin irq_prev<=0; irq_edges<=0; end
@@ -57,7 +57,7 @@ module tb_mynpu_soc_fpga #(
           (EXPECTED_CYCLES!=0 && firmware_cycles!==EXPECTED_CYCLES) || firmware_error !== 0)
         $fatal(1,"FPGA reporting mismatch round=%0d result=%0d irq_edges=%0d cycles=%0d error=%h",
                  round,firmware_result,irq_edges,firmware_cycles,firmware_error);
-      if (firmware_status !== dut.i_mainmem.g_fpga_bram.i_bram.mem['h1fc0/4])
+      if (firmware_status !== dut.g_private.i_mainmem.g_fpga_bram.i_bram.mem['h1fc0/4])
         $fatal(1,"Mailbox observer disagrees with actual CPU BRAM");
       $display("[SOC-FPGA] boot=%0d CPU PASS, five inferences, irq_edges=%0d cycles=%0d",round,irq_edges,firmware_cycles);
       if (round+1<BOOT_ROUNDS) reset_soc();
