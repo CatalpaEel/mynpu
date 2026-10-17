@@ -22,6 +22,8 @@ fpga/ego1/vivado/
 fpga/ego1/vivado_autonomous/
 fpga/ego1/vivado_autonomous_4lane/
 fpga/ego1/vivado_autonomous_dual_bank/
+fpga/ego1/vivado_jtag_private/
+fpga/ego1/vivado_jtag_shared/
 fpga/ego1/build/
 *.elf
 *.bin

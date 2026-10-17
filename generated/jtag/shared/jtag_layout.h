@@ -1,0 +1,3 @@
+#define DESC_BASE 9216u
+#define OUTPUT_BASE 10240u
+#define BUILD_ID 1247023364u

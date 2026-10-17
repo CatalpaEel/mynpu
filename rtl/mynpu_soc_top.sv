@@ -9,6 +9,7 @@ module mynpu_soc_top #(
     parameter integer NPU_IRQ_ID = 16,
     parameter bit DUAL_BANK_SHARED = 1'b0,
     parameter integer NPU_ACT_CACHE_WORDS = 1,
+    parameter bit JTAG_BOOT_CONTROL = 1'b0,
     parameter bit USE_FPGA_BRAM = 1'b0,
     parameter bit USE_ASIC_SRAM = 1'b0,
     parameter CPU_INIT_FILE = "",
@@ -392,7 +393,14 @@ module mynpu_soc_top #(
   logic [31:0] boot_addr;
   logic [31:0] boot_wdata;
   logic [31:0] boot_rdata;
+  logic [3:0] boot_be;
 
+  generate if(JTAG_BOOT_CONTROL)begin:g_debug_boot
+    mynpu_debug_boot #(.BUILD_ID(32'h4a541000 | (DUAL_BANK_SHARED ? 32'h100 : 0) | NPU_LANES),
+      .CACHE_WORDS(DUAL_BANK_SHARED ? NPU_ACT_CACHE_WORDS : 0)) i_boot(
+      .clk_i(clk_i),.rst_ni(ndmreset_n),.req_i(boot_req),.we_i(boot_we),
+      .addr_i(boot_addr[5:2]),.be_i(boot_be),.wdata_i(boot_wdata),.rdata_o(boot_rdata));
+  end else begin:g_legacy_boot
   bootram i_bootram (
       .clk_i (clk_i),
       .rst_ni(rst_ni),
@@ -402,6 +410,7 @@ module mynpu_soc_top #(
       .data_i(boot_wdata),
       .data_o(boot_rdata)
   );
+  end endgenerate
 
   axi2mem #(
       .AXI_ID_WIDTH   (4),
@@ -415,7 +424,7 @@ module mynpu_soc_top #(
       .req_o  (boot_req),
       .we_o   (boot_we),
       .addr_o (boot_addr),
-      .be_o   (),
+      .be_o   (boot_be),
       .data_o (boot_wdata),
       .user_i (1'b0),
       .user_o (),

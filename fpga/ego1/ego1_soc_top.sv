@@ -6,9 +6,13 @@
 module ego1_soc_top #(
   parameter integer CPU_SRAM_BYTES = 8192,
   parameter integer NPU_SRAM_BYTES = 8192,
-  parameter integer NPU_LANES = 1,
+  parameter integer NPU_LANES = 4,
+  parameter bit DUAL_BANK_SHARED = 1'b0,
+  parameter integer NPU_ACT_CACHE_WORDS = 1,
+  parameter bit JTAG_BOOT_CONTROL = 1'b1,
   parameter bit USE_FPGA_BRAM = 1'b1,
-  parameter CPU_INIT_FILE = "generated/8k/cpu.hex"
+  parameter CPU_INIT_FILE = "",
+  parameter NPU_INIT_FILE = ""
 ) (
   input  logic       fpga_clk_i,
   input  logic       rst_ni,
@@ -23,9 +27,10 @@ module ego1_soc_top #(
   logic clk_fb_mmcm, clk_fb;
   logic mmcm_clk0;
   logic sys_rst_ni;
-  logic [1:0] reset_sync_q;
+  (* ASYNC_REG = "TRUE" *) logic [1:0] reset_sync_q;
   logic [25:0] heartbeat_q;
-  logic tck_toggle_q, tck_sync1_q, tck_sync2_q;
+  logic tck_toggle_q;
+  (* ASYNC_REG = "TRUE" *) logic tck_sync1_q, tck_sync2_q;
   logic npu_irq, cpu_debug_halted;
 
   MMCME2_BASE #(
@@ -80,9 +85,12 @@ module ego1_soc_top #(
       .CPU_SRAM_BYTES(CPU_SRAM_BYTES),
       .NPU_SRAM_BYTES(NPU_SRAM_BYTES),
       .NPU_LANES(NPU_LANES),
+      .DUAL_BANK_SHARED(DUAL_BANK_SHARED),
+      .NPU_ACT_CACHE_WORDS(NPU_ACT_CACHE_WORDS),
+      .JTAG_BOOT_CONTROL(JTAG_BOOT_CONTROL),
       .USE_FPGA_BRAM(USE_FPGA_BRAM),
       .CPU_INIT_FILE(CPU_INIT_FILE),
-      .NPU_INIT_FILE("")
+      .NPU_INIT_FILE(NPU_INIT_FILE)
   ) i_soc (
       .clk_i(clk_sys),
       .rst_ni(sys_rst_ni),

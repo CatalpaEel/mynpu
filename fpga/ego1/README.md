@@ -1,5 +1,7 @@
 # EGo1 FPGA smoke test
 
+当前另提供 Lab6 外接 FT232H/J5 的两套 4-lane 版本：`build_jtag_private.tcl`（CPU/NPU 独立 SRAM）和 `build_jtag_shared.tcl`（共享双 bank），均经 Boot ROM 等待后由 JTAG 冷加载。完整接线、源码安装 OpenOCD、GDB 操作、PC 连续推理命令见 [Lab6 JTAG 指南](../../docs/lab6-jtag.md)。以下的 USB/VIO 自运行工程仍可使用。
+
 ## 双 8KB 共享 bank、4-lane 版本（当前分支上板路径）
 
 `feature/dual-bank-shared-sram` 使用完整 CPU/NPU SoC，共享两块逻辑 8KB 单口
@@ -161,7 +163,9 @@ BOARD_REGRESSION PASS boots=21 inferences=105
 工程；ASIC 的 8-lane packed4 NPU 功能回归为 55723 cycles，尚未以该
 配置替代 4-lane 的完整 SoC/上板主回归。
 
-## Lab 6 外部 JTAG 版本
+## Lab 6 外部 JTAG 版本（旧版说明）
+
+旧 1-lane 预置程序工程已由上述 4-lane 冷加载工程替代。`create_project.tcl` 现在默认创建 private JTAG 工程，`build_bitstream.tcl` 默认转入 `build_jtag_private.tcl`。以新的 [Lab6 指南](../../docs/lab6-jtag.md)为准；下述为历史配置说明。
 
 This shell targets the XC7A35T EGo1 board. The board clock is 100 MHz on P17;
 the reset and LED pins are from the EGo1 V2.2 manual. Check the board revision

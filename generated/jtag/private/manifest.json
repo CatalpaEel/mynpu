@@ -1,0 +1,32 @@
+{
+  "protocol_version": 1,
+  "layout": "private",
+  "lanes": 4,
+  "build_id": 1247023108,
+  "cache_words": 0,
+  "boot_control": 65584,
+  "boot_id": 65588,
+  "mailbox": 2147491776,
+  "input_address": 1879069696,
+  "output_address": 1879069696,
+  "input_bytes": 784,
+  "output_bytes": 10,
+  "cpu_code_limit": 2048,
+  "clock_hz": 50000000,
+  "loads": [
+    {
+      "file": "cpu.hex",
+      "address": 2147483648,
+      "bytes": 2048
+    },
+    {
+      "file": "model.hex",
+      "address": 1879064576,
+      "bytes": 8192
+    }
+  ],
+  "sha256": {
+    "cpu.hex": "5dffe7910606442b8b63fadcca7a7f578a8d7f77b57e64e4f6cc446a46509da7",
+    "model.hex": "170db646d1b2ddfd7a010c8529c2f627947755b76b58333522533393b9df3913"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-17",
+  "tool": "Vivado 2023.2",
+  "notes": "Bitstream/routed FPGA reports only. External FT232H/J5/OpenOCD/GDB board link not yet exercised. FPGA results are not ASIC signoff.",
+  "records": [
+    {
+      "layout": "private",
+      "part": "xc7a35tcsg324-1",
+      "clock_hz": 50000000,
+      "lanes": 4,
+      "setup_wns_ns": 1.047,
+      "hold_whs_ns": 0.043,
+      "setup_failing": 0,
+      "hold_failing": 0,
+      "resources": {
+        "LUT": 11189,
+        "FF": 6452,
+        "DSP": 17,
+        "RAMB36E1": 4
+      },
+      "firmware_preinitialized": false,
+      "external_ft232h_board_tested": false,
+      "artifacts_sha256": {
+        "fpga/ego1/build/ego1_jtag_private.bit": "de00e065b485efd4168be980e0c25b2e85d75e3d29e9cdc89efb82d473b23f57",
+        "fpga/ego1/build/ego1_jtag_private_timing.rpt": "f3a711adb0592eec9031f3449d2fab8049a094c3d1815340add399639ceca8d9",
+        "fpga/ego1/build/ego1_jtag_private_utilization.rpt": "ffb8d176281e288d013b6d3e0bbdb6f611ea57166b7cae35b6129d19d2e28046"
+      },
+      "cache_words": 0
+    },
+    {
+      "layout": "shared",
+      "part": "xc7a35tcsg324-1",
+      "clock_hz": 50000000,
+      "lanes": 4,
+      "setup_wns_ns": 1.136,
+      "hold_whs_ns": 0.04,
+      "setup_failing": 0,
+      "hold_failing": 0,
+      "resources": {
+        "LUT": 10547,
+        "FF": 6489,
+        "DSP": 17,
+        "RAMB36E1": 4
+      },
+      "firmware_preinitialized": false,
+      "external_ft232h_board_tested": false,
+      "artifacts_sha256": {
+        "fpga/ego1/build/ego1_jtag_shared.bit": "8f3a7ff656673721665eccb7521cd4106a450e3d7dfadc482321a3b7c78a40a6",
+        "fpga/ego1/build/ego1_jtag_shared_timing.rpt": "fc0df63867d30438cc3bf1b1599ead55fdae30942a0ab5d50319c172ce5dd1de",
+        "fpga/ego1/build/ego1_jtag_shared_utilization.rpt": "8c5c7dab776f829b8df6ddf1f2a983525bf85b187837a2749609c9f51c1c3ee0"
+      },
+      "cache_words": 1
+    }
+  ]
+}

@@ -51,6 +51,25 @@ def main():
             for off in range(meta['parameter_base'],meta['model_load_end'],4):
                 assert banks[(off>>2)&1][off>>3]==words[off>>2]
         print('dual-bank: single 4288B parameter copy, all integer layers and both physical FPGA images PASS')
+    if (ROOT/'generated/jtag').is_dir():
+        from jtag_host import read_bundle,words_from_hex
+        vectors=json.loads((ROOT/'generated/jtag/vectors/mnist.json').read_text())
+        assert vectors['count']==len(vectors['vectors'])==64
+        for layout in ('private','shared'):
+            folder,manifest=read_bundle(layout)
+            assert len(words_from_hex(folder/'cpu.hex'))==512
+            assert manifest['lanes']in(2,4,8)
+            assert manifest['build_id']==(0x4a541000|(0x100 if layout=='shared'else 0)|manifest['lanes'])
+        private=ROOT/'cnn_npu_int8/generated/8k-p4'
+        meta=json.loads((private/'golden.json').read_text())
+        image=bytes(int(v,16)for v in(private/'cnn_npu_mem.hex').read_text().split())
+        for vector in vectors['vectors']:
+            mem=bytearray(image);mem[meta['activation_a']:meta['activation_a']+784]=bytes(vector['input'])
+            assert integer_golden(mem,meta)[-1]==vector['integer']
+            assert max(abs(a-b)for a,b in zip(vector['integer'],vector['pytorch']))<=1
+        for file,key in (('inputs.hex','input'),('integer.hex','integer'),('pytorch.hex','pytorch')):
+            assert bytes(int(v,16)for v in(ROOT/'generated/jtag/vectors'/file).read_text().split())==bytes(q for v in vectors['vectors']for q in v[key])
+        print('JTAG: both layout manifests/SHA256 and 64 integer/PyTorch vectors PASS')
     print('Asset checks PASS')
 
 if __name__=='__main__': main()

@@ -10,11 +10,15 @@ if (-not (Test-Path -LiteralPath $usbipd)) {
 
 if ([string]::IsNullOrWhiteSpace($BusId)) {
     $lines = & $usbipd list
-    $match = $lines | Where-Object { $_ -match '^\s*(\S+)\s+0403:6014\s+' } | Select-Object -First 1
-    if ($null -eq $match) {
+    $ft232hRows = @($lines | Where-Object { $_ -match '^\s*(\S+)\s+0403:6014\s+' })
+    if ($ft232hRows.Count -eq 0) {
         Write-Host "No FT232H with VID:PID 0403:6014 was found. Plug in the external JTAG adapter, then run usbipd list."
         exit 2
     }
+    if ($ft232hRows.Count -ne 1) {
+        throw "Multiple FT232H adapters found. Use usbipd list and pass -BusId explicitly."
+    }
+    $match = $ft232hRows[0]
     $BusId = ([regex]::Match($match, '^\s*(\S+)\s+0403:6014\s+')).Groups[1].Value
 }
 

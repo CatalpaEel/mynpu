@@ -31,7 +31,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports {led_o[*]}]
 # tck_i is asynchronous to the MMCM-generated system clock. The Debug Module
 # contains its own DMI CDC synchronizers.
 set_clock_groups -asynchronous \
-  -group [get_clocks fpga_clk_100m] \
+  -group [get_clocks -include_generated_clocks fpga_clk_100m] \
   -group [get_clocks tck_clock]
 
 set_property CFGBVS VCCO [current_design]

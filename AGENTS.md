@@ -13,6 +13,10 @@
 - Preserve JTAG -> DMI -> Debug Module SBA firmware/input/result access.
   Do not introduce UART/SPI loading. CPU fetch/data accesses must wait correctly
   when contending with the NPU; never return a busy marker as an instruction.
+- External FPGA debug follows the user's Lab6: board USB-JTAG configures the
+  FPGA; a separate FT232H/channel0/J5 chain connects OpenOCD/GDB to the RISC-V
+  DM. Keep private/shared 4-lane projects and matching host cold-load assets.
+  Report real external-probe board tests separately from USB/VIO or RTL tests.
 - Verify repeated inference, independent integer golden and recorded PyTorch
   outputs, both ASIC/FPGA backends and CPU-in-loop whole-SoC behavior.
 - Real macro timing checks and PDK signoff are explicitly out of scope.

@@ -9,4 +9,6 @@ if [[ ! -f "$config" ]]; then
   exit 1
 fi
 
-exec openocd -f "$config" "$@"
+openocd_bin="${OPENOCD:-$HOME/.local/mynpu-openocd/bin/openocd}"
+if [[ ! -x "$openocd_bin" ]]; then openocd_bin="$(command -v openocd)"; fi
+exec "$openocd_bin" -s "$repo_root/fpga/ego1" -f "$config" "$@"
