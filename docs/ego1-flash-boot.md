@@ -119,6 +119,9 @@ MCS/BIN/bit 配置数据一致，并比较 FAR/FDRI，确认所有 FPGA 配置�
 与原 Lab6 版本完全一致；结果与 SHA256 见 [Flash 镜像记录](lab6-jtag-flash.json)。
 本次没有改 CPU/NPU/ASIC RTL，不把镜像转换算作新增 ASIC 压力测试。
 
-**目前尚未实际烧写 Flash、验证断电启动或完成外接 FT232H 板测。** 既有 VCS 的
+2026-10-19 已将 **shared / 4-lane** 镜像实际烧入 EGo1，Vivado 识别 Flash ID 为
+`20 BA 17`，擦除、空白检查、写入及读回校验均成功，输出 `FLASH_PROGRAM_VERIFY_PASS`。
+实体烧写证据见 [板卡记录](ego1-flash-board.json)。private 版仍仅完成镜像生成与离线检查。
+**断电后从 Flash 启动，以及外接 FT232H 的 CPU/NPU 推理仍待验证。** 既有 VCS 的
 ASIC/FPGA 四配置、768 次推理记录见 [原验证记录](lab6-jtag-verification.json)。
 FPGA 板载 QSPI 只恢复 FPGA 电路，不是给 ASIC 新增 SPI 固件加载器，也不增加 SRAM。

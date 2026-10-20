@@ -140,8 +140,7 @@ def main():
     result = dict(date="2026-10-19", tool="Vivado 2023.2", interface="SPIx4",
                   flash_mib=8, offset=0, configuration_clock_mhz=6,
                   default_flash_part="n25q64-3.3v-spi-x1_x2_x4",
-                  physical_flash_programmed=False, physical_flash_boot_tested=False,
-                  external_ft232h_board_tested=False,
+                  physical_test_record="docs/ego1-flash-board.json",
                   notes="Offline image checks only. Exact FPGA frame equality to original Lab6 bitstreams. "
                         "No RTL changes; not a new physical-board or ASIC signoff result.", records=records)
     args.output.parent.mkdir(parents=True, exist_ok=True)

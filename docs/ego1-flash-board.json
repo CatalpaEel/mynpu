@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-19",
+  "tool": "Vivado 2023.2",
+  "board": "EGo1 / XC7A35T",
+  "layout": "shared",
+  "lanes": 4,
+  "clock_hz": 50000000,
+  "sram_bank_bytes": [
+    8192,
+    8192
+  ],
+  "flash_part": "n25q64-3.3v-spi-x1_x2_x4",
+  "jedec_id": "20 BA 17 00 00",
+  "physical_flash_programmed": true,
+  "erase_passed": true,
+  "blank_check_passed": true,
+  "program_passed": true,
+  "readback_verify_passed": true,
+  "physical_power_cycle_boot_tested": false,
+  "external_ft232h_board_tested": false,
+  "flash_boot_path_cpu_inferences": 0,
+  "private_flash_programmed": false,
+  "image": "fpga/ego1/build/ego1_jtag_shared_flash.mcs",
+  "image_sha256": "17b64064e63dba6ab30da4454d20aa79dce24092d5c37008995a732149be6919",
+  "log_file": "build/flash-program-shared.log",
+  "log_sha256": "071d778c5f5e51b2ff04c2fcb088656e05c47cb8e9911d7dfa972e87904a1afc",
+  "evidence": [
+    "Mfg ID : 20   Memory Type : ba   Memory Capacity : 17   Device ID 1 : 0   Device ID 2 : 0",
+    "Erase Operation successful.",
+    "Blank Check Operation successful. The part is blank.",
+    "Program/Verify Operation successful.",
+    "INFO: [Labtoolstcl 44-377] Flash programming completed successfully"
+  ],
+  "pass_marker": "FLASH_PROGRAM_VERIFY_PASS: shared",
+  "notes": "Actual shared/4-lane Flash erase/program/readback verification. Power-cycle boot and external FT232H/DM inference are separate pending tests. No ASIC RTL changes or new ASIC signoff claims."
+}

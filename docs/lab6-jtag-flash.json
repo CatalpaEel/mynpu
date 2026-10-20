@@ -6,9 +6,7 @@
   "offset": 0,
   "configuration_clock_mhz": 6,
   "default_flash_part": "n25q64-3.3v-spi-x1_x2_x4",
-  "physical_flash_programmed": false,
-  "physical_flash_boot_tested": false,
-  "external_ft232h_board_tested": false,
+  "physical_test_record": "docs/ego1-flash-board.json",
   "notes": "Offline image checks only. Exact FPGA frame equality to original Lab6 bitstreams. No RTL changes; not a new physical-board or ASIC signoff result.",
   "records": [
     {

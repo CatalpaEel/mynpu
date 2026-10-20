@@ -12,7 +12,7 @@ def main():
     files=[ROOT/'tools/jtag_host.py',ROOT/'sw/main_jtag.c',ROOT/'sw/startup.S']
     files+=list((ROOT/'generated/jtag').rglob('*'))
     files += [ROOT/'docs'/n for n in ('lab6-jtag.md','lab6-jtag-fpga.json','lab6-jtag-verification.json',
-      'ego1-flash-boot.md','lab6-jtag-flash.json')]
+      'ego1-flash-boot.md','lab6-jtag-flash.json','ego1-flash-board.json')]
     files += [ROOT/'fpga/ego1'/n for n in ('program_jtag.tcl','program_flash.tcl','attach_ft232h.ps1','start_openocd.sh',
       'start_gdb.sh','debug_cpu.sh','ego1_openocd.cfg','sba_helpers.tcl','setup_wsl.sh','setup_lab6_openocd.sh')]
     for record in fpga['records']:
