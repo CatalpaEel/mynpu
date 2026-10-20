@@ -1,6 +1,10 @@
 # EGo1：按 Lab6 使用外接 FT232H、OpenOCD、GDB
 
-这套工程沿用用户提供的 Lab6 通路：EGo1 Type-C 接 Vivado 配置 FPGA；外接 FT232H 经六根线接 J5，访问 SoC 内的 RISC-V DTM/Debug Module；Ubuntu WSL 运行 OpenOCD 与 GDB。两条 JTAG 链独立，需要同时连接。
+这套工程沿用用户提供的 Lab6 通路：EGo1 Type-C 接 Vivado 配置 FPGA；外接 FT232H 经六根线接 J5，访问 SoC 内的 RISC-V DTM/Debug Module；Ubuntu WSL 运行 OpenOCD 与 GDB。两条 JTAG 链独立；直接下载 `.bit`、由电脑给板子供电时，需要两条 USB 连接。
+
+电脑只有一个 USB-A 口时，可以先把 FPGA 配置烧入板载 Flash，以后用 USB 充电头给开发板
+供电，把电脑 USB-A 留给外部 FT232H。接线、两版 Flash 镜像和烧写脚本见
+[Flash 上电启动指南](ego1-flash-boot.md)。运行阶段无需把板载配置 USB 连接电脑；CPU/模型/输入仍由 DM 加载。
 
 | 配置名 | 存储与总线 | FPGA 构建入口 | 输出 bitstream |
 |---|---|---|---|

@@ -2,6 +2,8 @@
 
 Lab6 外接 FT232H/J5 的 **独立 SRAM / 共享 bank 两套 4-lane 工程**及 WSL OpenOCD/GDB、PC 冷加载与连续推理工具见 [Lab6 JTAG 操作指南](docs/lab6-jtag.md)。该模式由 CPU 在 ROM 等待，PC 加载固件/模型后放行；外接探针实测状态与 USB/VIO 自运行板测分开记录。
 
+电脑只有一个 USB-A 时，使用 [EGo1 Flash 启动](docs/ego1-flash-boot.md)：先烧 FPGA 配置，再由充电头给板子供电，电脑 USB 接外部 FT232H；两版 Flash 镜像、烧写脚本和原有 PC 冷加载程序配套提供。
+
 本分支 `feature/dual-bank-shared-sram` 新增 **3×3 AXI crossbar + CPU/NPU 共用双 8KB SRAM bank** 的完整 ASIC/FPGA 实现。模型权重只保存一份，按 32-bit word 分布到两块 SRAM；每 bank 独立仲裁，CPU 冲突访问可以等待，NPU 并行发起激活/权重读。4-lane 默认计算段约 35,600 周期，激活缓存和 lane 数可参数化。配置、加载地址、缓存实测和回归命令见 [共享 bank 架构](docs/shared-bank-npu.md)。下文保留原独立 CPU/NPU SRAM 版本的基线说明。
 
 2026-10-15 已在 EGo1 实际下载双 bank 4-lane 版本，21 次启动/105 次 CPU 推理全部通过，每次 35570 周期（50MHz 下 0.7114ms）、五次 IRQ；ASIC/FPGA 两个存储后端的完整 SoC 压力回归记录见 [验证汇总](docs/dual-bank-verification.json)，实体板记录见 [FPGA 板测](docs/dual-bank-fpga-board.json)。

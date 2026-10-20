@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-19",
+  "tool": "Vivado 2023.2",
+  "interface": "SPIx4",
+  "flash_mib": 8,
+  "offset": 0,
+  "configuration_clock_mhz": 6,
+  "default_flash_part": "n25q64-3.3v-spi-x1_x2_x4",
+  "physical_flash_programmed": false,
+  "physical_flash_boot_tested": false,
+  "external_ft232h_board_tested": false,
+  "notes": "Offline image checks only. Exact FPGA frame equality to original Lab6 bitstreams. No RTL changes; not a new physical-board or ASIC signoff result.",
+  "records": [
+    {
+      "layout": "private",
+      "part": "xc7a35tcsg324-1",
+      "lanes": 4,
+      "cache_words": 0,
+      "clock_hz": 50000000,
+      "image_bytes": 2192012,
+      "routed_checkpoint_sha256": "d0475d26c43fd5138e31f06ceeaafd3ffced00b4e91ad7692309c06cd9497ab0",
+      "frames_equal_baseline": true,
+      "frame_data_sha256": "0e817f94888bef71eb5807b5303fe53a15ef580b8b03cd59c8cee97c41df50c1",
+      "mcs_equals_bin": true,
+      "bin_equals_bit_payload": true,
+      "artifacts_sha256": {
+        "fpga/ego1/build/ego1_jtag_private_flash.bit": "ed830f9cbf2415463f11d625aa379105513efc0630ff6ae0ac36dd61d7308b21",
+        "fpga/ego1/build/ego1_jtag_private_flash.mcs": "7a464ebd48a091626c4ad831ea235307b693da26c0c6217d73ee6a93d96dbfb3",
+        "fpga/ego1/build/ego1_jtag_private_flash.bin": "c4c481f86fffd79ee6e7a5154f1ba00c32b8aebdda8c36e1016b18736ba37bde"
+      }
+    },
+    {
+      "layout": "shared",
+      "part": "xc7a35tcsg324-1",
+      "lanes": 4,
+      "cache_words": 1,
+      "clock_hz": 50000000,
+      "image_bytes": 2192012,
+      "routed_checkpoint_sha256": "bd78db003bf54724ff5866d23e067203dfbacdf16691be6df89e761b4dbe2527",
+      "frames_equal_baseline": true,
+      "frame_data_sha256": "d2379c891d30db27c779272ac41eb1eefe140efafdbc68da982a1d1eb2d1d490",
+      "mcs_equals_bin": true,
+      "bin_equals_bit_payload": true,
+      "artifacts_sha256": {
+        "fpga/ego1/build/ego1_jtag_shared_flash.bit": "82dae2e60f9dea9ea8771380a723ea6ea66eb24107d4831d76b0308f1fb3418d",
+        "fpga/ego1/build/ego1_jtag_shared_flash.mcs": "17b64064e63dba6ab30da4454d20aa79dce24092d5c37008995a732149be6919",
+        "fpga/ego1/build/ego1_jtag_shared_flash.bin": "1a737eee4418fa8786550824d6499c0329094552194f43f76485c562e219fea7"
+      }
+    }
+  ]
+}

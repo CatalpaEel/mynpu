@@ -11,8 +11,9 @@ def main():
     assert sim['inferences']==768 and len(sim['records'])==4,'Complete the VCS matrix first'
     files=[ROOT/'tools/jtag_host.py',ROOT/'sw/main_jtag.c',ROOT/'sw/startup.S']
     files+=list((ROOT/'generated/jtag').rglob('*'))
-    files += [ROOT/'docs'/n for n in ('lab6-jtag.md','lab6-jtag-fpga.json','lab6-jtag-verification.json')]
-    files += [ROOT/'fpga/ego1'/n for n in ('program_jtag.tcl','attach_ft232h.ps1','start_openocd.sh',
+    files += [ROOT/'docs'/n for n in ('lab6-jtag.md','lab6-jtag-fpga.json','lab6-jtag-verification.json',
+      'ego1-flash-boot.md','lab6-jtag-flash.json')]
+    files += [ROOT/'fpga/ego1'/n for n in ('program_jtag.tcl','program_flash.tcl','attach_ft232h.ps1','start_openocd.sh',
       'start_gdb.sh','debug_cpu.sh','ego1_openocd.cfg','sba_helpers.tcl','setup_wsl.sh','setup_lab6_openocd.sh')]
     for record in fpga['records']:
         _,manifest=read_bundle(record['layout'])
@@ -22,12 +23,21 @@ def main():
             files.append(ROOT/name)
         elf=ROOT/'build/jtag'/record['layout']/'firmware.elf'
         if elf.is_file():files.append(elf)
+    flash=json.loads((ROOT/'docs/lab6-jtag-flash.json').read_text())
+    assert {r['layout']for r in flash['records']}=={'private','shared'}
+    for record in flash['records']:
+        assert record['frames_equal_baseline']and record['mcs_equals_bin']and record['bin_equals_bit_payload']
+        for name,digest in record['artifacts_sha256'].items():
+            file=ROOT/name
+            assert hashlib.sha256(file.read_bytes()).hexdigest()==digest
+            files.append(file)
     a.output.parent.mkdir(parents=True,exist_ok=True)
     with zipfile.ZipFile(a.output,'w',zipfile.ZIP_DEFLATED)as archive:
         archive.writestr('mynpu-lab6/README.txt',
           'Lab6 JTAG runtime kit: see docs/lab6-jtag.md.\n'
           'Both private/shared 4-lane bitstreams and matching PC assets are included.\n'
           'Configure EGo1 using board USB-JTAG; connect external FT232H/J5 for OpenOCD/GDB.\n'
+          'Single PC USB port: see docs/ego1-flash-boot.md; program Flash, then power board from USB charger.\n'
           'Physical FT232H board testing remains separate from the recorded VCS simulations.\n'
           'No proprietary SRAM model or PDK files are included.\n'
           'Full RTL/build source: https://github.com/one-bite-one-pig/mynpu/tree/feature/dual-bank-shared-sram\n')
