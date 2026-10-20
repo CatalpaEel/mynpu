@@ -31,6 +31,12 @@ def main():
             file=ROOT/name
             assert hashlib.sha256(file.read_bytes()).hexdigest()==digest
             files.append(file)
+    board=json.loads((ROOT/'docs/ego1-flash-board.json').read_text())
+    for name,digest in board.get('validation_artifacts_sha256',{}).items():
+        file=ROOT/name
+        assert name.startswith('build/')and file.suffix in ('.json','.log')
+        assert hashlib.sha256(file.read_bytes()).hexdigest()==digest
+        files.append(file)
     a.output.parent.mkdir(parents=True,exist_ok=True)
     with zipfile.ZipFile(a.output,'w',zipfile.ZIP_DEFLATED)as archive:
         archive.writestr('mynpu-lab6/README.txt',
@@ -39,6 +45,7 @@ def main():
           'Configure EGo1 using board USB-JTAG; connect external FT232H/J5 for OpenOCD/GDB.\n'
           'Single PC USB port: see docs/ego1-flash-boot.md; program Flash, then power board from USB charger.\n'
           'Physical FT232H board testing remains separate from the recorded VCS simulations.\n'
+          'Physical Flash/FT232H results and included test logs: docs/ego1-flash-board.json.\n'
           'No proprietary SRAM model or PDK files are included.\n'
           'Full RTL/build source: https://github.com/one-bite-one-pig/mynpu/tree/feature/dual-bank-shared-sram\n')
         for file in dict.fromkeys(files):

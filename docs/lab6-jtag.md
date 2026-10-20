@@ -85,7 +85,8 @@ wsl -d Ubuntu -u root -- bash -lc `
 
 本机已完成源码编译安装，版本为 `0.12.0+dev-04406-g10b7a647d`。GDB Multiarch 已离线载入两版 RV32 ELF/符号，PC 六项协议/异常测试和 Tcl SBA 错误/超时检查均通过；这些软件检查不代替实体下载器联调。
 
-Windows 管理员 PowerShell 把 FT232H 交给 WSL：
+先打开 Ubuntu WSL 终端并保持窗口运行（仅执行一次短命令后退出，WSL 可能自动停止）。
+再用 Windows 管理员 PowerShell 把 FT232H 交给 WSL；首次 `usbipd bind` 需要管理员权限：
 
 ```powershell
 usbipd list
@@ -196,7 +197,9 @@ clab VCS 四态完整 SoC 回归已全部通过：
 
 合计 **12 次启动、768 次完整推理**，每次检查全部十个整数输出码、与实际 PyTorch 输出码差值 ≤1、argmax、错误状态、周期和 IRQ 计数。覆盖 ROM 等待期间禁止取 SRAM 指令、真实 TAP/DMI/SBA 加载、只读 ROM/版本 ID、CPU halt/resume/WFI/IRQ、POR/ndmreset 后重新加载。日志摘要和源码 SHA256 见 [VCS 验证记录](lab6-jtag-verification.json)。ASIC 功能仿真禁用 timing check/notifier，未做 PDK 签核。
 
-本地 Verilator 另完成 private/BRAM 的三次启动、192 次推理，作为辅助两态检查；主要结论以四态 VCS 为准。实体 FT232H/J5/OpenOCD/GDB 联调尚未完成，本次没有把 bitstream 生成或原 USB/VIO 板测标成外接探针实测。
+本地 Verilator 另完成 private/BRAM 的三次启动、192 次推理，作为辅助两态检查；主要仿真结论以四态 VCS 为准。
+
+2026-10-19 实体 **shared / 4-lane** 已完成 Flash 烧写/读回、QSPI 上电启动、外接 FT232H/J5/OpenOCD 冷加载，5 次短测试加 3×64 次连续推理，共 197 次真实 CPU/NPU 推理全部通过。64 张不同输入的十个输出码与整数参考完全一致、PyTorch 最大码差 1，IRQ 计数正确；每次 NPU 为 35570 周期。GDB 寄存器和内存读取也已实测。前 5 次用 10kHz，192 次用 100kHz JTAG；SoC 始终 50MHz。步骤见 [Flash 指南](ego1-flash-boot.md)，完整实板状态见 [板测记录](ego1-flash-board.json)。private 的外接探针实测仍待进行；原 VIO 测试和 VCS 数据分别保留。
 
 可用 `python3 tools/package_jtag_kit.py` 生成 `build/lab6-jtag-kit.zip`：包含两套已校验 bitstream、报告、PC 脚本、固件/模型/64 张参考向量及 ELF 符号。运行包不含私有 SRAM 模型或 PDK 文件；完整 RTL/重建工程保存在 GitHub 分支中。软件与夹具协议测试不需要 PyTorch，只有重新生成 PyTorch 参考时使用 eeml 环境。
 

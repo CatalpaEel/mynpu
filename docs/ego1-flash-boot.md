@@ -60,9 +60,11 @@ Erase / Program / Verify。不要仅用 Program Device 下载 `.bit` 代替 Flas
 
 1. 关闭开发板电源，断开开发板与电脑的 USB 连接。
 2. 按板卡丝印/手册，将 **JP2 设为 QSPI 启动**；不要凭“左边/右边”判断不同板卡版本。
+   本次实物标记为左 QSPI、右 JTAG，三针跳帽跨接左侧和中间两针，右侧一针露出。
 3. 把开发板 USB 线的另一端接 USB 充电头，再打开板卡电源。
 4. 等 FPGA 配置完成。官方手册的配置完成指示为 D24；本 SoC 的 LED0 表示 MMCM locked，
    LED1 为心跳。CPU 此时在 ROM 等待，尚未加载模型，也不会自动进行 MNIST 推理。
+   LED4 显示外接 TCK 边沿活动；确认调试连接应以 OpenOCD 的 TAP/CPU/版本 ID 读取为准。
 5. 用另一根数据线把 FT232H 接电脑唯一的 USB-A，按 [Lab6 接线表](lab6-jtag.md#3-烧写-fpga-与接线)
    将它连接 J5。
 
@@ -71,7 +73,7 @@ Erase / Program / Verify。不要仅用 Program Device 下载 `.bit` 代替 Flas
 
 ## 4. 用原来的 OpenOCD 和 PC 程序运行
 
-Windows 管理员 PowerShell：
+先打开 Ubuntu WSL 终端并保持运行，再在 Windows 管理员 PowerShell 执行（首次共享下载器需要管理员权限）：
 
 ```powershell
 .\fpga\ego1\attach_ft232h.ps1
@@ -91,6 +93,15 @@ cd /mnt/c/Users/zhujunan/Desktop/tapeout/mynpu
 python3 tools/jtag_host.py --layout shared --boots 1 --runs 5
 python3 tools/jtag_host.py --layout shared --boots 3 --runs 64
 ```
+
+首次连通按 Lab6 默认 10kHz。已验证连接后，可在启动 OpenOCD 时覆盖为 100kHz：
+
+```bash
+sudo bash fpga/ego1/start_openocd.sh -c 'adapter speed 100'
+```
+
+本次前 5 次短测试使用 10kHz，随后 3×64 次回归使用 100kHz。此参数只影响 JTAG 传输，
+SoC/NPU 的系统时钟始终为 50MHz。
 
 独立 SRAM 版将 `shared` 改为 `private`。GDB 手动调试仍使用
 `bash fpga/ego1/debug_cpu.sh shared`，详见 [Lab6 主指南](lab6-jtag.md)。
@@ -122,6 +133,15 @@ MCS/BIN/bit 配置数据一致，并比较 FAR/FDRI，确认所有 FPGA 配置�
 2026-10-19 已将 **shared / 4-lane** 镜像实际烧入 EGo1，Vivado 识别 Flash ID 为
 `20 BA 17`，擦除、空白检查、写入及读回校验均成功，输出 `FLASH_PROGRAM_VERIFY_PASS`。
 实体烧写证据见 [板卡记录](ego1-flash-board.json)。private 版仍仅完成镜像生成与离线检查。
-**断电后从 Flash 启动，以及外接 FT232H 的 CPU/NPU 推理仍待验证。** 既有 VCS 的
+随后已完成充电头供电、QSPI 断电上电启动，外接 FT232H 读取版本 ID `0x4a541104`、
+RUN=0、CPU PC=`0x00010008`。CPU 固件/模型通过原 DM SBA 下载并逐字核对，运行
+5 次短测试及 3 次 DM 复位/重装、每次 64 张 MNIST 输入，共 **197 次 CPU-in-loop 实板推理**，
+全部十个输出码与整数参考 bit-exact，与导出的 PyTorch INT8 输出最大差值 1，IRQ 计数全部正确。
+NPU 每次 35570 周期，即 50MHz 下 0.7114ms；USB/JTAG 传输时间另计。
+GDB 也实际读回了 CPU 寄存器、版本 ID、最终 DONE sequence=63 和 IRQ=64。
+
+这是一次真实断电上电启动及四次 DM 复位/重新加载，不等于四次断电测试。
+完整数据/日志在 `build/ego1-flash-jtag-validation.tgz`，运行包也包含本次板测数据与日志。
+既有 VCS 的
 ASIC/FPGA 四配置、768 次推理记录见 [原验证记录](lab6-jtag-verification.json)。
 FPGA 板载 QSPI 只恢复 FPGA 电路，不是给 ASIC 新增 SPI 固件加载器，也不增加 SRAM。

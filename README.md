@@ -4,13 +4,15 @@ Lab6 外接 FT232H/J5 的 **独立 SRAM / 共享 bank 两套 4-lane 工程**及 
 
 电脑只有一个 USB-A 时，使用 [EGo1 Flash 启动](docs/ego1-flash-boot.md)：先烧 FPGA 配置，再由充电头给板子供电，电脑 USB 接外部 FT232H；两版 Flash 镜像、烧写脚本和原有 PC 冷加载程序配套提供。
 
+2026-10-19 已完成共享 bank / 4-lane 的 **Flash 上电启动、外接 FT232H/DM 冷加载、真实 CPU 参与的 197 次实板推理**，全部通过整数参考及 PyTorch 输出对照，GDB 寄存器/内存访问通过。NPU 每次 35570 周期，50MHz 下 0.7114ms。记录见 [Flash/JTAG 板测](docs/ego1-flash-board.json)；独立 SRAM 版的外接探针板测仍待进行。
+
 本分支 `feature/dual-bank-shared-sram` 新增 **3×3 AXI crossbar + CPU/NPU 共用双 8KB SRAM bank** 的完整 ASIC/FPGA 实现。模型权重只保存一份，按 32-bit word 分布到两块 SRAM；每 bank 独立仲裁，CPU 冲突访问可以等待，NPU 并行发起激活/权重读。4-lane 默认计算段约 35,600 周期，激活缓存和 lane 数可参数化。配置、加载地址、缓存实测和回归命令见 [共享 bank 架构](docs/shared-bank-npu.md)。下文保留原独立 CPU/NPU SRAM 版本的基线说明。
 
 2026-10-15 已在 EGo1 实际下载双 bank 4-lane 版本，21 次启动/105 次 CPU 推理全部通过，每次 35570 周期（50MHz 下 0.7114ms）、五次 IRQ；ASIC/FPGA 两个存储后端的完整 SoC 压力回归记录见 [验证汇总](docs/dual-bank-verification.json)，实体板记录见 [FPGA 板测](docs/dual-bank-fpga-board.json)。
 
 本工程在独立目录中整合了 **CV32E40P CPU、3×4 AXI crossbar、原有 JTAG/Debug Module、Boot RAM、CPU SRAM 和 INT8 CNN NPU**。流片主配置为 CPU 8KB RA1SHD + NPU 8KB RA1SHD、`USE_ASIC_SRAM=1`、`NPU_LANES=4`，四个 MAC 同拍计算。顶层的历史默认值仍保留功能数组/8 lanes，实际流片配置必须显式设置参数。原始 `lab3-ST` 未修改；复用源码保存在 `third_party/lab3`，新增集成顶层是 `rtl/mynpu_soc_top.sv`。
 
-这是已通过完整 ASIC SoC 宏功能模型、FPGA BRAM SoC 压力仿真和 EGo1 Vivado bitstream 生成的 RTL 工程。`USE_FPGA_BRAM=1` 同时将 CPU/NPU 替换为同步单口 BRAM，`USE_ASIC_SRAM=1` 同时替换为 RA1SHD wrapper；NPU 在 1 lane 时使用原串行核心，在 2/4/8 lanes 时使用 `cnn_npu_sp_lanes` 向量核心。原 1-lane 已实际上板；新版 4-lane 的下载记录单独列在 FPGA README。真实宏 timing check/PDK 签核按约定不在本次任务范围，FT232H/OpenOCD/GDB 探针链路仍未联调。
+这是已通过完整 ASIC SoC 宏功能模型、FPGA BRAM SoC 压力仿真和 EGo1 Vivado bitstream 生成的 RTL 工程。`USE_FPGA_BRAM=1` 同时将 CPU/NPU 替换为同步单口 BRAM，`USE_ASIC_SRAM=1` 同时替换为 RA1SHD wrapper；NPU 在 1 lane 时使用原串行核心，在 2/4/8 lanes 时使用 `cnn_npu_sp_lanes` 向量核心。原 1-lane 已实际上板；新版 4-lane 的下载记录单独列在 FPGA README。真实宏 timing check/PDK 签核按约定不在本次任务范围；共享 bank 的 FT232H/OpenOCD/GDB 实测见上面的独立记录。
 
 ## 架构
 

@@ -73,10 +73,12 @@ def run(io,layout,runs,boots,timeout,chunk_words):
         if io.read(m['boot_control'])[0]!=0:raise RuntimeError('CPU boot gate did not reset')
         for item in m['loads']:
             words=words_from_hex(folder/item['file'])
+            print('Loading:',item['file'],item['bytes'],'bytes, boot',boot,flush=True)
             for start in range(0,len(words),chunk_words):
                 batch=words[start:start+chunk_words];address=item['address']+start*4
                 io.write(address,batch)
                 if io.read(address,len(batch))!=batch:raise RuntimeError('Load readback mismatch at 0x%08x'%address)
+            print('Readback verified:',item['file'],flush=True)
         io.write(MAIL,[0]*16)
         io.command('mynpu_run')
         wait_mail(io,0x5354524d,timeout)

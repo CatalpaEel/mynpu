@@ -2,7 +2,9 @@
 
 当前另提供 Lab6 外接 FT232H/J5 的两套 4-lane 版本：`build_jtag_private.tcl`（CPU/NPU 独立 SRAM）和 `build_jtag_shared.tcl`（共享双 bank），均经 Boot ROM 等待后由 JTAG 冷加载。完整接线、源码安装 OpenOCD、GDB 操作、PC 连续推理命令见 [Lab6 JTAG 指南](../../docs/lab6-jtag.md)。以下的 USB/VIO 自运行工程仍可使用。
 
-## 双 8KB 共享 bank、4-lane 版本（当前分支上板路径）
+共享 bank 版已于 2026-10-19 完成 [Flash 启动 + 外接 FT232H 实板验证](../../docs/ego1-flash-boot.md)：197 次 CPU-in-loop 推理全部通过，GDB 寄存器/内存访问通过，NPU 每次 35570 周期。独立 SRAM 版的外接探针实测仍待进行。
+
+## 双 8KB 共享 bank、4-lane 版本（USB/VIO 自运行路径）
 
 `feature/dual-bank-shared-sram` 使用完整 CPU/NPU SoC，共享两块逻辑 8KB 单口
 BRAM，对应 ASIC 的两块 RA1SHD 宏。CPU 程序、单份模型权重、描述符和激活
@@ -46,8 +48,8 @@ failing endpoints 均为 0。含完整 SoC、VIO/debug hub：11567 LUT、8745 FF
 
 板测为固定输入重复回归；64 张不同 MNIST 输入及 ASIC 冷加载属于 VCS
 完整 SoC 验证。匹配物理 BRAM 初值且无 SBA 轮询的仿真同样为 35570 周期；
-带 SBA mailbox 轮询的 SoC 测试为 35574 周期。外接 RISC-V DM 链路仍需
-具备探针后联调；此板测通过同一 SoC 中的 CPU 执行推理。
+带 SBA mailbox 轮询的 SoC 测试为 35574 周期。此段记录 USB/VIO 自运行测试；
+外接 RISC-V DM 的实测另见上面的 Flash/JTAG 记录。
 
 以下保留原独立 CPU/NPU SRAM 的旧版工程与板测说明。
 

@@ -16,9 +16,9 @@
   "blank_check_passed": true,
   "program_passed": true,
   "readback_verify_passed": true,
-  "physical_power_cycle_boot_tested": false,
-  "external_ft232h_board_tested": false,
-  "flash_boot_path_cpu_inferences": 0,
+  "physical_power_cycle_boot_tested": true,
+  "external_ft232h_board_tested": true,
+  "flash_boot_path_cpu_inferences": 197,
   "private_flash_programmed": false,
   "image": "fpga/ego1/build/ego1_jtag_shared_flash.mcs",
   "image_sha256": "17b64064e63dba6ab30da4454d20aa79dce24092d5c37008995a732149be6919",
@@ -32,5 +32,59 @@
     "INFO: [Labtoolstcl 44-377] Flash programming completed successfully"
   ],
   "pass_marker": "FLASH_PROGRAM_VERIFY_PASS: shared",
-  "notes": "Actual shared/4-lane Flash erase/program/readback verification. Power-cycle boot and external FT232H/DM inference are separate pending tests. No ASIC RTL changes or new ASIC signoff claims."
+  "notes": "Physical shared/4-lane Flash boot and external FT232H full CPU-in-loop inference. One user-performed power cycle; four DM reset/reload tests are not four power cycles. Private Flash board test remains unperformed. No ASIC RTL changes or ASIC signoff claims.",
+  "power_cycle_evidence": "User selected QSPI and power-cycled using charger; D24/LED0 on, LED1 blinking. External DM then read correct hardware ID, RUN=0 and PC in Boot ROM.",
+  "external_probe": "FT232H 0403:6014 / channel0 / J5",
+  "transport": "OpenOCD -> DMI -> DM SBA",
+  "initial_probe": {
+    "layout": "shared",
+    "lanes": 4,
+    "boot_control": 0,
+    "hardware_id": "0x4a541104",
+    "cache_words": 1,
+    "pc": "pc (/32): 0x00010008",
+    "connection": "external FT232H -> J5 -> DTM -> DM SBA",
+    "flash_boot_observed_by_user": true
+  },
+  "dm_reset_firmware_model_reload_count": 4,
+  "unique_mnist_vectors": 64,
+  "all_integer_bitexact": true,
+  "all_irq_counts_verified": true,
+  "pytorch_max_code_error": 1,
+  "npu_cycles_min": 35570,
+  "npu_cycles_max": 35570,
+  "npu_compute_ms_min": 0.7114,
+  "npu_compute_ms_max": 0.7114,
+  "gdb_register_memory_read_verified": true,
+  "suites": [
+    {
+      "name": "smoke",
+      "dm_reset_loads": 1,
+      "runs_per_load": 5,
+      "inferences": 5,
+      "jtag_clock_khz": 10,
+      "passed": true,
+      "result": "build/jtag/board-shared-flash-smoke.json"
+    },
+    {
+      "name": "stress",
+      "dm_reset_loads": 3,
+      "runs_per_load": 64,
+      "inferences": 192,
+      "jtag_clock_khz": 100,
+      "passed": true,
+      "result": "build/jtag/board-shared-flash-stress.json"
+    }
+  ],
+  "validation_artifacts_sha256": {
+    "build/jtag/board-shared-flash-smoke.json": "b602b36ac322d0b23a3ee8c2af3227d3c912a5c43ca44e0d244a42df0047a6d1",
+    "build/jtag/board-shared-flash-smoke.log": "6b8ad69cdace1e512f3989b29555aaff561acb6f26b7cd884f6e60374b75e0da",
+    "build/jtag/board-shared-flash-stress.json": "4a345543387d03352ac4a24d2d49a19c1be33394067c3b967d1dd47af193e834",
+    "build/jtag/board-shared-flash-stress.log": "57cae6106bc1d79c6f4d3a0a9882ca4fda7240495a70d02279428b2066647445",
+    "build/flash-initial-probe.json": "0b2433126d4465562071fb3fa5312b316c1c39a6c434e64c47a400f40e3bb984",
+    "build/jtag/flash-jtag-speed.json": "0e2e4af027163453771249be886dc7e8c1c628e69e7ebaff0ed28dfc9d67efe8",
+    "build/jtag/flash-gdb-smoke.log": "5da99b3967c2eeb8bdcc4823c979e7dd53421a5892f8b73fb278741a4afe40e0",
+    "build/jtag/flash-openocd-snapshot.log": "90b104c3551fab9f7b02323f76c15b27412ca88909d90080f2a681b21fd1d90d",
+    "build/flash-program-shared.log": "071d778c5f5e51b2ff04c2fcb088656e05c47cb8e9911d7dfa972e87904a1afc"
+  }
 }
