@@ -1,3 +1,5 @@
+> 当前分支：4×4 torus、每 PE 四个本地寄存器、邻居读、CPU 软件控制的 shape/stride 流搬运及 ABI 4 紧凑流描述符及并行计算／预取命令。实现入口见 [torus 使用说明](docs/torus/README.md)，**完整设计分析见 [设计文档](docs/torus/design.md)**，性能与实际后端结果见 [验证记录](docs/torus/validation.md)。下方历史文档使用旧架构与旧 ABI。
+
 # mynpu：tiny MNIST INT8 完整 SoC
 
 Lab6 外接 FT232H/J5 的 **独立 SRAM / 共享 bank 两套 4-lane 工程**及 WSL OpenOCD/GDB、PC 冷加载与连续推理工具见 [Lab6 JTAG 操作指南](docs/lab6-jtag.md)。该模式由 CPU 在 ROM 等待，PC 加载固件/模型后放行；外接探针实测状态与 USB/VIO 自运行板测分开记录。

@@ -1,0 +1,16 @@
+# Matches the Lab 4 clock periods; boot/status port delays are trial assumptions.
+create_clock -name sys_clk -period 20 -waveform {0 10} [get_ports clk_i]
+create_clock -name jtag_clk -period 100 -waveform {0 50} [get_ports tck_i]
+create_clock -name virtual_jtag_tck -period 1000 -waveform {0 500}
+set_clock_groups -asynchronous -group [get_clocks sys_clk] -group [get_clocks {jtag_clk virtual_jtag_tck}]
+set_clock_uncertainty -setup 0.52 [get_clocks {sys_clk jtag_clk}]
+set_clock_uncertainty -hold 0.2 [get_clocks {sys_clk jtag_clk}]
+set_clock_uncertainty -setup 0.42 [get_clocks virtual_jtag_tck]
+set_clock_uncertainty -hold 0.42 [get_clocks virtual_jtag_tck]
+set_input_delay 0 -clock virtual_jtag_tck [get_ports {tms_i td_i}]
+set_output_delay 0 -clock virtual_jtag_tck -clock_fall [get_ports td_o]
+set_input_delay 0.5 -clock sys_clk [get_ports boot_ready_i]
+set_output_delay 0.5 -clock sys_clk [get_ports {npu_irq_o cpu_debug_halted_o}]
+set_input_transition 0.2 [get_ports {clk_i rst_ni boot_ready_i tck_i tms_i td_i}]
+set_load 0.2 [all_outputs]
+set_false_path -from [get_ports rst_ni]

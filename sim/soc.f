@@ -71,11 +71,14 @@ rtl/mynpu_sram_2048x32_fpga.sv
 rtl/mynpu_sram.sv
 rtl/mynpu_banked_sram.sv
 rtl/mynpu_axi_shared.sv
-cnn_npu_int8/rtl/cnn_npu_banked.sv
-rtl/mynpu_shared_subsystem.sv
 cnn_npu_int8/rtl/cnn_npu_top.sv
 cnn_npu_int8/rtl/cnn_npu_sp_top.sv
 cnn_npu_int8/rtl/cnn_npu_lane_mac.sv
 cnn_npu_int8/rtl/cnn_npu_sp_lanes.sv
 cnn_npu_int8/rtl/cnn_npu_subsystem.sv
+rtl/mynpu_host_arbiter.sv
+cnn_npu_int8/rtl/torus_pe.sv
+cnn_npu_int8/rtl/torus_array.sv
+cnn_npu_int8/rtl/shape_stream.sv
+rtl/mynpu_torus_subsystem.sv
 rtl/mynpu_soc_top.sv

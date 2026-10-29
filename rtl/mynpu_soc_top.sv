@@ -5,12 +5,16 @@
 module mynpu_soc_top #(
     parameter integer CPU_SRAM_BYTES = 8192,
     parameter integer NPU_SRAM_BYTES = 8192,
-    parameter integer NPU_LANES = 8,
+    parameter integer NPU_LANES = 4,
     parameter integer NPU_IRQ_ID = 16,
-    parameter bit DUAL_BANK_SHARED = 1'b0,
+    parameter bit DUAL_BANK_SHARED = 1'b1,
     parameter integer NPU_ACT_CACHE_WORDS = 1,
-    parameter bit JTAG_BOOT_CONTROL = 1'b0,
-    parameter bit USE_FPGA_BRAM = 1'b0,
+    parameter bit NPU_MMIO_GRID = 1'b1,
+    parameter bit COMPACT_HOST_BUS = 1'b1,
+    parameter integer NPU_GRID_CACHE_WORDS = 32,
+    parameter integer NPU_GRID_TOPOLOGY = 3,
+    parameter bit JTAG_BOOT_CONTROL = 1'b1,
+    parameter bit USE_FPGA_BRAM = 1'b1,
     parameter bit USE_ASIC_SRAM = 1'b0,
     parameter CPU_INIT_FILE = "",
     parameter NPU_INIT_FILE = "",
@@ -32,6 +36,7 @@ module mynpu_soc_top #(
 );
 
   import mynpu_soc_pkg::*;
+  localparam bit NATIVE_HOST = DUAL_BANK_SHARED && NPU_MMIO_GRID && COMPACT_HOST_BUS;
   logic [31:0] cpu_irq;
   localparam integer NPU_MEM_BACKEND = USE_ASIC_SRAM ? 2 : (USE_FPGA_BRAM ? 1 : 0);
   assign cpu_irq = (32'd1 << NPU_IRQ_ID) & {32{npu_irq_o}};
@@ -90,6 +95,7 @@ module mynpu_soc_top #(
       '{ idx: IDX_DM,   start_addr: DM_BASE,   end_addr: DM_BASE   + DM_LENGTH   }
   };
 
+  if(!NATIVE_HOST)begin:g_axi_fabric
   axi_xbar_intf #(
       .AXI_USER_WIDTH (1),
       .Cfg            (AXI_XBAR_CFG),
@@ -105,6 +111,7 @@ module mynpu_soc_top #(
       .default_mst_port_i    ('0)
   );
 
+  end
   logic           instr_req;
   logic           instr_gnt;
   logic           instr_rvalid;
@@ -192,6 +199,7 @@ module mynpu_soc_top #(
   `AXI_ASSIGN_FROM_REQ(slave[2], dm_axi_m_req)
   `AXI_ASSIGN_TO_RESP(dm_axi_m_resp, slave[2])
 
+  if(!NATIVE_HOST)begin:g_axi_cpu
   assign data_valid = data_rvalid | data_axi_resp.b_valid;
 
   axi_adapter #(
@@ -254,6 +262,7 @@ module mynpu_soc_top #(
       .axi_resp_i            (data_axi_resp)
   );
 
+  end
   dmi_jtag i_dmi_jtag (
       .clk_i           (clk_i),
       .rst_ni          (rst_ni),
@@ -300,6 +309,7 @@ module mynpu_soc_top #(
   logic        dm_master_read_valid;
   logic [31:0] dm_master_r_rdata;
 
+  if(!NATIVE_HOST)begin:g_axi_dm_slave
   axi2mem #(
       .AXI_ID_WIDTH   (4),
       .AXI_ADDR_WIDTH (32),
@@ -319,6 +329,7 @@ module mynpu_soc_top #(
       .data_i (dm_slave_rdata)
   );
 
+  end
   dm_top #(
       .NrHarts         (1),
       .BusWidth        (32),
@@ -355,6 +366,7 @@ module mynpu_soc_top #(
       .dmi_resp_o       (debug_resp)
   );
 
+  if(!NATIVE_HOST)begin:g_axi_sba
   axi_adapter #(
       .ADDR_WIDTH         (32),
       .DATA_WIDTH         (32),
@@ -388,6 +400,7 @@ module mynpu_soc_top #(
   // SBA must see write completion as well as read completion.
   assign dm_master_r_valid = dm_master_read_valid | dm_axi_m_resp.b_valid;
 
+  end
   logic        boot_req;
   logic        boot_we;
   logic [31:0] boot_addr;
@@ -396,7 +409,7 @@ module mynpu_soc_top #(
   logic [3:0] boot_be;
 
   generate if(JTAG_BOOT_CONTROL)begin:g_debug_boot
-    mynpu_debug_boot #(.BUILD_ID(32'h4a541000 | (DUAL_BANK_SHARED ? 32'h100 : 0) | NPU_LANES),
+    mynpu_debug_boot #(.BUILD_ID(DUAL_BANK_SHARED ? 32'h544f5204 : 32'h4a541004),
       .CACHE_WORDS(DUAL_BANK_SHARED ? NPU_ACT_CACHE_WORDS : 0)) i_boot(
       .clk_i(clk_i),.rst_ni(ndmreset_n),.req_i(boot_req),.we_i(boot_we),
       .addr_i(boot_addr[5:2]),.be_i(boot_be),.wdata_i(boot_wdata),.rdata_o(boot_rdata));
@@ -412,6 +425,7 @@ module mynpu_soc_top #(
   );
   end endgenerate
 
+  if(!NATIVE_HOST)begin:g_axi_boot
   axi2mem #(
       .AXI_ID_WIDTH   (4),
       .AXI_ADDR_WIDTH (32),
@@ -431,18 +445,67 @@ module mynpu_soc_top #(
       .data_i (boot_rdata)
   );
 
+  end
+  logic host_req,host_we,host_gnt,host_rv;
+  logic[31:0]host_addr_bus,host_wd_bus,host_rd;
+  logic[3:0]host_be_bus;
+  logic pe_command_valid,pe_command_ready;
+  if(NATIVE_HOST)begin:g_native_host
+    // Ordered CPU data responses across the direct command port and shared bus.
+    // The direct path is a single response slot, not an instruction FIFO.
+    logic data_pending_q,data_fast_q;
+    wire[2:0]grants,responses;wire[31:0]read_data[0:2];
+    wire fast_address=data_we&&(&data_be)&&data_addr==32'h70000ffc;
+    wire retire_data=data_pending_q&&(data_fast_q||responses[1]);
+    wire allow_data=!data_pending_q||retire_data;
+    wire[2:0] requests={dm_master_req,data_req&&!fast_address&&allow_data,instr_req};
+    wire[2:0] writes={dm_master_we,data_we,1'b0};
+    wire[31:0]addresses[0:2],write_data[0:2];
+    wire[3:0]byte_enables[0:2];
+    assign addresses[0]=instr_addr;assign addresses[1]=data_addr;assign addresses[2]=dm_master_add;
+    assign write_data[0]=0;assign write_data[1]=data_wdata;assign write_data[2]=dm_master_wdata;
+    assign byte_enables[0]=15;assign byte_enables[1]=data_be;assign byte_enables[2]=dm_master_be;
+    assign instr_gnt=grants[0];assign instr_rvalid=responses[0];assign instr_rdata=read_data[0];
+    assign pe_command_valid=data_req&&fast_address&&allow_data;
+    assign data_gnt=fast_address?(data_req&&allow_data&&pe_command_ready):grants[1];
+    assign data_rvalid=retire_data;assign data_valid=retire_data;
+    assign data_rdata=data_fast_q?32'd0:read_data[1];
+    always_ff @(posedge clk_i or negedge ndmreset_n)begin
+      if(!ndmreset_n)begin data_pending_q<=0;data_fast_q<=0;end
+      else begin
+        if(retire_data)data_pending_q<=0;
+        if(data_req&&data_gnt)begin data_pending_q<=1;data_fast_q<=fast_address;end
+      end
+    end
+    assign dm_master_gnt=grants[2];assign dm_master_read_valid=responses[2];assign dm_master_r_valid=responses[2];assign dm_master_r_rdata=read_data[2];
+    mynpu_host_arbiter i_host(.clk_i(clk_i),.rst_ni(ndmreset_n),.req_i(requests),.we_i(writes),
+      .addr_i(addresses),.wdata_i(write_data),.be_i(byte_enables),.gnt_o(grants),.rvalid_o(responses),.rdata_o(read_data),
+      .shared_req_o(host_req),.shared_we_o(host_we),.shared_addr_o(host_addr_bus),.shared_wdata_o(host_wd_bus),.shared_be_o(host_be_bus),
+      .shared_gnt_i(host_gnt),.shared_rvalid_i(host_rv),.shared_rdata_i(host_rd),
+      .boot_req_o(boot_req),.boot_we_o(boot_we),.boot_addr_o(boot_addr),.boot_wdata_o(boot_wdata),.boot_be_o(boot_be),.boot_rdata_i(boot_rdata),
+      .dm_req_o(dm_slave_req),.dm_we_o(dm_slave_we),.dm_addr_o(dm_slave_addr),.dm_wdata_o(dm_slave_wdata),.dm_be_o(dm_slave_be),.dm_rdata_i(dm_slave_rdata));
+  end
+
+  if(!NATIVE_HOST)assign pe_command_valid=1'b0;
+
   generate if (DUAL_BANK_SHARED) begin : g_shared
     logic req,we,gnt,rv,err,host_write;
     logic [31:0] addr,wd,rd,host_addr,host_wd;
     logic [3:0] be,host_be;
+    if(NATIVE_HOST)begin:g_native
+      assign req=host_req;assign we=host_we;assign addr=host_addr_bus;assign wd=host_wd_bus;assign be=host_be_bus;
+      assign host_gnt=gnt;assign host_rv=rv;assign host_rd=rd;
+    end else begin:g_axi
     mynpu_axi_shared #(.ID_WIDTH(4)) i_bridge(
       .clk_i(clk_i),.rst_ni(ndmreset_n),.slave(master[IDX_NPU]),
       .req_o(req),.we_o(we),.addr_o(addr),.wdata_o(wd),.be_o(be),
       .gnt_i(gnt),.rvalid_i(rv),.rdata_i(rd),.error_i(err));
-    mynpu_shared_subsystem #(.LANES(NPU_LANES),.MEM_BACKEND(NPU_MEM_BACKEND),.ACT_CACHE_WORDS(NPU_ACT_CACHE_WORDS),
+    end
+    mynpu_torus_subsystem #(.MEM_BACKEND(NPU_MEM_BACKEND),.STREAM_CACHE_WORDS(NPU_GRID_CACHE_WORDS),
       .BANK0_INIT_FILE(CPU_INIT_FILE),.BANK1_INIT_FILE(NPU_INIT_FILE)) i_subsystem(
       .clk_i(clk_i),.rst_ni(ndmreset_n),.req_i(req),.we_i(we),.addr_i(addr),
       .wdata_i(wd),.be_i(be),.gnt_o(gnt),.rvalid_o(rv),.rdata_o(rd),.error_o(err),
+      .command_valid_i(pe_command_valid),.command_word_i(data_wdata),.command_ready_o(pe_command_ready),
       .irq_o(npu_irq_o),.host_write_o(host_write),.host_addr_o(host_addr),
       .host_wdata_o(host_wd),.host_be_o(host_be));
     always_ff @(posedge clk_i or negedge ndmreset_n) begin
@@ -457,6 +520,7 @@ module mynpu_soc_top #(
       endcase
     end
   end else begin : g_private
+  assign pe_command_ready=1'b0;
   logic        sram_req;
   logic        sram_we;
   logic [31:0] sram_addr;

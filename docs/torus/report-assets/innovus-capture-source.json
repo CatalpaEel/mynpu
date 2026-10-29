@@ -1,0 +1,11 @@
+{
+  "tool": "Cadence Innovus 21.16",
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261029-torus-area-v4",
+  "checkpoint": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261029-torus-area-v4/mynpu/pnr/checkpoints/06_powerplan.enc",
+  "checkpoint_pointer_sha256": "53a383c3af943de7c7412267304c61bffc35c9a3bb0a81879af82fcf0e909ced",
+  "capture_script": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261029-torus-area-v4/scripts/gui_capture.tcl",
+  "capture_log": "build/torus/report-capture/launcher.log",
+  "output": "innovus-powerplan.png",
+  "image_sha256": "cca4343a7cf3456630af0e04bd745e35912ad86ab24f38090292d0528fc06198",
+  "scope": "Restored powerplan canvas. No placed standard cells or signal routing claimed."
+}
