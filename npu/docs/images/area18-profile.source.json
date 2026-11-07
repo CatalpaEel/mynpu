@@ -1,0 +1,10 @@
+{
+  "matplotlib_version": "3.11.2",
+  "scope": "Data plots; no physical placement",
+  "source_sha256": {
+    "npu/reports/area18_distribution.json": "4f51daec98e5a488cdb2c8c329143a477b0f4a81a6569e96f3ebb6941327f254",
+    "npu/reports/area18_blocking_profile.json": "1e8a821514568f784f2f32c546e4ebd7910cec6ba24aced94c414fbcb7229c21",
+    "npu/tb/tb_mnist_blocking.sv": "34ce96865a44752fec207377ef5a00ad5fded37f690a7f93883a64c8c99ecbd5",
+    "npu/eda/tsmc180/draw_area18_profile.py": "69a053ed03e14fa31bfc2f15cd851ffc290f01c4b329842f0c8f7eee24445a81"
+  }
+}

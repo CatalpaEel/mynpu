@@ -1,5 +1,7 @@
 # RTL文件导航
 
+已补充[18ns＋门控的面积归属与软件阻塞分布](../docs/area18-distribution-and-blocking.md)：最终网表leaf级面积统计、两条软件路径各10张图的CPU/轮询/逐层等待分析及三张图。RTL与固件未为统计改动。
+
 最新[面积压缩结果](../docs/area25-optimization.md)：**2.515488mm²**（含两块SRAM、不含PAD），相比2.846849mm²减少 **11.64%**。采用high综合、自动门控与18ns再优化；50MHz setup slack **+2.0040ns**。全部功能、256B RF和8/8/8队列保留，推理周期不变；未重跑PNR，严格2.5mm²还差0.015488mm²。
 
 此前完成[Matrix、CNN、Vector Stream精简](../docs/streams-optimized.md)：递增寻址、CNN行窗口选择共享、Vector缓冲与地址ALU复用。21组验证通过，默认/共享量化/旧固件分别为29,173 / 27,432 / 30,710周期，均与本轮优化前一致。[最新综合面积与时序](../docs/streams-optimized-area.md)：总面积 **2.846849mm²**（含两块SRAM，不含PAD），50MHz setup slack **+4.0020ns**，本轮未跑PNR。下列数值为各历史版本。

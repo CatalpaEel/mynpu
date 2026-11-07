@@ -36,6 +36,7 @@ p.add_argument(
         "rfsink",
         "burst",
         "layers",
+        "blocking",
         "latency",
         "stream",
         "enginefaults",
@@ -109,6 +110,7 @@ tops = {
     "rfsink": "tb_rf_sink",
     "burst": "tb_queue_burst",
     "layers": "tb_mnist",
+    "blocking": "tb_mnist_blocking",
     "latency": "tb_mnist_latency",
     "stream": "tb_mnist_stream",
     "enginefaults": "tb_engine_faults",
@@ -215,6 +217,7 @@ if a.macro:
         "soc",
         "burst",
         "layers",
+        "blocking",
         "latency",
         "stream",
     ]:
@@ -227,25 +230,107 @@ if a.macro:
     wrapper = out / "npu_soc_macro.sv"
     wrapper.write_text(text)
     files = [f for f in files if f.name not in ["npu_soc.sv", "sram_ff.sv"]] + [wrapper, macro]
-cwd = a.artifacts_dir if a.suite in ["jtag", "quantlayers", "layers", "latency", "stream"] else out
+cwd = (
+    a.artifacts_dir
+    if a.suite in ["jtag", "quantlayers", "layers", "blocking", "latency", "stream"]
+    else out
+)
 if a.suite == "soc":
     subprocess.run(["/usr/bin/python3.12", str(ROOT / "sw/gen_boot.py")], check=True)
     shutil.copy2(ROOT / "sw/boot.hex", out / "boot.hex")
 assets = (
     list(cwd.glob("*.hex"))
-    if a.suite in ["jtag", "quantlayers", "layers", "latency", "stream", "soc"]
+    if a.suite in ["jtag", "quantlayers", "layers", "blocking", "latency", "stream", "soc"]
     else []
 )
 tracked = (
     files
     + [tb]
     + ([ROOT / "tb/db_jtag_tasks.svh"] if a.suite == "jtag" else [])
-    + ([ROOT / "tb/mnist_profile.svh"] if a.suite == "latency" else [])
+    + ([ROOT / "tb/mnist_profile.svh"] if a.suite in ["latency", "blocking"] else [])
     + list(inc.glob("*"))
     + assets
 )
 if a.suite in ["latency", "layers", "stream", "jtag", "quantlayers"]:
     tracked.append(a.artifacts_dir / "test_meta.svh")
+if a.suite == "blocking":
+    # The dependency-free assembler emits exactly one RV32 word per listing
+    # instruction; labels do not consume space. Preserve the binary unchanged.
+    import struct
+
+    pc = 32
+    classes = [0] * 4096
+    labels = {}
+    for line in (a.artifacts_dir / "boot.S").read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.endswith(":"):
+            labels[str(0x80000000 + pc * 4)] = line[:-1]
+        else:
+            pc += 1
+    binary = (a.artifacts_dir / "boot.bin").read_bytes()
+    backedges = {}
+    for word in range(32, pc):
+        insn = struct.unpack_from("<I", binary, word * 4)[0]
+        op = insn & 127
+        if op == 0x63:
+            delta = (
+                ((insn >> 31) << 12)
+                | (((insn >> 7) & 1) << 11)
+                | (((insn >> 25) & 63) << 5)
+                | (((insn >> 8) & 15) << 1)
+            )
+            if delta & 4096:
+                delta -= 8192
+        elif op == 0x6F:
+            delta = (
+                ((insn >> 31) << 20)
+                | (((insn >> 12) & 255) << 12)
+                | (((insn >> 20) & 1) << 11)
+                | (((insn >> 21) & 1023) << 1)
+            )
+            if delta & (1 << 20):
+                delta -= 1 << 21
+        else:
+            continue
+        if delta < 0:
+            backedges.setdefault(word * 4 + delta, []).append(word)
+    ranges = []
+    for address, label in labels.items():
+        category = (
+            1
+            if "space" in label
+            else 2
+            if "drain" in label and "drained" not in label
+            else 3
+            if re.fullmatch(r"ack[0-9]+", label)
+            else 0
+        )
+        begin = (int(address) - 0x80000000) // 4
+        if category and begin * 4 in backedges:
+            end = max(backedges[begin * 4]) + 1
+            assert end <= pc and end - begin < 128, (label, begin, end)
+            classes[begin:end] = [category] * (end - begin)
+            ranges.append(
+                dict(
+                    label=label,
+                    start_pc=int(address),
+                    end_pc=0x80000000 + end * 4,
+                    category=category,
+                )
+            )
+    (out / "block_pc_ranges.json").write_text(json.dumps(ranges, indent=2) + "\n")
+    pc_map = out / "block_pc_class.hex"
+    pc_map.write_text("".join(f"{c:x}\n" for c in classes))
+    (out / "block_pc_labels.json").write_text(json.dumps(labels, indent=2) + "\n")
+    tracked += [
+        ROOT / "tb/tb_mnist_latency.sv",
+        a.artifacts_dir / "boot.S",
+        a.artifacts_dir / "boot.bin",
+        a.artifacts_dir / "test_meta.svh",
+        pc_map,
+    ]
 hashes = {str(f): hashlib.sha256(f.read_bytes()).hexdigest() for f in tracked if f.is_file()}
 cmd = [
     "vcs",
@@ -281,6 +366,8 @@ with (out / "compile-launcher.log").open("w") as f:
 if r.returncode:
     raise SystemExit("Compile failed: " + str(out))
 cmd = [str(out / "simv"), "-l", str(out / "run.log")]
+if a.suite == "blocking":
+    cmd.append("+block_pc_map=" + str(pc_map))
 if a.macro:
     cmd += ["+notimingcheck"]
 if a.max_cycles:
@@ -314,6 +401,7 @@ markers = {
     "rfsink": "RF SINK PASS",
     "burst": "BURST PASS",
     "layers": "MNIST PASS",
+    "blocking": "BLOCKING PASS",
     "latency": "SINGLE PASS",
     "stream": "STREAM PASS",
     "enginefaults": "ENGINE FAULTS PASS",

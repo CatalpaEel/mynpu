@@ -44,6 +44,11 @@ p.add_argument(
 p.add_argument(
     "--clock-gating", action="store_true", help="Extract library clock gates for enabled registers"
 )
+p.add_argument(
+    "--preserve-unit-boundaries",
+    action="store_true",
+    help="Keep CPU and accelerator unit hierarchy for area attribution",
+)
 p.add_argument("--effort", choices=["low", "medium", "high"], default="medium")
 a = p.parse_args()
 r = a.out.resolve()
@@ -99,6 +104,7 @@ lefs = [
             "report_period_ns": a.report_period,
             "effort": a.effort,
             "clock_gating": a.clock_gating,
+            "unit_boundaries_preserved": a.preserve_unit_boundaries,
             "sram_banks": 2,
             "rf_bank_words": a.rf_bank_words,
             "cache_words_per_bank": 0,
@@ -168,6 +174,18 @@ def listing(paths):
     return "{" + " ".join(map(str, paths)) + "}"
 
 
+preserve_units = (
+    """
+foreach pattern {*i_cpu *i_xbar *i_mmio *i_stream *i_cnn *i_matmul *i_matrix_stream *i_vector *i_vector_stream *i_quant *i_debug *i_boot} {
+ set blocks [get_db hinsts $pattern]
+ if {[llength $blocks] == 0} {error "Missing hierarchy: $pattern"}
+ set_db $blocks .ungroup_ok false
+}
+"""
+    if a.preserve_unit_boundaries
+    else ""
+)
+
 tcl = f"""set_db max_cpus_per_server 4
 set_db design_process_node 180
 set_db init_hdl_search_path {{{r / "inputs" / inc}}}
@@ -181,7 +199,7 @@ read_sdc {r / "synth.sdc"}
 set_db syn_generic_effort {a.effort}
 set_db syn_map_effort {a.effort}
 set_db syn_opt_effort {a.effort}
-syn_generic
+{preserve_units}syn_generic
 report_area > {r / "reports/generic_area.rpt"}
 syn_map
 report_area > {r / "reports/mapped_area.rpt"}

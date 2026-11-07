@@ -1,0 +1,259 @@
+{
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-profile-hier",
+  "scope": "mapped cell area, two SRAM macros included, PADs and PNR overhead excluded",
+  "total_area_mm2": 2.507804628,
+  "standard_cell_area_mm2": 1.704917446,
+  "buckets": {
+    "XBAR": {
+      "area_um2": 363685.37,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_xbar",
+          "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6",
+          "cells": 14980,
+          "area_um2": 363685.37
+        }
+      ],
+      "area_mm2": 0.36368537,
+      "percent_total": 14.502141272864739
+    },
+    "CPU": {
+      "area_um2": 256607.904,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_cpu",
+          "module": "cv32e40p_top_COREV_PULP0_COREV_CLUSTER0_FPU0_NUM_M",
+          "cells": 9754,
+          "area_um2": 256607.904
+        }
+      ],
+      "area_mm2": 0.256607904,
+      "percent_total": 10.232372216517021
+    },
+    "Matrix": {
+      "area_um2": 356221.689,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_matmul",
+          "module": "npu_matmul",
+          "cells": 9976,
+          "area_um2": 252384.339
+        },
+        {
+          "indent": 2,
+          "instance": "i_core_i_matrix_stream",
+          "module": "npu_matrix_stream_GATHER1",
+          "cells": 4143,
+          "area_um2": 103837.35
+        }
+      ],
+      "area_mm2": 0.356221689,
+      "percent_total": 14.204523152351403
+    },
+    "MMIO / task queues": {
+      "area_um2": 183477.011,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_mmio",
+          "module": "npu_mmio",
+          "cells": 6138,
+          "area_um2": 183477.011
+        }
+      ],
+      "area_mm2": 0.183477011,
+      "percent_total": 7.316240226668885
+    },
+    "CNN": {
+      "area_um2": 206985.408,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_stream",
+          "module": "npu_stream_RF_SINK1",
+          "cells": 6554,
+          "area_um2": 158899.552
+        },
+        {
+          "indent": 2,
+          "instance": "i_core_i_cnn",
+          "module": "npu_cnn",
+          "cells": 1972,
+          "area_um2": 48085.856
+        }
+      ],
+      "area_mm2": 0.206985408,
+      "percent_total": 8.25364965392352
+    },
+    "Shared quantizer": {
+      "area_um2": 109452.672,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_quant",
+          "module": "npu_shared_quant",
+          "cells": 3989,
+          "area_um2": 109452.672
+        }
+      ],
+      "area_mm2": 0.109452672,
+      "percent_total": 4.364481617824018
+    },
+    "Vector": {
+      "area_um2": 138949.574,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_vector",
+          "module": "npu_vector",
+          "cells": 4356,
+          "area_um2": 87691.654
+        },
+        {
+          "indent": 2,
+          "instance": "i_core_i_vector_stream",
+          "module": "npu_vector_stream_GATHER1",
+          "cells": 2251,
+          "area_um2": 51257.92
+        }
+      ],
+      "area_mm2": 0.138949574,
+      "percent_total": 5.5406857635003925
+    },
+    "JTAG / debug": {
+      "area_um2": 86343.802,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_debug",
+          "module": "npu_jtag_debug",
+          "cells": 3581,
+          "area_um2": 85887.2
+        },
+        {
+          "indent": 2,
+          "instance": "i_core_i_boot",
+          "module": "npu_debug_boot",
+          "cells": 42,
+          "area_um2": 456.602
+        }
+      ],
+      "area_mm2": 0.086343802,
+      "percent_total": 3.443003535281776
+    },
+    "SRAM macros": {
+      "area_um2": 802887.182,
+      "count": 2,
+      "area_mm2": 0.802887182,
+      "percent_total": 32.01553952950118
+    },
+    "Top / core glue": {
+      "area_um2": 3194.0160000000615,
+      "area_mm2": 0.0031940160000000616,
+      "percent_total": 0.12736303156706916
+    }
+  },
+  "hierarchical_rows": [
+    {
+      "indent": 0,
+      "instance": "npu_asic_top",
+      "module": null,
+      "cells": 67912,
+      "area_um2": 2507804.628
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_xbar",
+      "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6",
+      "cells": 14980,
+      "area_um2": 363685.37
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_cpu",
+      "module": "cv32e40p_top_COREV_PULP0_COREV_CLUSTER0_FPU0_NUM_M",
+      "cells": 9754,
+      "area_um2": 256607.904
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_matmul",
+      "module": "npu_matmul",
+      "cells": 9976,
+      "area_um2": 252384.339
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_mmio",
+      "module": "npu_mmio",
+      "cells": 6138,
+      "area_um2": 183477.011
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_stream",
+      "module": "npu_stream_RF_SINK1",
+      "cells": 6554,
+      "area_um2": 158899.552
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_quant",
+      "module": "npu_shared_quant",
+      "cells": 3989,
+      "area_um2": 109452.672
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_matrix_stream",
+      "module": "npu_matrix_stream_GATHER1",
+      "cells": 4143,
+      "area_um2": 103837.35
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_vector",
+      "module": "npu_vector",
+      "cells": 4356,
+      "area_um2": 87691.654
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_debug",
+      "module": "npu_jtag_debug",
+      "cells": 3581,
+      "area_um2": 85887.2
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_vector_stream",
+      "module": "npu_vector_stream_GATHER1",
+      "cells": 2251,
+      "area_um2": 51257.92
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_cnn",
+      "module": "npu_cnn",
+      "cells": 1972,
+      "area_um2": 48085.856
+    },
+    {
+      "indent": 2,
+      "instance": "i_core_i_boot",
+      "module": "npu_debug_boot",
+      "cells": 42,
+      "area_um2": 456.602
+    }
+  ],
+  "xbar_breakdown": {
+    "shared_rf_mm2": 0.0,
+    "stream_fifo_mm2": 0.0,
+    "sram_arbitration_and_response_mm2": 0.36368537
+  },
+  "sram_cache_words_per_bank": 0,
+  "compute_boundaries_preserved": true
+}
