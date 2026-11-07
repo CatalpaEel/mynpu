@@ -1,0 +1,19 @@
+{
+  "source": "/home/s2400012841/chip-fullstack-2026/mynpu-torus/eda/tsmc180/scripts",
+  "sha256": {
+    "batch_stage.tcl": "aececeba6d7dfd89b26b602ba14fef08c6ef880698c860d6c8912a676d084572",
+    "chip_mmmc.tcl": "cd9724c5adc7c8848ac0da06ec0932f659e3b396b831e2a085af7db6419613ba",
+    "pnr_01_floorplan_io.tcl": "1bdf55ad5991d0dad2395d2b29c84ad945d2ebe73cfaef230611bdf2488ab394",
+    "pnr_02_powerplan.tcl": "532603cd250eaef3a3b119b474ea7ebb4cd04a2ad918aee6ae5f244a5f1e538f",
+    "pnr_03_place.tcl": "6659071e1fbf97fd51b2f4d87933df1060de6db3f8b5f8d60991af6eb59a8c14",
+    "pnr_04_cts.tcl": "4fe11caeb5bb76fba887856ebcee7d43b659165ac5064fa74131b8d8c40578eb",
+    "pnr_04b_holdfix.tcl": "42d8035f82be588524c711846afd8e6c5f8c309ee2a4fc1b9f4e3b000b2392b3",
+    "pnr_05_route.tcl": "2ca44f803807d43b7ab8e32b4608d2d3d872c509ce974954967d10ec5fc2b6d0",
+    "pnr_06_finish.tcl": "a1e23303fa02bbb80cec4be84c2fb9bf40407a8aa0203afe58f7eb2004a74335",
+    "pnr_07_export.tcl": "1956bcd9dd88ca0dde9b44557ae0a1b8e83dd89e90b3af5c63b1b2a071525106",
+    "fix_pg_edge_vias.tcl": "27d402c30c8dc6fd0173f38409bdb95555dea5513b193943b395ce4ee3414a63",
+    "report_implemented_area.tcl": "d0ce6cf3aa12feaf686f137800a1e2487d086d2931e0ec175a44536c0954a3f5",
+    "repair_antenna_diodes.tcl": "548e865554ac51f6ea1146ef0554fae7b5e35900f7f496d4008c7ba39bc9eecc",
+    "repair_pg_pin_access.tcl": "812a3d42a80a8662cd1dfa960ca00496e95791253a59779405a65489b5bfc4fe"
+  }
+}

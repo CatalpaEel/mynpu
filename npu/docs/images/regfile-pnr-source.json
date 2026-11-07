@@ -1,0 +1,10 @@
+{
+  "tool": "Innovus21.16-s078_1",
+  "checkpoint": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-vector/rf64-q8/pnr/checkpoints/cleanup.enc",
+  "checkpoint_pointer_sha256": "a14aaec4112e9399aabf2020053376819626a30c09df67af3a99c36cdee0403a",
+  "image_sha256": "948d3f965fdbe48cecd80c75e039207565f2d3fd3409cea54ec9c9d34d0ff7d8",
+  "netlist_sha256": "7598958ef7318bd4bc4565febf3d3d7d8a99760762bba6d1a290dc22c08b60c8",
+  "capture_script_sha256": "c1dddee09f8680bd099bbd8f4494f0816abeea496c92b6192f6269cb7c8fcace",
+  "capture_log_sha256": "41ed5f025335be07f60886b86db626175eb9328a3e2c14b601db889db78581c0",
+  "scope": "Actual routed core canvas after PG cleanup; no pads, TT only."
+}

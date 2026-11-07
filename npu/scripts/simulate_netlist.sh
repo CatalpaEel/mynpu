@@ -8,7 +8,7 @@ cd "$npu_root/build/netlist_sim"
 cp "$npu_root/sw/boot.hex" boot.hex
 # Vivado 2025.2 emits a multiline Rocky Linux host string into its header.
 # Comment the stray OS release line in a simulation-only copy; HDL is unchanged.
-python3 - "$npu_root/reports/npu_synth.v" <<'PYCODE'
+python3 - "$npu_root/reports/npu_synth.v" << 'PYCODE'
 import sys
 from pathlib import Path
 s=Path(sys.argv[1]).read_text()

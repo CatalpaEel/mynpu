@@ -1,0 +1,861 @@
+{
+  "scope": "Maintained SV/SVH, Python, C/H and Shell under npu and tools; generated assets, vendor and historical reports excluded",
+  "format_snapshot_note": "Formatting snapshots were taken after the explicit simulation-adapter edits; hardware RTL is additionally token-compared against the original synthesis inputs in both gate runs.",
+  "sources": {
+    "npu/eda/tsmc180/prepare_run.py": {
+      "before_sha256": "d5d324b7d6bfe7a4e291298b978f7cd45502f74b058d2a21584a3f353746df08",
+      "after_sha256": "f2a320d5ef70d4681693821c87d70422caf045cec65383cdb05b3b493f34e73a",
+      "ast_identical": true
+    },
+    "npu/mnist/export.py": {
+      "before_sha256": "7e297e89177d617f82185772c525c186bb4103a358c0a4b75f8dc774b1c7e817",
+      "after_sha256": "078176b5047f1a43aa572b081a21986dd71c697034c7db0e29a144431d78c2dd",
+      "ast_identical": true
+    },
+    "npu/mnist/firmware.py": {
+      "before_sha256": "7c109f53cfc8b9e86fbf05b4ab1bfe16c6d77487aa3dbd12c21fd8cee75706b4",
+      "after_sha256": "335a9d1b5f047b121d298262768d2ce172382df895259397010d2aa89f7d26d1",
+      "ast_identical": true
+    },
+    "npu/mnist/stream_firmware.py": {
+      "before_sha256": "f6d405d9ebdc40057a2c3daf986cea8f9afb14353385cbc79c7d79c67e795420",
+      "after_sha256": "01421033ad6e50d14820452a82727c2c38ff0950f190a69d633a946219a29574",
+      "ast_identical": true
+    },
+    "npu/mnist/validate.py": {
+      "before_sha256": "d56c9dbd2a9deaed465f4d9eb440b0435c7a89171cc4b7e3b4a0cca365fa6a0b",
+      "after_sha256": "99880f6908f7c163d3620e3fb714df0b095b1dd8c71a8c2a99c284c4984d837c",
+      "ast_identical": true
+    },
+    "npu/rtl/nmc.sv": {
+      "before_sha256": "c631c8a3a7c365ead03d1f48f0216bafc547fd331100b66c58b8f8342caa4662",
+      "after_sha256": "65de212767b77dd15741a91f8334b78022b07ca23525b9f58cb3c7d935402272",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_clock_gate.sv": {
+      "before_sha256": "ee845982da1db79155b1b22c17e637cfa71ca01d23df8233801f3ab2571f3643",
+      "after_sha256": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_cnn.sv": {
+      "before_sha256": "ea56ce181f29fe12a9ac79f61e49035307f781f67c995a37497e2e6fe0b26616",
+      "after_sha256": "070196f2294a110f3e9eefbcec260f9cb7e37ad045063dc8033ddc9dce7e3734",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_cnn_control.sv": {
+      "before_sha256": "bb80cb5b21f6c16d3ca6c23f337bf531bedc8a0b30c475d5f910253849daf4c9",
+      "after_sha256": "86d0caba16b8bdd5e46d5849f6c814da9ac3705a1a8dd8256659cf1eccbc8e94",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_cnn_engine.sv": {
+      "before_sha256": "553219f0988a570c1c7ff39e32ae8c0373e8f3505779d9c9b21c6f3d5dae5518",
+      "after_sha256": "c7014b0b672a69074c56fedb6d1dcbc7e7692aa6850d5aa5929267417210f05f",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_cnn_mac.sv": {
+      "before_sha256": "dd33ea718e9eead7db41151c709159d7b8ccb1abf38ffdaaafb0a686756263f0",
+      "after_sha256": "9692d10289ca2f733db20f3194b112fc41c8a39f4b3234757f5b820fb63d198c",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_cnn_pkg.sv": {
+      "before_sha256": "e4fec2428f21c4641fdfed59ad5e75c4efb35e42461afb0a55f26bdb9fa6f2d4",
+      "after_sha256": "cdb0415057e55f61c500d428e807a191759905824b31eb38e8a3bf9da0bd0399",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_core.sv": {
+      "before_sha256": "d05c658b248157720200f5e7adc884238f4d9ae4ab47daa6231f6c898720368d",
+      "after_sha256": "fdb8a30d6bd3ddd4abaade8d0d0007801022f7c094326159207bafd4f1947a87",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_debug_boot.sv": {
+      "before_sha256": "a5ac1c3c06498106c62e726300050e46e831eecf72077088995c367ceb1693cc",
+      "after_sha256": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_dma_channel.sv": {
+      "before_sha256": "715ce67e6fe17ac4dc61f12bc90b1c6793a57f809b4170b052e10ab8f3b6978a",
+      "after_sha256": "000cc6f74bf68518b3faff22d2e52b33b1eb1825e81cea137220ba326517501b",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_dma_regs.sv": {
+      "before_sha256": "e0e2e7e3c3c70bca4eafe6542d79c038b02c2c075d64d60c4a413f7c9ae99183",
+      "after_sha256": "3fc2615b1b8d86ce2c69c339d3bd8f06cb76602d21e9b1805e8a9bc0a6814e9f",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_jtag_debug.sv": {
+      "before_sha256": "0060af4710903a0d05bc7c4cfec624f333e71ad9c0f40a1189746078b2c17696",
+      "after_sha256": "844a2c581df32c191a08f76bff2adfd088c3991f5250d0c3ea670b43c0d5e4a0",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_matmul.sv": {
+      "before_sha256": "498d707819d634a16a1e4b3f14d93c9d7823b1f6fc7a63b1cec244c4367956bd",
+      "after_sha256": "9c1cba40b5418099efdc9f00bef941f8e1e13c221a05b500df2f0d4853f22d60",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_mmio.sv": {
+      "before_sha256": "3f4ebe4de5070c0a7f2b5b5cc198522b760cfa2c995e00f91a223090403743e8",
+      "after_sha256": "257c9dc72427042ce491f274df7fe74bce09f043f1fc6f518bc311eec0aeeeed",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_soc.sv": {
+      "before_sha256": "4e127d12f66366e3c94865d02851a31e1f8308f9e0d54ab0a687808d4801b743",
+      "after_sha256": "565876c2577451f42786f15d0051a265f8e64d58caff0d7ff2d0cedf7772a334",
+      "tokens_identical": true
+    },
+    "npu/rtl/npu_vector.sv": {
+      "before_sha256": "fcbae7beeb9506fe0ecbb1af0ed3f022fd7f0ab3bf5fbd34f6baae74c9e25ecf",
+      "after_sha256": "b7263cd53417b4fe09589873817005530d9621953d7eab0c5e81f9684959e6b7",
+      "tokens_identical": true
+    },
+    "npu/scripts/build_vivado.sh": {
+      "before_sha256": "0eed7e0d992d1396f7a3d21789cb6cc1d8bbc27edfc0415630ab6c43eb3d4563",
+      "after_sha256": "e18bce5f037d2a0dcd839131d5d8f213a5f4e8b7d819ceb53f029cafcde34197",
+      "bash_syntax_passed": true
+    },
+    "npu/scripts/collect_cnn_cleanup.py": {
+      "before_sha256": "0b02605d8905a091d213871b66f100b4394b9f5e2263db90c0646cb5b3385b29",
+      "after_sha256": "9426b73d0963424c83a05e605d4cdd5591e890bdfad991da29bd3c69f08d32d4",
+      "ast_identical": true
+    },
+    "npu/scripts/collect_cnn_row_order.py": {
+      "before_sha256": "0b1faf8da8de4dbdadf6ed0d17416f849349ed6f184824162347c2e72b0b294c",
+      "after_sha256": "1c238a51fa28de7151b6d896f2feb7ff25d293ba59c89afac15baa27754e4ad5",
+      "ast_identical": true
+    },
+    "npu/scripts/collect_dual.py": {
+      "before_sha256": "803b09c7ad0aee4cacf87d0bf210ef01c79841061c28f330927f06ff7d01cd90",
+      "after_sha256": "d1a21cf6d44849939333c54853c27e012335acf4966ad9b0604f7ae4c74661c1",
+      "ast_identical": true
+    },
+    "npu/scripts/collect_fifo.py": {
+      "before_sha256": "1c776fbd6616beace9d54b509ff54c0c51cd834fdaf24c66549b69ba2114afc8",
+      "after_sha256": "7ac1a1275047a693a00d6b4808d5f758c4c63ddb0672b17fe13e31e807d2ac07",
+      "ast_identical": true
+    },
+    "npu/scripts/collect_fifo16.py": {
+      "before_sha256": "b54bb99cb83ce9a07085beed2f8db5daff2291b49424c5683a12d35c9f493116",
+      "after_sha256": "1a11fe19cfb273f0cf53ca4fde6e9abd263070fd18ef2faf9f163836d9a11cdd",
+      "ast_identical": true
+    },
+    "npu/scripts/collect_independent.py": {
+      "before_sha256": "f73ccb81396082b74c35e38f30595150214e3a34ab8341fe7eff3b2ec90f6d99",
+      "after_sha256": "4b9e6fdd8b0d92c70c28e326bc4c58492888edad2d334426458d180ee316c975",
+      "ast_identical": true
+    },
+    "npu/scripts/collect_nmc_mac9.py": {
+      "before_sha256": "67d6b41194e3f8edeb4ac0e28dd55e792e2cd2940ca5fc4e9363dc05d7cf1590",
+      "after_sha256": "7fca9bcbef6219109eb2727061686f52844cb64d8997549432e530207edef514",
+      "ast_identical": true
+    },
+    "npu/scripts/gen_sources.py": {
+      "before_sha256": "fdf04195ea5f7250376fa05c77a00027f53e38d937d5855dbe288aa8832858a8",
+      "after_sha256": "7263d78084b0a479e3c8a00ae5dc582a02073b8e2a1065ff4d45d1f4f05d1ebe",
+      "ast_identical": true
+    },
+    "npu/scripts/run_gate.py": {
+      "before_sha256": "9a7143adfeebbc767dd86163a80e55e3955f84e657209ac8f14722965c628d2e",
+      "after_sha256": "e807a6c38ee6d993c12cef5fadc0f33a99c83ff82d291223451cb23bbd9c5ed1",
+      "ast_identical": false,
+      "intentional_change": "Formatting-compatible netlist runner or clearer formatter error reporting"
+    },
+    "npu/scripts/run_vcs.py": {
+      "before_sha256": "7a591d2f2efed9d2f327a255232727c9658c2aaa279c63fbf2740de8f215a0be",
+      "after_sha256": "5a94619e33ac8ccf21d39bbe48cc02f406caa758532759ddaf6c47ef125c4be7",
+      "ast_identical": true
+    },
+    "npu/scripts/sim_sources.py": {
+      "before_sha256": "7276f434e1f06324a767514211e0a3e42f7385913d6e1d0228c4120c1e2a14f5",
+      "after_sha256": "f40b7b4649c311760d42e8fb48f222ea3558e62fdeba00c67581fd0924bc695a",
+      "ast_identical": true
+    },
+    "npu/scripts/simulate.sh": {
+      "before_sha256": "42d9ef83cf06c30b4fff3db30ca6e3c2d42a0d3ee030544586d3050697346df2",
+      "after_sha256": "42d9ef83cf06c30b4fff3db30ca6e3c2d42a0d3ee030544586d3050697346df2",
+      "bash_syntax_passed": true
+    },
+    "npu/scripts/simulate_mnist.sh": {
+      "before_sha256": "80e00101543bbab604fe3c045cdb62ed0366dd65f36d05b956a1cb0d7e5f7d0b",
+      "after_sha256": "7dbae2b3f0ab2c0811893048c613ee0c83f46fa6398d252f75694a4e3c7d2d75",
+      "bash_syntax_passed": true
+    },
+    "npu/scripts/simulate_mnist_latency.sh": {
+      "before_sha256": "d759dbf2305fca19d767ecd3822d36568ca9a3905bce3c99c03fee3e3364f272",
+      "after_sha256": "4d0c4bdcc4ace41e64efbd3a9584b80a94051c26a222ec50c8ab72493e44a8c0",
+      "bash_syntax_passed": true
+    },
+    "npu/scripts/simulate_mnist_netlist.sh": {
+      "before_sha256": "baedd6bd7d468ddf79248dc49000ea9b213493b988a38f1004b37514a087ffae",
+      "after_sha256": "0706650a601441e368f48442da04a65235b3350a69a8ff49e29acbc2150bf1eb",
+      "bash_syntax_passed": true
+    },
+    "npu/scripts/simulate_mnist_stream.sh": {
+      "before_sha256": "1e1a8d12cc636d64ed3761c58d6c30f5c1ac4323cc91746571b059305fcbad20",
+      "after_sha256": "cd61697557e4a0e9ab3c01f7e72e1292626b01c14e20cf7dcd9aac48648207a7",
+      "bash_syntax_passed": true
+    },
+    "npu/scripts/simulate_netlist.sh": {
+      "before_sha256": "56183b293032147a4decf92d293e4b42fb0d2af9fac0f60d20ef5b3e0d3eb662",
+      "after_sha256": "98d6fa810f9d1b576535bc8964500bf96cde28088d2e11fc6662324a8a446e77",
+      "bash_syntax_passed": true
+    },
+    "npu/scripts/summarize.py": {
+      "before_sha256": "a2702ef5aace8381b62d78599cd2eb8127b6f6be90c0758ca4ed1b9e2738a60e",
+      "after_sha256": "945b0062de7afbddbd4c7973477901be5ee264cbd0f2ab3a479c2578fd5e2179",
+      "ast_identical": true
+    },
+    "npu/sw/gen_boot.py": {
+      "before_sha256": "f99f17ef7ff4496f7ad82f8110852dc0e6c316c6601c5a2342597295e2588fca",
+      "after_sha256": "1d8dc6390e30353ba135a94cc6c3bc43f75878a5a414082b1735e453b4c35616",
+      "ast_identical": true
+    },
+    "npu/sw/load_program.py": {
+      "before_sha256": "73041b105b25730fe3217b2b8ec397bc6b242a8ed9d0f8fa27a074382062dd27",
+      "after_sha256": "21199d6ef557f22ab1f53bc33125caab04c2573a64dda90714cb339793e367da",
+      "ast_identical": true
+    },
+    "npu/sw/npu.h": {
+      "before_sha256": "c7c6c4f003a04c135046fa9a9c53387a8cc70f3ae385259b3b7a078a6416d5b2",
+      "after_sha256": "265306937bf0368270d509e442ffe55f26776960d3b1a63df60405d6e369bbea"
+    },
+    "npu/tb/db_jtag_tasks.svh": {
+      "before_sha256": "49d21ec44427baf75f5e7cb0fd778d862bbff5c72fc71c2473a2304024fd7223",
+      "after_sha256": "220e2617385913779c8530dc82ff5632f444c0f9438df1dc9e4482fdf750ac5b",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_cnn_queue.sv": {
+      "before_sha256": "a4bb7425818969d4398e8a9bd7d30df45f07596d5b2af570118966c323070c03",
+      "after_sha256": "9c8064fe2099fac8ca59eee88b58a054ff11c38d87131f3f2fcc2d927e3e60d4",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_dma_control.sv": {
+      "before_sha256": "2bd38bd7b0354317d648ebef2a3b93775e5f076e35b7b80a8041099be3bab93c",
+      "after_sha256": "4aecfa3fb3bd532060e2d331cec93dc61ff2c01c6500bf1153a80506ceb9530a",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_jtag.sv": {
+      "before_sha256": "e8283c4cb7831983b190bc455894596cc4a06a1aee66e36779c2625009e6f2e8",
+      "after_sha256": "87848aa406f45aa188368b34a4bac2a8e2d836a76cdf96314203e254e7a5419b",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_mnist.sv": {
+      "before_sha256": "6376bf6659de597c6cf5f8a8aef6084c6660ab273605707b6aa50f73c4d1a872",
+      "after_sha256": "1f28ad82de099e2a2af8b51c29bc421a1dd9727ec5623f920c3b55fbd2b127b9",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_mnist_latency.sv": {
+      "before_sha256": "d53d42d3533e2ac76e55e8ab1f7f1c166f5c728c906feb73af90ec0c95a9c5df",
+      "after_sha256": "6f2fe4477be9fa476f9b06f857e8d2de54ef5cf58f5e867a71c17f3f80dc3e62",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_mnist_stream.sv": {
+      "before_sha256": "213bfc4dbf195234d7b6f2b7f04f301cf8e2e04bf5e94942a562fe161862f83d",
+      "after_sha256": "bad655989efc908421c4885a91519709d2bbf137041c77cf3ca9d7882f6a6810",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_nmc.sv": {
+      "before_sha256": "43edb07f742433a42e2e0ac2ca760c1f67b8e14ca109b4070341761cb940c425",
+      "after_sha256": "622e6f17dd6cc9a212e13b9f1eaf05e692b7015bd26708c250129e4019bf0f19",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_nmc_concurrent.sv": {
+      "before_sha256": "5217cbce8517f3225c24c9f66cd04b6a0afa4fa416643792325e1f24e1c9ff71",
+      "after_sha256": "8abde8b1302d44d0b539742698ec8f3abb5f5b37098474e0f1edc745bbb27d6f",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_npu_soc.sv": {
+      "before_sha256": "26a0adcfa8c06ffdaf44a0ca70d61ae8d88bd3aa65e534de49d13b46e2ec03cd",
+      "after_sha256": "111847f8061fa288dae7398682f7168701bb6e587cd2c9295f8da5ad5937f622",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_ops.sv": {
+      "before_sha256": "088689cef2e47c3d7a1c190ebe02b825ca883e45b654623a07d3cd14666e51e8",
+      "after_sha256": "c5d37073631ce03d2565b4b04ebfc9cf873dc454bc9d59995785f47573616af5",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_queue_burst.sv": {
+      "before_sha256": "7e45b5ece85587e574b46c59fefb31da02722160a683b0d0298e7ec32041b78e",
+      "after_sha256": "0b61ea274fef196a1b0b0a23b35c2992f3cd298fd4add103646cfb33eaeee94c",
+      "tokens_identical": true
+    },
+    "npu/tb/tb_queues.sv": {
+      "before_sha256": "871001cf23d7950aa84b4c83fa1a40b46fe67600bd42f571fd40b4649150f28d",
+      "after_sha256": "e9b9305406a2d04ad300a30e7bd983527134979f757afff89fc030a20e7a688b",
+      "tokens_identical": true
+    },
+    "tools/format_code.py": {
+      "before_sha256": "c0192f93b75f35ed325893bf6f0bf15538f3c885020936a73fe3e5f239214a17",
+      "after_sha256": "179c3599a52be00f24710083011ef7433fae047f30b9374cc8a163dc7a805859",
+      "ast_identical": false,
+      "intentional_change": "Formatting-compatible netlist runner or clearer formatter error reporting"
+    },
+    "tools/install_formatters.py": {
+      "before_sha256": "46d364697b90fa415340f0dce0876c23f663f5c4729e23078df5b33b2a110553",
+      "after_sha256": "d8b504d91a8ea2c1ab3bdc7dc97990ea8326912c95963071845268fd81e3e3a9",
+      "ast_identical": true
+    }
+  },
+  "source_count": 58,
+  "changed_count": 57,
+  "sv_token_equivalence_count": 29,
+  "python_ast_equivalence_count": 19,
+  "intentional_adapter_changes": [
+    "Whitespace-independent SRAM macro wrapper generation",
+    "NPU_GATE_SIM guards and +samples control in two testbenches",
+    "Explicit frozen-SHA plus SV-token comparison for old netlist reuse; original strict mode retained"
+  ],
+  "configs_sha256": {
+    ".editorconfig": "0cad1141c58ca29a36e1090bb210560b9a158796bd940b93a8f061d153dcfd71",
+    ".verible-format": "ef183360d09e0c15227c00471883759e505c1a251d8178afd381b331bc05e96f",
+    ".clang-format": "1376a503337bd862ff84def7b6ee488a844bd1ae84467a367d7e2170ba9bbaab",
+    "ruff.toml": "a20271b983310d5631fae5899ccdcb8eb8cfeec5328a1a572e0526cb59d480e6",
+    "Makefile": "4e52011325ad0e6460bbb24a61ee6877a88a1ac9f7e924770bb14eb43173a8cc",
+    "FORMATTING.md": "1fd1b4d1ed9f5593571ac64299b0b1a98d994ad6a56816574593880daef35bee",
+    "tools/formatters.json": "2c7edb286ad3eae3a630fffc74eadc928ffa3b6982889ba66bd30914f12eedee"
+  },
+  "format_check": {
+    "passed": true,
+    "log": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-code-format/format-check.log",
+    "summary": "/usr/bin/python3.12 tools/format_code.py --check\nWould format 0 / 58 files"
+  },
+  "c_header_syntax_passed": true,
+  "regressions": {
+    "vcs-format1-latency-macro": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-latency-macro/result.json",
+      "result_sha256": "879fb6a242c9364cee44a008e51abba1626415d9ef481d61427d52382c939cfe",
+      "run_log_sha256": "4e8a7d39cbe13aa4e1a79a92963a996b4626dd57e041680aae7896a033b3e274",
+      "passed": true,
+      "summaries": [
+        "SINGLE_INPUT sample=0 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "SINGLE sample=0 useful_macs=40770 kernel_cycles=18881 elapsed_cycles=19825 kernel_utilization_pct=23.99 system_utilization_pct=22.85 latency_us_at_50mhz=396.50 PASS",
+        "SINGLE_INPUT sample=1 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "SINGLE sample=1 useful_macs=40770 kernel_cycles=18881 elapsed_cycles=19825 kernel_utilization_pct=23.99 system_utilization_pct=22.85 latency_us_at_50mhz=396.50 PASS",
+        "SINGLE_INPUT sample=2 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "SINGLE sample=2 useful_macs=40770 kernel_cycles=18881 elapsed_cycles=19825 kernel_utilization_pct=23.99 system_utilization_pct=22.85 latency_us_at_50mhz=396.50 PASS",
+        "SINGLE_INPUT sample=3 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "SINGLE sample=3 useful_macs=40770 kernel_cycles=18881 elapsed_cycles=19825 kernel_utilization_pct=23.99 system_utilization_pct=22.85 latency_us_at_50mhz=396.50 PASS",
+        "SINGLE_INPUT sample=4 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "SINGLE sample=4 useful_macs=40770 kernel_cycles=18881 elapsed_cycles=19825 kernel_utilization_pct=23.99 system_utilization_pct=22.85 latency_us_at_50mhz=396.50 PASS",
+        "SINGLE_INPUT sample=5 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "SINGLE sample=5 useful_macs=40770 kernel_cycles=18881 elapsed_cycles=19825 kernel_utilization_pct=23.99 system_utilization_pct=22.85 latency_us_at_50mhz=396.50 PASS",
+        "SINGLE_INPUT sample=6 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "SINGLE sample=6 useful_macs=40770 kernel_cycles=18881 elapsed_cycles=19825 kernel_utilization_pct=23.99 system_utilization_pct=22.85 latency_us_at_50mhz=396.50 PASS",
+        "SINGLE_INPUT sample=7 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "SINGLE sample=7 useful_macs=40770 kernel_cycles=18881 elapsed_cycles=19825 kernel_utilization_pct=23.99 system_utilization_pct=22.85 latency_us_at_50mhz=396.50 PASS",
+        "SINGLE_INPUT sample=8 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "SINGLE sample=8 useful_macs=40770 kernel_cycles=18881 elapsed_cycles=19825 kernel_utilization_pct=23.99 system_utilization_pct=22.85 latency_us_at_50mhz=396.50 PASS",
+        "SINGLE_INPUT sample=9 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "SINGLE sample=9 useful_macs=40770 kernel_cycles=18881 elapsed_cycles=19825 kernel_utilization_pct=23.99 system_utilization_pct=22.85 latency_us_at_50mhz=396.50 PASS",
+        "SINGLE PASS samples=10 checks=150"
+      ]
+    },
+    "vcs-format1-layers-macro": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-layers-macro/result.json",
+      "result_sha256": "929a07e66a9113f39827a50937e96d6933b472811d054e5df6a4dec7bf0d2df0",
+      "run_log_sha256": "662f640049481b5745c2962c9889cfa36ceb6e4c81d6215b9be3aa634595da2e",
+      "passed": true,
+      "summaries": [
+        "CNN wide rows PASS: W16/17/27/28, H1/2/3/27/28, Ci1/2/4/8/16, stride1/2, crop/padding/unaligned, cross-bank input",
+        "CNN boundary cases PASS (padding, byte masks, zero-points, ReLU, saturation, signed ties-even, invalid dimensions, overlap)",
+        "CNN writable shadow / shared master exclusion PASS",
+        "ROW PERF sample=0 layer=0 kernel_cycles=2337 useful_macs=3362 issued=392 PASS",
+        "ROW PERF sample=0 layer=1 kernel_cycles=5294 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=0 layer=2 kernel_cycles=7998 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=0 layer=3 kernel_cycles=3618 useful_macs=4096 issued=576 PASS",
+        "ROW PERF sample=0 layer=4 kernel_cycles=5193 useful_macs=6272 issued=1152 PASS",
+        "ROW PERF sample=0 layer=5 kernel_cycles=1345 useful_macs=1440 issued=240 PASS",
+        "MNIST sample=0 prediction=0 label=0 PASS",
+        "ROW PERF sample=1 layer=0 kernel_cycles=2351 useful_macs=3362 issued=392 PASS",
+        "ROW PERF sample=1 layer=1 kernel_cycles=5294 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=1 layer=2 kernel_cycles=7998 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=1 layer=3 kernel_cycles=3618 useful_macs=4096 issued=576 PASS",
+        "ROW PERF sample=1 layer=4 kernel_cycles=5193 useful_macs=6272 issued=1152 PASS",
+        "ROW PERF sample=1 layer=5 kernel_cycles=1345 useful_macs=1440 issued=240 PASS",
+        "MNIST sample=1 prediction=1 label=1 PASS",
+        "ROW PERF sample=2 layer=0 kernel_cycles=2351 useful_macs=3362 issued=392 PASS",
+        "ROW PERF sample=2 layer=1 kernel_cycles=5294 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=2 layer=2 kernel_cycles=7998 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=2 layer=3 kernel_cycles=3618 useful_macs=4096 issued=576 PASS",
+        "ROW PERF sample=2 layer=4 kernel_cycles=5193 useful_macs=6272 issued=1152 PASS",
+        "ROW PERF sample=2 layer=5 kernel_cycles=1345 useful_macs=1440 issued=240 PASS",
+        "MNIST sample=2 prediction=2 label=2 PASS",
+        "ROW PERF sample=3 layer=0 kernel_cycles=2351 useful_macs=3362 issued=392 PASS",
+        "ROW PERF sample=3 layer=1 kernel_cycles=5294 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=3 layer=2 kernel_cycles=7998 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=3 layer=3 kernel_cycles=3618 useful_macs=4096 issued=576 PASS",
+        "ROW PERF sample=3 layer=4 kernel_cycles=5193 useful_macs=6272 issued=1152 PASS",
+        "ROW PERF sample=3 layer=5 kernel_cycles=1345 useful_macs=1440 issued=240 PASS",
+        "MNIST sample=3 prediction=3 label=3 PASS",
+        "ROW PERF sample=4 layer=0 kernel_cycles=2351 useful_macs=3362 issued=392 PASS",
+        "ROW PERF sample=4 layer=1 kernel_cycles=5294 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=4 layer=2 kernel_cycles=7998 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=4 layer=3 kernel_cycles=3618 useful_macs=4096 issued=576 PASS",
+        "ROW PERF sample=4 layer=4 kernel_cycles=5193 useful_macs=6272 issued=1152 PASS",
+        "ROW PERF sample=4 layer=5 kernel_cycles=1345 useful_macs=1440 issued=240 PASS",
+        "MNIST sample=4 prediction=4 label=4 PASS",
+        "ROW PERF sample=5 layer=0 kernel_cycles=2351 useful_macs=3362 issued=392 PASS",
+        "ROW PERF sample=5 layer=1 kernel_cycles=5294 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=5 layer=2 kernel_cycles=7998 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=5 layer=3 kernel_cycles=3618 useful_macs=4096 issued=576 PASS",
+        "ROW PERF sample=5 layer=4 kernel_cycles=5193 useful_macs=6272 issued=1152 PASS",
+        "ROW PERF sample=5 layer=5 kernel_cycles=1345 useful_macs=1440 issued=240 PASS",
+        "MNIST sample=5 prediction=5 label=5 PASS",
+        "ROW PERF sample=6 layer=0 kernel_cycles=2351 useful_macs=3362 issued=392 PASS",
+        "ROW PERF sample=6 layer=1 kernel_cycles=5294 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=6 layer=2 kernel_cycles=7998 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=6 layer=3 kernel_cycles=3618 useful_macs=4096 issued=576 PASS",
+        "ROW PERF sample=6 layer=4 kernel_cycles=5193 useful_macs=6272 issued=1152 PASS",
+        "ROW PERF sample=6 layer=5 kernel_cycles=1345 useful_macs=1440 issued=240 PASS",
+        "MNIST sample=6 prediction=6 label=6 PASS",
+        "ROW PERF sample=7 layer=0 kernel_cycles=2351 useful_macs=3362 issued=392 PASS",
+        "ROW PERF sample=7 layer=1 kernel_cycles=5294 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=7 layer=2 kernel_cycles=7998 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=7 layer=3 kernel_cycles=3618 useful_macs=4096 issued=576 PASS",
+        "ROW PERF sample=7 layer=4 kernel_cycles=5193 useful_macs=6272 issued=1152 PASS",
+        "ROW PERF sample=7 layer=5 kernel_cycles=1345 useful_macs=1440 issued=240 PASS",
+        "MNIST sample=7 prediction=7 label=7 PASS",
+        "ROW PERF sample=8 layer=0 kernel_cycles=2351 useful_macs=3362 issued=392 PASS",
+        "ROW PERF sample=8 layer=1 kernel_cycles=5294 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=8 layer=2 kernel_cycles=7998 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=8 layer=3 kernel_cycles=3618 useful_macs=4096 issued=576 PASS",
+        "ROW PERF sample=8 layer=4 kernel_cycles=5193 useful_macs=6272 issued=1152 PASS",
+        "ROW PERF sample=8 layer=5 kernel_cycles=1345 useful_macs=1440 issued=240 PASS",
+        "MNIST sample=8 prediction=8 label=8 PASS",
+        "ROW PERF sample=9 layer=0 kernel_cycles=2351 useful_macs=3362 issued=392 PASS",
+        "ROW PERF sample=9 layer=1 kernel_cycles=5294 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=9 layer=2 kernel_cycles=7998 useful_macs=12800 issued=1568 PASS",
+        "ROW PERF sample=9 layer=3 kernel_cycles=3618 useful_macs=4096 issued=576 PASS",
+        "ROW PERF sample=9 layer=4 kernel_cycles=5193 useful_macs=6272 issued=1152 PASS",
+        "ROW PERF sample=9 layer=5 kernel_cycles=1345 useful_macs=1440 issued=240 PASS",
+        "MNIST sample=9 prediction=9 label=9 PASS",
+        "MNIST normal mode without host layer ACK PASS prediction=7",
+        "MNIST PASS samples=10 exact_activation_checks=19033 transactions=139011"
+      ]
+    },
+    "vcs-format1-stream-macro": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-stream-macro/result.json",
+      "result_sha256": "8e4ce3d2eb624df79d513cf4defe34bb13e6ba82916c4258dabe11b551a99d2c",
+      "run_log_sha256": "c656af9ed6ddc1569fa6ee4444d51d5dc0ac31f7419491af748de47e4a987c51",
+      "passed": true,
+      "summaries": [
+        "STREAM frame=0 slot=0 prediction=0 logits and TX PASS",
+        "STREAM frame=1 slot=1 prediction=1 logits and TX PASS",
+        "STREAM frame=2 slot=0 prediction=2 logits and TX PASS",
+        "STREAM frame=3 slot=1 prediction=3 logits and TX PASS",
+        "STREAM frame=4 slot=0 prediction=4 logits and TX PASS",
+        "STREAM frame=5 slot=1 prediction=5 logits and TX PASS",
+        "STREAM frame=6 slot=0 prediction=6 logits and TX PASS",
+        "STREAM frame=7 slot=1 prediction=7 logits and TX PASS",
+        "STREAM frame=8 slot=0 prediction=8 logits and TX PASS",
+        "STREAM frame=9 slot=1 prediction=9 logits and TX PASS",
+        "STREAM frame=10 slot=0 prediction=0 logits and TX PASS",
+        "STREAM frame=11 slot=1 prediction=1 logits and TX PASS",
+        "STREAM frame=12 slot=0 prediction=2 logits and TX PASS",
+        "STREAM frame=13 slot=1 prediction=3 logits and TX PASS",
+        "STREAM frame=14 slot=0 prediction=4 logits and TX PASS",
+        "STREAM frame=15 slot=1 prediction=5 logits and TX PASS",
+        "STREAM frame=16 slot=0 prediction=6 logits and TX PASS",
+        "STREAM frame=17 slot=1 prediction=7 logits and TX PASS",
+        "STREAM frame=18 slot=0 prediction=8 logits and TX PASS",
+        "STREAM frame=19 slot=1 prediction=9 logits and TX PASS",
+        "STREAM PASS frames=20 useful_macs=815400 kernel_cycles=386809 elapsed_cycles=406016 kernel_utilization_pct=23.42 system_utilization_pct=22.31 rx_overlap_beats=3528 tx_overlap_beats=76 checks=142"
+      ]
+    },
+    "vcs-format1-cnnqueues": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-cnnqueues/result.json",
+      "result_sha256": "c03675048e2d3c9931ab0d599801e101e1a2c59181dbaae1a3d1c37ed1481589",
+      "run_log_sha256": "529168f07355dff6ac87b8af649746da076a9f5b00c57cdc2b10e3595aac7832",
+      "passed": true,
+      "summaries": [
+        "CNN QUEUE PASS depth=16 descriptor_bits=104 checks=144 snapshots, overflow, order, byte writes, reset"
+      ]
+    },
+    "vcs-format1-soc-macro": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-soc-macro/result.json",
+      "result_sha256": "eba93a30fff9d7486efb7e4ae859931228286e5ed8811bffe9cecf81dc7e1ca5",
+      "run_log_sha256": "c2102f443d88c697062cdb53c43a26873ca303b1a4ba61a46e2bda727355703c",
+      "passed": true,
+      "summaries": [
+        "PASS real CV32E40P: SRAM fetch -> matmul -> ReLU -> add -> 2D DMA -> CPU checks",
+        "PASS native bus byte masks, alignment, bounds and MMIO decode",
+        "PASS DMA: 2D/strides/broadcast/copy/fill/tail bytes/stream stalls/descriptor errors/abort/timeout/reset",
+        "PASS 12 matrix jobs; concurrent matrix/vector/three DMA/host and busy command rejection",
+        "PASS vector signed extrema, wrapping add, in-place, invalid descriptors, reset recovery",
+        "ALL PASS checks=1241 host_transactions=10934 max_host_wait=5 cycles"
+      ]
+    },
+    "vcs-format1-jtag-macro": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-jtag-macro/result.json",
+      "result_sha256": "3365ec715c270d07edf7c8331831588885d3de82c3294ca43a28c8d78107b468",
+      "run_log_sha256": "afc845820815b58cdacbc897e02fb4931c8298c4ca43c23585db4546f31ecc40",
+      "passed": true,
+      "summaries": [
+        "JTAG PASS checks=41"
+      ]
+    },
+    "vcs-format1-ops-macro": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-ops-macro/result.json",
+      "result_sha256": "ec516a4c532c9bc5c40b84152fa9f3d00e14fa75513554c883ccf09bc6e66755",
+      "run_log_sha256": "4d9f4066c894ef23778dde63f1a9b46f4d28d08dfc4067d970feb646368081a3",
+      "passed": true,
+      "summaries": [
+        "OPERATORS PASS gemm_jobs=67 vector_jobs=96 checks=7505"
+      ]
+    },
+    "vcs-format1-burst-macro": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-burst-macro/result.json",
+      "result_sha256": "e717fb1126cb20904737b040f0c210d2351428d9a0dfce2d725a74d8ccfc21c1",
+      "run_log_sha256": "f123d505d76ba7e578059190cde87f764001ca869d1c36f8d961f8e5998a8cd7",
+      "passed": true,
+      "summaries": [
+        "BURST PASS matrix_depth=16 vector_depth=16 matrix_jobs=16 vector_jobs=16 submit_cycles=288 total_cycles=16941 matrix_pending_peak=15 vector_pending_peak=15 checks=516"
+      ]
+    },
+    "vcs-format1-nmc": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-nmc/result.json",
+      "result_sha256": "0463cdbbce4b6a731a73df652a557a37bf8629ca86e1ab4c0f8419d4efbcd8a4",
+      "run_log_sha256": "bfed202739811f0683a72cf2126d6418c99147c967c31c9bbbff2515f08fc3ac",
+      "passed": true,
+      "summaries": [
+        "PASS NMC: 128 consecutive grants/responses, all eight masters receive 16 grants",
+        "PASS NMC MMIO: registered payload, two-cycle response, parallel SRAM owner preserved",
+        "NMC ALL PASS: 256 parallel grants, fairness, byte writes, coherence, fill/write race, bounds, bank isolation"
+      ]
+    },
+    "vcs-format1-nmcconcurrent": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-nmcconcurrent/result.json",
+      "result_sha256": "52024ab81987d87e6b0e9f0e7ac13f494e319ccb7ec2b6df0ce17397f6342248",
+      "run_log_sha256": "db4dd2c537c3aea8e3e5469b97a4bccd425021d38ee69de0b6fd1846028228f9",
+      "passed": true,
+      "summaries": [
+        "NMC CONCURRENT PASS checks=5069 grants=5070 MMIO_pending_dual_bank=51 triple_grants=793 same_owner_blocks=123 mixed SRAM/MMIO/DM/boot/errors byte writes cache and reset"
+      ]
+    },
+    "vcs-format1-queues": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-queues/result.json",
+      "result_sha256": "4fcbf6f1bcd024a07e3e5cb2fd9a0cde34e8b151522de28764a3b021718780fe",
+      "run_log_sha256": "a60fbadc45cc917453dc2df18af71d7dd6e80fd3667ac88a647d587c75bd35d6",
+      "passed": true,
+      "summaries": [
+        "QUEUES PASS matrix_depth=16 vector_depth=16 checks=595 snapshots, wrap, overflow, concurrent engines, invalid descriptor, reset"
+      ]
+    },
+    "vcs-format1-dma": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-format1-dma/result.json",
+      "result_sha256": "d2bebe6f484e696cf333a2ee508393f22509f05612107c00ff5e9cdcb60c0f45",
+      "run_log_sha256": "e15ee8113f1044df549ba3f8aa8fc7061b842a101f60dd139a8237104e6c8236",
+      "passed": true,
+      "summaries": [
+        "PASS DMA control: abort/timeout preserve committed writes, cancel-before-grant and bus faults"
+      ]
+    },
+    "gate-format1-latency": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/gate-format1-latency/result.json",
+      "result_sha256": "f4a55b5518d53fa1bb8e6f257aea9f80aa26bc9c6d6d8e9e241ff31134a07231",
+      "run_log_sha256": "4c3b41de36028213b08e11aaf3ffef8951a77d478f2c816277e1959b1e6e3325",
+      "passed": true,
+      "summaries": [
+        "GATE_INPUT sample=0 ingress_cycles=620 input_to_classification_cycles=20445 input_to_classification_us_at_50mhz=408.90 PASS",
+        "GATE PASS samples=1 checks=15"
+      ],
+      "format_only_source_equivalence": {
+        "npu/rtl/npu_cnn_pkg.sv": {
+          "original_sha256": "e4fec2428f21c4641fdfed59ad5e75c4efb35e42461afb0a55f26bdb9fa6f2d4",
+          "current_sha256": "cdb0415057e55f61c500d428e807a191759905824b31eb38e8a3bf9da0bd0399",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_cnn_pkg.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/nmc.sv": {
+          "original_sha256": "c631c8a3a7c365ead03d1f48f0216bafc547fd331100b66c58b8f8342caa4662",
+          "current_sha256": "65de212767b77dd15741a91f8334b78022b07ca23525b9f58cb3c7d935402272",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/nmc.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_clock_gate.sv": {
+          "original_sha256": "ee845982da1db79155b1b22c17e637cfa71ca01d23df8233801f3ab2571f3643",
+          "current_sha256": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_clock_gate.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_cnn.sv": {
+          "original_sha256": "ea56ce181f29fe12a9ac79f61e49035307f781f67c995a37497e2e6fe0b26616",
+          "current_sha256": "070196f2294a110f3e9eefbcec260f9cb7e37ad045063dc8033ddc9dce7e3734",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_cnn.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_cnn_control.sv": {
+          "original_sha256": "bb80cb5b21f6c16d3ca6c23f337bf531bedc8a0b30c475d5f910253849daf4c9",
+          "current_sha256": "86d0caba16b8bdd5e46d5849f6c814da9ac3705a1a8dd8256659cf1eccbc8e94",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_cnn_control.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_cnn_engine.sv": {
+          "original_sha256": "553219f0988a570c1c7ff39e32ae8c0373e8f3505779d9c9b21c6f3d5dae5518",
+          "current_sha256": "c7014b0b672a69074c56fedb6d1dcbc7e7692aa6850d5aa5929267417210f05f",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_cnn_engine.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_cnn_mac.sv": {
+          "original_sha256": "dd33ea718e9eead7db41151c709159d7b8ccb1abf38ffdaaafb0a686756263f0",
+          "current_sha256": "9692d10289ca2f733db20f3194b112fc41c8a39f4b3234757f5b820fb63d198c",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_cnn_mac.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_core.sv": {
+          "original_sha256": "d05c658b248157720200f5e7adc884238f4d9ae4ab47daa6231f6c898720368d",
+          "current_sha256": "fdb8a30d6bd3ddd4abaade8d0d0007801022f7c094326159207bafd4f1947a87",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_core.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_debug_boot.sv": {
+          "original_sha256": "a5ac1c3c06498106c62e726300050e46e831eecf72077088995c367ceb1693cc",
+          "current_sha256": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_debug_boot.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_dma_channel.sv": {
+          "original_sha256": "715ce67e6fe17ac4dc61f12bc90b1c6793a57f809b4170b052e10ab8f3b6978a",
+          "current_sha256": "000cc6f74bf68518b3faff22d2e52b33b1eb1825e81cea137220ba326517501b",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_dma_channel.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_dma_regs.sv": {
+          "original_sha256": "e0e2e7e3c3c70bca4eafe6542d79c038b02c2c075d64d60c4a413f7c9ae99183",
+          "current_sha256": "3fc2615b1b8d86ce2c69c339d3bd8f06cb76602d21e9b1805e8a9bc0a6814e9f",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_dma_regs.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_jtag_debug.sv": {
+          "original_sha256": "0060af4710903a0d05bc7c4cfec624f333e71ad9c0f40a1189746078b2c17696",
+          "current_sha256": "844a2c581df32c191a08f76bff2adfd088c3991f5250d0c3ea670b43c0d5e4a0",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_jtag_debug.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_matmul.sv": {
+          "original_sha256": "498d707819d634a16a1e4b3f14d93c9d7823b1f6fc7a63b1cec244c4367956bd",
+          "current_sha256": "9c1cba40b5418099efdc9f00bef941f8e1e13c221a05b500df2f0d4853f22d60",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_matmul.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_mmio.sv": {
+          "original_sha256": "3f4ebe4de5070c0a7f2b5b5cc198522b760cfa2c995e00f91a223090403743e8",
+          "current_sha256": "257c9dc72427042ce491f274df7fe74bce09f043f1fc6f518bc311eec0aeeeed",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_mmio.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_vector.sv": {
+          "original_sha256": "fcbae7beeb9506fe0ecbb1af0ed3f022fd7f0ab3bf5fbd34f6baae74c9e25ecf",
+          "current_sha256": "b7263cd53417b4fe09589873817005530d9621953d7eab0c5e81f9684959e6b7",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_vector.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_soc.sv": {
+          "original_sha256": "4e127d12f66366e3c94865d02851a31e1f8308f9e0d54ab0a687808d4801b743",
+          "current_sha256": "565876c2577451f42786f15d0051a265f8e64d58caff0d7ff2d0cedf7772a334",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-code-format/before/npu/rtl/npu_soc.sv",
+          "tokens_identical": true
+        }
+      }
+    },
+    "gate-format1-burst": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/gate-format1-burst/result.json",
+      "result_sha256": "e2ca8bd4a23c6afced6a9fdf4f45dce21de27de722fb4bf482bb73abde8da517",
+      "run_log_sha256": "829389c0a21a75433c1bd659fa3e1445c0fb856c2112f242be9689617ea15f0e",
+      "passed": true,
+      "summaries": [
+        "GATE BURST PASS matrix_depth=16 vector_depth=16 matrix_jobs=16 vector_jobs=16 submit_cycles=288 total_cycles=16941 checks=516"
+      ],
+      "format_only_source_equivalence": {
+        "npu/rtl/npu_cnn_pkg.sv": {
+          "original_sha256": "e4fec2428f21c4641fdfed59ad5e75c4efb35e42461afb0a55f26bdb9fa6f2d4",
+          "current_sha256": "cdb0415057e55f61c500d428e807a191759905824b31eb38e8a3bf9da0bd0399",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_cnn_pkg.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/nmc.sv": {
+          "original_sha256": "c631c8a3a7c365ead03d1f48f0216bafc547fd331100b66c58b8f8342caa4662",
+          "current_sha256": "65de212767b77dd15741a91f8334b78022b07ca23525b9f58cb3c7d935402272",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/nmc.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_clock_gate.sv": {
+          "original_sha256": "ee845982da1db79155b1b22c17e637cfa71ca01d23df8233801f3ab2571f3643",
+          "current_sha256": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_clock_gate.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_cnn.sv": {
+          "original_sha256": "ea56ce181f29fe12a9ac79f61e49035307f781f67c995a37497e2e6fe0b26616",
+          "current_sha256": "070196f2294a110f3e9eefbcec260f9cb7e37ad045063dc8033ddc9dce7e3734",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_cnn.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_cnn_control.sv": {
+          "original_sha256": "bb80cb5b21f6c16d3ca6c23f337bf531bedc8a0b30c475d5f910253849daf4c9",
+          "current_sha256": "86d0caba16b8bdd5e46d5849f6c814da9ac3705a1a8dd8256659cf1eccbc8e94",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_cnn_control.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_cnn_engine.sv": {
+          "original_sha256": "553219f0988a570c1c7ff39e32ae8c0373e8f3505779d9c9b21c6f3d5dae5518",
+          "current_sha256": "c7014b0b672a69074c56fedb6d1dcbc7e7692aa6850d5aa5929267417210f05f",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_cnn_engine.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_cnn_mac.sv": {
+          "original_sha256": "dd33ea718e9eead7db41151c709159d7b8ccb1abf38ffdaaafb0a686756263f0",
+          "current_sha256": "9692d10289ca2f733db20f3194b112fc41c8a39f4b3234757f5b820fb63d198c",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_cnn_mac.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_core.sv": {
+          "original_sha256": "d05c658b248157720200f5e7adc884238f4d9ae4ab47daa6231f6c898720368d",
+          "current_sha256": "fdb8a30d6bd3ddd4abaade8d0d0007801022f7c094326159207bafd4f1947a87",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_core.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_debug_boot.sv": {
+          "original_sha256": "a5ac1c3c06498106c62e726300050e46e831eecf72077088995c367ceb1693cc",
+          "current_sha256": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_debug_boot.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_dma_channel.sv": {
+          "original_sha256": "715ce67e6fe17ac4dc61f12bc90b1c6793a57f809b4170b052e10ab8f3b6978a",
+          "current_sha256": "000cc6f74bf68518b3faff22d2e52b33b1eb1825e81cea137220ba326517501b",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_dma_channel.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_dma_regs.sv": {
+          "original_sha256": "e0e2e7e3c3c70bca4eafe6542d79c038b02c2c075d64d60c4a413f7c9ae99183",
+          "current_sha256": "3fc2615b1b8d86ce2c69c339d3bd8f06cb76602d21e9b1805e8a9bc0a6814e9f",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_dma_regs.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_jtag_debug.sv": {
+          "original_sha256": "0060af4710903a0d05bc7c4cfec624f333e71ad9c0f40a1189746078b2c17696",
+          "current_sha256": "844a2c581df32c191a08f76bff2adfd088c3991f5250d0c3ea670b43c0d5e4a0",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_jtag_debug.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_matmul.sv": {
+          "original_sha256": "498d707819d634a16a1e4b3f14d93c9d7823b1f6fc7a63b1cec244c4367956bd",
+          "current_sha256": "9c1cba40b5418099efdc9f00bef941f8e1e13c221a05b500df2f0d4853f22d60",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_matmul.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_mmio.sv": {
+          "original_sha256": "3f4ebe4de5070c0a7f2b5b5cc198522b760cfa2c995e00f91a223090403743e8",
+          "current_sha256": "257c9dc72427042ce491f274df7fe74bce09f043f1fc6f518bc311eec0aeeeed",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_mmio.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_vector.sv": {
+          "original_sha256": "fcbae7beeb9506fe0ecbb1af0ed3f022fd7f0ab3bf5fbd34f6baae74c9e25ecf",
+          "current_sha256": "b7263cd53417b4fe09589873817005530d9621953d7eab0c5e81f9684959e6b7",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-cnn-cleanup/asic/inputs/npu/rtl/npu_vector.sv",
+          "tokens_identical": true
+        },
+        "npu/rtl/npu_soc.sv": {
+          "original_sha256": "4e127d12f66366e3c94865d02851a31e1f8308f9e0d54ab0a687808d4801b743",
+          "current_sha256": "565876c2577451f42786f15d0051a265f8e64d58caff0d7ff2d0cedf7772a334",
+          "frozen_source": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-code-format/before/npu/rtl/npu_soc.sv",
+          "tokens_identical": true
+        }
+      }
+    }
+  },
+  "firmware_and_hex_assets_unchanged_sha256": {
+    "sram2.hex": "69e55c4cbbc2046361792589fec01ad0e022ff67fe2585c4642cfc148115cab8",
+    "sram6.hex": "c9194eddbc95e298be81ae4b49b72b967bd8a0abc9c4da26375820ba4e0ef4b5",
+    "gold7_1.hex": "345540f696ff3c07235c5f6dfbcc1ff49323678e85b94f47f8d16689e2abd181",
+    "gold6_5.hex": "d52422af4cc83b594c739b5ba35dc5741a35e573635af09a3dfc4dc351f14b86",
+    "gold2_5.hex": "1565334b100fdbe1ca120ce52643f9d66ce4529e2b0c6b268f5128fa55157b60",
+    "gold6_2.hex": "5affe0d369c1816932d383c42595dbfc49ce76c6a2e641d0b0049c7f1da40119",
+    "gold9_5.hex": "c40db4e9314a09c40e5b61ec6c59b1ae6788c9c01489cc95780d79c0da678376",
+    "gold7_4.hex": "b46db84411cc246e8d27b83869002dfbac94ab19f3a15a280dc24c86164bcaed",
+    "gold6_3.hex": "c1ade21e9495fd8f1d582a59a781a612318ca8e8b9395026e1b855388717cc61",
+    "input8.hex": "1234a05be7fefe6a967660c9167a53ff42e34684a73d445f6e5bdd7dfaf0a103",
+    "gold7_0.hex": "4f98cb9b6c367803a8334c2687e1b05bbc3bf36e14b24e148843ad767abfbca9",
+    "gold5_2.hex": "e4312f5f222db4188337b5d1234114deb774b12c23097c9320f1a37c40f7c877",
+    "gold8_2.hex": "0988109aa6e2f0cb23e9c91896cfc362f6c44c34973b13fd12fb5c0da2ac2abd",
+    "gold9_1.hex": "291186267a4d50722408e5f7f15563863f347fe9c824360c6ffaa80b0edd1adf",
+    "gold8_4.hex": "8045cee08adae6d4078d581b86f9bd7a98be64a4bbbc538b5ad1f77fb5d506f6",
+    "gold3_1.hex": "94794f00301c0d2ad6e0cb38b504dca75f506ac2046498ae2a80729d5ddb7270",
+    "gold4_4.hex": "9fca4e89d5e330f4cc897cd6023fd3226c3ff98e0115b555f9dbcb1c649ae2de",
+    "gold0_2.hex": "8d9bff70709daebb090b6d61f0347b48a4b6a0fd52c7bbc9306bf676b9bcb73d",
+    "gold7_2.hex": "dc3654f6ca26313605718b74cd91909356768663445bffb01388c45c8d63c733",
+    "gold1_2.hex": "aa8942680f093c4fbda92942dc6f1a0c12f9bdfc37e1762061c1e971b0ba5aea",
+    "input4.hex": "70241669e9bfb1e884b012f9748d59da634ce078a27bcf19c817d0cbb0159c65",
+    "sram7.hex": "e3cbe1d25dcbf1ff6e6f19894b85c314d75b7243b2e4bd303dc85614abb30e1a",
+    "gold7_5.hex": "0318f17382d00d478525e935a3f96c7e46f8d8d63f86ab71b724b90ecdc6b0f1",
+    "gold1_4.hex": "353a1d406f83470de40721442c4fda581ac0bd0c3b484a6aaab940e040a7d89c",
+    "boot.hex": "0cdb272f7609303bc72aac9b01d39f2b9b1b617aca878e93993692d38a1fdb3c",
+    "gold4_0.hex": "4c85a29ae0b9b0d9dfb6d127e49a4bd7225a97e6b1539902c0e485b70b3fab77",
+    "gold8_3.hex": "f5283bce4366e5464a1b41e4f886a2a6e4d0cc7f9ce6d3cbea01bd417ad5c993",
+    "gold8_1.hex": "da99a4c5b7b1c5f3ad2558f91fab9fc868509638fc074ff72b94a75ad96ddee2",
+    "gold7_3.hex": "17ef0daf5da411c21e41dfcfcc758b9c54d716280215c07da0c34699098a5609",
+    "input0.hex": "910952a5eb7938623db2032d4c2116d793b94efd3e9b673e0e6443c56167115b",
+    "sram3.hex": "efd027001f12096b8262ba155848034b24ff0404ad773740166c4e0bbd5af128",
+    "gold2_3.hex": "56a80dfddb8d7b3bdee89c068d7ee0c1424d6a03c1154d010c3bdf4207273dd2",
+    "gold0_1.hex": "f9fafafc73d1e86436cd28bf1a356e661dc4a31598e6a9e805f9760555f96df9",
+    "gold1_3.hex": "7fc177f3ba823452621605ab932df25fd39ac0980e24b2c9a6512070e814f741",
+    "sram0.hex": "27a1dfedc0a1e9ef5a32f84b45fd27844635c380f0e3cfaac90c0fba120d1098",
+    "sram5.hex": "044d447e87e34119239b4e733bc1a4230cfa4bd4b7b446e21c7c0414e49fce0b",
+    "gold1_1.hex": "fb0b75fed43a5bf6bcf33ccd4611f5506f57135331a41fb2911a59ccf8886b5d",
+    "gold3_4.hex": "76dcd33ff8e4d138f919f75aae679d3a5e8ae3358091977046c01e9b6a4089ed",
+    "stream_boot.hex": "7fb9bc0543d8285e5a3706da2735f10510047c0d1fc17ffafc26ca782b145d05",
+    "gold9_2.hex": "5c3fd00038130bb074e9cc4976e3c2532d19f641c9b54793fc3a870ae05f09ca",
+    "gold0_4.hex": "d2b3e7844750209e2bf57a62061740ae01a6ccaa0be0163822679a10e4d12504",
+    "gold5_5.hex": "1622ea72595077fdfce44f3282d78d260c8dc59cde04ecf866b0c8958eb19dc3",
+    "gold2_4.hex": "0cc94a237ccb5c06bfa626969cedefd555c9e60a14cff3284be89f841ddbdd0f",
+    "gold3_2.hex": "9e480c811dba25597117596501a56e5202116d23d59010d2faa8cf6d9a09b366",
+    "input3.hex": "0b2d39f796e31f861fff3d0feb480b916cdc3e12d175084d1336aef41d450262",
+    "sram9.hex": "65b08f6b3e8f5c6ca0eb5298919034f924da25008b63536fbc0f65ad39175454",
+    "gold5_0.hex": "62a4fcd49333f881330be595fea6f50385fd2ab249ac14022cb9ae29d90ec6cc",
+    "gold2_1.hex": "1658e6121527474b2304d60e353af3d2eceb24f192d8d362eff3b4fa00722f8d",
+    "gold0_0.hex": "aa071d584486e19636034ba6502c9ec82fe8f7044e1775a85a51ee88ce6661d1",
+    "input6.hex": "fea6585eb22c82323cff2ef0c2a189ddad3a121893b3e84b430a26f33fbc1e6b",
+    "gold6_0.hex": "8594f68e85b17e2a981a6ba106d442a6e741e7a36dc0fcdbbffdf72b93e21ffa",
+    "gold3_5.hex": "de88696e62c23f2c44b71fb5d81c578b3375d61f64c9cd6469a27b0eeb94a1ff",
+    "gold9_0.hex": "2c232a77b5773815040de7cbb84cfe28ee7eedcdc25235fe39dca221d772a46d",
+    "gold1_5.hex": "00564ffcdb982cbee3717566cb86109dc80d5465a00462c8903963abf3a22ebd",
+    "gold5_3.hex": "73118a31d4c1239bc56c100b84b27f756d3cc887587c2ae6c9a5e47590bda964",
+    "gold4_3.hex": "31603fa05dc25eeb6d82e75862d2ddd491cb6b4b09dbae99653d8943d92cca8d",
+    "input2.hex": "ffa9f9739ea0126090314d08885598e069af5c825c2f37eba1d1ec0fd19540cb",
+    "input9.hex": "914f3fc1532e2a6da37a477326f0aac7dd4a9a023fa82ab62192f5ef9fd005d4",
+    "gold4_1.hex": "ed8a9213a74ed8b9125efdab7f7fa1a4c8cc9a52cd58f57be8d6fb2ab50ad79e",
+    "gold3_0.hex": "b1d38e73415bb7641fca9104372e3f52b73d74b8c44ca84a7c76315312a14865",
+    "gold1_0.hex": "ed8bddbd9acf21ddc1735a87f89d4e168e7ad271d94be793fe4bf53510e893a8",
+    "input7.hex": "da017e83648709b0fe7576370bebc50ddc29d3e10bbeae35f6a4d2ff95fb0764",
+    "gold8_5.hex": "0d1a72329a799b40d33214613c8dc92a4febc48b3382af9d8745c74314a349ce",
+    "gold0_3.hex": "627f9ab127272046334d6fd804b36a2bc1037a9c554a020f641786a248c4a4c7",
+    "gold4_2.hex": "776b280a6f11819b73db38d6facd2129af95e977d96516c9938ae0a9ea7e2d56",
+    "gold5_4.hex": "13300f09e9eb92fdfdcc664ce2fea5dab75a7b0cbffbc88d59b2c201febca751",
+    "sram4.hex": "25a01a1af6ba0cbc015b1e21c205999e775fe51047d05de8321bd1154f4b5e28",
+    "gold4_5.hex": "c18dab0f503097200410913532a5a8d1d95f28b8d6e76c432ff90c846e602950",
+    "gold9_4.hex": "cab79467932ba66de9edd80e194786a7e9ba58dcb635c680464b2c23429d638a",
+    "gold9_3.hex": "d82b2e08dcd03482673b46fbde2f05add751cf17be81104c0369065c3cc95cd6",
+    "gold0_5.hex": "dbf3511560759e6f24404a12f05a059ea1bc97ff90a1f657d145994d8aa0e996",
+    "gold2_0.hex": "7b066b684db313a4d3d3dbb9f6ef80d55b612832c7d3a8cd13220dae19319abe",
+    "gold2_2.hex": "7c9953f29382c19ad12e8fb7cc9dac041cf1c12ad2f1741abaee71e9052e78e7",
+    "gold6_1.hex": "8614a13e588e6b58b7e991c55e155dfabfc255ec7b835d701a55362c41b4bfd9",
+    "input1.hex": "353d5dfdefc2d292102f11cfb1e7fde9d2da6c1afca139589e72c1339a10e8fa",
+    "gold6_4.hex": "8fe4cd1e99f2969b1af15d5bcb7e5cb2bd71495aaa6630e7998d8f55091d42ca",
+    "gold3_3.hex": "10a7c659d94685f910f498019de88a1ca98f7c79d159a4a048c188c3c92947ed",
+    "params.hex": "b505f5c44122e25ecc67e836915a8a1c33683f3baaa23a0896987898d22ff927",
+    "sram1.hex": "782f1c17e77c1e543f5351d933a21ad40d87653796e74e2e80fcbafeb056c48f",
+    "input5.hex": "ae999ed0ffd0e4fec0e115ef0d7cf5f788789c372c5c3745eed6efc851d493e1",
+    "gold8_0.hex": "ebab8c2bc5e160bc3e87b73960533e1c3c33cf2f6a58c8b333256e4ce2c0a0e9",
+    "gold5_1.hex": "27d2e70a3b9c8fae96ba4ef57bb4b3f882986fb5d92e0a121b505f3d29b39ca6",
+    "sram8.hex": "4a85da286a3fcbc3f200f3d1d6dd0cdb8e1d13acf191647b5f86731bcc996dd8"
+  },
+  "generated_asic_wrapper_tokens_identical": true,
+  "historical_ppa_report_unchanged": {
+    "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/reports/cnn_cleanup_validation.json",
+    "sha256": "bb63cf419884756352d34242772e9ef6624fcc2a75b90469fddaeae5e6df268d"
+  },
+  "new_synthesis_run": false,
+  "new_place_route_run": false,
+  "validation_script": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/../eda-runs/20261103-code-format/validate.py",
+  "validation_script_sha256": "03cb688d56dfe41fdd0a1183c9c83c7d86f22a594c3ff42ca3a96902b10eab14"
+}

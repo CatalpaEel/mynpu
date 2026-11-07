@@ -1,0 +1,6 @@
+{
+  "rf_bank_words": 32,
+  "matrix_queue_depth": 8,
+  "vector_queue_depth": 8,
+  "cnn_queue_depth": 8
+}

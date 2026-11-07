@@ -1,0 +1,9 @@
+{
+  "scope": "Actual Innovus canvas after CTS and one failed legalization. Nine core placement violation instances remain. Signal detailed routing was stopped; not a final routed chip.",
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261104-vector-program/fullchip-rf32",
+  "checkpoint": "11_pre_route",
+  "image_sha256": "f447ba47cd0095d78b5094c96f74b15f3235e53c4fc172e58f75e26a3c7504f2",
+  "capture_tcl_sha256": "a313356a2b8fc4c76b85ba19761797557a432f4f3f3ee739771b0c32935f03be",
+  "checkpoint_file_sha256": "fe15e2a174a6bcabefc8cecaf40e4e40bba20c690fd5b3e7333eed50c47dfeb5",
+  "capture_log_sha256": "a99cb6c0b99c3d9a81fcad360535ea4da394ce677868619f8ebf9414851435be"
+}

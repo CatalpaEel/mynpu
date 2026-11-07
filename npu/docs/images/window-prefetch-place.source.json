@@ -1,0 +1,13 @@
+{
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip",
+  "checkpoint": "08_post_tie",
+  "scope": "Actual pre-CTS placement and native IO; not a detailed-routed image",
+  "sha256": {
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/window-prefetch-place.png": "933220e6f9413254ef49b2c118ebe57d0cf2caf3e95ba839f78d138b6bff88df",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/place-capture-107.log": "dafaee7515abf2e834dd42e8f586801240d00856b60799475f74deca15c81ad4",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/scripts/capture.tcl": "a313356a2b8fc4c76b85ba19761797557a432f4f3f3ee739771b0c32935f03be",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/mynpu/pnr/checkpoints/08_post_tie.enc": "fa048832556fe0b7faf98575dc6d9325ec7c42251a8ab6b85236a3ef349644d4",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/mynpu/pnr/outputs/08_post_tie.v": "6b456843b7a23d9f409a365074c75331e08d9244698852bad52081e5db34402e",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/mynpu/pnr/outputs/07_io_optimized.def": "ec832cb20ae1d8df289a6b051a3ae33dbe8762b47473d5a7c1b642fc0b461dc3"
+  }
+}

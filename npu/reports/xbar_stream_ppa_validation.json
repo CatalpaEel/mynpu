@@ -1,0 +1,39 @@
+{
+  "pid": 111171,
+  "scope": "Genus core synthesis; includes two SRAM macros; excludes PAD and physical timing",
+  "started_utc": "2026-11-05T15:24:32.704557+00:00",
+  "status": "completed",
+  "phase": "finished",
+  "previous_cell_area_mm2": 2.412416602,
+  "genus_pid": 111176,
+  "synthesis_exit_code": 0,
+  "cell_area_mm2": 2.6944119939999998,
+  "clocks": {
+    "jtag_clk": {
+      "setup_wns_ns": 47.7999,
+      "setup_tns_ns": 0.0,
+      "violating_paths": 0
+    },
+    "sys_clk": {
+      "setup_wns_ns": 4.0012,
+      "setup_tns_ns": 0.0,
+      "violating_paths": 0
+    }
+  },
+  "area_change_percent": 11.689332255722885,
+  "measurement_completed": true,
+  "reports": {
+    "area.rpt": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-xbar-routes-ppa/core/reports/area.rpt",
+    "qor.rpt": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-xbar-routes-ppa/core/reports/qor.rpt",
+    "timing.rpt": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-xbar-routes-ppa/core/reports/timing.rpt",
+    "unresolved.rpt": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-xbar-routes-ppa/core/reports/unresolved.rpt"
+  },
+  "report_sha256": {
+    "area.rpt": "2fb73e8f05a76f278d3c4eba17ed39f9cc8e4846db1dc4d9bd9e7818a9526580",
+    "qor.rpt": "52cbad67cf8484460e402cf13cf86fe8bcfee23a46f3ba2c7ba5b5c7ff676a09",
+    "timing.rpt": "20ee7693c4a62baf376fd0f689871535e85fb08cca482ca59ec612dd7a4cf142",
+    "unresolved.rpt": "a8a87babbdb01d17a151725b930736ba1ec926d9d33075f8604383bf57a035b1"
+  },
+  "gate_exit_code": 0,
+  "finished_utc": "2026-11-05T15:49:28.586403+00:00"
+}

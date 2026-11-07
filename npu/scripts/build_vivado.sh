@@ -6,7 +6,7 @@ python3 "$npu_root/sw/gen_boot.py"
 python3 "$npu_root/scripts/gen_sources.py"
 cp "$npu_root/sw/boot.hex" "$npu_root/build/boot.hex"
 cd "$npu_root/build"
-python3 - "$npu_root" <<'PYCODE'
+python3 - "$npu_root" << 'PYCODE'
 import sys,json,hashlib
 from pathlib import Path
 root=Path(sys.argv[1]);files=[Path(x) for x in (root/'build/sources.f').read_text().splitlines()]

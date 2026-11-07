@@ -1,0 +1,498 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2021 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+Version: 19.17-s144_1, built Fri Aug 20 02:53:14 PDT 2021
+Options: -no_gui -batch -files ../eda-runs/20261102-cnn-fifo8/final-depth8/synth.tcl 
+Date:    Mon Nov 02 10:57:04 2026
+Host:    tc-01a0e839f9eb (x86_64 w/Linux 6.12.0-211.54.1.el10_2.x86_64) (24cores*48cpus*2physical cpus*Intel(R) Xeon(R) Platinum 8160 CPU @ 2.10GHz 33792KB) (16777216KB)
+PID:     1771059
+OS:      AlmaLinux release 8.10 (Cerulean Leopard)
+
+Checking out license: Genus_Synthesis
+
+Loading tool scripts...
+Finished loading tool scripts (7 seconds elapsed).
+
+#@ Processing -files option
+@genus 1> source ../eda-runs/20261102-cnn-fifo8/final-depth8/synth.tcl
+#@ Begin verbose source ../eda-runs/20261102-cnn-fifo8/final-depth8/synth.tcl
+@file(synth.tcl) 1: set_db max_cpus_per_server 4
+  Setting attribute of root '/': 'max_cpus_per_server' = 4
+@file(synth.tcl) 2: set_db design_process_node 180
+  Setting attribute of root '/': 'design_process_node' = 180
+@file(synth.tcl) 3: set_db init_hdl_search_path {/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include}
+  Setting attribute of root '/': 'init_hdl_search_path' = /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include
+@file(synth.tcl) 4: read_libs {/home/almalinux/tsmc180/tcb018gbwp7t_290a/TSMCHOME/digital/Front_End/timing_power_noise/NLDM/tcb018gbwp7t_270a/tcb018gbwp7ttc.lib /home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8_tt_1p8_25C_syn.lib}
+
+Threads Configured:4
+
+  Message Summary for Library both libraries:
+  *******************************************
+  Missing a function attribute in the output pin definition. [LBR-518]: 1
+  An unsupported construct was detected in this library. [LBR-40]: 2
+  *******************************************
+ 
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.800000, 25.000000) in library 'tcb018gbwp7ttc.lib'.
+        : The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.800000, 25.000000) in library 'RA1SHD_2048x32M8_tt_1p8_25C_syn.lib'.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'ANTENNABWP7T' must have an output pin.
+        : Add the missing output pin(s), then reload the library. Else the library cell will be marked as timing model i.e. unusable. Timing_model means that the cell does not have any defined function. If there is no output pin, Genus will mark library cell as unusable i.e. the attribute 'usable' will be marked to 'false' on the libcell. Therefore, the cell is not used for mapping and it will not be picked up from the library for synthesis. If you query the attribute 'unusable_reason' on the libcell; result will be: 'Library cell has no output pins.'Note: The message LBR-9 is only for the logical pins and not for the power_ground pins. Genus will depend upon the output function defined in the pin group (output pin) of the cell, to use it for mapping. The pg_pin will not have any function defined.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'ANTENNABWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP16BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP16BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP32BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP32BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP4BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP4BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP64BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP64BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP8BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP8BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAPBWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAPBWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP10BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP10BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP2BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP2BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP3BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP3BWP7T' must have an output pin.
+@file(synth.tcl) 5: read_physical -lef {/home/almalinux/tsmc180/tcb018gbwp7t_290a/TSMCHOME/digital/Back_End/lef/tcb018gbwp7t_270a/lef/tcb018gbwp7t_6lm.lef /home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8.vclef /home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8_ant.lef}
+Warning : Macro already defined before. [PHYS-107]
+        : Macro 'RA1SHD_2048x32M8' is already defined. Ignoring this definition in file '/home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8_ant.lef'.
+
+  According to lef_library, there are total 6 routing layers [ V(3) / H(3) ]
+
+  Libraries have 344 usable logic and 147 usable sequential lib-cells.
+@file(synth.tcl) 6: read_hdl -sv -define {SYNTHESIS NPU_CNN_QUEUE_DEPTH=8} {/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/nmc.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_clock_gate.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_cnn.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_cnn_mac.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_core.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_debug_boot.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_dma_channel.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_dma_regs.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_jtag_debug.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_matmul.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_mmio.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/npu_vector.sv /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu_asic_top.sv}
+ initial if(CACHE_WORDS<4 || CACHE_WORDS>64 || (CACHE_WORDS&(CACHE_WORDS-1))!=0)$fatal(1,"CACHE_WORDS must be a power of two in [4,64]");
+       |
+Warning : Ignoring unsynthesizable construct. [VLOGPT-37]
+        : Initial in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu/rtl/nmc.sv' on line 39, column 8.
+        : For example, the following constructs will be ignored:
+    - initial block
+    - final block
+    - program block
+    - property block
+    - sequence block
+    - covergroup
+    - checker block
+    - gate drive strength
+    - system task enable
+    - reg declaration with initial value
+    - specify block.
+@file(synth.tcl) 7: elaborate npu_asic_top
+Info    : Elaborating Design. [ELAB-1]
+        : Elaborating top-level block 'npu_asic_top' from file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/npu_asic_top.sv'.
+Warning : Unreachable statements for case item. [CDFG-472]
+        : Case item 'default' in module 'dmi_jtag_tap_IrLength5_IdcodeValue1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv' on line 260.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'a_abstractcs[datacount]' in module 'dm_csrs_NrHarts1_BusWidth32_SelectableHarts1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv' on line 225.
+        : Genus removes the flip-flop or latch inferred for an unused signal or variable. To preserve the flip-flop or latch, set the hdl_preserve_unused_registers attribute to true or use a pragma in the RTL.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'a_abstractcs[zero0]' in module 'dm_csrs_NrHarts1_BusWidth32_SelectableHarts1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv' on line 225.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'a_abstractcs[zero1]' in module 'dm_csrs_NrHarts1_BusWidth32_SelectableHarts1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv' on line 225.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'a_abstractcs[busy]' in module 'dm_csrs_NrHarts1_BusWidth32_SelectableHarts1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv' on line 225.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'a_abstractcs[zero2]' in module 'dm_csrs_NrHarts1_BusWidth32_SelectableHarts1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv' on line 225.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'a_abstractcs[progbufsize]' in module 'dm_csrs_NrHarts1_BusWidth32_SelectableHarts1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv' on line 225.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'a_abstractcs[zero3]' in module 'dm_csrs_NrHarts1_BusWidth32_SelectableHarts1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv' on line 225.
+Warning : Unreachable statements for case item. [CDFG-472]
+        : Case item 'default' in module 'dm_mem_NrHarts1_BusWidth32_SelectableHarts1_DmBaseAddress4096' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv' on line 144.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused flip-flop register 'p_elw_busy_q' in module 'cv32e40p_sleep_unit_COREV_CLUSTER0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv' on line 138.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'check_fprm' in module 'cv32e40p_decoder_COREV_PULP0_COREV_CLUSTER0_A_EXTENSION0_FPU0_FPU_ADDMUL_LAT0_FPU_OTHERS_LAT0_ZFINX0_PULP_SECURE0_USE_PMP0_APU_WOP_CPU6_DEBUG_TRIGGER_EN1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv' on line 198.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'fpu_op' in module 'cv32e40p_decoder_COREV_PULP0_COREV_CLUSTER0_A_EXTENSION0_FPU0_FPU_ADDMUL_LAT0_FPU_OTHERS_LAT0_ZFINX0_PULP_SECURE0_USE_PMP0_APU_WOP_CPU6_DEBUG_TRIGGER_EN1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv' on line 198.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'fpu_op_mod' in module 'cv32e40p_decoder_COREV_PULP0_COREV_CLUSTER0_A_EXTENSION0_FPU0_FPU_ADDMUL_LAT0_FPU_OTHERS_LAT0_ZFINX0_PULP_SECURE0_USE_PMP0_APU_WOP_CPU6_DEBUG_TRIGGER_EN1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv' on line 198.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'fpu_vec_op' in module 'cv32e40p_decoder_COREV_PULP0_COREV_CLUSTER0_A_EXTENSION0_FPU0_FPU_ADDMUL_LAT0_FPU_OTHERS_LAT0_ZFINX0_PULP_SECURE0_USE_PMP0_APU_WOP_CPU6_DEBUG_TRIGGER_EN1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv' on line 198.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'fp_op_group' in module 'cv32e40p_decoder_COREV_PULP0_COREV_CLUSTER0_A_EXTENSION0_FPU0_FPU_ADDMUL_LAT0_FPU_OTHERS_LAT0_ZFINX0_PULP_SECURE0_USE_PMP0_APU_WOP_CPU6_DEBUG_TRIGGER_EN1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv' on line 198.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'hwlp_end_4_id_d' in module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv' on line 256.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'wb_contention_lsu' in module 'cv32e40p_ex_stage_COREV_PULP0_FPU0_APU_NARGS_CPU3_APU_WOP_CPU6_APU_NDSFLAGS_CPU15_APU_NUSFLAGS_CPU5' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv' on line 227.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'uepc_n' in module 'cv32e40p_cs_registers_N_HWLP2_APU0_A_EXTENSION0_FPU0_ZFINX0_PULP_SECURE0_USE_PMP0_N_PMP_ENTRIES16_NUM_MHPMCOUNTERS1_COREV_PULP0_COREV_CLUSTER0_DEBUG_TRIGGER_EN1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv' on line 885.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'mstatus_n[mprv]' in module 'cv32e40p_cs_registers_N_HWLP2_APU0_A_EXTENSION0_FPU0_ZFINX0_PULP_SECURE0_USE_PMP0_N_PMP_ENTRIES16_NUM_MHPMCOUNTERS1_COREV_PULP0_COREV_CLUSTER0_DEBUG_TRIGGER_EN1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv' on line 885.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'mstatus_n[mpp]' in module 'cv32e40p_cs_registers_N_HWLP2_APU0_A_EXTENSION0_FPU0_ZFINX0_PULP_SECURE0_USE_PMP0_N_PMP_ENTRIES16_NUM_MHPMCOUNTERS1_COREV_PULP0_COREV_CLUSTER0_DEBUG_TRIGGER_EN1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv' on line 885.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'mstatus_n[upie]' in module 'cv32e40p_cs_registers_N_HWLP2_APU0_A_EXTENSION0_FPU0_ZFINX0_PULP_SECURE0_USE_PMP0_N_PMP_ENTRIES16_NUM_MHPMCOUNTERS1_COREV_PULP0_COREV_CLUSTER0_DEBUG_TRIGGER_EN1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv' on line 885.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused latch register 'mstatus_n[uie]' in module 'cv32e40p_cs_registers_N_HWLP2_APU0_A_EXTENSION0_FPU0_ZFINX0_PULP_SECURE0_USE_PMP0_N_PMP_ENTRIES16_NUM_MHPMCOUNTERS1_COREV_PULP0_COREV_CLUSTER0_DEBUG_TRIGGER_EN1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/inputs/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv' on line 885.
+Info    : Done Elaborating Design. [ELAB-3]
+        : Done elaborating 'npu_asic_top'.
+Checking for analog nets...
+Check completed for analog nets.
+Checking for source RTL...
+Check completed for source RTL.
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+--------------------------------------------
+| Trick | Accepts | Rejects | Runtime (ms) | 
+--------------------------------------------
+--------------------------------------------
+UM:   timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                      elaborate
+@file(synth.tcl) 8: check_design > /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/reports/elaborated_check.rpt
+
+@file(synth.tcl) 9: check_design -unresolved > /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/reports/elaborated_unresolved.rpt
+
+@file(synth.tcl) 10: read_sdc /home/s2400012841/chip-fullstack-2026/eda-runs/20261102-cnn-fifo8/final-depth8/synth.sdc
+Statistics for commands executed by read_sdc:
+ "all_clocks"               - successful      2 , failed      0 (runtime  0.00)
+ "all_inputs"               - successful      2 , failed      0 (runtime  0.00)
+ "all_outputs"              - successful      2 , failed      0 (runtime  0.00)
+ "create_clock"             - successful      2 , failed      0 (runtime  0.00)
+ "get_clocks"               - successful      2 , failed      0 (runtime  0.00)
+ "get_ports"                - successful      7 , failed      0 (runtime  0.00)
+ "remove_from_collection"   - successful      2 , failed      0 (runtime  0.00)
+ "set_clock_groups"         - successful      1 , failed      0 (runtime  0.00)
+ "set_clock_uncertainty"    - successful      2 , failed      0 (runtime  0.00)
+ "set_false_path"           - successful      1 , failed      0 (runtime  0.00)
+ "set_input_delay"          - successful      2 , failed      0 (runtime  0.00)
+ "set_input_transition"     - successful      1 , failed      0 (runtime  0.00)
+ "set_load"                 - successful      1 , failed      0 (runtime  0.00)
+ "set_output_delay"         - successful      2 , failed      0 (runtime  0.00)
+Total runtime 0.0
+@file(synth.tcl) 11: set_db syn_generic_effort low
+  Setting attribute of root '/': 'syn_generic_effort' = low
+@file(synth.tcl) 12: set_db syn_map_effort low
+  Setting attribute of root '/': 'syn_map_effort' = low
+@file(synth.tcl) 13: set_db syn_opt_effort low
+  Setting attribute of root '/': 'syn_opt_effort' = low
+@file(synth.tcl) 14: syn_generic
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 194 sequential instances.
+        : Optimizations such as constant propagation or redundancy removal could change the connections so a hierarchical instance does not drive any primary outputs anymore. To see the list of deleted hierarchical instances, set the 'information_level' attribute to 2 or above. If the message is truncated set the message attribute 'truncate' to false to see the complete list. To prevent this optimization, set the 'delete_unloaded_insts' root/subdesign attribute to 'false' or 'preserve' instance attribute to 'true'.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 37 hierarchical instances.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/dmcontrol_q_reg[clrresethaltreq]'.
+        : To prevent this optimization, set the 'optimize_constant_0_flops' root attribute to 'false' or 'optimize_constant_0_seq' instance attribute to 'false'. You can also see the complete list of deleted sequential with command "report sequential -deleted" (on Reason "constant0").
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/dmcontrol_q_reg[setresethaltreq]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/dmcontrol_q_reg[zero0][4]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/dmcontrol_q_reg[zero0][5]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/dmcontrol_q_reg[hasel]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/dmcontrol_q_reg[zero1]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/dmcontrol_q_reg[ackhavereset]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/dmcontrol_q_reg[hartreset]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/abstractauto_q_reg[zero0][12]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/abstractauto_q_reg[zero0][13]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/abstractauto_q_reg[zero0][14]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/abstractauto_q_reg[zero0][15]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/sbcs_q_reg[sbaccess8]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/sbcs_q_reg[sbaccess16]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/sbcs_q_reg[sbaccess64]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/sbcs_q_reg[sbaccess128]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/sbcs_q_reg[sbasize][5]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/sbcs_q_reg[sbasize][6]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/sbcs_q_reg[sbasize][7]'.
+Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
+        : The instance is 'i_core/i_debug/i_dm/i_dm_csrs/sbcs_q_reg[sbasize][8]'.
+Info    : Replacing a flip-flop with a logic constant 1. [GLO-13]
+        : The instance is 'i_core/i_cpu/core_i/cs_registers_i/dcsr_q_reg[xdebugver][30]'.
+        : To prevent this optimization, set the 'optimize_constant_1_flops' root attribute to 'false' or 'optimize_constant_1_seq' instance attribute to 'false'.
+Info    : Replacing a flip-flop with a logic constant 1. [GLO-13]
+        : The instance is 'i_core/i_cpu/core_i/cs_registers_i/mstatus_q_reg[mpp][0]'.
+Info    : Replacing a flip-flop with a logic constant 1. [GLO-13]
+        : The instance is 'i_core/i_cpu/core_i/cs_registers_i/mstatus_q_reg[mpp][1]'.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 571 sequential instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 22 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 105 hierarchical instances.
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Info    : Synthesizing. [SYNTH-1]
+        : Synthesizing 'npu_asic_top' to generic gates using 'low' effort.
+PBS_Generic-Start - Elapsed_Time 0, CPU_Time 0.0
+stamp 'PBS_Generic-Start' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:46(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   10:57:49 (Nov02) |  797.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 4 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+TNS Restructuring config:  at stage: generic applied.
+Info    : Partition Based Synthesis execution skipped. [PHYS-752]
+        : 'low' effort synthesis done in non-distributed manner. Set synthesize -effort to 'medium' or 'high' to turn on distributed optimization.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 2 sequential instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 10 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 15 hierarchical instances.
+Starting mux data reorder optimization [v1.0] (stage: post_to_gen_setup, startdef: npu_asic_top, recur: true)
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 4 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 16 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 8 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 8 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 8 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 8 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 8 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 8 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 8 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 8 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 8 hierarchical instances.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 8 hierarchical instances.
+Completed mux data reorder optimization (accepts: 60, rejects: 0, runtime: 1.497s)
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+--------------------------------------------
+| Trick | Accepts | Rejects | Runtime (ms) | 
+--------------------------------------------
+--------------------------------------------
+Starting reconvergence optimization [v1.0] (stage: pre_rtlopt, startdef: npu_asic_top, recur: true)
+new_area=243546944  new_slack=-153.50  new_is_better=1
+new_area=3957637840  new_slack=-321.10  new_is_better=1
+new_area=3470543952  new_slack=-305.70  new_is_better=1
+Completed reconvergence optimization (accepts: 3, rejects: 0, runtime: 1.295s)
+Starting logic restructure optimization [v1.0] (stage: pre_rtlopt, startdef: npu_asic_top, recur: true)
+Completed logic restructure optimization (accepts: 0, rejects: 0, runtime: 0.057s)
+Starting optimize datapath elements [v1.0] (stage: pre_rtlopt, startdef: npu_asic_top, recur: true)
+Completed optimize datapath elements (accepts: 0, rejects: 0, runtime: 0.003s)
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+--------------------------------------------
+| Trick | Accepts | Rejects | Runtime (ms) | 
+--------------------------------------------
+--------------------------------------------
+Info    : Pre-processed datapath logic. [DPOPT-6]
+        : Pre-processing optimizations applied to datapath logic in 'npu_asic_top':
+          sop(31) mux_reduce(18) msb_trim(3) output_trim(27) 
+Info    : Optimizing datapath logic. [DPOPT-1]
+        : Optimizing datapath logic in 'npu_asic_top'.
+Info    : Implementing datapath configurations. [DPOPT-3]
+        : Implementing datapath configurations for 'CDN_DP_region_13334'
+Info    : Truncated carry-save logic. [RTLOPT-22]
+        : Truncated carry-save logic using instance csTrunc_range_ok_123_117:lte_101_87.
+Info    : Truncated carry-save logic. [RTLOPT-22]
+        : Truncated carry-save logic using instance csTrunc_range_ok_123_81:lte_101_87.
+Info    : Truncated carry-save logic. [RTLOPT-22]
+        : Truncated carry-save logic using instance csTrunc_range_ok_123_152:lte_101_87.
+Info    : Truncated carry-save logic. [RTLOPT-22]
+        : Truncated carry-save logic using instance csTrunc_range_ok_123_46:lte_101_87.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'csa_tree_activation_row_332_12:add_185_58' and 'csa_tree_activation_row_340_14:add_185_58' in 'CDN_DP_region_13334_c1 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'csa_tree_activation_row_332_12:add_186_26' and 'csa_tree_activation_row_340_14:add_186_26' in 'CDN_DP_region_13334_c1 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'csa_tree_activation_row_332_12:add_187_19' and 'csa_tree_activation_row_340_14:add_187_19' in 'CDN_DP_region_13334_c1 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'csa_tree_activation_row_332_12:add_188_17' and 'csa_tree_activation_row_340_14:add_188_17' in 'CDN_DP_region_13334_c1 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged the following sets of instances in 'CDN_DP_region_13334_c1 in npu_cnn':
+	  (final_adder_activation_row_340_14:sub_182_57, final_adder_activation_row_332_12:sub_182_57)
+
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'final_adder_add_330_21' and 'final_adder_add_339_35' in 'CDN_DP_region_13334_c1 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'final_adder_activation_row_340_14:add_186_26' and 'final_adder_add_339_62' in 'CDN_DP_region_13334_c1 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'final_adder_activation_row_332_12:add_186_26' and 'final_adder_activation_row_340_14:add_187_19' in 'CDN_DP_region_13334_c1 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'final_adder_activation_row_332_12:add_187_19' and 'final_adder_activation_row_340_14:add_186_26_Y_final_adder_add_339_62' in 'CDN_DP_region_13334_c1 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'final_adder_activation_row_332_12:add_188_17' and 'final_adder_activation_row_340_14:add_188_17' in 'CDN_DP_region_13334_c1 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged the following sets of instances in 'CDN_DP_region_13334_c1 in npu_cnn':
+	  (inc_add_302_43_I2, inc_add_135_33)
+
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged the following sets of instances in 'CDN_DP_region_13334_c1 in npu_cnn':
+	  (launch_284_62:add_203_34, launch_290_7:add_201_36)
+
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged the following sets of instances in 'CDN_DP_region_13334_c1 in npu_cnn':
+	  (csa_tree_activation_row_340_14:sub_182_57, csa_tree_activation_row_332_12:sub_182_57)
+
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged the following sets of instances in 'CDN_DP_region_13334_c1 in npu_cnn':
+	  (add_338_44, addinc_ADD_UNS_OP_504)
+
+Info    : Truncated carry-save logic. [RTLOPT-22]
+        : Truncated carry-save logic using instance csTrunc_launch_297_7:gte_203_89.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged the following sets of instances in 'CDN_DP_region_13334_c2 in npu_cnn':
+	  (csa_tree_activation_row_340_14:add_185_58, csa_tree_activation_row_332_12:add_185_58)
+
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged the following sets of instances in 'CDN_DP_region_13334_c2 in npu_cnn':
+	  (final_adder_activation_row_332_12:add_185_58, final_adder_activation_row_340_14:add_185_58)
+
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'activation_row_332_12:add_186_26' and 'activation_row_340_14:add_186_26' in 'CDN_DP_region_13334_c2 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'activation_row_332_12:add_187_19' and 'activation_row_340_14:add_187_19' in 'CDN_DP_region_13334_c2 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'activation_row_332_12:add_188_17' and 'activation_row_340_14:add_188_17' in 'CDN_DP_region_13334_c2 in npu_cnn'.
+Info    : Accepted resource sharing opportunity. [RTLOPT-30]
+        : Merged instances 'activation_row_332_12:add_186_26_Y_activation_row_340_14:add_186_26' and 'add_338_44' in 'CDN_DP_region_13334_c2 in npu_cnn'.
+Info    : Truncated carry-save logic. [RTLOPT-22]
+        : Truncated carry-save logic using instance csTrunc_range_ok_123_117:lte_101_87.
+Info    : Truncated carry-save logic. [RTLOPT-22]
+        : Truncated carry-save logic using instance csTrunc_range_ok_123_81:lte_101_87.
+Info    : Truncated carry-save logic. [RTLOPT-22]
+        : Truncated carry-save logic using instance csTrunc_range_ok_123_152:lte_101_87.
+Info    : Truncated carry-save logic. [RTLOPT-22]
+        : Truncated carry-save logic using instance csTrunc_range_ok_123_46:lte_101_87.
+Info    : Truncated carry-save logic. [RTLOPT-22]
+        : Truncated carry-save logic using instance csTrunc_launch_297_7:gte_203_89.
+Info    : Done implementing datapath configurations. [DPOPT-4]
+        : Selected 'very_slow' configuration 2 for module 'CDN_DP_region_13334'.
+          Optimizations applied to 'very_slow' configuration:
+            rewriting(19), factoring(0), sharing(14), cmultcse(0), downsizing(0), speculation(0)
+Info    : Implementing datapath configurations. [DPOPT-3]
+        : Implementing datapath configurations for 'CDN_DP_region_13320'

@@ -89,46 +89,22 @@
   <FileSets Version="1" Minor="32">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
       <Filter Type="Srcs"/>
-      <File Path="$PPRDIR/npu/rtl/noc_endpoint.sv">
+
+      <File Path="$PPRDIR/npu/rtl/debug/npu_jtag_debug.sv">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/noc_host_arbiter.sv">
+      <File Path="$PPRDIR/npu/rtl/debug/npu_debug_boot.sv">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/noc_router.sv">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/npu/rtl/npu_noc_core.sv">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/npu/rtl/npu_noc_soc.sv">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
+
       <File Path="$PPRDIR/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -325,63 +301,108 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/nmc.sv">
+      <File Path="$PPRDIR/npu/rtl/interconnect/npu_data_regfile.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/npu_clock_gate.sv">
+
+      <File Path="$PPRDIR/npu/rtl/common/npu_clock_gate.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/npu_cnn.sv">
+      <File Path="$PPRDIR/npu/rtl/common/npu_addr_pkg.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/npu_core.sv">
+      <File Path="$PPRDIR/npu/rtl/cnn/npu_stream_pkg.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/npu_dma_channel.sv">
+      <File Path="$PPRDIR/npu/rtl/cnn/npu_stream_control.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/npu_dma_regs.sv">
+      <File Path="$PPRDIR/npu/rtl/cnn/npu_stream_engine.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/npu_matmul.sv">
+      <File Path="$PPRDIR/npu/rtl/cnn/npu_stream.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/npu_mmio.sv">
+      <File Path="$PPRDIR/npu/rtl/cnn/npu_cnn.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/npu_vector.sv">
+      <File Path="$PPRDIR/npu/rtl/cnn/npu_cnn_mac.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/npu/rtl/matrix/npu_matrix_stream.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/npu/rtl/vector/npu_vector_stream.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/npu/rtl/top/npu_core.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+
+
+      <File Path="$PPRDIR/npu/rtl/matrix/npu_matmul.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/npu/rtl/control/npu_mmio.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/npu/rtl/vector/npu_vector.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -395,7 +416,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/npu/rtl/npu_soc.sv">
+      <File Path="$PPRDIR/npu/rtl/top/npu_soc.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -406,8 +427,26 @@
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="npu_soc"/>
         <Verilog_Define Name="NPU_FPGA_TEST"/>
+        <Verilog_Define Name="NPU_RF_BANK_WORDS=64"/>
+        <Verilog_Define Name="NPU_MATRIX_QUEUE_DEPTH=8"/>
+        <Verilog_Define Name="NPU_VECTOR_QUEUE_DEPTH=8"/>
+        <Verilog_Define Name="NPU_CNN_QUEUE_DEPTH=16"/>
       </Config>
-    </FileSet>
+          <File Path="$PPRDIR/npu/rtl/interconnect/xbar.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/npu/rtl/interconnect/xbar_stream.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+</FileSet>
     <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1" RelGenDir="$PGENDIR/constrs_1">
       <Filter Type="Constrs"/>
       <File Path="$PPRDIR/npu/constraints/npu_ooc.xdc">
@@ -896,10 +935,12 @@
         <Option Name="CosimOutDir" Val=""/>
         <Option Name="CosimXsa" Val=""/>
         <Option Name="CosimAIKernel" Val=""/>
-        <Option Name="LogicalNoCTop" Val=""/>
-        <Option Name="LogicalNoCTopLib" Val=""/>
         <Option Name="Dmv" Val=""/>
         <Verilog_Define Name="NPU_FPGA_TEST"/>
+        <Verilog_Define Name="NPU_RF_BANK_WORDS=64"/>
+        <Verilog_Define Name="NPU_MATRIX_QUEUE_DEPTH=8"/>
+        <Verilog_Define Name="NPU_VECTOR_QUEUE_DEPTH=8"/>
+        <Verilog_Define Name="NPU_CNN_QUEUE_DEPTH=16"/>
       </Config>
     </FileSet>
     <FileSet Name="utils_1" Type="Utils" RelSrcDir="$PSRCDIR/utils_1" RelGenDir="$PGENDIR/utils_1">

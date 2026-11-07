@@ -7,7 +7,7 @@ if {[version -short] ne "2025.2"} { error "Vivado 2025.2 required" }
 source sources.tcl
 open_project $project_file
 set_property PART xc7a35tcsg324-1 [current_project]
-foreach pattern {*/npu_rom.sv */cv32e40p_fpga_clock_gate.sv */boot.hex} {
+foreach pattern {*/npu_rom.sv */cv32e40p_fpga_clock_gate.sv */boot.hex */npu_dma_channel.sv */npu_dma_regs.sv} {
   set stale [get_files -quiet $pattern]
   if {[llength $stale]} { remove_files $stale }
 }
@@ -26,10 +26,10 @@ set_property top npu_soc [get_filesets sources_1]
 add_files -fileset sim_1 -norecurse [file join $npu_root tb tb_mnist.sv]
 add_files -fileset sim_1 -norecurse [file join $npu_root tb tb_mnist_stream.sv]
 add_files -fileset sim_1 -norecurse [file join $npu_root tb tb_mnist_latency.sv]
-set_property top tb_mnist_stream [get_filesets sim_1]
+set_property top tb_mnist_latency [get_filesets sim_1]
 set_property generic {} [get_filesets sources_1]
-set_property verilog_define {NPU_FPGA_TEST} [get_filesets sources_1]
-set_property verilog_define {NPU_FPGA_TEST} [get_filesets sim_1]
+set_property verilog_define [concat {NPU_FPGA_TEST} $npu_defines] [get_filesets sources_1]
+set_property verilog_define [concat {NPU_FPGA_TEST} $npu_defines] [get_filesets sim_1]
 set_property target_language Verilog [current_project]
 update_compile_order -fileset sources_1
 update_compile_order -fileset sim_1

@@ -1,0 +1,80 @@
+{
+  "scope": "Serial ordinary-xbar CNN feeder; no private gather/sink; no new PPA measured",
+  "before_engine_lines": 577,
+  "engine_lines": 252,
+  "before_inference_cycles": 25930,
+  "inference_cycles": 52978,
+  "window_bytes": 24,
+  "weight_buffer_bytes": 9,
+  "inflight_transactions": 1,
+  "tests": {
+    "latency": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-cnn_simple_final-latency-macro/result.json",
+      "summaries": [
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=53370 input_to_classification_us_at_50mhz=1067.40 PASS",
+        "SINGLE sample=0 useful_macs=39330 kernel_cycles=44595 elapsed_cycles=52978 kernel_utilization_pct=9.80 system_utilization_pct=8.25 latency_us_at_50mhz=1059.56 PASS",
+        "SINGLE_INPUT sample=1 ingress_cycles=392 input_to_classification_cycles=53370 input_to_classification_us_at_50mhz=1067.40 PASS",
+        "SINGLE sample=1 useful_macs=39330 kernel_cycles=44595 elapsed_cycles=52978 kernel_utilization_pct=9.80 system_utilization_pct=8.25 latency_us_at_50mhz=1059.56 PASS",
+        "SINGLE_INPUT sample=2 ingress_cycles=392 input_to_classification_cycles=53370 input_to_classification_us_at_50mhz=1067.40 PASS",
+        "SINGLE sample=2 useful_macs=39330 kernel_cycles=44595 elapsed_cycles=52978 kernel_utilization_pct=9.80 system_utilization_pct=8.25 latency_us_at_50mhz=1059.56 PASS",
+        "SINGLE_INPUT sample=3 ingress_cycles=392 input_to_classification_cycles=53370 input_to_classification_us_at_50mhz=1067.40 PASS",
+        "SINGLE sample=3 useful_macs=39330 kernel_cycles=44595 elapsed_cycles=52978 kernel_utilization_pct=9.80 system_utilization_pct=8.25 latency_us_at_50mhz=1059.56 PASS",
+        "SINGLE_INPUT sample=4 ingress_cycles=392 input_to_classification_cycles=53370 input_to_classification_us_at_50mhz=1067.40 PASS",
+        "SINGLE sample=4 useful_macs=39330 kernel_cycles=44595 elapsed_cycles=52978 kernel_utilization_pct=9.80 system_utilization_pct=8.25 latency_us_at_50mhz=1059.56 PASS",
+        "SINGLE_INPUT sample=5 ingress_cycles=392 input_to_classification_cycles=53370 input_to_classification_us_at_50mhz=1067.40 PASS",
+        "SINGLE sample=5 useful_macs=39330 kernel_cycles=44595 elapsed_cycles=52978 kernel_utilization_pct=9.80 system_utilization_pct=8.25 latency_us_at_50mhz=1059.56 PASS",
+        "SINGLE_INPUT sample=6 ingress_cycles=392 input_to_classification_cycles=53370 input_to_classification_us_at_50mhz=1067.40 PASS",
+        "SINGLE sample=6 useful_macs=39330 kernel_cycles=44595 elapsed_cycles=52978 kernel_utilization_pct=9.80 system_utilization_pct=8.25 latency_us_at_50mhz=1059.56 PASS",
+        "SINGLE_INPUT sample=7 ingress_cycles=392 input_to_classification_cycles=53370 input_to_classification_us_at_50mhz=1067.40 PASS",
+        "SINGLE sample=7 useful_macs=39330 kernel_cycles=44595 elapsed_cycles=52978 kernel_utilization_pct=9.80 system_utilization_pct=8.25 latency_us_at_50mhz=1059.56 PASS",
+        "SINGLE_INPUT sample=8 ingress_cycles=392 input_to_classification_cycles=53370 input_to_classification_us_at_50mhz=1067.40 PASS",
+        "SINGLE sample=8 useful_macs=39330 kernel_cycles=44595 elapsed_cycles=52978 kernel_utilization_pct=9.80 system_utilization_pct=8.25 latency_us_at_50mhz=1059.56 PASS",
+        "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=53370 input_to_classification_us_at_50mhz=1067.40 PASS",
+        "SINGLE sample=9 useful_macs=39330 kernel_cycles=44595 elapsed_cycles=52978 kernel_utilization_pct=9.80 system_utilization_pct=8.25 latency_us_at_50mhz=1059.56 PASS",
+        "SINGLE PASS samples=10 checks=120"
+      ]
+    },
+    "unitroutes": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-cnn_simple_final-unitroutes-macro/result.json",
+      "summaries": [
+        "UNIT ROUTE producer=0 consumer=1 PASS",
+        "UNIT ROUTE producer=0 consumer=2 PASS",
+        "UNIT ROUTE producer=1 consumer=0 PASS",
+        "UNIT ROUTE producer=1 consumer=2 PASS",
+        "UNIT ROUTE producer=2 consumer=0 PASS",
+        "UNIT ROUTE producer=2 consumer=1 PASS",
+        "UNIT ROUTES PASS checks=24 six directed pairs, three-stage chain, 256-word GEMM, streamed DOT9 weights"
+      ]
+    },
+    "jtag": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-cnn_simple_final-jtag-macro/result.json",
+      "summaries": [
+        "JTAG PASS checks=42"
+      ]
+    },
+    "cnnqueues": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-cnn_simple_final-cnnqueues/result.json",
+      "summaries": [
+        "CNN QUEUE PASS depth=8 descriptor_bits=32 checks=85 compact tasks, immutable config, order, overflow, reset, faults"
+      ]
+    },
+    "vectorprogram": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-cnn_simple_final-vectorprogram/result.json",
+      "summaries": [
+        "VECTOR PROGRAM PASS jobs=143 checks=3897 memory source, signed INT32, ties, saturation, byte masks, faults/retry"
+      ]
+    },
+    "queues": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-cnn_simple_final-queues/result.json",
+      "summaries": [
+        "QUEUES PASS matrix_depth=8 vector_depth=8 checks=339 snapshots, wrap, overflow, concurrent engines, invalid descriptor, reset"
+      ]
+    },
+    "cnncompute": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-cnn_simple_final-cnncompute/result.json",
+      "summaries": [
+        "CNN COMPUTE PASS checks=2008 accepted=933 emitted=737 stalls=714 clear/load/accumulate/emit/masks/offset/modulo32/flush"
+      ]
+    }
+  }
+}

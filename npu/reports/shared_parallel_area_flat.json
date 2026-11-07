@@ -1,0 +1,524 @@
+{
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-shared-parallel-area",
+  "scope": "mapped cell area, two SRAM macros included, PADs and PNR overhead excluded",
+  "total_area_mm2": 2.91251609,
+  "standard_cell_area_mm2": 2.109628908,
+  "buckets": {
+    "XBAR": {
+      "area_um2": 781759.014,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_xbar",
+          "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6_CACHE_WOR",
+          "cells": 33718,
+          "area_um2": 781759.014
+        }
+      ],
+      "area_mm2": 0.7817590139999999,
+      "percent_total": 26.841362926170138
+    },
+    "MMIO / task queues": {
+      "area_um2": 243575.002,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_mmio",
+          "module": "npu_mmio_CACHE_WORDS16",
+          "cells": 7529,
+          "area_um2": 243575.002
+        }
+      ],
+      "area_mm2": 0.243575002,
+      "percent_total": 8.363043996093426
+    },
+    "Vector": {
+      "area_um2": 309031.475,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_vector",
+          "module": "npu_vector",
+          "cells": 10790,
+          "area_um2": 176656.525
+        },
+        {
+          "indent": 4,
+          "instance": "i_vector_stream",
+          "module": "npu_vector_stream_GATHER1",
+          "cells": 5494,
+          "area_um2": 114988.966
+        },
+        {
+          "indent": 4,
+          "instance": "i_vector_light",
+          "module": "npu_vector_light",
+          "cells": 1044,
+          "area_um2": 17385.984
+        }
+      ],
+      "area_mm2": 0.309031475,
+      "percent_total": 10.610464129659109
+    },
+    "CNN": {
+      "area_um2": 205049.242,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_stream_i_engine",
+          "module": "npu_stream_engine_RF_SINK1",
+          "cells": 7787,
+          "area_um2": 158074.157
+        },
+        {
+          "indent": 4,
+          "instance": "i_stream_i_control",
+          "module": "npu_stream_control_QUEUE_DEPTH8",
+          "cells": 1474,
+          "area_um2": 46975.085
+        }
+      ],
+      "area_mm2": 0.205049242,
+      "percent_total": 7.04027842812707
+    },
+    "CPU": {
+      "area_um2": 294694.624,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_id_stage_i",
+          "module": "cv32e40p_id_stage_COREV_PULP0_COREV_CLUSTER0_N_HWL",
+          "cells": 5249,
+          "area_um2": 127519.168
+        },
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_ex_stage_i",
+          "module": "cv32e40p_ex_stage_COREV_PULP0_FPU0_APU_NARGS_CPU3_",
+          "cells": 3951,
+          "area_um2": 79314.771
+        },
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_cs_registers_i",
+          "module": "cv32e40p_cs_registers_N_HWLP2_APU0_A_EXTENSION0_FP",
+          "cells": 1819,
+          "area_um2": 48718.074
+        },
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_if_stage_i",
+          "module": "cv32e40p_if_stage_COREV_PULP0_PULP_OBI0_PULP_SECUR",
+          "cells": 1100,
+          "area_um2": 28774.682
+        },
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_load_store_unit_i",
+          "module": "cv32e40p_load_store_unit_PULP_OBI0",
+          "cells": 550,
+          "area_um2": 10190.118
+        },
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_sleep_unit_i",
+          "module": "cv32e40p_sleep_unit_COREV_CLUSTER0",
+          "cells": 7,
+          "area_um2": 177.811
+        }
+      ],
+      "area_mm2": 0.294694624,
+      "percent_total": 10.118214454224699
+    },
+    "JTAG / debug": {
+      "area_um2": 104866.899,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_debug",
+          "module": "npu_jtag_debug",
+          "cells": 4464,
+          "area_um2": 104401.517
+        },
+        {
+          "indent": 4,
+          "instance": "i_boot",
+          "module": "npu_debug_boot",
+          "cells": 41,
+          "area_um2": 465.382
+        }
+      ],
+      "area_mm2": 0.104866899,
+      "percent_total": 3.6005603320117623
+    },
+    "Matrix": {
+      "area_um2": 47881.702,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_matrix_stream",
+          "module": "npu_matrix_stream_GATHER1",
+          "cells": 2005,
+          "area_um2": 47881.702
+        }
+      ],
+      "area_mm2": 0.047881702,
+      "percent_total": 1.6439978534161503
+    },
+    "SRAM macros": {
+      "area_um2": 802887.182,
+      "count": 2,
+      "area_mm2": 0.802887182,
+      "percent_total": 27.566789579521263
+    },
+    "Top / core glue": {
+      "area_um2": 122770.94999999995,
+      "area_mm2": 0.12277094999999995,
+      "percent_total": 4.215288300776391
+    }
+  },
+  "hierarchical_rows": [
+    {
+      "indent": 0,
+      "instance": "npu_asic_top",
+      "module": null,
+      "cells": 92819,
+      "area_um2": 2912516.09
+    },
+    {
+      "indent": 2,
+      "instance": "i_core",
+      "module": "npu_core",
+      "cells": 92807,
+      "area_um2": 2109563.053
+    },
+    {
+      "indent": 4,
+      "instance": "i_xbar",
+      "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6_CACHE_WOR",
+      "cells": 33718,
+      "area_um2": 781759.014
+    },
+    {
+      "indent": 6,
+      "instance": "i_regfile",
+      "module": "npu_data_regfile_GATHER_PORTS9_NUM_MASTERS7_ID_W3",
+      "cells": 16613,
+      "area_um2": 350874.182
+    },
+    {
+      "indent": 6,
+      "instance": "i_stream_routes",
+      "module": "xbar_stream_MASTERS6",
+      "cells": 10760,
+      "area_um2": 257071.091
+    },
+    {
+      "indent": 4,
+      "instance": "i_mmio",
+      "module": "npu_mmio_CACHE_WORDS16",
+      "cells": 7529,
+      "area_um2": 243575.002
+    },
+    {
+      "indent": 4,
+      "instance": "i_vector",
+      "module": "npu_vector",
+      "cells": 10790,
+      "area_um2": 176656.525
+    },
+    {
+      "indent": 4,
+      "instance": "i_stream_i_engine",
+      "module": "npu_stream_engine_RF_SINK1",
+      "cells": 7787,
+      "area_um2": 158074.157
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_id_stage_i",
+      "module": "cv32e40p_id_stage_COREV_PULP0_COREV_CLUSTER0_N_HWL",
+      "cells": 5249,
+      "area_um2": 127519.168
+    },
+    {
+      "indent": 6,
+      "instance": "register_file_i",
+      "module": "cv32e40p_register_file_ADDR_WIDTH6_DATA_WIDTH32_FP",
+      "cells": 3610,
+      "area_um2": 93945.779
+    },
+    {
+      "indent": 6,
+      "instance": "controller_i",
+      "module": "cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU",
+      "cells": 316,
+      "area_um2": 4074.291
+    },
+    {
+      "indent": 6,
+      "instance": "decoder_i",
+      "module": "cv32e40p_decoder_COREV_PULP0_COREV_CLUSTER0_A_EXTE",
+      "cells": 311,
+      "area_um2": 3624.275
+    },
+    {
+      "indent": 6,
+      "instance": "int_controller_i",
+      "module": "cv32e40p_int_controller_PULP_SECURE0",
+      "cells": 14,
+      "area_um2": 272.205
+    },
+    {
+      "indent": 4,
+      "instance": "i_vector_stream",
+      "module": "npu_vector_stream_GATHER1",
+      "cells": 5494,
+      "area_um2": 114988.966
+    },
+    {
+      "indent": 6,
+      "instance": "i_operand_read",
+      "module": "npu_multi_read_GATHER1_1",
+      "cells": 324,
+      "area_um2": 11116.493
+    },
+    {
+      "indent": 4,
+      "instance": "i_debug",
+      "module": "npu_jtag_debug",
+      "cells": 4464,
+      "area_um2": 104401.517
+    },
+    {
+      "indent": 6,
+      "instance": "i_dm_i_dm_csrs",
+      "module": "dm_csrs_NrHarts1_BusWidth32_SelectableHarts1",
+      "cells": 2737,
+      "area_um2": 63412.742
+    },
+    {
+      "indent": 6,
+      "instance": "i_dtm",
+      "module": "dmi_jtag",
+      "cells": 629,
+      "area_um2": 22669.83
+    },
+    {
+      "indent": 8,
+      "instance": "i_dmi_cdc",
+      "module": "dmi_cdc",
+      "cells": 178,
+      "area_um2": 9931.085
+    },
+    {
+      "indent": 10,
+      "instance": "i_cdc_req",
+      "module": "cdc_2phase_Ttype_dm_dmi_req_t_220_25",
+      "cells": 99,
+      "area_um2": 5531.904
+    },
+    {
+      "indent": 12,
+      "instance": "i_dst",
+      "module": "cdc_2phase_dst_Ttype_dm_dmi_req_t_220_25",
+      "cells": 51,
+      "area_um2": 2805.466
+    },
+    {
+      "indent": 12,
+      "instance": "i_src",
+      "module": "cdc_2phase_src_Ttype_dm_dmi_req_t_220_25",
+      "cells": 48,
+      "area_um2": 2726.438
+    },
+    {
+      "indent": 10,
+      "instance": "i_cdc_resp",
+      "module": "cdc_2phase_Ttype_dm_dmi_resp_t_226_26",
+      "cells": 79,
+      "area_um2": 4399.181
+    },
+    {
+      "indent": 12,
+      "instance": "i_dst",
+      "module": "cdc_2phase_dst_Ttype_dm_dmi_resp_t_226_26",
+      "cells": 41,
+      "area_um2": 2236.909
+    },
+    {
+      "indent": 12,
+      "instance": "i_src",
+      "module": "cdc_2phase_src_Ttype_dm_dmi_resp_t_226_26",
+      "cells": 38,
+      "area_um2": 2162.272
+    },
+    {
+      "indent": 8,
+      "instance": "i_dmi_jtag_tap",
+      "module": "dmi_jtag_tap_IrLength5_IdcodeValue1",
+      "cells": 236,
+      "area_um2": 6135.584
+    },
+    {
+      "indent": 6,
+      "instance": "i_dm_i_dm_mem",
+      "module": "dm_mem_NrHarts1_BusWidth32_SelectableHarts1_DmBase",
+      "cells": 907,
+      "area_um2": 14119.526
+    },
+    {
+      "indent": 8,
+      "instance": "gen_rom_snd_scratch.i_debug_rom",
+      "module": "debug_rom",
+      "cells": 148,
+      "area_um2": 1955.923
+    },
+    {
+      "indent": 6,
+      "instance": "i_reset",
+      "module": "rstgen",
+      "cells": 4,
+      "area_um2": 195.373
+    },
+    {
+      "indent": 8,
+      "instance": "i_rstgen_bypass",
+      "module": "rstgen_bypass",
+      "cells": 4,
+      "area_um2": 195.373
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_ex_stage_i",
+      "module": "cv32e40p_ex_stage_COREV_PULP0_FPU0_APU_NARGS_CPU3_",
+      "cells": 3951,
+      "area_um2": 79314.771
+    },
+    {
+      "indent": 6,
+      "instance": "alu_i",
+      "module": "cv32e40p_alu",
+      "cells": 2101,
+      "area_um2": 38536.736
+    },
+    {
+      "indent": 8,
+      "instance": "alu_div_i",
+      "module": "cv32e40p_alu_div",
+      "cells": 582,
+      "area_um2": 14453.197
+    },
+    {
+      "indent": 8,
+      "instance": "ff_one_i",
+      "module": "cv32e40p_ff_one",
+      "cells": 72,
+      "area_um2": 796.858
+    },
+    {
+      "indent": 4,
+      "instance": "i_matrix_stream",
+      "module": "npu_matrix_stream_GATHER1",
+      "cells": 2005,
+      "area_um2": 47881.702
+    },
+    {
+      "indent": 6,
+      "instance": "i_operand_read",
+      "module": "npu_multi_read_GATHER1",
+      "cells": 330,
+      "area_um2": 10954.048
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_cs_registers_i",
+      "module": "cv32e40p_cs_registers_N_HWLP2_APU0_A_EXTENSION0_FP",
+      "cells": 1819,
+      "area_um2": 48718.074
+    },
+    {
+      "indent": 4,
+      "instance": "i_stream_i_control",
+      "module": "npu_stream_control_QUEUE_DEPTH8",
+      "cells": 1474,
+      "area_um2": 46975.085
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_if_stage_i",
+      "module": "cv32e40p_if_stage_COREV_PULP0_PULP_OBI0_PULP_SECUR",
+      "cells": 1100,
+      "area_um2": 28774.682
+    },
+    {
+      "indent": 6,
+      "instance": "prefetch_buffer_i",
+      "module": "cv32e40p_prefetch_buffer_PULP_OBI0_COREV_PULP0",
+      "cells": 378,
+      "area_um2": 12690.451
+    },
+    {
+      "indent": 8,
+      "instance": "fifo_i",
+      "module": "cv32e40p_fifo_FALL_THROUGH0_DATA_WIDTH32_DEPTH2",
+      "cells": 118,
+      "area_um2": 5027.008
+    },
+    {
+      "indent": 6,
+      "instance": "aligner_i",
+      "module": "cv32e40p_aligner",
+      "cells": 201,
+      "area_um2": 5885.331
+    },
+    {
+      "indent": 6,
+      "instance": "compressed_decoder_i",
+      "module": "cv32e40p_compressed_decoder_FPU0_ZFINX0",
+      "cells": 255,
+      "area_um2": 3068.89
+    },
+    {
+      "indent": 4,
+      "instance": "i_vector_light",
+      "module": "npu_vector_light",
+      "cells": 1044,
+      "area_um2": 17385.984
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_load_store_unit_i",
+      "module": "cv32e40p_load_store_unit_PULP_OBI0",
+      "cells": 550,
+      "area_um2": 10190.118
+    },
+    {
+      "indent": 4,
+      "instance": "i_boot",
+      "module": "npu_debug_boot",
+      "cells": 41,
+      "area_um2": 465.382
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_sleep_unit_i",
+      "module": "cv32e40p_sleep_unit_COREV_CLUSTER0",
+      "cells": 7,
+      "area_um2": 177.811
+    },
+    {
+      "indent": 6,
+      "instance": "core_clock_gate_i",
+      "module": "cv32e40p_clock_gate",
+      "cells": 2,
+      "area_um2": 41.709
+    }
+  ],
+  "xbar_breakdown": {
+    "shared_rf_mm2": 0.350874182,
+    "stream_fifo_mm2": 0.257071091,
+    "sram_read_cache_and_arbitration_mm2": 0.17381374100000002
+  },
+  "compute_boundaries_preserved": false
+}

@@ -1,0 +1,2307 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2021 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+Version: 19.17-s144_1, built Fri Aug 20 02:53:14 PDT 2021
+Options: -no_gui -batch -files ../eda-runs/20261103-regfile-fullchip/scripts/synth_chip.tcl 
+Date:    Tue Nov 03 12:43:25 2026
+Host:    tc-01a0e839f9eb (x86_64 w/Linux 6.12.0-211.54.1.el10_2.x86_64) (24cores*48cpus*2physical cpus*Intel(R) Xeon(R) Platinum 8160 CPU @ 2.10GHz 33792KB) (16777216KB)
+PID:     2213284
+OS:      AlmaLinux release 8.10 (Cerulean Leopard)
+
+Checking out license: Genus_Synthesis
+
+Loading tool scripts...
+Finished loading tool scripts (8 seconds elapsed).
+
+#@ Processing -files option
+@genus 1> source ../eda-runs/20261103-regfile-fullchip/scripts/synth_chip.tcl
+#@ Begin verbose source ../eda-runs/20261103-regfile-fullchip/scripts/synth_chip.tcl
+@file(synth_chip.tcl) 1: set_db max_cpus_per_server 8
+  Setting attribute of root '/': 'max_cpus_per_server' = 8
+@file(synth_chip.tcl) 2: set_db design_process_node 180
+  Setting attribute of root '/': 'design_process_node' = 180
+@file(synth_chip.tcl) 3: read_libs [list {/home/almalinux/tsmc180/tcb018gbwp7t_290a/TSMCHOME/digital/Front_End/timing_power_noise/NLDM/tcb018gbwp7t_270a/tcb018gbwp7ttc.lib} {/home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8_tt_1p8_25C_syn.lib}]
+
+Threads Configured:6
+
+  Message Summary for Library both libraries:
+  *******************************************
+  Missing a function attribute in the output pin definition. [LBR-518]: 1
+  An unsupported construct was detected in this library. [LBR-40]: 2
+  *******************************************
+ 
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.800000, 25.000000) in library 'tcb018gbwp7ttc.lib'.
+        : The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.800000, 25.000000) in library 'RA1SHD_2048x32M8_tt_1p8_25C_syn.lib'.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'ANTENNABWP7T' must have an output pin.
+        : Add the missing output pin(s), then reload the library. Else the library cell will be marked as timing model i.e. unusable. Timing_model means that the cell does not have any defined function. If there is no output pin, Genus will mark library cell as unusable i.e. the attribute 'usable' will be marked to 'false' on the libcell. Therefore, the cell is not used for mapping and it will not be picked up from the library for synthesis. If you query the attribute 'unusable_reason' on the libcell; result will be: 'Library cell has no output pins.'Note: The message LBR-9 is only for the logical pins and not for the power_ground pins. Genus will depend upon the output function defined in the pin group (output pin) of the cell, to use it for mapping. The pg_pin will not have any function defined.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'ANTENNABWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP16BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP16BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP32BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP32BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP4BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP4BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP64BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP64BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP8BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP8BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAPBWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAPBWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP10BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP10BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP2BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP2BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP3BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP3BWP7T' must have an output pin.
+@file(synth_chip.tcl) 4: read_physical -lef [list {/home/almalinux/tsmc180/tcb018gbwp7t_290a/TSMCHOME/digital/Back_End/lef/tcb018gbwp7t_270a/lef/tcb018gbwp7t_6lm.lef} {/home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8.vclef} {/home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8_ant.lef}]
+Warning : Macro already defined before. [PHYS-107]
+        : Macro 'RA1SHD_2048x32M8' is already defined. Ignoring this definition in file '/home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8_ant.lef'.
+
+  According to lef_library, there are total 6 routing layers [ V(3) / H(3) ]
+
+  Libraries have 344 usable logic and 147 usable sequential lib-cells.
+@file(synth_chip.tcl) 5: read_hdl -sv [list {/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v} {/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/chip_top.sv}]
+@file(synth_chip.tcl) 6: elaborate mynpu_asic_top
+Info    : Elaborating Design. [ELAB-1]
+        : Elaborating top-level block 'mynpu_asic_top' from file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/chip_top.sv'.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'fault_code_o' in module 'npu_dma_channel' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 22, column 28, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_valid_o' in module 'npu_dma_channel' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 20, column 57, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_data_o' in module 'npu_dma_channel' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 23, column 50, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_keep_o' in module 'npu_dma_channel' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 22, column 39, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_last_o' in module 'npu_dma_channel' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 20, column 68, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'fault_code_o' in module 'npu_dma_channel_1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 2957, column 28, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'rx_ready_o' in module 'npu_dma_channel_1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 2955, column 45, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'wdata_o' in module 'npu_dma_channel_1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 2958, column 67, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'fault_code_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 5793, column 28, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'rx_ready_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 5791, column 45, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_valid_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 5791, column 57, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_data_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 5794, column 50, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_keep_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 5793, column 39, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_last_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 5791, column 68, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'stream_abort_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 5792, column 22, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'data_o' in module 'npu_debug_boot' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 8715, column 23, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'command_o[src]' in module 'npu_cnn_control_QUEUE_DEPTH16' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 8797, column 8, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'done_o' in module 'npu_cnn_control_QUEUE_DEPTH16' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 8798, column 46, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'valid_o' in module 'npu_cnn_mac' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 22684, column 28, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'data_o' in module 'npu_cnn_mac' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 22686, column 23, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'vector_mode_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 81790, column 21, hid = 0.
+        : Run check_design to check 'Undriven Port(s)/Pin(s)' section for all undriven module input ports. It is better to double confirm with designer if these undriven ports are expected. During syn_gen the undriven ports are controlled by attribute 'hdl_unconnected_value', the default value is 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'bmask_a_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 81790, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'bmask_b_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 81790, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'imm_vec_ext_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 81790, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'is_clpx_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 81790, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'is_subrot_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 81790, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'clpx_shift_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 81790, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'is_fetch_failed_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'mret_insn_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'uret_insn_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'pc_id_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_start_addr_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_start_addr_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_end_addr_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_end_addr_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_counter_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_counter_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'data_we_ex_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'data_load_event_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'data_err_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/inputs/core.v' on line 99978, column 67, hid = 0.
+Info    : Done Elaborating Design. [ELAB-3]
+        : Done elaborating 'mynpu_asic_top'.
+Checking for analog nets...
+Check completed for analog nets.
+Checking for source RTL...
+Check completed for source RTL.
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+--------------------------------------------
+| Trick | Accepts | Rejects | Runtime (ms) | 
+--------------------------------------------
+--------------------------------------------
+UM:   timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                      elaborate
+@file(synth_chip.tcl) 7: read_sdc {/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/scripts/chip.sdc}
+Statistics for commands executed by read_sdc:
+ "all_clocks"               - successful      2 , failed      0 (runtime  0.00)
+ "all_inputs"               - successful      1 , failed      0 (runtime  0.00)
+ "all_outputs"              - successful      1 , failed      0 (runtime  0.00)
+ "create_clock"             - successful      2 , failed      0 (runtime  0.00)
+ "get_clocks"               - successful      2 , failed      0 (runtime  0.00)
+ "get_ports"                - successful      7 , failed      0 (runtime  0.00)
+ "set_clock_groups"         - successful      1 , failed      0 (runtime  0.00)
+ "set_clock_uncertainty"    - successful      2 , failed      0 (runtime  0.00)
+ "set_false_path"           - successful      1 , failed      0 (runtime  0.00)
+ "set_input_delay"          - successful      2 , failed      0 (runtime  0.00)
+ "set_input_transition"     - successful      1 , failed      0 (runtime  0.00)
+ "set_load"                 - successful      1 , failed      0 (runtime  0.00)
+ "set_output_delay"         - successful      2 , failed      0 (runtime  0.00)
+Total runtime 0.0
+@file(synth_chip.tcl) 8: set_db syn_generic_effort low
+  Setting attribute of root '/': 'syn_generic_effort' = low
+@file(synth_chip.tcl) 9: set_db syn_map_effort low
+  Setting attribute of root '/': 'syn_map_effort' = low
+@file(synth_chip.tcl) 10: set_db syn_opt_effort low
+  Setting attribute of root '/': 'syn_opt_effort' = low
+@file(synth_chip.tcl) 11: syn_generic
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'fault_code_o' in module 'npu_dma_channel'.
+        : The 'hdl_unconnected_value' attribute controls treatment of undriven output port.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_valid_o' in module 'npu_dma_channel'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_data_o' in module 'npu_dma_channel'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_keep_o' in module 'npu_dma_channel'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_last_o' in module 'npu_dma_channel'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'fault_code_o' in module 'npu_dma_channel_1'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'rx_ready_o' in module 'npu_dma_channel_1'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'wdata_o' in module 'npu_dma_channel_1'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'fault_code_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'rx_ready_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_valid_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_data_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_keep_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_last_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'stream_abort_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'data_o' in module 'npu_debug_boot'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'command_o[src]' in module 'npu_cnn_control_QUEUE_DEPTH16'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'done_o' in module 'npu_cnn_control_QUEUE_DEPTH16'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'valid_o' in module 'npu_cnn_mac'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'data_o' in module 'npu_cnn_mac'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'vector_mode_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+        : The 'hdl_unconnected_value' attribute controls treatment of undriven input port.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'bmask_a_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'bmask_b_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'imm_vec_ext_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'is_clpx_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'is_subrot_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'clpx_shift_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'is_fetch_failed_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'mret_insn_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'uret_insn_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'pc_id_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_start_addr_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_start_addr_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_end_addr_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_end_addr_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_counter_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_counter_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'data_we_ex_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'data_load_event_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'data_err_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 2 sequential instances.
+        : Optimizations such as constant propagation or redundancy removal could change the connections so a hierarchical instance does not drive any primary outputs anymore. To see the list of deleted hierarchical instances, set the 'information_level' attribute to 2 or above. If the message is truncated set the message attribute 'truncate' to false to see the complete list. To prevent this optimization, set the 'delete_unloaded_insts' root/subdesign attribute to 'false' or 'preserve' instance attribute to 'true'.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 1 sequential instance.
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Info    : Synthesizing. [SYNTH-1]
+        : Synthesizing 'mynpu_asic_top' to generic gates using 'low' effort.
+PBS_Generic-Start - Elapsed_Time 0, CPU_Time 0.0
+stamp 'PBS_Generic-Start' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+TNS Restructuring config:  at stage: generic applied.
+Info    : Partition Based Synthesis execution skipped. [PHYS-752]
+        : 'low' effort synthesis done in non-distributed manner. Set synthesize -effort to 'medium' or 'high' to turn on distributed optimization.
+Starting mux data reorder optimization [v1.0] (stage: post_to_gen_setup, startdef: mynpu_asic_top, recur: true)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.002s)
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+--------------------------------------------
+| Trick | Accepts | Rejects | Runtime (ms) | 
+--------------------------------------------
+--------------------------------------------
+Starting reconvergence optimization [v1.0] (stage: pre_rtlopt, startdef: mynpu_asic_top, recur: true)
+Completed reconvergence optimization (accepts: 0, rejects: 0, runtime: 0.003s)
+Starting logic restructure optimization [v1.0] (stage: pre_rtlopt, startdef: mynpu_asic_top, recur: true)
+Completed logic restructure optimization (accepts: 0, rejects: 0, runtime: 0.065s)
+Starting optimize datapath elements [v1.0] (stage: pre_rtlopt, startdef: mynpu_asic_top, recur: true)
+Completed optimize datapath elements (accepts: 0, rejects: 0, runtime: 0.001s)
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+--------------------------------------------
+| Trick | Accepts | Rejects | Runtime (ms) | 
+--------------------------------------------
+--------------------------------------------
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 1 sequential instance.
+Info    : Pre-processed datapath logic. [DPOPT-6]
+        : No pre-processing optimizations applied to datapath logic in 'mynpu_asic_top'.
+Info    : Skipping datapath optimization. [DPOPT-5]
+        : There is no datapath logic in 'mynpu_asic_top'.
+Starting mux data reorder optimization [v1.0] (stage: post_rtlopt, startdef: mynpu_asic_top, recur: true)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.003s)
+Starting mux speculation [v1.0] (stage: post_muxopt, startdef: mynpu_asic_top, recur: true)
+Starting speculation optimization
+Completed speculation optimization (accepts:0)
+Completed mux speculation (accepts: 0, rejects: 0, runtime: 4.582s)
+==================================
+Stage : to_generic 
+==================================
+  =================
+   Message Summary
+  =================
+--------------------------------------------------------------------------------
+|     Id      |  Sev   |Count |                 Message Text                   |
+--------------------------------------------------------------------------------
+| CDFG-500    |Info    |  199 |Unused module input port.                       |
+|             |        |      |In port definition within the module, the input |
+|             |        |      | port is not used in any assignment statements  |
+|             |        |      | or conditional expressions for decision        |
+|             |        |      | statements.                                    |
+| CDFG-738    |Info    |    1 |Common subexpression eliminated.                |
+| CDFG-739    |Info    |    1 |Common subexpression kept.                      |
+| DPOPT-5     |Info    |    1 |Skipping datapath optimization.                 |
+| DPOPT-6     |Info    |    1 |Pre-processed datapath logic.                   |
+| ELAB-1      |Info    |    1 |Elaborating Design.                             |
+| ELAB-2      |Info    |   48 |Elaborating Subdesign.                          |
+| ELAB-3      |Info    |    1 |Done Elaborating Design.                        |
+| ELABUTL-123 |Warning |  274 |Undriven module output port.                    |
+| ELABUTL-127 |Warning |  254 |Undriven module input port.                     |
+|             |        |      |Run check_design to check 'Undriven Port(s)     |
+|             |        |      | /Pin(s)                                        |
+|             |        |      | ' section for all undriven module input ports. |
+|             |        |      | It is better to double confirm with designer   |
+|             |        |      | if these undriven ports are expected. During   |
+|             |        |      | syn_gen the undriven ports are controlled by   |
+|             |        |      | attribute 'hdl_unconnected_value', the default |
+|             |        |      | value is 0.                                    |
+| ELABUTL-128 |Info    |  274 |Undriven module output port.                    |
+|             |        |      |The 'hdl_unconnected_value' attribute controls  |
+|             |        |      | treatment of undriven output port.             |
+| ELABUTL-131 |Info    |  254 |Undriven module input port.                     |
+|             |        |      |The 'hdl_unconnected_value' attribute controls  |
+|             |        |      | treatment of undriven input port.              |
+| ELABUTL-132 |Info    |   13 |Unused instance port.                           |
+|             |        |      |Please check the reported scenario of           |
+|             |        |      | unconnected instance port to ensure that it    |
+|             |        |      | matches the design intent.                     |
+| GLO-34      |Info    |    3 |Deleting instances not driving any primary      |
+|             |        |      | outputs.                                       |
+|             |        |      |Optimizations such as constant propagation or   |
+|             |        |      | redundancy removal could change the            |
+|             |        |      | connections so a hierarchical instance does    |
+|             |        |      | not drive any primary outputs anymore. To see  |
+|             |        |      | the list of deleted hierarchical instances,    |
+|             |        |      | set the 'information_level' attribute to 2 or  |
+|             |        |      | above. If the message is truncated set the     |
+|             |        |      | message attribute 'truncate' to false to see   |
+|             |        |      | the complete list. To prevent this             |
+|             |        |      | optimization, set the 'delete_unloaded_insts'  |
+|             |        |      | root/subdesign attribute to 'false' or         |
+|             |        |      | 'preserve' instance attribute to 'true'.       |
+| GLO-42      |Info    |    1 |Equivalent sequential instances have been       |
+|             |        |      | merged.                                        |
+|             |        |      |To prevent merging of sequential instances, set |
+|             |        |      | the 'optimize_merge_flops' and                 |
+|             |        |      | 'optimize_merge_latches' root attributes to    |
+|             |        |      | 'false' or the 'optimize_merge_seq' instance   |
+|             |        |      | attribute to 'false'.                          |
+| LBR-9       |Warning |   34 |Library cell has no output pins defined.        |
+|             |        |      |Add the missing output pin(s)                   |
+|             |        |      | , then reload the library. Else the library    |
+|             |        |      | cell will be marked as timing model i.e.       |
+|             |        |      | unusable. Timing_model means that the cell     |
+|             |        |      | does not have any defined function. If there   |
+|             |        |      | is no output pin, Genus will mark library cell |
+|             |        |      | as unusable i.e. the attribute 'usable' will   |
+|             |        |      | be marked to 'false' on the libcell.           |
+|             |        |      | Therefore, the cell is not used for mapping    |
+|             |        |      | and it will not be picked up from the library  |
+|             |        |      | for synthesis. If you query the attribute      |
+|             |        |      | 'unusable_reason' on the libcell; result will  |
+|             |        |      | be: 'Library cell has no output pins.'Note:    |
+|             |        |      | The message LBR-9 is only for the logical pins |
+|             |        |      | and not for the power_ground pins. Genus will  |
+|             |        |      | depend upon the output function defined in the |
+|             |        |      | pin group (output pin)                         |
+|             |        |      | of the cell, to use it for mapping. The pg_pin |
+|             |        |      | will not have any function defined.            |
+| LBR-40      |Info    |    2 |An unsupported construct was detected in this   |
+|             |        |      | library.                                       |
+|             |        |      |Check to see if this construct is really needed |
+|             |        |      | for synthesis. Many liberty constructs are not |
+|             |        |      | actually required.                             |
+| LBR-41      |Info    |   33 |An output library pin lacks a function          |
+|             |        |      | attribute.                                     |
+|             |        |      |If the remainder of this library cell's         |
+|             |        |      | semantic checks are successful, it will be     |
+|             |        |      | considered as a timing-model                   |
+|             |        |      | (because one of its outputs does not have a va |
+|             |        |      | lid function.                                  |
+| LBR-155     |Info    |   72 |Mismatch in unateness between 'timing_sense'    |
+|             |        |      | attribute and the function.                    |
+|             |        |      |The 'timing_sense' attribute will be respected. |
+| LBR-161     |Info    |    1 |Setting the maximum print count of this message |
+|             |        |      | to 10 if information_level is less than 9.     |
+| LBR-162     |Info    |  122 |Both 'pos_unate' and 'neg_unate' timing_sense   |
+|             |        |      | arcs have been processed.                      |
+|             |        |      |Setting the 'timing_sense' to non_unate.        |
+| LBR-412     |Info    |    2 |Created nominal operating condition.            |
+|             |        |      |The nominal operating condition is represented, |
+|             |        |      | either by the nominal PVT values specified in  |
+|             |        |      | the library source                             |
+|             |        |      | (via nom_process,nom_voltage and nom_temperatu |
+|             |        |      | re respectively)                               |
+|             |        |      | , or by the default PVT values (1.0,1.0,1.0).  |
+| LBR-518     |Info    |    1 |Missing a function attribute in the output pin  |
+|             |        |      | definition.                                    |
+| PHYS-107    |Warning |    1 |Macro already defined before.                   |
+| PHYS-752    |Info    |    1 |Partition Based Synthesis execution skipped.    |
+| SYNTH-1     |Info    |    1 |Synthesizing.                                   |
+| TUI-31      |Warning |    1 |Obsolete command.                               |
+|             |        |      |This command is no longer supported.            |
+--------------------------------------------------------------------------------
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Mapper: Libraries have:
+	domain _default_: 344 combo usable cells and 147 sequential usable cells
+Info    : Attempting to launch a super-threading server. [ST-120]
+        : Attempting to Launch server 1 of 8.
+        : The tool is entering super-threading mode and is launching a CPU server process.  This is enabled by the root attribute 'super_thread_servers' or 'auto_super_thread'.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_0' is process '2213510' on this host.
+        : The tool is entering super-threading mode and has established a connection with a CPU server process.  This is enabled by the root attributes 'super_thread_servers' or 'auto_super_thread'.
+                  Library loading done successfully on server 'localhost_1_0'.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_1' is forked process '2213666' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_2' is forked process '2213668' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_3' is forked process '2213670' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_4' is forked process '2213672' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_5' is forked process '2213674' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_6' is forked process '2213676' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_7' is forked process '2213678' on this host.
+Multi-threaded constant propagation [1|0] ...
+Updating ST server settings
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_8' is forked process '2213680' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_9' is forked process '2213682' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_10' is forked process '2213684' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_11' is forked process '2213686' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_12' is forked process '2213688' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_13' is forked process '2213691' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_14' is forked process '2213693' on this host.
+        Distributing super-thread jobs: npu_cnn_engine npu_data_regfile_NUM_MASTERS8_ID_W3
+          Sending 'npu_cnn_engine' to server 'localhost_1_13'...
+            Sent 'npu_cnn_engine' to server 'localhost_1_13'.
+          Sending 'npu_data_regfile_NUM_MASTERS8_ID_W3' to server 'localhost_1_12'...
+            Sent 'npu_data_regfile_NUM_MASTERS8_ID_W3' to server 'localhost_1_12'.
+          Received 'npu_cnn_engine' from server 'localhost_1_13'. (2382 ms elapsed)
+          Received 'npu_data_regfile_NUM_MASTERS8_ID_W3' from server 'localhost_1_12'. (1619 ms elapsed)
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 1 sequential instance.
+Updating ST server settings
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_15' is forked process '2213714' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_16' is forked process '2213716' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_17' is forked process '2213718' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_18' is forked process '2213720' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_19' is forked process '2213722' on this host.
+        Distributing super-thread jobs: npu_cnn_engine npu_data_regfile_NUM_MASTERS8_ID_W3
+          Sending 'npu_cnn_engine' to server 'localhost_1_20'...
+            Sent 'npu_cnn_engine' to server 'localhost_1_20'.
+          Sending 'npu_data_regfile_NUM_MASTERS8_ID_W3' to server 'localhost_1_19'...
+            Sent 'npu_data_regfile_NUM_MASTERS8_ID_W3' to server 'localhost_1_19'.
+          Received 'npu_cnn_engine' from server 'localhost_1_20'. (2355 ms elapsed)
+          Received 'npu_data_regfile_NUM_MASTERS8_ID_W3' from server 'localhost_1_19'. (1617 ms elapsed)
+Multi-threaded Virtual Mapping    (8 threads per ST process, 8 of 48 CPUs usable)
+        Distributing super-thread jobs: cb_part_173 cb_part_243 cb_part_155 cb_part_177 cb_oseq_80 cb_part_104 cb_part_149 cb_part_123 cb_part_127 cb_part_125 cb_part_171 cb_oseq_68 cb_part_187
+          Sending 'cb_part_173' to server 'localhost_1_20'...
+            Sent 'cb_part_173' to server 'localhost_1_20'.
+          Sending 'cb_part_243' to server 'localhost_1_19'...
+            Sent 'cb_part_243' to server 'localhost_1_19'.
+          Sending 'cb_part_155' to server 'localhost_1_18'...
+            Sent 'cb_part_155' to server 'localhost_1_18'.
+          Sending 'cb_part_177' to server 'localhost_1_0'...
+            Sent 'cb_part_177' to server 'localhost_1_0'.
+          Sending 'cb_oseq_80' to server 'localhost_1_17'...
+            Sent 'cb_oseq_80' to server 'localhost_1_17'.
+          Sending 'cb_part_104' to server 'localhost_1_16'...
+            Sent 'cb_part_104' to server 'localhost_1_16'.
+          Sending 'cb_part_149' to server 'localhost_1_21'...
+            Sent 'cb_part_149' to server 'localhost_1_21'.
+          Sending 'cb_part_123' to server 'localhost_1_15'...
+            Sent 'cb_part_123' to server 'localhost_1_15'.
+          Received 'cb_part_149' from server 'localhost_1_21'. (634 ms elapsed)
+          Sending 'cb_part_127' to server 'localhost_1_21'...
+            Sent 'cb_part_127' to server 'localhost_1_21'.
+          Received 'cb_oseq_80' from server 'localhost_1_17'. (719 ms elapsed)
+          Sending 'cb_part_125' to server 'localhost_1_17'...
+            Sent 'cb_part_125' to server 'localhost_1_17'.
+          Received 'cb_part_123' from server 'localhost_1_15'. (710 ms elapsed)
+          Sending 'cb_part_171' to server 'localhost_1_15'...
+            Sent 'cb_part_171' to server 'localhost_1_15'.
+          Received 'cb_part_155' from server 'localhost_1_18'. (831 ms elapsed)
+          Sending 'cb_oseq_68' to server 'localhost_1_18'...
+            Sent 'cb_oseq_68' to server 'localhost_1_18'.
+          Received 'cb_part_177' from server 'localhost_1_0'. (852 ms elapsed)
+          Sending 'cb_part_187' to server 'localhost_1_0'...
+            Sent 'cb_part_187' to server 'localhost_1_0'.
+          Received 'cb_part_104' from server 'localhost_1_16'. (1242 ms elapsed)
+          Received 'cb_part_243' from server 'localhost_1_19'. (1317 ms elapsed)
+          Received 'cb_part_173' from server 'localhost_1_20'. (1381 ms elapsed)
+          Received 'cb_part_127' from server 'localhost_1_21'. (642 ms elapsed)
+          Received 'cb_part_125' from server 'localhost_1_17'. (647 ms elapsed)
+          Received 'cb_part_187' from server 'localhost_1_0'. (184 ms elapsed)
+          Received 'cb_oseq_68' from server 'localhost_1_18'. (941 ms elapsed)
+          Received 'cb_part_171' from server 'localhost_1_15'. (1387 ms elapsed)
+        Distributing super-thread jobs: cb_part_156 cb_part_257 cb_part_211 cb_oseq_82 cb_part_167
+          Sending 'cb_part_156' to server 'localhost_1_20'...
+            Sent 'cb_part_156' to server 'localhost_1_20'.
+          Sending 'cb_part_257' to server 'localhost_1_19'...
+            Sent 'cb_part_257' to server 'localhost_1_19'.
+          Sending 'cb_part_211' to server 'localhost_1_18'...
+            Sent 'cb_part_211' to server 'localhost_1_18'.
+          Sending 'cb_oseq_82' to server 'localhost_1_0'...
+            Sent 'cb_oseq_82' to server 'localhost_1_0'.
+          Sending 'cb_part_167' to server 'localhost_1_17'...
+            Sent 'cb_part_167' to server 'localhost_1_17'.
+          Received 'cb_oseq_82' from server 'localhost_1_0'. (225 ms elapsed)
+          Received 'cb_part_167' from server 'localhost_1_17'. (339 ms elapsed)
+          Received 'cb_part_211' from server 'localhost_1_18'. (841 ms elapsed)
+          Received 'cb_part_156' from server 'localhost_1_20'. (1160 ms elapsed)
+          Received 'cb_part_257' from server 'localhost_1_19'. (1164 ms elapsed)
+        Distributing super-thread jobs: cb_part_163
+          Sending 'cb_part_163' to server 'localhost_1_20'...
+            Sent 'cb_part_163' to server 'localhost_1_20'.
+          Received 'cb_part_163' from server 'localhost_1_20'. (237 ms elapsed)
+        Distributing super-thread jobs: mrg_mux_ctl_323 mrg_mux_ctl_322
+          Sending 'mrg_mux_ctl_323' to server 'localhost_1_20'...
+            Sent 'mrg_mux_ctl_323' to server 'localhost_1_20'.
+          Sending 'mrg_mux_ctl_322' to server 'localhost_1_19'...
+            Sent 'mrg_mux_ctl_322' to server 'localhost_1_19'.
+          Received 'mrg_mux_ctl_322' from server 'localhost_1_19'. (1608 ms elapsed)
+          Received 'mrg_mux_ctl_323' from server 'localhost_1_20'. (2169 ms elapsed)
+        Distributing super-thread jobs: cb_part_236
+          Sending 'cb_part_236' to server 'localhost_1_20'...
+            Sent 'cb_part_236' to server 'localhost_1_20'.
+          Received 'cb_part_236' from server 'localhost_1_20'. (2110 ms elapsed)
+        Distributing super-thread jobs: cb_part_172 cb_part_264
+          Sending 'cb_part_172' to server 'localhost_1_20'...
+            Sent 'cb_part_172' to server 'localhost_1_20'.
+          Sending 'cb_part_264' to server 'localhost_1_19'...
+            Sent 'cb_part_264' to server 'localhost_1_19'.
+          Received 'cb_part_264' from server 'localhost_1_19'. (178 ms elapsed)
+          Received 'cb_part_172' from server 'localhost_1_20'. (409 ms elapsed)
+        Distributing super-thread jobs: cb_part_218
+          Sending 'cb_part_218' to server 'localhost_1_20'...
+            Sent 'cb_part_218' to server 'localhost_1_20'.
+          Received 'cb_part_218' from server 'localhost_1_20'. (286 ms elapsed)
+        Distributing super-thread jobs: cb_part_208 cb_part_194 cb_part_250 cb_part_252
+          Sending 'cb_part_208' to server 'localhost_1_20'...
+            Sent 'cb_part_208' to server 'localhost_1_20'.
+          Sending 'cb_part_194' to server 'localhost_1_19'...
+            Sent 'cb_part_194' to server 'localhost_1_19'.
+          Sending 'cb_part_250' to server 'localhost_1_18'...
+            Sent 'cb_part_250' to server 'localhost_1_18'.
+          Sending 'cb_part_252' to server 'localhost_1_0'...
+            Sent 'cb_part_252' to server 'localhost_1_0'.
+          Received 'cb_part_250' from server 'localhost_1_18'. (1093 ms elapsed)
+          Received 'cb_part_252' from server 'localhost_1_0'. (1223 ms elapsed)
+          Received 'cb_part_194' from server 'localhost_1_19'. (1740 ms elapsed)
+          Received 'cb_part_208' from server 'localhost_1_20'. (1895 ms elapsed)
+        Distributing super-thread jobs: cb_part_278 cb_seq_29 cb_seq_27 cb_seq cb_seq_98
+          Sending 'cb_part_278' to server 'localhost_1_20'...
+            Sent 'cb_part_278' to server 'localhost_1_20'.
+          Sending 'cb_seq_29' to server 'localhost_1_19'...
+            Sent 'cb_seq_29' to server 'localhost_1_19'.
+          Sending 'cb_seq_27' to server 'localhost_1_18'...
+            Sent 'cb_seq_27' to server 'localhost_1_18'.
+          Sending 'cb_seq' to server 'localhost_1_0'...
+            Sent 'cb_seq' to server 'localhost_1_0'.
+          Sending 'cb_seq_98' to server 'localhost_1_17'...
+            Sent 'cb_seq_98' to server 'localhost_1_17'.
+          Received 'cb_seq_27' from server 'localhost_1_18'. (398 ms elapsed)
+          Received 'cb_seq_29' from server 'localhost_1_19'. (488 ms elapsed)
+          Received 'cb_seq_98' from server 'localhost_1_17'. (617 ms elapsed)
+          Received 'cb_seq' from server 'localhost_1_0'. (795 ms elapsed)
+          Received 'cb_part_278' from server 'localhost_1_20'. (4508 ms elapsed)
+        Distributing super-thread jobs: cb_seq_92 cb_part_296 cb_oseq_34 cb_part_258
+          Sending 'cb_seq_92' to server 'localhost_1_20'...
+            Sent 'cb_seq_92' to server 'localhost_1_20'.
+          Sending 'cb_part_296' to server 'localhost_1_19'...
+            Sent 'cb_part_296' to server 'localhost_1_19'.
+          Sending 'cb_oseq_34' to server 'localhost_1_18'...
+            Sent 'cb_oseq_34' to server 'localhost_1_18'.
+          Sending 'cb_part_258' to server 'localhost_1_0'...
+            Sent 'cb_part_258' to server 'localhost_1_0'.
+          Received 'cb_oseq_34' from server 'localhost_1_18'. (5864 ms elapsed)
+          Received 'cb_part_258' from server 'localhost_1_0'. (5784 ms elapsed)
+          Received 'cb_part_296' from server 'localhost_1_19'. (6448 ms elapsed)
+          Received 'cb_seq_92' from server 'localhost_1_20'. (8066 ms elapsed)
+        Distributing super-thread jobs: cb_seq_90 cb_part_248 cb_seq_86 cb_seq_33
+          Sending 'cb_seq_90' to server 'localhost_1_20'...
+            Sent 'cb_seq_90' to server 'localhost_1_20'.
+          Sending 'cb_part_248' to server 'localhost_1_19'...
+            Sent 'cb_part_248' to server 'localhost_1_19'.
+          Sending 'cb_seq_86' to server 'localhost_1_18'...
+            Sent 'cb_seq_86' to server 'localhost_1_18'.
+          Sending 'cb_seq_33' to server 'localhost_1_0'...
+            Sent 'cb_seq_33' to server 'localhost_1_0'.
+          Received 'cb_seq_86' from server 'localhost_1_18'. (1264 ms elapsed)
+          Received 'cb_seq_90' from server 'localhost_1_20'. (2504 ms elapsed)
+          Received 'cb_seq_33' from server 'localhost_1_0'. (1955 ms elapsed)
+          Received 'cb_part_248' from server 'localhost_1_19'. (3727 ms elapsed)
+        Distributing super-thread jobs: cb_seq_31 cb_part_302
+          Sending 'cb_seq_31' to server 'localhost_1_20'...
+            Sent 'cb_seq_31' to server 'localhost_1_20'.
+          Sending 'cb_part_302' to server 'localhost_1_19'...
+            Sent 'cb_part_302' to server 'localhost_1_19'.
+          Received 'cb_seq_31' from server 'localhost_1_20'. (1938 ms elapsed)
+          Received 'cb_part_302' from server 'localhost_1_19'. (2577 ms elapsed)
+        Distributing super-thread jobs: cb_part_292 cb_seq_94 cb_part_294 cb_part_192 cb_part_232
+          Sending 'cb_part_292' to server 'localhost_1_20'...
+            Sent 'cb_part_292' to server 'localhost_1_20'.
+          Sending 'cb_seq_94' to server 'localhost_1_19'...
+            Sent 'cb_seq_94' to server 'localhost_1_19'.
+          Sending 'cb_part_294' to server 'localhost_1_18'...
+            Sent 'cb_part_294' to server 'localhost_1_18'.
+          Sending 'cb_part_192' to server 'localhost_1_0'...
+            Sent 'cb_part_192' to server 'localhost_1_0'.
+          Sending 'cb_part_232' to server 'localhost_1_17'...
+            Sent 'cb_part_232' to server 'localhost_1_17'.
+          Received 'cb_part_232' from server 'localhost_1_17'. (302 ms elapsed)
+          Received 'cb_part_192' from server 'localhost_1_0'. (688 ms elapsed)
+          Received 'cb_seq_94' from server 'localhost_1_19'. (2099 ms elapsed)
+          Received 'cb_part_294' from server 'localhost_1_18'. (1900 ms elapsed)
+          Received 'cb_part_292' from server 'localhost_1_20'. (16543 ms elapsed)
+        Distributing super-thread jobs: cb_seq_35 cb_part_174 cb_part_290 cb_part_318 cb_seq_88
+          Sending 'cb_seq_35' to server 'localhost_1_20'...
+            Sent 'cb_seq_35' to server 'localhost_1_20'.
+          Sending 'cb_part_174' to server 'localhost_1_19'...
+            Sent 'cb_part_174' to server 'localhost_1_19'.
+          Sending 'cb_part_290' to server 'localhost_1_18'...
+            Sent 'cb_part_290' to server 'localhost_1_18'.
+          Sending 'cb_part_318' to server 'localhost_1_0'...
+            Sent 'cb_part_318' to server 'localhost_1_0'.
+          Sending 'cb_seq_88' to server 'localhost_1_17'...
+            Sent 'cb_seq_88' to server 'localhost_1_17'.
+          Received 'cb_seq_88' from server 'localhost_1_17'. (382 ms elapsed)
+          Received 'cb_seq_35' from server 'localhost_1_20'. (3043 ms elapsed)
+          Received 'cb_part_174' from server 'localhost_1_19'. (2788 ms elapsed)
+          Received 'cb_part_318' from server 'localhost_1_0'. (3248 ms elapsed)
+          Received 'cb_part_290' from server 'localhost_1_18'. (3700 ms elapsed)
+        Distributing super-thread jobs: cb_seq_47 cb_seq_65 cb_seq_96 cb_part_284
+          Sending 'cb_seq_47' to server 'localhost_1_20'...
+            Sent 'cb_seq_47' to server 'localhost_1_20'.
+          Sending 'cb_seq_65' to server 'localhost_1_19'...
+            Sent 'cb_seq_65' to server 'localhost_1_19'.
+          Sending 'cb_seq_96' to server 'localhost_1_18'...
+            Sent 'cb_seq_96' to server 'localhost_1_18'.
+          Sending 'cb_part_284' to server 'localhost_1_0'...
+            Sent 'cb_part_284' to server 'localhost_1_0'.
+          Received 'cb_seq_47' from server 'localhost_1_20'. (883 ms elapsed)
+          Received 'cb_part_284' from server 'localhost_1_0'. (596 ms elapsed)
+          Received 'cb_seq_65' from server 'localhost_1_19'. (790 ms elapsed)
+          Received 'cb_seq_96' from server 'localhost_1_18'. (788 ms elapsed)
+        Distributing super-thread jobs: cb_part_244 cb_seq_49 cb_part_312
+          Sending 'cb_part_244' to server 'localhost_1_20'...
+            Sent 'cb_part_244' to server 'localhost_1_20'.
+          Sending 'cb_seq_49' to server 'localhost_1_19'...
+            Sent 'cb_seq_49' to server 'localhost_1_19'.
+          Sending 'cb_part_312' to server 'localhost_1_18'...
+            Sent 'cb_part_312' to server 'localhost_1_18'.
+          Received 'cb_seq_49' from server 'localhost_1_19'. (247 ms elapsed)
+          Received 'cb_part_312' from server 'localhost_1_18'. (287 ms elapsed)
+          Received 'cb_part_244' from server 'localhost_1_20'. (816 ms elapsed)
+        Distributing super-thread jobs: cb_seq_37 cv32e40p_compressed_decoder_FPU0_ZFINX0
+          Sending 'cb_seq_37' to server 'localhost_1_20'...
+            Sent 'cb_seq_37' to server 'localhost_1_20'.
+          Sending 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_19'...
+            Sent 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_19'.
+          Received 'cv32e40p_compressed_decoder_FPU0_ZFINX0' from server 'localhost_1_19'. (291 ms elapsed)
+          Received 'cb_seq_37' from server 'localhost_1_20'. (452 ms elapsed)
+==================================
+Stage : first_condense 
+==================================
+  =================
+   Message Summary
+  =================
+--------------------------------------------------------------------------------
+|   Id   |Sev  |Count |                     Message Text                       |
+--------------------------------------------------------------------------------
+| GLO-34 |Info |    1 |Deleting instances not driving any primary outputs.     |
+|        |     |      |Optimizations such as constant propagation or           |
+|        |     |      | redundancy removal could change the connections so a   |
+|        |     |      | hierarchical instance does not drive any primary       |
+|        |     |      | outputs anymore. To see the list of deleted            |
+|        |     |      | hierarchical instances, set the 'information_level'    |
+|        |     |      | attribute to 2 or above. If the message is truncated   |
+|        |     |      | set the message attribute 'truncate' to false to see   |
+|        |     |      | the complete list. To prevent this optimization, set   |
+|        |     |      | the 'delete_unloaded_insts' root/subdesign attribute   |
+|        |     |      | to 'false' or 'preserve' instance attribute to 'true'. |
+| GLO-42 |Info |    1 |Equivalent sequential instances have been merged.       |
+|        |     |      |To prevent merging of sequential instances, set the     |
+|        |     |      | 'optimize_merge_flops' and 'optimize_merge_latches'    |
+|        |     |      | root attributes to 'false' or the 'optimize_merge_seq' |
+|        |     |      | instance attribute to 'false'.                         |
+| ST-110 |Info |   22 |Connection established with super-threading server.     |
+|        |     |      |The tool is entering super-threading mode and has       |
+|        |     |      | established a connection with a CPU server process.    |
+|        |     |      | This is enabled by the root attributes                 |
+|        |     |      | 'super_thread_servers' or 'auto_super_thread'.         |
+| ST-112 |Info |   14 |A super-threading server has been shut down normally.   |
+|        |     |      |A super-threaded optimization is complete and a CPU     |
+|        |     |      | server was successfully shut down.                     |
+| ST-120 |Info |    1 |Attempting to launch a super-threading server.          |
+|        |     |      |The tool is entering super-threading mode and is        |
+|        |     |      | launching a CPU server process.  This is enabled by    |
+|        |     |      | the root attribute 'super_thread_servers' or           |
+|        |     |      | 'auto_super_thread'.                                   |
+| ST-128 |Info |    4 |Super thread servers are launched successfully.         |
+--------------------------------------------------------------------------------
+ 
+Global mapping target info
+==========================
+Cost Group 'jtag_clk' target slack:  1483 ps
+Target path end-point (Pin: i_soc/i_core_i_debug/i_dtm/i_dmi_jtag_tap/td_o_reg/d)
+
+Cost Group 'sys_clk' target slack:   300 ps
+Target path end-point (Pin: i_soc/i_core_i_cpu_core_i_sleep_unit_i/core_clock_gate_i/enable_latched_reg/d)
+
+
++-----------+-----------------+-----+----------------------+---------------------------+
+|   Host    |     Machine     | CPU | Physical Memory (MB) | Peak Physical Memory (MB) |
++-----------+-----------------+-----+----------------------+---------------------------+
+| localhost | tc-01a0e839f9eb |  8  |        1892.3        |          1892.3           |
++-----------+-----------------+-----+----------------------+---------------------------+
+
++----------------+----------------------+---------------------------+
+|     Server     | Physical Memory (MB) | Peak Physical Memory (MB) |
++----------------+----------------------+---------------------------+
+| localhost_1_0  |      691.1 [1]       |         773.5 [1]         |
+| localhost_1_15 |       74.2 [2]       |          [2] [3]          |
+| localhost_1_19 |       92.0 [2]       |          [2] [3]          |
+| localhost_1_21 |       74.1 [2]       |          [2] [3]          |
+| localhost_1_18 |       89.3 [2]       |          [2] [3]          |
+| localhost_1_20 |      105.1 [2]       |          [2] [3]          |
+| localhost_1_16 |       73.8 [2]       |          [2] [3]          |
+| localhost_1_17 |       78.5 [2]       |          [2] [3]          |
++----------------+----------------------+---------------------------+
+[1] Memory of child processes is included.
+[2] Memory is included in parent localhost_1_0.
+[3] Peak physical memory is not available for forked background servers.
+
+
+State Retention Synthesis Status
+================================
+
+Category                        Flops  Latches   Percentage
+-----------------------------------------------------------
+Total instances                 20041        1        100.0
+Excluded from State Retention   20041        1        100.0
+    - Will not convert          20041        1        100.0
+      - Preserved                   0        0          0.0
+      - Power intent excluded   20041        1        100.0
+    - Could not convert             0        0          0.0
+      - Scan type                   0        0          0.0
+      - No suitable cell            0        0          0.0
+State Retention instances           0        0          0.0
+-----------------------------------------------------------
+
+
++-----------+-----------------+-----+----------------------+---------------------------+
+|   Host    |     Machine     | CPU | Physical Memory (MB) | Peak Physical Memory (MB) |
++-----------+-----------------+-----+----------------------+---------------------------+
+| localhost | tc-01a0e839f9eb |  1  |        1383.6        |          1892.3           |
++-----------+-----------------+-----+----------------------+---------------------------+
+
++---------------+----------------------+---------------------------+
+|    Server     | Physical Memory (MB) | Peak Physical Memory (MB) |
++---------------+----------------------+---------------------------+
+| localhost_1_0 |        508.2         |           773.5           |
++---------------+----------------------+---------------------------+
+
+Info    : Using '2' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '47' more seconds during global map.
+Info    : Using '3' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '55' more seconds during global map.
+Info    : Using '4' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '63' more seconds during global map.
+PBS_Generic_Opt-Post - Elapsed_Time 220, CPU_Time 200.498491
+stamp 'PBS_Generic_Opt-Post' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:14(00:04:26) |  00:03:20(00:03:40) | 100.0(100.0) |   12:47:58 (Nov03) |   1.38 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+PBS_Generic-Postgen HBO Optimizations - Elapsed_Time 4, CPU_Time 4.0
+stamp 'PBS_Generic-Postgen HBO Optimizations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:14(00:04:26) |  00:03:20(00:03:40) |  98.0( 98.2) |   12:47:58 (Nov03) |   1.38 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:18(00:04:30) |  00:00:04(00:00:04) |   2.0(  1.8) |   12:48:02 (Nov03) |   1.38 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+##>=================== Cadence Confidential (Generic-Logical) ===================
+##>=================== Cadence Confidential (Generic-Logical) ===================
+##>Main Thread Summary:
+##>----------------------------------------------------------------------------------------
+##>STEP                           Elapsed       WNS       TNS     Insts      Area    Memory
+##>----------------------------------------------------------------------------------------
+##>G:Initial                            6         -         -     84541   2997275       788
+##>G:Setup                              0         -         -         -         -         -
+##>G:Launch ST                          0         -         -         -         -         -
+##>G:Design Partition                   0         -         -         -         -         -
+##>G:Create Partition Netlists          0         -         -         -         -         -
+##>G:Init Power                         0         -         -         -         -         -
+##>G:Budgeting                          0         -         -         -         -         -
+##>G:Derenv-DB                          0         -         -         -         -         -
+##>G:Debug Outputs                      0         -         -         -         -         -
+##>G:ST loading                         0         -         -         -         -         -
+##>G:Distributed                        0         -         -         -         -         -
+##>G:Timer                              0         -         -         -         -         -
+##>G:Assembly                           0         -         -         -         -         -
+##>G:DFT                                0         -         -         -         -         -
+##>G:Const Prop                         4         -         -    183254   4640236      1383
+##>G:Misc                             219
+##>----------------------------------------------------------------------------------------
+##>Total Elapsed                      229
+##>========================================================================================
+Info    : Done synthesizing. [SYNTH-2]
+        : Done synthesizing 'mynpu_asic_top' to generic gates.
+      timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                      syn_gen
+@file(synth_chip.tcl) 12: syn_map
+##Generic Timing Info for library domain: _default_ typical gate delay: 83.7 ps std_slew: 21.0 ps std_load: 8.5 fF
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Info    : Mapping. [SYNTH-4]
+        : Mapping 'mynpu_asic_top' using 'low' effort.
+Mapper: Libraries have:
+	domain _default_: 344 combo usable cells and 147 sequential usable cells
+Configuring mapper costing (none)
+TNS Restructuring config:  at stage: map applied.
+PBS_TechMap-Start - Elapsed_Time 0, CPU_Time 0.0
+stamp 'PBS_TechMap-Start' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:14(00:04:26) |  00:03:20(00:03:40) |  93.9( 94.0) |   12:47:58 (Nov03) |   1.38 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:18(00:04:30) |  00:00:04(00:00:04) |   1.9(  1.7) |   12:48:02 (Nov03) |   1.38 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:27(00:04:40) |  00:00:09(00:00:10) |   4.2(  4.3) |   12:48:12 (Nov03) |   1.35 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+PBS_TechMap-Premap HBO Optimizations - Elapsed_Time 3, CPU_Time 3.0
+stamp 'PBS_TechMap-Premap HBO Optimizations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:14(00:04:26) |  00:03:20(00:03:40) |  92.6( 92.8) |   12:47:58 (Nov03) |   1.38 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:18(00:04:30) |  00:00:04(00:00:04) |   1.8(  1.7) |   12:48:02 (Nov03) |   1.38 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:27(00:04:40) |  00:00:09(00:00:10) |   4.2(  4.2) |   12:48:12 (Nov03) |   1.35 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:30(00:04:43) |  00:00:03(00:00:03) |   1.4(  1.3) |   12:48:16 (Nov03) |   1.34 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+Info    : Partition Based Synthesis execution skipped. [PHYS-752]
+        : 'low' effort synthesis done in non-distributed manner. Set synthesize -effort to 'medium' or 'high' to turn on distributed optimization.
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Mapper: Libraries have:
+	domain _default_: 344 combo usable cells and 147 sequential usable cells
+Updating ST server settings
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_22' is forked process '2214137' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_23' is forked process '2214139' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_24' is forked process '2214141' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_25' is forked process '2214143' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_26' is forked process '2214145' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_27' is forked process '2214147' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_28' is forked process '2214149' on this host.
+Updating ST server settings
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_29' is forked process '2214210' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_30' is forked process '2214212' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_31' is forked process '2214214' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_32' is forked process '2214216' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_33' is forked process '2214218' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_34' is forked process '2214220' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_35' is forked process '2214222' on this host.
+        Distributing super-thread jobs: cb_seq_358 cb_seq_415 cb_seq_356 cb_seq_409 cb_seq_419
+          Sending 'cb_seq_358' to server 'localhost_1_30'...
+            Sent 'cb_seq_358' to server 'localhost_1_30'.
+          Sending 'cb_seq_415' to server 'localhost_1_34'...
+            Sent 'cb_seq_415' to server 'localhost_1_34'.
+          Sending 'cb_seq_356' to server 'localhost_1_33'...
+            Sent 'cb_seq_356' to server 'localhost_1_33'.
+          Sending 'cb_seq_409' to server 'localhost_1_31'...
+            Sent 'cb_seq_409' to server 'localhost_1_31'.
+          Sending 'cb_seq_419' to server 'localhost_1_35'...
+            Sent 'cb_seq_419' to server 'localhost_1_35'.
+          Received 'cb_seq_356' from server 'localhost_1_33'. (1763 ms elapsed)
+          Received 'cb_seq_415' from server 'localhost_1_34'. (2711 ms elapsed)
+          Received 'cb_seq_358' from server 'localhost_1_30'. (4805 ms elapsed)
+          Received 'cb_seq_419' from server 'localhost_1_35'. (1517 ms elapsed)
+          Received 'cb_seq_409' from server 'localhost_1_31'. (2162 ms elapsed)
+Multi-threaded Virtual Mapping    (8 threads per ST process, 8 of 48 CPUs usable)
+        Distributing super-thread jobs: cb_oseq_371 cb_oseq_361 cb_seq_404 cb_seq_402 cb_part_478 cb_oseq cb_oseq_353 cb_oseq_351 cb_part_490 cb_oseq_408 cb_part_444 mrg_mux_ctl cb_part_470 cb_oseq_391
+          Sending 'cb_oseq_371' to server 'localhost_1_30'...
+            Sent 'cb_oseq_371' to server 'localhost_1_30'.
+          Sending 'cb_oseq_361' to server 'localhost_1_34'...
+            Sent 'cb_oseq_361' to server 'localhost_1_34'.
+          Sending 'cb_seq_404' to server 'localhost_1_33'...
+            Sent 'cb_seq_404' to server 'localhost_1_33'.
+          Sending 'cb_seq_402' to server 'localhost_1_31'...
+            Sent 'cb_seq_402' to server 'localhost_1_31'.
+          Sending 'cb_part_478' to server 'localhost_1_35'...
+            Sent 'cb_part_478' to server 'localhost_1_35'.
+          Sending 'cb_oseq' to server 'localhost_1_29'...
+            Sent 'cb_oseq' to server 'localhost_1_29'.
+          Sending 'cb_oseq_353' to server 'localhost_1_0'...
+            Sent 'cb_oseq_353' to server 'localhost_1_0'.
+          Sending 'cb_oseq_351' to server 'localhost_1_32'...
+            Sent 'cb_oseq_351' to server 'localhost_1_32'.
+          Received 'cb_seq_402' from server 'localhost_1_31'. (717 ms elapsed)
+          Sending 'cb_part_490' to server 'localhost_1_31'...
+            Sent 'cb_part_490' to server 'localhost_1_31'.
+          Received 'cb_seq_404' from server 'localhost_1_33'. (850 ms elapsed)
+          Sending 'cb_oseq_408' to server 'localhost_1_33'...
+            Sent 'cb_oseq_408' to server 'localhost_1_33'.
+          Received 'cb_oseq' from server 'localhost_1_29'. (799 ms elapsed)
+          Sending 'cb_part_444' to server 'localhost_1_29'...
+            Sent 'cb_part_444' to server 'localhost_1_29'.
+          Received 'cb_part_478' from server 'localhost_1_35'. (834 ms elapsed)
+          Sending 'mrg_mux_ctl' to server 'localhost_1_35'...
+            Sent 'mrg_mux_ctl' to server 'localhost_1_35'.
+          Received 'cb_oseq_351' from server 'localhost_1_32'. (788 ms elapsed)
+          Sending 'cb_part_470' to server 'localhost_1_32'...
+            Sent 'cb_part_470' to server 'localhost_1_32'.
+          Received 'cb_oseq_361' from server 'localhost_1_34'. (1111 ms elapsed)
+          Sending 'cb_oseq_391' to server 'localhost_1_34'...
+            Sent 'cb_oseq_391' to server 'localhost_1_34'.
+          Received 'cb_part_444' from server 'localhost_1_29'. (200 ms elapsed)
+          Received 'cb_oseq_408' from server 'localhost_1_33'. (255 ms elapsed)
+          Received 'cb_oseq_391' from server 'localhost_1_34'. (141 ms elapsed)
+          Received 'mrg_mux_ctl' from server 'localhost_1_35'. (505 ms elapsed)
+          Received 'cb_oseq_371' from server 'localhost_1_30'. (1826 ms elapsed)
+          Received 'cb_oseq_353' from server 'localhost_1_0'. (1571 ms elapsed)
+          Received 'cb_part_490' from server 'localhost_1_31'. (1033 ms elapsed)
+          Received 'cb_part_470' from server 'localhost_1_32'. (952 ms elapsed)
+        Distributing super-thread jobs: cb_part_480 cb_part_460 cb_oseq_363 cb_part_494 cb_part_498 cb_part_502 cb_part_474 cb_part_529
+          Sending 'cb_part_480' to server 'localhost_1_30'...
+            Sent 'cb_part_480' to server 'localhost_1_30'.
+          Sending 'cb_part_460' to server 'localhost_1_34'...
+            Sent 'cb_part_460' to server 'localhost_1_34'.
+          Sending 'cb_oseq_363' to server 'localhost_1_33'...
+            Sent 'cb_oseq_363' to server 'localhost_1_33'.
+          Sending 'cb_part_494' to server 'localhost_1_31'...
+            Sent 'cb_part_494' to server 'localhost_1_31'.
+          Sending 'cb_part_498' to server 'localhost_1_35'...
+            Sent 'cb_part_498' to server 'localhost_1_35'.
+          Sending 'cb_part_502' to server 'localhost_1_29'...
+            Sent 'cb_part_502' to server 'localhost_1_29'.
+          Sending 'cb_part_474' to server 'localhost_1_0'...
+            Sent 'cb_part_474' to server 'localhost_1_0'.
+          Sending 'cb_part_529' to server 'localhost_1_32'...
+            Sent 'cb_part_529' to server 'localhost_1_32'.
+          Received 'cb_part_529' from server 'localhost_1_32'. (153 ms elapsed)
+          Received 'cb_oseq_363' from server 'localhost_1_33'. (252 ms elapsed)
+          Received 'cb_part_494' from server 'localhost_1_31'. (250 ms elapsed)
+          Received 'cb_part_460' from server 'localhost_1_34'. (358 ms elapsed)
+          Received 'cb_part_480' from server 'localhost_1_30'. (693 ms elapsed)
+          Received 'cb_part_474' from server 'localhost_1_0'. (554 ms elapsed)
+          Received 'cb_part_502' from server 'localhost_1_29'. (573 ms elapsed)
+          Received 'cb_part_498' from server 'localhost_1_35'. (966 ms elapsed)
+        Distributing super-thread jobs: cb_part_445 mux_ctl_1x cb_part_475
+          Sending 'cb_part_445' to server 'localhost_1_30'...
+            Sent 'cb_part_445' to server 'localhost_1_30'.
+          Sending 'mux_ctl_1x' to server 'localhost_1_34'...
+            Sent 'mux_ctl_1x' to server 'localhost_1_34'.
+          Sending 'cb_part_475' to server 'localhost_1_33'...
+            Sent 'cb_part_475' to server 'localhost_1_33'.
+          Received 'mux_ctl_1x' from server 'localhost_1_34'. (133 ms elapsed)
+          Received 'cb_part_475' from server 'localhost_1_33'. (154 ms elapsed)
+          Received 'cb_part_445' from server 'localhost_1_30'. (1606 ms elapsed)
+        Distributing super-thread jobs: cb_part_464
+          Sending 'cb_part_464' to server 'localhost_1_30'...
+            Sent 'cb_part_464' to server 'localhost_1_30'.
+          Received 'cb_part_464' from server 'localhost_1_30'. (204 ms elapsed)
+        Distributing super-thread jobs: cb_part_430
+          Sending 'cb_part_430' to server 'localhost_1_30'...
+            Sent 'cb_part_430' to server 'localhost_1_30'.
+          Received 'cb_part_430' from server 'localhost_1_30'. (187 ms elapsed)
+        Distributing super-thread jobs: cb_part_467 cb_part_500
+          Sending 'cb_part_467' to server 'localhost_1_30'...
+            Sent 'cb_part_467' to server 'localhost_1_30'.
+          Sending 'cb_part_500' to server 'localhost_1_34'...
+            Sent 'cb_part_500' to server 'localhost_1_34'.
+          Received 'cb_part_500' from server 'localhost_1_34'. (1303 ms elapsed)
+          Received 'cb_part_467' from server 'localhost_1_30'. (2729 ms elapsed)
+        Distributing super-thread jobs: cb_part_506 cb_part_496
+          Sending 'cb_part_506' to server 'localhost_1_30'...
+            Sent 'cb_part_506' to server 'localhost_1_30'.
+          Sending 'cb_part_496' to server 'localhost_1_34'...
+            Sent 'cb_part_496' to server 'localhost_1_34'.
+          Received 'cb_part_496' from server 'localhost_1_34'. (296 ms elapsed)
+          Received 'cb_part_506' from server 'localhost_1_30'. (1869 ms elapsed)
+        Distributing super-thread jobs: cb_part_499
+          Sending 'cb_part_499' to server 'localhost_1_30'...
+            Sent 'cb_part_499' to server 'localhost_1_30'.
+          Received 'cb_part_499' from server 'localhost_1_30'. (237 ms elapsed)
+        Distributing super-thread jobs: cb_oseq_365 cb_part_511
+          Sending 'cb_oseq_365' to server 'localhost_1_30'...
+            Sent 'cb_oseq_365' to server 'localhost_1_30'.
+          Sending 'cb_part_511' to server 'localhost_1_34'...
+            Sent 'cb_part_511' to server 'localhost_1_34'.
+          Received 'cb_part_511' from server 'localhost_1_34'. (137 ms elapsed)
+          Received 'cb_oseq_365' from server 'localhost_1_30'. (3279 ms elapsed)
+        Distributing super-thread jobs: cb_seq_415 cb_part_501
+          Sending 'cb_seq_415' to server 'localhost_1_30'...
+            Sent 'cb_seq_415' to server 'localhost_1_30'.
+          Sending 'cb_part_501' to server 'localhost_1_34'...
+            Sent 'cb_part_501' to server 'localhost_1_34'.
+          Received 'cb_part_501' from server 'localhost_1_34'. (443 ms elapsed)
+          Received 'cb_seq_415' from server 'localhost_1_30'. (9419 ms elapsed)
+        Distributing super-thread jobs: cb_part_507 cb_part_503
+          Sending 'cb_part_507' to server 'localhost_1_30'...
+            Sent 'cb_part_507' to server 'localhost_1_30'.
+          Sending 'cb_part_503' to server 'localhost_1_34'...
+            Sent 'cb_part_503' to server 'localhost_1_34'.
+          Received 'cb_part_503' from server 'localhost_1_34'. (151 ms elapsed)
+          Received 'cb_part_507' from server 'localhost_1_30'. (1456 ms elapsed)
+        Distributing super-thread jobs: cb_seq_356 cb_seq_419 cb_oseq_414 cb_seq_421 cb_seq_411 cb_seq cb_seq_350 cb_seq_352 cb_oseq_410 cb_seq_392 cb_part_433
+          Sending 'cb_seq_356' to server 'localhost_1_30'...
+            Sent 'cb_seq_356' to server 'localhost_1_30'.
+          Sending 'cb_seq_419' to server 'localhost_1_34'...
+            Sent 'cb_seq_419' to server 'localhost_1_34'.
+          Sending 'cb_oseq_414' to server 'localhost_1_33'...
+            Sent 'cb_oseq_414' to server 'localhost_1_33'.
+          Sending 'cb_seq_421' to server 'localhost_1_31'...
+            Sent 'cb_seq_421' to server 'localhost_1_31'.
+          Sending 'cb_seq_411' to server 'localhost_1_35'...
+            Sent 'cb_seq_411' to server 'localhost_1_35'.
+          Sending 'cb_seq' to server 'localhost_1_29'...
+            Sent 'cb_seq' to server 'localhost_1_29'.
+          Sending 'cb_seq_350' to server 'localhost_1_0'...
+            Sent 'cb_seq_350' to server 'localhost_1_0'.
+          Sending 'cb_seq_352' to server 'localhost_1_32'...
+            Sent 'cb_seq_352' to server 'localhost_1_32'.
+          Received 'cb_seq' from server 'localhost_1_29'. (2914 ms elapsed)
+          Sending 'cb_oseq_410' to server 'localhost_1_29'...
+            Sent 'cb_oseq_410' to server 'localhost_1_29'.
+          Received 'cb_seq_350' from server 'localhost_1_0'. (3176 ms elapsed)
+          Sending 'cb_seq_392' to server 'localhost_1_0'...
+            Sent 'cb_seq_392' to server 'localhost_1_0'.
+          Received 'cb_seq_352' from server 'localhost_1_32'. (3436 ms elapsed)
+          Sending 'cb_part_433' to server 'localhost_1_32'...
+            Sent 'cb_part_433' to server 'localhost_1_32'.
+          Received 'cb_part_433' from server 'localhost_1_32'. (953 ms elapsed)
+          Received 'cb_seq_421' from server 'localhost_1_31'. (5156 ms elapsed)
+          Received 'cb_oseq_410' from server 'localhost_1_29'. (1900 ms elapsed)
+          Received 'cb_seq_411' from server 'localhost_1_35'. (5217 ms elapsed)
+          Received 'cb_oseq_414' from server 'localhost_1_33'. (6231 ms elapsed)
+          Received 'cb_seq_392' from server 'localhost_1_0'. (2257 ms elapsed)
+          Received 'cb_seq_419' from server 'localhost_1_34'. (7389 ms elapsed)
+          Received 'cb_seq_356' from server 'localhost_1_30'. (8090 ms elapsed)
+        Distributing super-thread jobs: cb_seq_409 cb_seq_413 cb_part_526 cv32e40p_compressed_decoder_FPU0_ZFINX0
+          Sending 'cb_seq_409' to server 'localhost_1_30'...
+            Sent 'cb_seq_409' to server 'localhost_1_30'.
+          Sending 'cb_seq_413' to server 'localhost_1_34'...
+            Sent 'cb_seq_413' to server 'localhost_1_34'.
+          Sending 'cb_part_526' to server 'localhost_1_33'...
+            Sent 'cb_part_526' to server 'localhost_1_33'.
+          Sending 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_31'...
+            Sent 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_31'.
+          Received 'cv32e40p_compressed_decoder_FPU0_ZFINX0' from server 'localhost_1_31'. (281 ms elapsed)
+          Received 'cb_part_526' from server 'localhost_1_33'. (649 ms elapsed)
+          Received 'cb_seq_413' from server 'localhost_1_34'. (3785 ms elapsed)
+          Received 'cb_seq_409' from server 'localhost_1_30'. (6463 ms elapsed)
+        Distributing super-thread jobs: cb_part_525
+          Sending 'cb_part_525' to server 'localhost_1_30'...
+            Sent 'cb_part_525' to server 'localhost_1_30'.
+          Received 'cb_part_525' from server 'localhost_1_30'. (92 ms elapsed)
+        Distributing super-thread jobs: cb_seq_417 cb_seq_370 cb_seq_388 cb_part_527 cb_seq_360 cb_seq_372 cb_seq_362 cb_seq_374 cb_seq_382 cb_seq_366
+          Sending 'cb_seq_417' to server 'localhost_1_30'...
+            Sent 'cb_seq_417' to server 'localhost_1_30'.
+          Sending 'cb_seq_370' to server 'localhost_1_34'...
+            Sent 'cb_seq_370' to server 'localhost_1_34'.
+          Sending 'cb_seq_388' to server 'localhost_1_33'...
+            Sent 'cb_seq_388' to server 'localhost_1_33'.
+          Sending 'cb_part_527' to server 'localhost_1_31'...
+            Sent 'cb_part_527' to server 'localhost_1_31'.
+          Sending 'cb_seq_360' to server 'localhost_1_35'...
+            Sent 'cb_seq_360' to server 'localhost_1_35'.
+          Sending 'cb_seq_372' to server 'localhost_1_29'...
+            Sent 'cb_seq_372' to server 'localhost_1_29'.
+          Sending 'cb_seq_362' to server 'localhost_1_0'...
+            Sent 'cb_seq_362' to server 'localhost_1_0'.
+          Sending 'cb_seq_374' to server 'localhost_1_32'...
+            Sent 'cb_seq_374' to server 'localhost_1_32'.
+          Received 'cb_seq_372' from server 'localhost_1_29'. (1111 ms elapsed)
+          Sending 'cb_seq_382' to server 'localhost_1_29'...
+            Sent 'cb_seq_382' to server 'localhost_1_29'.
+          Received 'cb_seq_360' from server 'localhost_1_35'. (2024 ms elapsed)
+          Sending 'cb_seq_366' to server 'localhost_1_35'...
+            Sent 'cb_seq_366' to server 'localhost_1_35'.
+          Received 'cb_seq_370' from server 'localhost_1_34'. (3703 ms elapsed)
+          Received 'cb_seq_362' from server 'localhost_1_0'. (3044 ms elapsed)
+          Received 'cb_seq_366' from server 'localhost_1_35'. (2059 ms elapsed)
+          Received 'cb_seq_382' from server 'localhost_1_29'. (2830 ms elapsed)
+          Received 'cb_seq_417' from server 'localhost_1_30'. (5330 ms elapsed)
+          Received 'cb_seq_388' from server 'localhost_1_33'. (4785 ms elapsed)
+          Received 'cb_part_527' from server 'localhost_1_31'. (4633 ms elapsed)
+          Received 'cb_seq_374' from server 'localhost_1_32'. (4260 ms elapsed)
+        Distributing super-thread jobs: cb_seq_358 cb_seq_354
+          Sending 'cb_seq_358' to server 'localhost_1_30'...
+            Sent 'cb_seq_358' to server 'localhost_1_30'.
+          Sending 'cb_seq_354' to server 'localhost_1_34'...
+            Sent 'cb_seq_354' to server 'localhost_1_34'.
+          Received 'cb_seq_354' from server 'localhost_1_34'. (3113 ms elapsed)
+          Received 'cb_seq_358' from server 'localhost_1_30'. (25041 ms elapsed)
+==================================
+Stage : first_condense 
+==================================
+  =================
+   Message Summary
+  =================
+--------------------------------------------------------------------------------
+|    Id    |Sev  |Count |                    Message Text                      |
+--------------------------------------------------------------------------------
+| LBR-155  |Info |   24 |Mismatch in unateness between 'timing_sense'          |
+|          |     |      | attribute and the function.                          |
+|          |     |      |The 'timing_sense' attribute will be respected.       |
+| PHYS-752 |Info |    1 |Partition Based Synthesis execution skipped.          |
+| ST-110   |Info |   14 |Connection established with super-threading server.   |
+|          |     |      |The tool is entering super-threading mode and has     |
+|          |     |      | established a connection with a CPU server process.  |
+|          |     |      | This is enabled by the root attributes               |
+|          |     |      | 'super_thread_servers' or 'auto_super_thread'.       |
+| ST-112   |Info |   14 |A super-threading server has been shut down normally. |
+|          |     |      |A super-threaded optimization is complete and a CPU   |
+|          |     |      | server was successfully shut down.                   |
+| ST-128   |Info |    2 |Super thread servers are launched successfully.       |
+| SYNTH-2  |Info |    1 |Done synthesizing.                                    |
+| SYNTH-4  |Info |    1 |Mapping.                                              |
+| TIM-501  |Info |    1 |Resetting the break_timing_paths attribute of a pin   |
+|          |     |      | removes exceptions set on the pin.                   |
+|          |     |      | break_timing_paths attribute has default value of    |
+|          |     |      | false and can be reset to other values either false  |
+|          |     |      | or clock_gating depends on the enable signal.        |
+|          |     |      |Do the analysis and apply the case analysis on the    |
+|          |     |      | pin whether you want to break the timing paths or    |
+|          |     |      | not                                                  |
+| TUI-58   |Info |    1 |Removed object.                                       |
+--------------------------------------------------------------------------------
+ 
+Global mapping target info
+==========================
+Cost Group 'jtag_clk' target slack:  1483 ps
+Target path end-point (Pin: i_soc/i_core_i_debug/i_dtm/i_dmi_jtag_tap/td_o_reg/d)
+
+Cost Group 'sys_clk' target slack:   300 ps
+Target path end-point (Pin: i_soc/i_core_i_cpu_core_i_sleep_unit_i/core_clock_gate_i/enable_latched_reg/d)
+
+Multi-threaded Technology Mapping (8 threads per ST process, 8 of 48 CPUs usable)
+        Distributing super-thread jobs: cb_seq_358 cb_seq_354
+          Sending 'cb_seq_358' to server 'localhost_1_30'...
+            Sent 'cb_seq_358' to server 'localhost_1_30'.
+          Sending 'cb_seq_354' to server 'localhost_1_34'...
+            Sent 'cb_seq_354' to server 'localhost_1_34'.
+          Received 'cb_seq_354' from server 'localhost_1_34'. (6058 ms elapsed)
+          Received 'cb_seq_358' from server 'localhost_1_30'. (32727 ms elapsed)
+        Distributing super-thread jobs: cb_seq_417 cb_seq_370 cb_seq_388 cb_seq_360 cb_seq_372 cb_seq_362 cb_seq_374 cb_seq_382 cb_seq_366
+          Sending 'cb_seq_417' to server 'localhost_1_30'...
+            Sent 'cb_seq_417' to server 'localhost_1_30'.
+          Sending 'cb_seq_370' to server 'localhost_1_34'...
+            Sent 'cb_seq_370' to server 'localhost_1_34'.
+          Sending 'cb_seq_388' to server 'localhost_1_33'...
+            Sent 'cb_seq_388' to server 'localhost_1_33'.
+          Sending 'cb_seq_360' to server 'localhost_1_31'...
+            Sent 'cb_seq_360' to server 'localhost_1_31'.
+          Sending 'cb_seq_372' to server 'localhost_1_35'...
+            Sent 'cb_seq_372' to server 'localhost_1_35'.
+          Sending 'cb_seq_362' to server 'localhost_1_29'...
+            Sent 'cb_seq_362' to server 'localhost_1_29'.
+          Sending 'cb_seq_374' to server 'localhost_1_0'...
+            Sent 'cb_seq_374' to server 'localhost_1_0'.
+          Sending 'cb_seq_382' to server 'localhost_1_32'...
+            Sent 'cb_seq_382' to server 'localhost_1_32'.
+          Received 'cb_seq_382' from server 'localhost_1_32'. (1709 ms elapsed)
+          Sending 'cb_seq_366' to server 'localhost_1_32'...
+            Sent 'cb_seq_366' to server 'localhost_1_32'.
+          Received 'cb_seq_362' from server 'localhost_1_29'. (2055 ms elapsed)
+          Received 'cb_seq_366' from server 'localhost_1_32'. (855 ms elapsed)
+          Received 'cb_seq_374' from server 'localhost_1_0'. (2919 ms elapsed)
+          Received 'cb_seq_372' from server 'localhost_1_35'. (3502 ms elapsed)
+          Received 'cb_seq_360' from server 'localhost_1_31'. (4426 ms elapsed)
+          Received 'cb_seq_370' from server 'localhost_1_34'. (6701 ms elapsed)
+          Received 'cb_seq_417' from server 'localhost_1_30'. (10306 ms elapsed)
+          Received 'cb_seq_388' from server 'localhost_1_33'. (11751 ms elapsed)
+        Distributing super-thread jobs: cb_part_527
+          Sending 'cb_part_527' to server 'localhost_1_30'...
+            Sent 'cb_part_527' to server 'localhost_1_30'.
+          Received 'cb_part_527' from server 'localhost_1_30'. (4560 ms elapsed)
+        Distributing super-thread jobs: cb_part_525
+          Sending 'cb_part_525' to server 'localhost_1_30'...
+            Sent 'cb_part_525' to server 'localhost_1_30'.
+          Received 'cb_part_525' from server 'localhost_1_30'. (180 ms elapsed)
+        Distributing super-thread jobs: cb_seq_409 cb_seq_413
+          Sending 'cb_seq_409' to server 'localhost_1_30'...
+            Sent 'cb_seq_409' to server 'localhost_1_30'.
+          Sending 'cb_seq_413' to server 'localhost_1_34'...
+            Sent 'cb_seq_413' to server 'localhost_1_34'.
+          Received 'cb_seq_413' from server 'localhost_1_34'. (7651 ms elapsed)
+          Received 'cb_seq_409' from server 'localhost_1_30'. (13445 ms elapsed)
+        Distributing super-thread jobs: cb_part_526 cv32e40p_compressed_decoder_FPU0_ZFINX0
+          Sending 'cb_part_526' to server 'localhost_1_30'...
+            Sent 'cb_part_526' to server 'localhost_1_30'.
+          Sending 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_34'...
+            Sent 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_34'.
+          Received 'cv32e40p_compressed_decoder_FPU0_ZFINX0' from server 'localhost_1_34'. (492 ms elapsed)
+          Received 'cb_part_526' from server 'localhost_1_30'. (1102 ms elapsed)
+        Distributing super-thread jobs: cb_seq_356 cb_seq_419 cb_seq_411 cb_seq_421 cb_seq cb_seq_350 cb_seq_352 cb_seq_392
+          Sending 'cb_seq_356' to server 'localhost_1_30'...
+            Sent 'cb_seq_356' to server 'localhost_1_30'.
+          Sending 'cb_seq_419' to server 'localhost_1_34'...
+            Sent 'cb_seq_419' to server 'localhost_1_34'.
+          Sending 'cb_seq_411' to server 'localhost_1_33'...
+            Sent 'cb_seq_411' to server 'localhost_1_33'.
+          Sending 'cb_seq_421' to server 'localhost_1_31'...
+            Sent 'cb_seq_421' to server 'localhost_1_31'.
+          Sending 'cb_seq' to server 'localhost_1_35'...
+            Sent 'cb_seq' to server 'localhost_1_35'.
+          Sending 'cb_seq_350' to server 'localhost_1_29'...
+            Sent 'cb_seq_350' to server 'localhost_1_29'.
+          Sending 'cb_seq_352' to server 'localhost_1_0'...
+            Sent 'cb_seq_352' to server 'localhost_1_0'.
+          Sending 'cb_seq_392' to server 'localhost_1_32'...
+            Sent 'cb_seq_392' to server 'localhost_1_32'.
+          Received 'cb_seq_392' from server 'localhost_1_32'. (2793 ms elapsed)
+          Received 'cb_seq_350' from server 'localhost_1_29'. (5937 ms elapsed)
+          Received 'cb_seq_352' from server 'localhost_1_0'. (6900 ms elapsed)
+          Received 'cb_seq_411' from server 'localhost_1_33'. (8020 ms elapsed)
+          Received 'cb_seq_421' from server 'localhost_1_31'. (7818 ms elapsed)
+          Received 'cb_seq_356' from server 'localhost_1_30'. (13943 ms elapsed)
+          Received 'cb_seq' from server 'localhost_1_35'. (13916 ms elapsed)
+          Received 'cb_seq_419' from server 'localhost_1_34'. (15234 ms elapsed)
+        Distributing super-thread jobs: cb_oseq_414 cb_oseq_410 cb_part_433
+          Sending 'cb_oseq_414' to server 'localhost_1_30'...
+            Sent 'cb_oseq_414' to server 'localhost_1_30'.
+          Sending 'cb_oseq_410' to server 'localhost_1_34'...
+            Sent 'cb_oseq_410' to server 'localhost_1_34'.
+          Sending 'cb_part_433' to server 'localhost_1_33'...
+            Sent 'cb_part_433' to server 'localhost_1_33'.
+          Received 'cb_part_433' from server 'localhost_1_33'. (164 ms elapsed)
+          Received 'cb_oseq_410' from server 'localhost_1_34'. (1653 ms elapsed)
+          Received 'cb_oseq_414' from server 'localhost_1_30'. (5587 ms elapsed)
+        Distributing super-thread jobs: cb_part_507 cb_part_503
+          Sending 'cb_part_507' to server 'localhost_1_30'...
+            Sent 'cb_part_507' to server 'localhost_1_30'.
+          Sending 'cb_part_503' to server 'localhost_1_34'...
+            Sent 'cb_part_503' to server 'localhost_1_34'.
+          Received 'cb_part_503' from server 'localhost_1_34'. (270 ms elapsed)
+          Received 'cb_part_507' from server 'localhost_1_30'. (2129 ms elapsed)
+        Distributing super-thread jobs: cb_seq_415
+          Sending 'cb_seq_415' to server 'localhost_1_30'...
+            Sent 'cb_seq_415' to server 'localhost_1_30'.
+          Received 'cb_seq_415' from server 'localhost_1_30'. (17534 ms elapsed)
+        Distributing super-thread jobs: cb_part_501
+          Sending 'cb_part_501' to server 'localhost_1_30'...
+            Sent 'cb_part_501' to server 'localhost_1_30'.
+          Received 'cb_part_501' from server 'localhost_1_30'. (678 ms elapsed)
+        Distributing super-thread jobs: cb_oseq_365 cb_part_511
+          Sending 'cb_oseq_365' to server 'localhost_1_30'...
+            Sent 'cb_oseq_365' to server 'localhost_1_30'.
+          Sending 'cb_part_511' to server 'localhost_1_34'...
+            Sent 'cb_part_511' to server 'localhost_1_34'.
+          Received 'cb_part_511' from server 'localhost_1_34'. (288 ms elapsed)
+          Received 'cb_oseq_365' from server 'localhost_1_30'. (5435 ms elapsed)
+        Distributing super-thread jobs: cb_part_499
+          Sending 'cb_part_499' to server 'localhost_1_30'...
+            Sent 'cb_part_499' to server 'localhost_1_30'.
+          Received 'cb_part_499' from server 'localhost_1_30'. (441 ms elapsed)
+        Distributing super-thread jobs: cb_part_506 cb_part_496
+          Sending 'cb_part_506' to server 'localhost_1_30'...
+            Sent 'cb_part_506' to server 'localhost_1_30'.
+          Sending 'cb_part_496' to server 'localhost_1_34'...
+            Sent 'cb_part_496' to server 'localhost_1_34'.
+          Received 'cb_part_496' from server 'localhost_1_34'. (622 ms elapsed)
+          Received 'cb_part_506' from server 'localhost_1_30'. (2963 ms elapsed)
+        Distributing super-thread jobs: cb_part_467 cb_part_500
+          Sending 'cb_part_467' to server 'localhost_1_30'...
+            Sent 'cb_part_467' to server 'localhost_1_30'.
+          Sending 'cb_part_500' to server 'localhost_1_34'...
+            Sent 'cb_part_500' to server 'localhost_1_34'.
+          Received 'cb_part_500' from server 'localhost_1_34'. (2164 ms elapsed)
+          Received 'cb_part_467' from server 'localhost_1_30'. (4404 ms elapsed)
+        Distributing super-thread jobs: cb_part_430
+          Sending 'cb_part_430' to server 'localhost_1_30'...
+            Sent 'cb_part_430' to server 'localhost_1_30'.
+          Received 'cb_part_430' from server 'localhost_1_30'. (452 ms elapsed)
+        Distributing super-thread jobs: cb_part_464
+          Sending 'cb_part_464' to server 'localhost_1_30'...
+            Sent 'cb_part_464' to server 'localhost_1_30'.
+          Received 'cb_part_464' from server 'localhost_1_30'. (541 ms elapsed)
+        Distributing super-thread jobs: cb_part_445 mux_ctl_1x cb_part_475
+          Sending 'cb_part_445' to server 'localhost_1_30'...
+            Sent 'cb_part_445' to server 'localhost_1_30'.
+          Sending 'mux_ctl_1x' to server 'localhost_1_34'...
+            Sent 'mux_ctl_1x' to server 'localhost_1_34'.
+          Sending 'cb_part_475' to server 'localhost_1_33'...
+            Sent 'cb_part_475' to server 'localhost_1_33'.
+          Received 'mux_ctl_1x' from server 'localhost_1_34'. (196 ms elapsed)
+          Received 'cb_part_475' from server 'localhost_1_33'. (248 ms elapsed)
+          Received 'cb_part_445' from server 'localhost_1_30'. (3357 ms elapsed)
+        Distributing super-thread jobs: cb_part_480 cb_part_460 cb_part_494 cb_oseq_363 cb_part_498 cb_part_502 cb_part_474 cb_part_529
+          Sending 'cb_part_480' to server 'localhost_1_30'...
+            Sent 'cb_part_480' to server 'localhost_1_30'.
+          Sending 'cb_part_460' to server 'localhost_1_34'...
+            Sent 'cb_part_460' to server 'localhost_1_34'.
+          Sending 'cb_part_494' to server 'localhost_1_33'...
+            Sent 'cb_part_494' to server 'localhost_1_33'.
+          Sending 'cb_oseq_363' to server 'localhost_1_31'...
+            Sent 'cb_oseq_363' to server 'localhost_1_31'.
+          Sending 'cb_part_498' to server 'localhost_1_35'...
+            Sent 'cb_part_498' to server 'localhost_1_35'.
+          Sending 'cb_part_502' to server 'localhost_1_29'...
+            Sent 'cb_part_502' to server 'localhost_1_29'.
+          Sending 'cb_part_474' to server 'localhost_1_0'...
+            Sent 'cb_part_474' to server 'localhost_1_0'.
+          Sending 'cb_part_529' to server 'localhost_1_32'...
+            Sent 'cb_part_529' to server 'localhost_1_32'.
+          Received 'cb_part_529' from server 'localhost_1_32'. (324 ms elapsed)
+          Received 'cb_part_494' from server 'localhost_1_33'. (451 ms elapsed)
+          Received 'cb_part_460' from server 'localhost_1_34'. (679 ms elapsed)
+          Received 'cb_oseq_363' from server 'localhost_1_31'. (664 ms elapsed)
+          Received 'cb_part_474' from server 'localhost_1_0'. (704 ms elapsed)
+          Received 'cb_part_498' from server 'localhost_1_35'. (1120 ms elapsed)
+          Received 'cb_part_480' from server 'localhost_1_30'. (1302 ms elapsed)
+          Received 'cb_part_502' from server 'localhost_1_29'. (1159 ms elapsed)
+        Distributing super-thread jobs: cb_seq_404 cb_seq_402
+          Sending 'cb_seq_404' to server 'localhost_1_30'...
+            Sent 'cb_seq_404' to server 'localhost_1_30'.
+          Sending 'cb_seq_402' to server 'localhost_1_34'...
+            Sent 'cb_seq_402' to server 'localhost_1_34'.
+          Received 'cb_seq_402' from server 'localhost_1_34'. (517 ms elapsed)
+          Received 'cb_seq_404' from server 'localhost_1_30'. (627 ms elapsed)
+        Distributing super-thread jobs: cb_oseq_371 cb_oseq_361 cb_part_478 cb_oseq cb_oseq_353 cb_oseq_351 cb_part_490 cb_oseq_408 cb_part_444 mrg_mux_ctl cb_part_470 cb_oseq_391
+          Sending 'cb_oseq_371' to server 'localhost_1_30'...
+            Sent 'cb_oseq_371' to server 'localhost_1_30'.
+          Sending 'cb_oseq_361' to server 'localhost_1_34'...
+            Sent 'cb_oseq_361' to server 'localhost_1_34'.
+          Sending 'cb_part_478' to server 'localhost_1_33'...
+            Sent 'cb_part_478' to server 'localhost_1_33'.
+          Sending 'cb_oseq' to server 'localhost_1_31'...
+            Sent 'cb_oseq' to server 'localhost_1_31'.
+          Sending 'cb_oseq_353' to server 'localhost_1_35'...
+            Sent 'cb_oseq_353' to server 'localhost_1_35'.
+          Sending 'cb_oseq_351' to server 'localhost_1_29'...
+            Sent 'cb_oseq_351' to server 'localhost_1_29'.
+          Sending 'cb_part_490' to server 'localhost_1_0'...
+            Sent 'cb_part_490' to server 'localhost_1_0'.
+          Sending 'cb_oseq_408' to server 'localhost_1_32'...
+            Sent 'cb_oseq_408' to server 'localhost_1_32'.
+          Received 'cb_oseq_408' from server 'localhost_1_32'. (726 ms elapsed)
+          Sending 'cb_part_444' to server 'localhost_1_32'...
+            Sent 'cb_part_444' to server 'localhost_1_32'.
+          Received 'cb_part_478' from server 'localhost_1_33'. (898 ms elapsed)
+          Sending 'mrg_mux_ctl' to server 'localhost_1_33'...
+            Sent 'mrg_mux_ctl' to server 'localhost_1_33'.
+          Received 'cb_part_444' from server 'localhost_1_32'. (850 ms elapsed)
+          Sending 'cb_part_470' to server 'localhost_1_32'...
+            Sent 'cb_part_470' to server 'localhost_1_32'.
+          Received 'cb_oseq_361' from server 'localhost_1_34'. (1817 ms elapsed)
+          Sending 'cb_oseq_391' to server 'localhost_1_34'...
+            Sent 'cb_oseq_391' to server 'localhost_1_34'.
+          Received 'cb_oseq_351' from server 'localhost_1_29'. (1971 ms elapsed)
+          Received 'cb_part_470' from server 'localhost_1_32'. (393 ms elapsed)
+          Received 'cb_oseq_371' from server 'localhost_1_30'. (2499 ms elapsed)
+          Received 'cb_oseq_353' from server 'localhost_1_35'. (2336 ms elapsed)
+          Received 'cb_oseq_391' from server 'localhost_1_34'. (768 ms elapsed)
+          Received 'cb_part_490' from server 'localhost_1_0'. (2654 ms elapsed)
+          Received 'mrg_mux_ctl' from server 'localhost_1_33'. (2242 ms elapsed)
+          Received 'cb_oseq' from server 'localhost_1_31'. (3121 ms elapsed)
+ 
+Global mapping status
+=====================
+                                   Group   
+                                  Tot Wrst 
+                           Total  Weighted 
+Operation                   Area   Slacks  
+ global_map              4302190        0 
+
+    Cost Group            Target    Slack    Diff.  Constr.
+-----------------------------------------------------------
+       sys_clk               300      405             20000 
+      jtag_clk              1483    47574             50000     (launch clock period: 100000)
+
+ 
+Global incremental target info
+==============================
+Cost Group 'jtag_clk' target slack:   989 ps
+Target path end-point (Pin: i_soc/i_core_i_debug/i_dtm/i_dmi_jtag_tap/td_o_reg/D (DFNCND2BWP7T/D))
+
+Cost Group 'sys_clk' target slack:   387 ps
+Target path end-point (Pin: i_soc/i_core_i_vector/i_post/product_q_reg[55]/D (EDFCNQD1BWP7T/D))
+
+              Distributing super-thread jobs: cb_seq_358 cb_seq_354
+                Sending 'cb_seq_358' to server 'localhost_1_30'...
+                  Sent 'cb_seq_358' to server 'localhost_1_30'.
+                Sending 'cb_seq_354' to server 'localhost_1_34'...
+                  Sent 'cb_seq_354' to server 'localhost_1_34'.
+                Received 'cb_seq_354' from server 'localhost_1_34'. (1986 ms elapsed)
+                Received 'cb_seq_358' from server 'localhost_1_30'. (20683 ms elapsed)
+              Distributing super-thread jobs: cb_seq_417 cb_seq_370 cb_seq_388 cb_seq_360 cb_seq_372 cb_seq_362
+                Sending 'cb_seq_417' to server 'localhost_1_30'...
+                  Sent 'cb_seq_417' to server 'localhost_1_30'.
+                Sending 'cb_seq_370' to server 'localhost_1_34'...
+                  Sent 'cb_seq_370' to server 'localhost_1_34'.
+                Sending 'cb_seq_388' to server 'localhost_1_33'...
+                  Sent 'cb_seq_388' to server 'localhost_1_33'.
+                Sending 'cb_seq_360' to server 'localhost_1_31'...
+                  Sent 'cb_seq_360' to server 'localhost_1_31'.
+                Sending 'cb_seq_372' to server 'localhost_1_35'...
+                  Sent 'cb_seq_372' to server 'localhost_1_35'.
+                Sending 'cb_seq_362' to server 'localhost_1_29'...
+                  Sent 'cb_seq_362' to server 'localhost_1_29'.
+                Received 'cb_seq_417' from server 'localhost_1_30'. (1051 ms elapsed)
+                Received 'cb_seq_362' from server 'localhost_1_29'. (442 ms elapsed)
+                Received 'cb_seq_372' from server 'localhost_1_35'. (555 ms elapsed)
+                Received 'cb_seq_370' from server 'localhost_1_34'. (1079 ms elapsed)
+                Received 'cb_seq_388' from server 'localhost_1_33'. (1226 ms elapsed)
+                Received 'cb_seq_360' from server 'localhost_1_31'. (1163 ms elapsed)
+              Distributing super-thread jobs: cb_part_527
+                Sending 'cb_part_527' to server 'localhost_1_30'...
+                  Sent 'cb_part_527' to server 'localhost_1_30'.
+                Received 'cb_part_527' from server 'localhost_1_30'. (929 ms elapsed)
+              Distributing super-thread jobs: cb_seq_409 cb_seq_413
+                Sending 'cb_seq_409' to server 'localhost_1_30'...
+                  Sent 'cb_seq_409' to server 'localhost_1_30'.
+                Sending 'cb_seq_413' to server 'localhost_1_34'...
+                  Sent 'cb_seq_413' to server 'localhost_1_34'.
+                Received 'cb_seq_413' from server 'localhost_1_34'. (2183 ms elapsed)
+                Received 'cb_seq_409' from server 'localhost_1_30'. (5170 ms elapsed)
+              Distributing super-thread jobs: cb_part_526
+                Sending 'cb_part_526' to server 'localhost_1_30'...
+                  Sent 'cb_part_526' to server 'localhost_1_30'.
+                Received 'cb_part_526' from server 'localhost_1_30'. (406 ms elapsed)
+              Distributing super-thread jobs: cb_seq_356 cb_seq_419 cb_seq_411 cb_seq_421 cb_seq_352 cb_seq cb_seq_350
+                Sending 'cb_seq_356' to server 'localhost_1_30'...
+                  Sent 'cb_seq_356' to server 'localhost_1_30'.
+                Sending 'cb_seq_419' to server 'localhost_1_34'...
+                  Sent 'cb_seq_419' to server 'localhost_1_34'.
+                Sending 'cb_seq_411' to server 'localhost_1_33'...
+                  Sent 'cb_seq_411' to server 'localhost_1_33'.
+                Sending 'cb_seq_421' to server 'localhost_1_31'...
+                  Sent 'cb_seq_421' to server 'localhost_1_31'.
+                Sending 'cb_seq_352' to server 'localhost_1_35'...
+                  Sent 'cb_seq_352' to server 'localhost_1_35'.
+                Sending 'cb_seq' to server 'localhost_1_29'...
+                  Sent 'cb_seq' to server 'localhost_1_29'.
+                Sending 'cb_seq_350' to server 'localhost_1_0'...
+                  Sent 'cb_seq_350' to server 'localhost_1_0'.
+                Received 'cb_seq' from server 'localhost_1_29'. (613 ms elapsed)
+                Received 'cb_seq_356' from server 'localhost_1_30'. (1732 ms elapsed)
+                Received 'cb_seq_411' from server 'localhost_1_33'. (1269 ms elapsed)
+                Received 'cb_seq_352' from server 'localhost_1_35'. (988 ms elapsed)
+                Received 'cb_seq_350' from server 'localhost_1_0'. (781 ms elapsed)
+                Received 'cb_seq_421' from server 'localhost_1_31'. (2155 ms elapsed)
+                Received 'cb_seq_419' from server 'localhost_1_34'. (3556 ms elapsed)
+              Distributing super-thread jobs: cb_oseq_414 cb_oseq_410
+                Sending 'cb_oseq_414' to server 'localhost_1_30'...
+                  Sent 'cb_oseq_414' to server 'localhost_1_30'.
+                Sending 'cb_oseq_410' to server 'localhost_1_34'...
+                  Sent 'cb_oseq_410' to server 'localhost_1_34'.
+                Received 'cb_oseq_410' from server 'localhost_1_34'. (426 ms elapsed)
+                Received 'cb_oseq_414' from server 'localhost_1_30'. (1159 ms elapsed)
+              Distributing super-thread jobs: cb_seq_392
+                Sending 'cb_seq_392' to server 'localhost_1_30'...
+                  Sent 'cb_seq_392' to server 'localhost_1_30'.
+                Received 'cb_seq_392' from server 'localhost_1_30'. (269 ms elapsed)
+              Distributing super-thread jobs: cb_part_507
+                Sending 'cb_part_507' to server 'localhost_1_30'...
+                  Sent 'cb_part_507' to server 'localhost_1_30'.
+                Received 'cb_part_507' from server 'localhost_1_30'. (905 ms elapsed)
+              Distributing super-thread jobs: cb_seq_415
+                Sending 'cb_seq_415' to server 'localhost_1_30'...
+                  Sent 'cb_seq_415' to server 'localhost_1_30'.
+                Received 'cb_seq_415' from server 'localhost_1_30'. (2856 ms elapsed)
+              Distributing super-thread jobs: cb_part_501
+                Sending 'cb_part_501' to server 'localhost_1_30'...
+                  Sent 'cb_part_501' to server 'localhost_1_30'.
+                Received 'cb_part_501' from server 'localhost_1_30'. (198 ms elapsed)
+              Distributing super-thread jobs: cb_oseq_365
+                Sending 'cb_oseq_365' to server 'localhost_1_30'...
+                  Sent 'cb_oseq_365' to server 'localhost_1_30'.
+                Received 'cb_oseq_365' from server 'localhost_1_30'. (1637 ms elapsed)
+              Distributing super-thread jobs: cb_part_506 cb_part_496
+                Sending 'cb_part_506' to server 'localhost_1_30'...
+                  Sent 'cb_part_506' to server 'localhost_1_30'.
+                Sending 'cb_part_496' to server 'localhost_1_34'...
+                  Sent 'cb_part_496' to server 'localhost_1_34'.
+                Received 'cb_part_496' from server 'localhost_1_34'. (328 ms elapsed)
+                Received 'cb_part_506' from server 'localhost_1_30'. (745 ms elapsed)
+              Distributing super-thread jobs: cb_part_467 cb_part_500
+                Sending 'cb_part_467' to server 'localhost_1_30'...
+                  Sent 'cb_part_467' to server 'localhost_1_30'.
+                Sending 'cb_part_500' to server 'localhost_1_34'...
+                  Sent 'cb_part_500' to server 'localhost_1_34'.
+                Received 'cb_part_500' from server 'localhost_1_34'. (1424 ms elapsed)
+                Received 'cb_part_467' from server 'localhost_1_30'. (2912 ms elapsed)
+              Distributing super-thread jobs: cb_part_480
+                Sending 'cb_part_480' to server 'localhost_1_30'...
+                  Sent 'cb_part_480' to server 'localhost_1_30'.
+                Received 'cb_part_480' from server 'localhost_1_30'. (282 ms elapsed)
+              Distributing super-thread jobs: cb_oseq_371 cb_part_445 cb_oseq_361 cb_part_478
+                Sending 'cb_oseq_371' to server 'localhost_1_30'...
+                  Sent 'cb_oseq_371' to server 'localhost_1_30'.
+                Sending 'cb_part_445' to server 'localhost_1_34'...
+                  Sent 'cb_part_445' to server 'localhost_1_34'.
+                Sending 'cb_oseq_361' to server 'localhost_1_33'...
+                  Sent 'cb_oseq_361' to server 'localhost_1_33'.
+                Sending 'cb_part_478' to server 'localhost_1_31'...
+                  Sent 'cb_part_478' to server 'localhost_1_31'.
+                Received 'cb_part_478' from server 'localhost_1_31'. (277 ms elapsed)
+                Received 'cb_oseq_361' from server 'localhost_1_33'. (334 ms elapsed)
+                Received 'cb_part_445' from server 'localhost_1_34'. (614 ms elapsed)
+                Received 'cb_oseq_371' from server 'localhost_1_30'. (938 ms elapsed)
+==================================
+Stage : global_incr_map 
+==================================
+  =================
+   Message Summary
+  =================
+---------------------------------------------------------------------
+|  Id  |Sev  |Count |                 Message Text                  |
+---------------------------------------------------------------------
+| PA-7 |Info |  210 |Resetting power analysis results.              |
+|      |     |      |All computed switching activities are removed. |
+---------------------------------------------------------------------
+ 
+Global incremental optimization status
+======================================
+                                   Group   
+                                  Tot Wrst 
+                           Total  Weighted 
+Operation                   Area   Slacks  
+ global_incr             4220733        0 
+
+    Cost Group            Target    Slack    Diff.  Constr.
+-----------------------------------------------------------
+       sys_clk               387      381             20000 
+      jtag_clk               989    47533             50000     (launch clock period: 100000)
+
+
++-----------+-----------------+-----+----------------------+---------------------------+
+|   Host    |     Machine     | CPU | Physical Memory (MB) | Peak Physical Memory (MB) |
++-----------+-----------------+-----+----------------------+---------------------------+
+| localhost | tc-01a0e839f9eb |  8  |        1729.1        |          1892.3           |
++-----------+-----------------+-----+----------------------+---------------------------+
+
++----------------+----------------------+---------------------------+
+|     Server     | Physical Memory (MB) | Peak Physical Memory (MB) |
++----------------+----------------------+---------------------------+
+| localhost_1_34 |      115.0 [1]       |          [1] [2]          |
+| localhost_1_0  |      810.1 [3]       |         851.7 [3]         |
+| localhost_1_32 |       86.4 [1]       |          [1] [2]          |
+| localhost_1_35 |       90.3 [1]       |          [1] [2]          |
+| localhost_1_33 |      101.5 [1]       |          [1] [2]          |
+| localhost_1_30 |      123.6 [1]       |          [1] [2]          |
+| localhost_1_29 |       92.8 [1]       |          [1] [2]          |
+| localhost_1_31 |       97.5 [1]       |          [1] [2]          |
++----------------+----------------------+---------------------------+
+[1] Memory is included in parent localhost_1_0.
+[2] Peak physical memory is not available for forked background servers.
+[3] Memory of child processes is included.
+
+
+State Retention Synthesis Status
+================================
+
+Category                        Flops  Latches   Percentage
+-----------------------------------------------------------
+Total instances                 20041        1        100.0
+Excluded from State Retention   20041        1        100.0
+    - Will not convert          20041        1        100.0
+      - Preserved                   0        0          0.0
+      - Power intent excluded   20041        1        100.0
+    - Could not convert             0        0          0.0
+      - Scan type                   0        0          0.0
+      - No suitable cell            0        0          0.0
+State Retention instances           0        0          0.0
+-----------------------------------------------------------
+
+INFO: skipping constant propagation
+PBS_Techmap-Global Mapping - Elapsed_Time 388, CPU_Time 395.74094399999996
+stamp 'PBS_Techmap-Global Mapping' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:14(00:04:26) |  00:03:20(00:03:40) |  32.7( 35.1) |   12:47:58 (Nov03) |   1.38 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:18(00:04:30) |  00:00:04(00:00:04) |   0.7(  0.6) |   12:48:02 (Nov03) |   1.38 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:27(00:04:40) |  00:00:09(00:00:10) |   1.5(  1.6) |   12:48:12 (Nov03) |   1.35 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:30(00:04:43) |  00:00:03(00:00:03) |   0.5(  0.5) |   12:48:16 (Nov03) |   1.34 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:06(00:11:12) |  00:06:35(00:06:29) |  64.6( 62.1) |   12:54:44 (Nov03) |   1.46 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+Info    : Wrote formal verification information. [CFM-5]
+        : Wrote 'fv/mynpu_asic_top/fv_map.fv.json' for netlist 'fv/mynpu_asic_top/fv_map.v.gz'.
+Info    : Wrote dofile. [CFM-1]
+        : Dofile is 'fv/mynpu_asic_top/rtl_to_fv_map.do'.
+        : Alias mapping flow is enabled.
+PBS_TechMap-Datapath Postmap Operations - Elapsed_Time 16, CPU_Time 16.0
+stamp 'PBS_TechMap-Datapath Postmap Operations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:14(00:04:26) |  00:03:20(00:03:40) |  31.9( 34.3) |   12:47:58 (Nov03) |   1.38 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:18(00:04:30) |  00:00:04(00:00:04) |   0.6(  0.6) |   12:48:02 (Nov03) |   1.38 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:27(00:04:40) |  00:00:09(00:00:10) |   1.4(  1.6) |   12:48:12 (Nov03) |   1.35 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:30(00:04:43) |  00:00:03(00:00:03) |   0.5(  0.5) |   12:48:16 (Nov03) |   1.34 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:06(00:11:12) |  00:06:35(00:06:29) |  63.0( 60.6) |   12:54:44 (Nov03) |   1.46 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:22(00:11:28) |  00:00:16(00:00:16) |   2.5(  2.5) |   12:55:00 (Nov03) |   1.39 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+PBS_TechMap-Postmap HBO Optimizations - Elapsed_Time 2, CPU_Time 2.1280830000000606
+stamp 'PBS_TechMap-Postmap HBO Optimizations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:14(00:04:26) |  00:03:20(00:03:40) |  31.8( 34.2) |   12:47:58 (Nov03) |   1.38 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:18(00:04:30) |  00:00:04(00:00:04) |   0.6(  0.6) |   12:48:02 (Nov03) |   1.38 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:27(00:04:40) |  00:00:09(00:00:10) |   1.4(  1.6) |   12:48:12 (Nov03) |   1.35 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:30(00:04:43) |  00:00:03(00:00:03) |   0.5(  0.5) |   12:48:16 (Nov03) |   1.34 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:06(00:11:12) |  00:06:35(00:06:29) |  62.8( 60.4) |   12:54:44 (Nov03) |   1.46 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:22(00:11:28) |  00:00:16(00:00:16) |   2.5(  2.5) |   12:55:00 (Nov03) |   1.39 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:24(00:11:30) |  00:00:02(00:00:02) |   0.3(  0.3) |   12:55:02 (Nov03) |   1.39 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+ Doing ConstProp on design:mynpu_asic_top ... 
+
+IOPT-REDREM: Performing redundancy removal: Detected 1480 redundant wires. CPU time 7.725 seconds.
+
+Time taken by ConstProp Step: 00:00:16
+PBS_TechMap-Postmap Clock Gating - Elapsed_Time 17, CPU_Time 17.0
+stamp 'PBS_TechMap-Postmap Clock Gating' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:14(00:04:26) |  00:03:20(00:03:40) |  31.0( 33.3) |   12:47:58 (Nov03) |   1.38 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:18(00:04:30) |  00:00:04(00:00:04) |   0.6(  0.6) |   12:48:02 (Nov03) |   1.38 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:27(00:04:40) |  00:00:09(00:00:10) |   1.4(  1.5) |   12:48:12 (Nov03) |   1.35 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:30(00:04:43) |  00:00:03(00:00:03) |   0.5(  0.5) |   12:48:16 (Nov03) |   1.34 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:06(00:11:12) |  00:06:35(00:06:29) |  61.1( 58.9) |   12:54:44 (Nov03) |   1.46 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:22(00:11:28) |  00:00:16(00:00:16) |   2.5(  2.4) |   12:55:00 (Nov03) |   1.39 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:24(00:11:30) |  00:00:02(00:00:02) |   0.3(  0.3) |   12:55:02 (Nov03) |   1.39 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:41(00:11:47) |  00:00:17(00:00:17) |   2.6(  2.6) |   12:55:19 (Nov03) |   1.44 GB | PBS_TechMap-Postmap Clock Gating
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+-------------------------------------------------------------------------------
+ hi_fo_buf               4216413        0         0    106067      156
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+       hi_fo_buf        12  (        9 /        9 )  1.66
+
+ 
+Incremental optimization status
+===============================
+                                   Group   
+                                  Tot Wrst     Total - - DRC Totals - -
+                           Total  Weighted      Neg      Max       Max 
+Operation                   Area   Slacks      Slack    Trans      Cap 
+ init_delay              4216413        0         0    106067      156
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+       crit_upsz         0  (        0 /        0 )  0.00
+    plc_bal_star         0  (        0 /        0 )  0.00
+     drc_buftimb         0  (        0 /        0 )  0.00
+          plc_st         0  (        0 /        0 )  0.00
+    plc_st_fence         0  (        0 /        0 )  0.00
+        plc_star         0  (        0 /        0 )  0.00
+      plc_laf_st         0  (        0 /        0 )  0.00
+ plc_laf_st_fence         0  (        0 /        0 )  0.00
+     drc_buftims         0  (        0 /        0 )  0.00
+            fopt         0  (        0 /        0 )  0.00
+   plc_laf_lo_st         0  (        0 /        0 )  0.00
+       plc_lo_st         0  (        0 /        0 )  0.00
+        mb_split         0  (        0 /        0 )  0.00
+
+ 
+Local TNS optimization status
+=============================
+                                   Group   
+                                  Tot Wrst     Total - - DRC Totals - -
+                           Total  Weighted      Neg      Max       Max 
+Operation                   Area   Slacks      Slack    Trans      Cap 
+ init_tns                4216413        0         0    106067      156
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+    plc_bal_star         0  (        0 /        0 )  0.00
+     drc_buftimb         0  (        0 /        0 )  0.00
+     drc_buftims         0  (        0 /        0 )  0.00
+       crit_upsz         0  (        0 /        0 )  0.00
+   plc_laf_lo_st         0  (        0 /        0 )  0.00
+       plc_lo_st         0  (        0 /        0 )  0.00
+            fopt         0  (        0 /        0 )  0.00
+       crit_dnsz         0  (        0 /        0 )  0.00
+             dup         0  (        0 /        0 )  0.00
+        setup_dn         0  (        0 /        0 )  0.00
+        mb_split         0  (        0 /        0 )  0.00
+
+PBS_TechMap-Postmap Cleanup - Elapsed_Time 6, CPU_Time 6.836266000000023
+stamp 'PBS_TechMap-Postmap Cleanup' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:14(00:04:26) |  00:03:20(00:03:40) |  30.6( 33.0) |   12:47:58 (Nov03) |   1.38 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:18(00:04:30) |  00:00:04(00:00:04) |   0.6(  0.6) |   12:48:02 (Nov03) |   1.38 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:27(00:04:40) |  00:00:09(00:00:10) |   1.4(  1.5) |   12:48:12 (Nov03) |   1.35 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:30(00:04:43) |  00:00:03(00:00:03) |   0.5(  0.4) |   12:48:16 (Nov03) |   1.34 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:06(00:11:12) |  00:06:35(00:06:29) |  60.5( 58.3) |   12:54:44 (Nov03) |   1.46 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:22(00:11:28) |  00:00:16(00:00:16) |   2.4(  2.4) |   12:55:00 (Nov03) |   1.39 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:24(00:11:30) |  00:00:02(00:00:02) |   0.3(  0.3) |   12:55:02 (Nov03) |   1.39 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:41(00:11:47) |  00:00:17(00:00:17) |   2.6(  2.5) |   12:55:19 (Nov03) |   1.44 GB | PBS_TechMap-Postmap Clock Gating
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:48(00:11:53) |  00:00:06(00:00:06) |   1.0(  0.9) |   12:55:25 (Nov03) |   1.45 GB | PBS_TechMap-Postmap Cleanup
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+PBS_Techmap-Post_MBCI - Elapsed_Time 0, CPU_Time 0.0
+stamp 'PBS_Techmap-Post_MBCI' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:54(00:00:46) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:44:18 (Nov03) |  788.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:14(00:04:26) |  00:03:20(00:03:40) |  30.6( 33.0) |   12:47:58 (Nov03) |   1.38 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:18(00:04:30) |  00:00:04(00:00:04) |   0.6(  0.6) |   12:48:02 (Nov03) |   1.38 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:27(00:04:40) |  00:00:09(00:00:10) |   1.4(  1.5) |   12:48:12 (Nov03) |   1.35 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:30(00:04:43) |  00:00:03(00:00:03) |   0.5(  0.4) |   12:48:16 (Nov03) |   1.34 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:06(00:11:12) |  00:06:35(00:06:29) |  60.5( 58.3) |   12:54:44 (Nov03) |   1.46 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:22(00:11:28) |  00:00:16(00:00:16) |   2.4(  2.4) |   12:55:00 (Nov03) |   1.39 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:24(00:11:30) |  00:00:02(00:00:02) |   0.3(  0.3) |   12:55:02 (Nov03) |   1.39 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:41(00:11:47) |  00:00:17(00:00:17) |   2.6(  2.5) |   12:55:19 (Nov03) |   1.44 GB | PBS_TechMap-Postmap Clock Gating
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:48(00:11:53) |  00:00:06(00:00:06) |   1.0(  0.9) |   12:55:25 (Nov03) |   1.45 GB | PBS_TechMap-Postmap Cleanup
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:11:48(00:11:53) |  00:00:00(00:00:00) |   0.0(  0.0) |   12:55:25 (Nov03) |   1.45 GB | PBS_Techmap-Post_MBCI
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+##>=================== Cadence Confidential (Mapping-Logical) ===================
+##>Main Thread Summary:
+##>----------------------------------------------------------------------------------------
+##>STEP                           Elapsed       WNS       TNS     Insts      Area    Memory
+##>----------------------------------------------------------------------------------------
+##>M:Initial                            2         -         -    183254   4640236      1353
+##>M:Pre Cleanup                        0         -         -    183254   4640236      1353
+##>M:Setup                              0         -         -         -         -         -
+##>M:Launch ST                          0         -         -         -         -         -
+##>M:Design Partition                   0         -         -         -         -         -
+##>M:Create Partition Netlists          0         -         -         -         -         -
+##>M:Init Power                         0         -         -         -         -         -
+##>M:Budgeting                          0         -         -         -         -         -
+##>M:Derenv-DB                          0         -         -         -         -         -
+##>M:Debug Outputs                      0         -         -         -         -         -
+##>M:ST loading                         0         -         -         -         -         -
+##>M:Distributed                        0         -         -         -         -         -
+##>M:Timer                              0         -         -         -         -         -
+##>M:Assembly                           0         -         -         -         -         -
+##>M:DFT                                0         -         -         -         -         -
+##>M:DP Operations                     16         -         -     98823   3039367      1387
+##>M:Const Prop                         0       381         0     98823   3039367      1387
+##>M:Cleanup                            6       381         0     98787   3038974      1445
+##>M:MBCI                               0         -         -     98787   3038974      1445
+##>M:Const Gate Removal                 0         -         -         -         -         -
+##>M:Misc                             411
+##>----------------------------------------------------------------------------------------
+##>Total Elapsed                      435
+##>========================================================================================
+
++-----------+-----------------+-----+----------------------+---------------------------+
+|   Host    |     Machine     | CPU | Physical Memory (MB) | Peak Physical Memory (MB) |
++-----------+-----------------+-----+----------------------+---------------------------+
+| localhost | tc-01a0e839f9eb |  1  |        1445.4        |          1892.3           |
++-----------+-----------------+-----+----------------------+---------------------------+
+
++---------------+----------------------+---------------------------+
+|    Server     | Physical Memory (MB) | Peak Physical Memory (MB) |
++---------------+----------------------+---------------------------+
+| localhost_1_0 |        509.1         |           851.7           |
++---------------+----------------------+---------------------------+
+
+Info    : Done mapping. [SYNTH-5]
+        : Done mapping 'mynpu_asic_top'.
+      timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                      syn_map
+@file(synth_chip.tcl) 13: syn_opt
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Info    : Incrementally optimizing. [SYNTH-7]
+        : Incrementally optimizing 'mynpu_asic_top' using 'low' effort.
+ 
+Incremental optimization status
+===============================
+                                   Group   
+                                  Tot Wrst     Total - - DRC Totals - -
+                           Total  Weighted      Neg      Max       Max 
+Operation                   Area   Slacks      Slack    Trans      Cap 
+ init_iopt               4216413        0         0    106067      156
+-------------------------------------------------------------------------------
+ const_prop              4216415        0         0         0        0
+ simp_cc_inputs          4210417        0         0         0        0
+ 
+Incremental optimization status
+===============================
+                                   Group   
+                                  Tot Wrst     Total - - DRC Totals - -
+                           Total  Weighted      Neg      Max       Max 
+Operation                   Area   Slacks      Slack    Trans      Cap 
+ init_delay              4210417        0         0         0        0
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+       crit_upsz         0  (        0 /        0 )  0.00
+    plc_bal_star         0  (        0 /        0 )  0.00
+     drc_buftimb         0  (        0 /        0 )  0.00
+          plc_st         0  (        0 /        0 )  0.00
+    plc_st_fence         0  (        0 /        0 )  0.00
+        plc_star         0  (        0 /        0 )  0.00
+      plc_laf_st         0  (        0 /        0 )  0.00
+ plc_laf_st_fence         0  (        0 /        0 )  0.00
+     drc_buftims         0  (        0 /        0 )  0.00
+            fopt         0  (        0 /        0 )  0.00
+   plc_laf_lo_st         0  (        0 /        0 )  0.00
+       plc_lo_st         0  (        0 /        0 )  0.00
+        mb_split         0  (        0 /        0 )  0.00
+
+==================================
+Stage : incr_opt 
+==================================
+  =================
+   Message Summary
+  =================
+--------------------------------------------------------------------------------
+|   Id    |Sev  |Count |                     Message Text                      |
+--------------------------------------------------------------------------------
+| CFM-1   |Info |    1 |Wrote dofile.                                          |
+| CFM-5   |Info |    1 |Wrote formal verification information.                 |
+| LBR-155 |Info |   24 |Mismatch in unateness between 'timing_sense' attribute |
+|         |     |      | and the function.                                     |
+|         |     |      |The 'timing_sense' attribute will be respected.        |
+| PA-7    |Info |    4 |Resetting power analysis results.                      |
+|         |     |      |All computed switching activities are removed.         |
+| ST-112  |Info |    7 |A super-threading server has been shut down normally.  |
+|         |     |      |A super-threaded optimization is complete and a CPU    |
+|         |     |      | server was successfully shut down.                    |
+| SYNTH-5 |Info |    1 |Done mapping.                                          |
+| SYNTH-7 |Info |    1 |Incrementally optimizing.                              |
+| TIM-501 |Info |    2 |Resetting the break_timing_paths attribute of a pin    |
+|         |     |      | removes exceptions set on the pin. break_timing_paths |
+|         |     |      | attribute has default value of false and can be reset |
+|         |     |      | to other values either false or clock_gating depends  |
+|         |     |      | on the enable signal.                                 |
+|         |     |      |Do the analysis and apply the case analysis on the pin |
+|         |     |      | whether you want to break the timing paths or not     |
+| TUI-58  |Info |    2 |Removed object.                                        |
+--------------------------------------------------------------------------------
+Info    : Done incrementally optimizing. [SYNTH-8]
+        : Done incrementally optimizing 'mynpu_asic_top'.
+      timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                      syn_opt
+@file(synth_chip.tcl) 14: write_hdl > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/mynpu/chip_synth/mynpu_asic_top.postsyn.v
+@file(synth_chip.tcl) 15: write_sdc > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/mynpu/chip_synth/mynpu_asic_top.sdc
+Finished SDC export (command execution time mm:ss (real) = 00:01).
+@file(synth_chip.tcl) 16: report_area > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/mynpu/chip_synth/area.rpt
+@file(synth_chip.tcl) 17: report_qor > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/mynpu/chip_synth/qor.rpt
+@file(synth_chip.tcl) 18: report_timing -max_paths 10 > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/mynpu/chip_synth/timing.rpt
+Warning : Timing problems have been detected in this design. [TIM-11]
+        : The design is 'mynpu_asic_top'.
+        : Use 'check_timing_intent' or 'report timing -lint' to report more information.
+@file(synth_chip.tcl) 19: check_design > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/mynpu/chip_synth/check_design.rpt
+
+@file(synth_chip.tcl) 20: check_design -unresolved > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-regfile-fullchip/mynpu/chip_synth/unresolved.rpt
+
+@file(synth_chip.tcl) 21: puts FLOW_STAGE_OK_CHIP_SYNTHESIS
+FLOW_STAGE_OK_CHIP_SYNTHESIS
+@file(synth_chip.tcl) 22: exit
+
++-----------+-----------------+-----+----------------------+---------------------------+
+|   Host    |     Machine     | CPU | Physical Memory (MB) | Peak Physical Memory (MB) |
++-----------+-----------------+-----+----------------------+---------------------------+
+| localhost | tc-01a0e839f9eb |  1  |        1463.4        |          1892.3           |
++-----------+-----------------+-----+----------------------+---------------------------+
+
++---------------+----------------------+---------------------------+
+|    Server     | Physical Memory (MB) | Peak Physical Memory (MB) |
++---------------+----------------------+---------------------------+
+| localhost_1_0 |        508.6         |           851.7           |
++---------------+----------------------+---------------------------+
+
+Info    : A super-threading server has been shut down normally. [ST-112]
+        : The server 'localhost_1_0' was process '2213510' on this host.
+        : A super-threaded optimization is complete and a CPU server was successfully shut down.

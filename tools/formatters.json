@@ -1,0 +1,32 @@
+{
+  "verible-verilog-format": {
+    "version": "v0.0-4298-g085eef05",
+    "url": "https://github.com/chipsalliance/verible/releases/download/v0.0-4298-g085eef05/verible-v0.0-4298-g085eef05-linux-static-x86_64.tar.gz",
+    "archive": "tar",
+    "sha256": "b0a7b1ae948ca82e9d73a8a93e3844e4b2daa1db59df1f1eb5e1050260828473"
+  },
+  "verible-verilog-diff": {
+    "version": "v0.0-4298-g085eef05",
+    "url": "https://github.com/chipsalliance/verible/releases/download/v0.0-4298-g085eef05/verible-v0.0-4298-g085eef05-linux-static-x86_64.tar.gz",
+    "archive": "tar",
+    "sha256": "757cef3173cd4ab933fd5f677f65078aa1e30ae47431bb8a5f367b69dcdfd161"
+  },
+  "ruff": {
+    "version": "0.17.3",
+    "url": "https://github.com/astral-sh/ruff/releases/download/0.17.3/ruff-x86_64-unknown-linux-gnu.tar.gz",
+    "archive": "tar",
+    "sha256": "6761c67c2b307be3905473b165eb5af0fb2f083836b04f9e4a8cdd0caee37833"
+  },
+  "shfmt": {
+    "version": "v3.14.1",
+    "url": "https://github.com/mvdan/sh/releases/download/v3.14.1/shfmt_v3.14.1_linux_amd64",
+    "archive": "binary",
+    "sha256": "76e77641faa025814b77f153b29796b8e6fa2fca03e0c76a691608b86c7ea7bf"
+  },
+  "clang-format": {
+    "version": "18.1.8",
+    "url": "https://files.pythonhosted.org/packages/05/a8/d94adc8025c6a313bed5da994c421fff7dc4288d20028b309b1d45e15032/clang_format-18.1.8-py2.py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "archive": "zip",
+    "sha256": "7f15e3247bae5b3c1b30b1ab17f4d0ca2649380f09b96ef2d1b2e3495bd647e9"
+  }
+}

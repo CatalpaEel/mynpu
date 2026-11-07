@@ -1,0 +1,11 @@
+{
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip",
+  "checkpoint": "13_finished",
+  "scope": "Actual 2mm x 2mm native PAD routed layout. Not closed: 124 DRC, setup -0.566ns, hold -0.033ns",
+  "sha256": {
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/mynpu/pnr/outputs/fullchip-unclosed.png": "532da199b0022aa235acc370b9833ff6e8b4a26342b572d8053ea076b174cef4",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/scripts/capture.tcl": "a313356a2b8fc4c76b85ba19761797557a432f4f3f3ee739771b0c32935f03be",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/capture.log": "b5c34a087c104306aa7ecf8b3f1e856a08bc8ca595d5c9344bf0b55cc4288c60",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/mynpu/pnr/outputs/final/mynpu_asic_top.hier_postpnr.v": "ec272c23c7e91be43284316b2730d3089e2129a6bf3d81db7e9794a2e1ef2772"
+  }
+}

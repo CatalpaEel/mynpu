@@ -1,0 +1,50 @@
+{
+  "scope": "Independent DMA removed; actual SRAM macro RTL regressions; no new PPA measurement",
+  "ordinary_masters": 5,
+  "rf_internal_masters": 6,
+  "rf_bytes": 256,
+  "removed_dma_pages": [
+    "0x40000300",
+    "0x40000400",
+    "0x40000500"
+  ],
+  "jtag_bus_error_limitation": "Existing DM has no SBA bus-error input; NMC error checked directly",
+  "tests": {
+    "jtag": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-no_dma_verified-jtag-macro/result.json",
+      "sha256": "9acd5aad676f1b9973c74db7cb9412c57b0827412bffd0fdf9b0d9ce114a7774",
+      "summaries": [
+        "JTAG PASS checks=42"
+      ]
+    },
+    "latency": {
+      "result": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-no_dma_verified-latency-macro/result.json",
+      "sha256": "e58e06b179a66aa4492e65c6d2bba3b6cb19ba9155ff202994a68326d6e7deea",
+      "summaries": [
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=25780 input_to_classification_us_at_50mhz=515.60 PASS",
+        "SINGLE sample=0 useful_macs=39330 kernel_cycles=17009 elapsed_cycles=25388 kernel_utilization_pct=25.69 system_utilization_pct=17.21 latency_us_at_50mhz=507.76 PASS",
+        "SINGLE_INPUT sample=1 ingress_cycles=392 input_to_classification_cycles=25780 input_to_classification_us_at_50mhz=515.60 PASS",
+        "SINGLE sample=1 useful_macs=39330 kernel_cycles=17009 elapsed_cycles=25388 kernel_utilization_pct=25.69 system_utilization_pct=17.21 latency_us_at_50mhz=507.76 PASS",
+        "SINGLE_INPUT sample=2 ingress_cycles=392 input_to_classification_cycles=25780 input_to_classification_us_at_50mhz=515.60 PASS",
+        "SINGLE sample=2 useful_macs=39330 kernel_cycles=17009 elapsed_cycles=25388 kernel_utilization_pct=25.69 system_utilization_pct=17.21 latency_us_at_50mhz=507.76 PASS",
+        "SINGLE_INPUT sample=3 ingress_cycles=392 input_to_classification_cycles=25780 input_to_classification_us_at_50mhz=515.60 PASS",
+        "SINGLE sample=3 useful_macs=39330 kernel_cycles=17009 elapsed_cycles=25388 kernel_utilization_pct=25.69 system_utilization_pct=17.21 latency_us_at_50mhz=507.76 PASS",
+        "SINGLE_INPUT sample=4 ingress_cycles=392 input_to_classification_cycles=25780 input_to_classification_us_at_50mhz=515.60 PASS",
+        "SINGLE sample=4 useful_macs=39330 kernel_cycles=17009 elapsed_cycles=25388 kernel_utilization_pct=25.69 system_utilization_pct=17.21 latency_us_at_50mhz=507.76 PASS",
+        "SINGLE_INPUT sample=5 ingress_cycles=392 input_to_classification_cycles=25780 input_to_classification_us_at_50mhz=515.60 PASS",
+        "SINGLE sample=5 useful_macs=39330 kernel_cycles=17009 elapsed_cycles=25388 kernel_utilization_pct=25.69 system_utilization_pct=17.21 latency_us_at_50mhz=507.76 PASS",
+        "SINGLE_INPUT sample=6 ingress_cycles=392 input_to_classification_cycles=25780 input_to_classification_us_at_50mhz=515.60 PASS",
+        "SINGLE sample=6 useful_macs=39330 kernel_cycles=17009 elapsed_cycles=25388 kernel_utilization_pct=25.69 system_utilization_pct=17.21 latency_us_at_50mhz=507.76 PASS",
+        "SINGLE_INPUT sample=7 ingress_cycles=392 input_to_classification_cycles=25780 input_to_classification_us_at_50mhz=515.60 PASS",
+        "SINGLE sample=7 useful_macs=39330 kernel_cycles=17009 elapsed_cycles=25388 kernel_utilization_pct=25.69 system_utilization_pct=17.21 latency_us_at_50mhz=507.76 PASS",
+        "SINGLE_INPUT sample=8 ingress_cycles=392 input_to_classification_cycles=25780 input_to_classification_us_at_50mhz=515.60 PASS",
+        "SINGLE sample=8 useful_macs=39330 kernel_cycles=17009 elapsed_cycles=25388 kernel_utilization_pct=25.69 system_utilization_pct=17.21 latency_us_at_50mhz=507.76 PASS",
+        "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=25780 input_to_classification_us_at_50mhz=515.60 PASS",
+        "SINGLE sample=9 useful_macs=39330 kernel_cycles=17009 elapsed_cycles=25388 kernel_utilization_pct=25.69 system_utilization_pct=17.21 latency_us_at_50mhz=507.76 PASS",
+        "SINGLE PASS samples=10 checks=120"
+      ]
+    }
+  },
+  "inference_cycles": 25388,
+  "legacy_dma_suites": "Retired with explicit runner error; not claimed as passed"
+}

@@ -1,0 +1,13 @@
+{
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip",
+  "checkpoint": "13_finished",
+  "scope": "Actual final routed Innovus screenshot; native IO rail observations retained; not foundry signoff",
+  "sha256": {
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/window-prefetch-fullchip.png": "568923959798f07ffe4687804e283916f5e239f3e0af8fae5e669ff3e24dfa9e",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/final-capture-107.log": "30c0f0721d9b57d6c9a56f84ec3192d253e379bf0ad598338eb1bd371ee62490",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/scripts/capture.tcl": "a313356a2b8fc4c76b85ba19761797557a432f4f3f3ee739771b0c32935f03be",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/mynpu/pnr/checkpoints/13_finished.enc": "4345c3bd1226e2e7c257d7b1d5afb94f719c0bd799d21302dade22190a97cf3b",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/mynpu/pnr/outputs/final/mynpu_asic_top.hier_postpnr.v": "a72c725da7f1c58162c6a167836bdbe2688b0ed29882b69a28dfaa3db3aeba18",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/mynpu/pnr/outputs/final/mynpu_asic_top.gds.gz": "581c01d63e4ba25c43ffb37e4ff06d862cd4cbd98dc0047f443ec194a53aa772"
+  }
+}

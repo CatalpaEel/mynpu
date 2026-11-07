@@ -17,6 +17,6 @@
 # Previous implementation experiments; keep current reports and checkpoints
 npu/reports/legacy_*/
 npu/reports/mnist_attempt_*/
-npu/reports/noc/flat_attempt/
 # Unused teaching-project predecessor
 external/lab2-ST/
+**/.ruff_cache/

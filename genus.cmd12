@@ -1,0 +1,7 @@
+# Cadence Genus(TM) Synthesis Solution, Version 19.17-s144_1, built Aug 20 2021 09:53:14
+
+# Date: Tue Nov 03 13:26:58 2026
+# Host: tc-01a0e839f9eb (x86_64 w/Linux 6.12.0-211.54.1.el10_2.x86_64) (24cores*48cpus*2physical cpus*Intel(R) Xeon(R) Platinum 8160 CPU @ 2.10GHz 33792KB)
+# OS:   AlmaLinux release 8.10 (Cerulean Leopard)
+
+source ../eda-runs/20261103-regfile-fullchip-rf32q8-core/synth.tcl

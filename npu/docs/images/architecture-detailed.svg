@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2240" height="1940" viewBox="0 0 2240 1940">
+<rect width="2240" height="1940" fill="#0f172a"/>
+<text x="55" y="70" font-family="Noto Sans CJK SC,sans-serif" font-size="42" fill="#e2e8f0">mynpu 详细架构｜独立计算核 + 软件任务调度 + 共享存储</text>
+<text x="55" y="115" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#94a3b8">当前配置：CNN FIFO 8 / Matrix FIFO 8 / Vector FIFO 8 · RF 256B · SRAM 16KB · 50MHz目标</text>
+<rect x="55" y="160" width="430" height="190" rx="14" fill="#1e293b" stroke="#60a5fa" stroke-width="2"/>
+<text x="75" y="203" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#60a5fa">芯片接口 / JTAG调试</text>
+<text x="75" y="244" font-family="Noto Sans CJK SC,sans-serif" font-size="21" fill="#e2e8f0">9个信号PAD：CLK / RESET / START</text>
+<text x="75" y="277" font-family="Noto Sans CJK SC,sans-serif" font-size="21" fill="#e2e8f0">TCK / TMS / TDI / TDO / IRQ / HALTED</text>
+<text x="75" y="310" font-family="Noto Sans CJK SC,sans-serif" font-size="21" fill="#e2e8f0">Debug Module：SBA、halt/resume/step</text>
+<rect x="555" y="160" width="440" height="190" rx="14" fill="#1e293b" stroke="#60a5fa" stroke-width="2"/>
+<text x="575" y="203" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#60a5fa">CV32E40P CPU</text>
+<text x="575" y="246" font-family="Noto Sans CJK SC,sans-serif" font-size="23" fill="#e2e8f0">SRAM取指；普通load/store访问数据</text>
+<text x="575" y="281" font-family="Noto Sans CJK SC,sans-serif" font-size="23" fill="#e2e8f0">MMIO配置、任务提交、依赖同步</text>
+<text x="575" y="316" font-family="Noto Sans CJK SC,sans-serif" font-size="23" fill="#e2e8f0">软件决定tile、地址、边界与算子程序</text>
+<rect x="1065" y="160" width="1120" height="190" rx="14" fill="#1e293b" stroke="#c084fc" stroke-width="2"/>
+<text x="1085" y="203" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#c084fc">控制与任务入口  ·  CPU经XBAR译码访问MMIO</text>
+<text x="1085" y="247" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">Matrix / Vector：配置快照、FIFO、完成票据、依赖检查、错误/IRQ</text>
+<text x="1085" y="283" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">CNN Stream Control：公共配置、32bit tile命令FIFO、任务完成与错误</text>
+<text x="1085" y="319" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">独立DMA及外部流接口已删除；保留测试host，9信号PAD的程序与输入统一经JTAG SBA装载</text>
+<polyline points="485,240 555,240" fill="none" stroke="#60a5fa" stroke-width="4"/>
+<polygon points="555,240 541.0,233.0 541.0,247.0" fill="#60a5fa"/>
+<polyline points="995,240 1065,240" fill="none" stroke="#c084fc" stroke-width="4"/>
+<polygon points="1065,240 1051.0,233.0 1051.0,247.0" fill="#c084fc"/>
+<text x="492" y="201" font-family="Noto Sans CJK SC,sans-serif" font-size="19" fill="#e2e8f0">调试</text>
+<text x="55" y="420" font-family="Noto Sans CJK SC,sans-serif" font-size="30" fill="#c084fc">任务执行层：管理地址、循环、预取、程序PC与访存握手</text>
+<rect x="55" y="450" width="660" height="310" rx="14" fill="#1e293b" stroke="#fb923c" stroke-width="2"/>
+<text x="75" y="493" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#fb923c">CNN Stream  ·  npu_stream / control / engine</text>
+<text x="75" y="539" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">8项 × 32bit命令FIFO；软件准备tile边界</text>
+<text x="75" y="577" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">3行 × 3words循环窗口 = 36B</text>
+<text x="75" y="615" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">双份9B权重缓冲；读返回直通</text>
+<text x="75" y="653" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">跨输入通道部分和存共享RF</text>
+<text x="75" y="691" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">末通道结果可写RF / SRAM / xbar流FIFO</text>
+<rect x="790" y="450" width="660" height="310" rx="14" fill="#1e293b" stroke="#c084fc" stroke-width="2"/>
+<text x="810" y="493" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#c084fc">Matrix Stream  ·  npu_matrix_stream</text>
+<text x="810" y="539" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">8项GEMM任务FIFO由MMIO管理</text>
+<text x="810" y="577" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">执行M/N/K循环、地址步进与INT8解包</text>
+<text x="810" y="615" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">A/B读请求、旧D读取、结果写回</text>
+<text x="810" y="653" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">RF并行读A/B；SRAM分周期读取</text>
+<text x="810" y="691" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">独立master 5，可与CNN / Vector并行</text>
+<rect x="1525" y="450" width="660" height="310" rx="14" fill="#1e293b" stroke="#2dd4bf" stroke-width="2"/>
+<text x="1545" y="493" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#2dd4bf">Vector Stream  ·  npu_vector_stream</text>
+<text x="1545" y="539" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">8项任务FIFO由MMIO管理</text>
+<text x="1545" y="577" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">软件配置通用程序；PC + 4×32bit寄存器 + 进位标志</text>
+<text x="1545" y="615" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">选择操作数、LD32、程序发射、打包写回</text>
+<text x="1545" y="653" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">经xbar读取RF / SRAM或流FIFO</text>
+<text x="1545" y="691" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">逐条执行；软件编排高低字运算</text>
+<polyline points="385,425 385,450" fill="none" stroke="#c084fc" stroke-width="4"/>
+<polygon points="385,450 392.0,436.0 378.0,436.0" fill="#c084fc"/>
+<polyline points="1120,425 1120,450" fill="none" stroke="#c084fc" stroke-width="4"/>
+<polygon points="1120,450 1127.0,436.0 1113.0,436.0" fill="#c084fc"/>
+<polyline points="1855,425 1855,450" fill="none" stroke="#c084fc" stroke-width="4"/>
+<polygon points="1855,450 1862.0,436.0 1848.0,436.0" fill="#c084fc"/>
+<polyline points="385,760 385,815" fill="none" stroke="#2dd4bf" stroke-width="4"/>
+<polygon points="385,815 392.0,801.0 378.0,801.0" fill="#2dd4bf"/>
+<text x="405" y="788" font-family="Noto Sans CJK SC,sans-serif" font-size="18" fill="#2dd4bf">操作数 / 运算控制 ↓  结果 ↑</text>
+<polyline points="1120,760 1120,815" fill="none" stroke="#2dd4bf" stroke-width="4"/>
+<polygon points="1120,815 1127.0,801.0 1113.0,801.0" fill="#2dd4bf"/>
+<text x="1140" y="788" font-family="Noto Sans CJK SC,sans-serif" font-size="18" fill="#2dd4bf">操作数 / 运算控制 ↓  结果 ↑</text>
+<polyline points="1855,760 1855,815" fill="none" stroke="#2dd4bf" stroke-width="4"/>
+<polygon points="1855,815 1862.0,801.0 1848.0,801.0" fill="#2dd4bf"/>
+<text x="1875" y="788" font-family="Noto Sans CJK SC,sans-serif" font-size="18" fill="#2dd4bf">操作数 / 运算控制 ↓  结果 ↑</text>
+<rect x="55" y="815" width="660" height="205" rx="14" fill="#1e293b" stroke="#fb923c" stroke-width="2"/>
+<text x="75" y="858" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#fb923c">CNN纯计算核  ·  DOT9</text>
+<text x="75" y="903" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">9路 signed9激活 × signed8权重</text>
+<text x="75" y="940" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">输入零点扣除 / mask / seed / INT32累加</text>
+<text x="75" y="977" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">ready/valid、emit、flush；无地址或量化</text>
+<rect x="790" y="815" width="660" height="205" rx="14" fill="#1e293b" stroke="#c084fc" stroke-width="2"/>
+<text x="810" y="858" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#c084fc">Matrix纯计算核  ·  MAC / ADD32</text>
+<text x="810" y="903" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">最多4路INT8 / 2路INT16乘积归约</text>
+<text x="810" y="940" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">或使用INT32加数合并已有部分结果</text>
+<text x="810" y="977" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">保留累加器、结果valid；无M/N/K状态</text>
+<rect x="1525" y="815" width="660" height="205" rx="14" fill="#1e293b" stroke="#2dd4bf" stroke-width="2"/>
+<text x="1545" y="858" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#2dd4bf">Vector纯计算核  ·  通用整数ALU</text>
+<text x="1545" y="903" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">MUL32 / MULH / MULHU；32bit加法与进位</text>
+<text x="1545" y="940" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">单字 / 双字右移、舍入、逻辑与min/max</text>
+<text x="1545" y="977" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">单ALU：INT32 / 4×INT8 SIMD；量化用通用指令</text>
+<text x="875" y="1052" font-family="Noto Sans CJK SC,sans-serif" font-size="19" fill="#2dd4bf">任意单元 → xbar流FIFO → 任意单元（空队列直接转发）</text>
+<rect x="55" y="1080" width="2130" height="175" rx="14" fill="#1e293b" stroke="#60a5fa" stroke-width="2"/>
+<text x="75" y="1123" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#60a5fa">数据通路入口  ·  6个普通master + 4条流通道 + RF gather / sink</text>
+<text x="75" y="1167" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">M0 CPU数据  |  M1 CNN  |  M2 Vector  |  M3 Host / JTAG SBA共享  |  M4 CPU取指  |  M5 Matrix</text>
+<text x="75" y="1203" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">CNN / Matrix / Vector共9个逻辑gather槽，共享8个RF物理bank。</text>
+<text x="75" y="1239" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">本图控制箭头表示逻辑关系；实际CPU配置读写也经过XBAR。计算核仅连接各自供数/发射器。</text>
+<polyline points="100,760 100,795 65,795 65,1060 165,1060 165,1080" fill="none" stroke="#60a5fa" stroke-width="4"/>
+<polygon points="165,1080 172.0,1066.0 158.0,1066.0" fill="#60a5fa"/>
+<polyline points="835,760 835,795 800,795 800,1060 900,1060 900,1080" fill="none" stroke="#60a5fa" stroke-width="4"/>
+<polygon points="900,1080 907.0,1066.0 893.0,1066.0" fill="#60a5fa"/>
+<polyline points="1570,760 1570,795 1535,795 1535,1060 1635,1060 1635,1080" fill="none" stroke="#60a5fa" stroke-width="4"/>
+<polygon points="1635,1080 1642.0,1066.0 1628.0,1066.0" fill="#60a5fa"/>
+<rect x="55" y="1320" width="1310" height="245" rx="14" fill="#1e293b" stroke="#60a5fa" stroke-width="2"/>
+<text x="75" y="1363" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#60a5fa">XBAR：地址路由 / 流FIFO / 存储仲裁</text>
+<text x="75" y="1410" font-family="Noto Sans CJK SC,sans-serif" font-size="27" fill="#e2e8f0">4条流FIFO：每条16×32bit，地址0x80006000 + channel×0x100</text>
+<text x="75" y="1449" font-family="Noto Sans CJK SC,sans-serif" font-size="27" fill="#e2e8f0">两块SRAM直接访问；无tag / 填充 / 失效或命中路径</text>
+<text x="75" y="1488" font-family="Noto Sans CJK SC,sans-serif" font-size="27" fill="#e2e8f0">写流地址即发送，读同一地址即接收；满/空时反压，无RF中转</text>
+<text x="75" y="1527" font-family="Noto Sans CJK SC,sans-serif" font-size="27" fill="#e2e8f0">MMIO分发到控制寄存器 / CNN / Debug / Boot</text>
+<rect x="1435" y="1320" width="750" height="245" rx="14" fill="#1e293b" stroke="#fbbf24" stroke-width="2"/>
+<text x="1455" y="1363" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#fbbf24">XBAR内部共享RF  ·  npu_data_regfile</text>
+<text x="1455" y="1407" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">256B = 8个单端口物理bank</text>
+<text x="1455" y="1443" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">普通访问：2条逻辑lane，含RF写回共7个请求者</text>
+<text x="1455" y="1479" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">三个单元共享gather；CNN独立RF写回</text>
+<text x="1455" y="1515" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">逐端口译码；按bank掩码轮询与广播</text>
+<polyline points="710,1255 710,1320" fill="none" stroke="#60a5fa" stroke-width="4"/>
+<polygon points="710,1320 717.0,1306.0 703.0,1306.0" fill="#60a5fa"/>
+<polyline points="1810,1255 1810,1320" fill="none" stroke="#fbbf24" stroke-width="4"/>
+<polygon points="1810,1320 1817.0,1306.0 1803.0,1306.0" fill="#fbbf24"/>
+<rect x="55" y="1630" width="620" height="155" rx="14" fill="#1e293b" stroke="#60a5fa" stroke-width="2"/>
+<text x="75" y="1673" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#60a5fa">SRAM bank 0  ·  8KB</text>
+<text x="75" y="1718" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">2048×32bit单端口宏</text>
+<text x="75" y="1755" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">0x80000000 – 0x80001FFF</text>
+<rect x="745" y="1630" width="620" height="155" rx="14" fill="#1e293b" stroke="#60a5fa" stroke-width="2"/>
+<text x="765" y="1673" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#60a5fa">SRAM bank 1  ·  8KB</text>
+<text x="765" y="1718" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">2048×32bit单端口宏</text>
+<text x="765" y="1755" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">0x80002000 – 0x80003FFF</text>
+<polyline points="360,1565 360,1630" fill="none" stroke="#60a5fa" stroke-width="4"/>
+<polygon points="360,1630 367.0,1616.0 353.0,1616.0" fill="#60a5fa"/>
+<polyline points="1050,1565 1050,1630" fill="none" stroke="#60a5fa" stroke-width="4"/>
+<polygon points="1050,1630 1057.0,1616.0 1043.0,1616.0" fill="#60a5fa"/>
+<rect x="1435" y="1630" width="750" height="155" rx="14" fill="#1e293b" stroke="#fbbf24" stroke-width="2"/>
+<text x="1455" y="1673" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#fbbf24">RF软件管理地址区</text>
+<text x="1455" y="1717" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">0x80004000 – 0x800040FF</text>
+<text x="1455" y="1753" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">小激活 / 部分和 / 临时权重；由软件显式暂存</text>
+<polyline points="1810,1565 1810,1630" fill="none" stroke="#fbbf24" stroke-width="4"/>
+<polygon points="1810,1630 1817.0,1616.0 1803.0,1616.0" fill="#fbbf24"/>
+<text x="55" y="1855" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#2dd4bf">并行边界：CNN / Matrix / Vector可并行，任意有向连接经xbar FIFO转发；CNN读请求、RF gather、计算与写回重叠，各主端口受bank冲突和FIFO反压约束。</text>
+<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、单ALU INT32 / SIMD8版本；本版综合与布局布线尚未重跑。</text>
+</svg>

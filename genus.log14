@@ -1,0 +1,1453 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2021 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+Version: 19.17-s144_1, built Fri Aug 20 02:53:14 PDT 2021
+Options: -no_gui -batch -files ../eda-runs/20261103-logic-trim/fullchip/scripts/synth_chip.tcl 
+Date:    Tue Nov 03 14:05:03 2026
+Host:    tc-01a0e839f9eb (x86_64 w/Linux 6.12.0-211.54.1.el10_2.x86_64) (24cores*48cpus*2physical cpus*Intel(R) Xeon(R) Platinum 8160 CPU @ 2.10GHz 33792KB) (16777216KB)
+PID:     2332540
+OS:      AlmaLinux release 8.10 (Cerulean Leopard)
+
+Checking out license: Genus_Synthesis
+
+Loading tool scripts...
+Finished loading tool scripts (9 seconds elapsed).
+
+#@ Processing -files option
+@genus 1> source ../eda-runs/20261103-logic-trim/fullchip/scripts/synth_chip.tcl
+#@ Begin verbose source ../eda-runs/20261103-logic-trim/fullchip/scripts/synth_chip.tcl
+@file(synth_chip.tcl) 1: set_db max_cpus_per_server 8
+  Setting attribute of root '/': 'max_cpus_per_server' = 8
+@file(synth_chip.tcl) 2: set_db design_process_node 180
+  Setting attribute of root '/': 'design_process_node' = 180
+@file(synth_chip.tcl) 3: read_libs [list {/home/almalinux/tsmc180/tcb018gbwp7t_290a/TSMCHOME/digital/Front_End/timing_power_noise/NLDM/tcb018gbwp7t_270a/tcb018gbwp7ttc.lib} {/home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8_tt_1p8_25C_syn.lib}]
+
+Threads Configured:6
+
+  Message Summary for Library both libraries:
+  *******************************************
+  Missing a function attribute in the output pin definition. [LBR-518]: 1
+  An unsupported construct was detected in this library. [LBR-40]: 2
+  *******************************************
+ 
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.800000, 25.000000) in library 'tcb018gbwp7ttc.lib'.
+        : The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 1.800000, 25.000000) in library 'RA1SHD_2048x32M8_tt_1p8_25C_syn.lib'.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'ANTENNABWP7T' must have an output pin.
+        : Add the missing output pin(s), then reload the library. Else the library cell will be marked as timing model i.e. unusable. Timing_model means that the cell does not have any defined function. If there is no output pin, Genus will mark library cell as unusable i.e. the attribute 'usable' will be marked to 'false' on the libcell. Therefore, the cell is not used for mapping and it will not be picked up from the library for synthesis. If you query the attribute 'unusable_reason' on the libcell; result will be: 'Library cell has no output pins.'Note: The message LBR-9 is only for the logical pins and not for the power_ground pins. Genus will depend upon the output function defined in the pin group (output pin) of the cell, to use it for mapping. The pg_pin will not have any function defined.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'ANTENNABWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP16BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP16BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP32BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP32BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP4BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP4BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP64BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP64BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP8BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAP8BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAPBWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'DCAPBWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP10BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP10BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP2BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP2BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP3BWP7T' must have an output pin.
+Warning : Library cell has no output pins defined. [LBR-9]
+        : Library cell 'GDCAP3BWP7T' must have an output pin.
+@file(synth_chip.tcl) 4: read_physical -lef [list {/home/almalinux/tsmc180/tcb018gbwp7t_290a/TSMCHOME/digital/Back_End/lef/tcb018gbwp7t_270a/lef/tcb018gbwp7t_6lm.lef} {/home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8.vclef} {/home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8_ant.lef}]
+Warning : Macro already defined before. [PHYS-107]
+        : Macro 'RA1SHD_2048x32M8' is already defined. Ignoring this definition in file '/home/s2400012841/chip-fullstack-2026/soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8_ant.lef'.
+
+  According to lef_library, there are total 6 routing layers [ V(3) / H(3) ]
+
+  Libraries have 344 usable logic and 147 usable sequential lib-cells.
+@file(synth_chip.tcl) 5: read_hdl -sv [list {/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v} {/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/chip_top.sv}]
+@file(synth_chip.tcl) 6: elaborate mynpu_asic_top
+Info    : Elaborating Design. [ELAB-1]
+        : Elaborating top-level block 'mynpu_asic_top' from file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/chip_top.sv'.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'fault_code_o' in module 'npu_dma_channel' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 22, column 28, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_valid_o' in module 'npu_dma_channel' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 20, column 57, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_data_o' in module 'npu_dma_channel' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 23, column 50, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_keep_o' in module 'npu_dma_channel' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 22, column 39, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_last_o' in module 'npu_dma_channel' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 20, column 68, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'fault_code_o' in module 'npu_dma_channel_1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 2958, column 28, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'rx_ready_o' in module 'npu_dma_channel_1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 2956, column 45, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'wdata_o' in module 'npu_dma_channel_1' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 2959, column 67, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'fault_code_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 5794, column 28, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'rx_ready_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 5792, column 45, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_valid_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 5792, column 57, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_data_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 5795, column 50, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_keep_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 5794, column 39, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tx_last_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 5792, column 68, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'stream_abort_o' in module 'npu_dma_channel_2' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 5793, column 22, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'data_o' in module 'npu_debug_boot' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 8716, column 23, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'command_o[src]' in module 'npu_cnn_control_QUEUE_DEPTH16' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 8798, column 8, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'done_o' in module 'npu_cnn_control_QUEUE_DEPTH16' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 8799, column 46, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'valid_o' in module 'npu_cnn_mac' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 22724, column 28, hid = 0.
+Warning : Undriven module output port. [ELABUTL-123]
+        : Undriven bits of output port 'tag_o' in module 'npu_cnn_mac' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 22725, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'vector_mode_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 66590, column 21, hid = 0.
+        : Run check_design to check 'Undriven Port(s)/Pin(s)' section for all undriven module input ports. It is better to double confirm with designer if these undriven ports are expected. During syn_gen the undriven ports are controlled by attribute 'hdl_unconnected_value', the default value is 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'bmask_a_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 66590, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'bmask_b_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 66590, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'imm_vec_ext_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 66590, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'is_clpx_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 66590, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'is_subrot_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 66590, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'clpx_shift_i' of instance 'alu_i' of module 'cv32e40p_alu' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 66590, column 21, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'is_fetch_failed_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'mret_insn_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'uret_insn_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'pc_id_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_start_addr_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_start_addr_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_end_addr_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_end_addr_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_counter_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'hwlp_counter_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'data_we_ex_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'data_load_event_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Warning : Undriven module input port. [ELABUTL-127]
+        : Undriven bits of port 'data_err_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0' in file '/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/inputs/core.v' on line 84777, column 67, hid = 0.
+Info    : Done Elaborating Design. [ELAB-3]
+        : Done elaborating 'mynpu_asic_top'.
+Checking for analog nets...
+Check completed for analog nets.
+Checking for source RTL...
+Check completed for source RTL.
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+--------------------------------------------
+| Trick | Accepts | Rejects | Runtime (ms) | 
+--------------------------------------------
+--------------------------------------------
+UM:   timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                      elaborate
+@file(synth_chip.tcl) 7: set core_hinst [get_db hinsts *i_soc]; if {[llength $core_hinst] != 1} {error "Expected one mapped core"}; set_db $core_hinst .preserve true
+  Setting attribute of hinst 'i_soc': 'preserve' = true
+@file(synth_chip.tcl) 8: read_sdc {/home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/scripts/chip.sdc}
+Statistics for commands executed by read_sdc:
+ "all_clocks"               - successful      2 , failed      0 (runtime  0.00)
+ "all_inputs"               - successful      1 , failed      0 (runtime  0.00)
+ "all_outputs"              - successful      1 , failed      0 (runtime  0.00)
+ "create_clock"             - successful      2 , failed      0 (runtime  0.00)
+ "get_clocks"               - successful      2 , failed      0 (runtime  0.00)
+ "get_ports"                - successful      7 , failed      0 (runtime  0.00)
+ "set_clock_groups"         - successful      1 , failed      0 (runtime  0.00)
+ "set_clock_uncertainty"    - successful      2 , failed      0 (runtime  0.00)
+ "set_false_path"           - successful      1 , failed      0 (runtime  0.00)
+ "set_input_delay"          - successful      2 , failed      0 (runtime  0.00)
+ "set_input_transition"     - successful      1 , failed      0 (runtime  0.00)
+ "set_load"                 - successful      1 , failed      0 (runtime  0.00)
+ "set_output_delay"         - successful      2 , failed      0 (runtime  0.00)
+Total runtime 0.0
+@file(synth_chip.tcl) 9: set_db syn_generic_effort low
+  Setting attribute of root '/': 'syn_generic_effort' = low
+@file(synth_chip.tcl) 10: set_db syn_map_effort low
+  Setting attribute of root '/': 'syn_map_effort' = low
+@file(synth_chip.tcl) 11: set_db syn_opt_effort low
+  Setting attribute of root '/': 'syn_opt_effort' = low
+@file(synth_chip.tcl) 12: syn_generic
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'fault_code_o' in module 'npu_dma_channel'.
+        : The 'hdl_unconnected_value' attribute controls treatment of undriven output port.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_valid_o' in module 'npu_dma_channel'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_data_o' in module 'npu_dma_channel'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_keep_o' in module 'npu_dma_channel'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_last_o' in module 'npu_dma_channel'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'fault_code_o' in module 'npu_dma_channel_1'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'rx_ready_o' in module 'npu_dma_channel_1'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'wdata_o' in module 'npu_dma_channel_1'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'fault_code_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'rx_ready_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_valid_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_data_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_keep_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tx_last_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'stream_abort_o' in module 'npu_dma_channel_2'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'data_o' in module 'npu_debug_boot'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'command_o[src]' in module 'npu_cnn_control_QUEUE_DEPTH16'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'done_o' in module 'npu_cnn_control_QUEUE_DEPTH16'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'valid_o' in module 'npu_cnn_mac'.
+Info    : Undriven module output port. [ELABUTL-128]
+        : Assuming a logic '0' value for undriven bits of output port 'tag_o' in module 'npu_cnn_mac'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'vector_mode_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+        : The 'hdl_unconnected_value' attribute controls treatment of undriven input port.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'bmask_a_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'bmask_b_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'imm_vec_ext_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'is_clpx_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'is_subrot_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'clpx_shift_i' of instance 'alu_i' of module 'cv32e40p_alu'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'is_fetch_failed_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'mret_insn_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'uret_insn_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'pc_id_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_start_addr_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_start_addr_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_end_addr_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_end_addr_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_counter_i[0]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'hwlp_counter_i[1]' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'data_we_ex_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'data_load_event_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Info    : Undriven module input port. [ELABUTL-131]
+        : Assuming a logic '0' value for undriven bits of port 'data_err_i' of instance 'controller_i' of module 'cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU0'.
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Info    : Synthesizing. [SYNTH-1]
+        : Synthesizing 'mynpu_asic_top' to generic gates using 'low' effort.
+PBS_Generic-Start - Elapsed_Time 0, CPU_Time 0.0
+stamp 'PBS_Generic-Start' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+TNS Restructuring config:  at stage: generic applied.
+Info    : Partition Based Synthesis execution skipped. [PHYS-752]
+        : 'low' effort synthesis done in non-distributed manner. Set synthesize -effort to 'medium' or 'high' to turn on distributed optimization.
+Starting mux data reorder optimization [v1.0] (stage: post_to_gen_setup, startdef: mynpu_asic_top, recur: true)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.000s)
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+--------------------------------------------
+| Trick | Accepts | Rejects | Runtime (ms) | 
+--------------------------------------------
+--------------------------------------------
+Starting reconvergence optimization [v1.0] (stage: pre_rtlopt, startdef: mynpu_asic_top, recur: true)
+Completed reconvergence optimization (accepts: 0, rejects: 0, runtime: 0.002s)
+Starting logic restructure optimization [v1.0] (stage: pre_rtlopt, startdef: mynpu_asic_top, recur: true)
+Completed logic restructure optimization (accepts: 0, rejects: 0, runtime: 0.001s)
+Starting optimize datapath elements [v1.0] (stage: pre_rtlopt, startdef: mynpu_asic_top, recur: true)
+Completed optimize datapath elements (accepts: 0, rejects: 0, runtime: 0.001s)
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+--------------------------------------------
+| Trick | Accepts | Rejects | Runtime (ms) | 
+--------------------------------------------
+--------------------------------------------
+Info    : Pre-processed datapath logic. [DPOPT-6]
+        : No pre-processing optimizations applied to datapath logic in 'mynpu_asic_top'.
+Info    : Skipping datapath optimization. [DPOPT-5]
+        : There is no datapath logic in 'mynpu_asic_top'.
+Starting mux data reorder optimization [v1.0] (stage: post_rtlopt, startdef: mynpu_asic_top, recur: true)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.001s)
+Starting mux speculation [v1.0] (stage: post_muxopt, startdef: mynpu_asic_top, recur: true)
+Starting speculation optimization
+Completed speculation optimization (accepts:0)
+Completed mux speculation (accepts: 0, rejects: 0, runtime: 4.622s)
+==================================
+Stage : to_generic 
+==================================
+  =================
+   Message Summary
+  =================
+--------------------------------------------------------------------------------
+|     Id      |  Sev   |Count |                 Message Text                   |
+--------------------------------------------------------------------------------
+| CDFG-500    |Info    |  199 |Unused module input port.                       |
+|             |        |      |In port definition within the module, the input |
+|             |        |      | port is not used in any assignment statements  |
+|             |        |      | or conditional expressions for decision        |
+|             |        |      | statements.                                    |
+| CDFG-738    |Info    |    1 |Common subexpression eliminated.                |
+| CDFG-739    |Info    |    1 |Common subexpression kept.                      |
+| DPOPT-5     |Info    |    1 |Skipping datapath optimization.                 |
+| DPOPT-6     |Info    |    1 |Pre-processed datapath logic.                   |
+| ELAB-1      |Info    |    1 |Elaborating Design.                             |
+| ELAB-2      |Info    |   48 |Elaborating Subdesign.                          |
+| ELAB-3      |Info    |    1 |Done Elaborating Design.                        |
+| ELABUTL-123 |Warning |  275 |Undriven module output port.                    |
+| ELABUTL-127 |Warning |  254 |Undriven module input port.                     |
+|             |        |      |Run check_design to check 'Undriven Port(s)     |
+|             |        |      | /Pin(s)                                        |
+|             |        |      | ' section for all undriven module input ports. |
+|             |        |      | It is better to double confirm with designer   |
+|             |        |      | if these undriven ports are expected. During   |
+|             |        |      | syn_gen the undriven ports are controlled by   |
+|             |        |      | attribute 'hdl_unconnected_value', the default |
+|             |        |      | value is 0.                                    |
+| ELABUTL-128 |Info    |  275 |Undriven module output port.                    |
+|             |        |      |The 'hdl_unconnected_value' attribute controls  |
+|             |        |      | treatment of undriven output port.             |
+| ELABUTL-131 |Info    |  254 |Undriven module input port.                     |
+|             |        |      |The 'hdl_unconnected_value' attribute controls  |
+|             |        |      | treatment of undriven input port.              |
+| ELABUTL-132 |Info    |   13 |Unused instance port.                           |
+|             |        |      |Please check the reported scenario of           |
+|             |        |      | unconnected instance port to ensure that it    |
+|             |        |      | matches the design intent.                     |
+| LBR-9       |Warning |   34 |Library cell has no output pins defined.        |
+|             |        |      |Add the missing output pin(s)                   |
+|             |        |      | , then reload the library. Else the library    |
+|             |        |      | cell will be marked as timing model i.e.       |
+|             |        |      | unusable. Timing_model means that the cell     |
+|             |        |      | does not have any defined function. If there   |
+|             |        |      | is no output pin, Genus will mark library cell |
+|             |        |      | as unusable i.e. the attribute 'usable' will   |
+|             |        |      | be marked to 'false' on the libcell.           |
+|             |        |      | Therefore, the cell is not used for mapping    |
+|             |        |      | and it will not be picked up from the library  |
+|             |        |      | for synthesis. If you query the attribute      |
+|             |        |      | 'unusable_reason' on the libcell; result will  |
+|             |        |      | be: 'Library cell has no output pins.'Note:    |
+|             |        |      | The message LBR-9 is only for the logical pins |
+|             |        |      | and not for the power_ground pins. Genus will  |
+|             |        |      | depend upon the output function defined in the |
+|             |        |      | pin group (output pin)                         |
+|             |        |      | of the cell, to use it for mapping. The pg_pin |
+|             |        |      | will not have any function defined.            |
+| LBR-40      |Info    |    2 |An unsupported construct was detected in this   |
+|             |        |      | library.                                       |
+|             |        |      |Check to see if this construct is really needed |
+|             |        |      | for synthesis. Many liberty constructs are not |
+|             |        |      | actually required.                             |
+| LBR-41      |Info    |   33 |An output library pin lacks a function          |
+|             |        |      | attribute.                                     |
+|             |        |      |If the remainder of this library cell's         |
+|             |        |      | semantic checks are successful, it will be     |
+|             |        |      | considered as a timing-model                   |
+|             |        |      | (because one of its outputs does not have a va |
+|             |        |      | lid function.                                  |
+| LBR-155     |Info    |   72 |Mismatch in unateness between 'timing_sense'    |
+|             |        |      | attribute and the function.                    |
+|             |        |      |The 'timing_sense' attribute will be respected. |
+| LBR-161     |Info    |    1 |Setting the maximum print count of this message |
+|             |        |      | to 10 if information_level is less than 9.     |
+| LBR-162     |Info    |  122 |Both 'pos_unate' and 'neg_unate' timing_sense   |
+|             |        |      | arcs have been processed.                      |
+|             |        |      |Setting the 'timing_sense' to non_unate.        |
+| LBR-412     |Info    |    2 |Created nominal operating condition.            |
+|             |        |      |The nominal operating condition is represented, |
+|             |        |      | either by the nominal PVT values specified in  |
+|             |        |      | the library source                             |
+|             |        |      | (via nom_process,nom_voltage and nom_temperatu |
+|             |        |      | re respectively)                               |
+|             |        |      | , or by the default PVT values (1.0,1.0,1.0).  |
+| LBR-518     |Info    |    1 |Missing a function attribute in the output pin  |
+|             |        |      | definition.                                    |
+| PHYS-107    |Warning |    1 |Macro already defined before.                   |
+| PHYS-752    |Info    |    1 |Partition Based Synthesis execution skipped.    |
+| SYNTH-1     |Info    |    1 |Synthesizing.                                   |
+| TUI-31      |Warning |    1 |Obsolete command.                               |
+|             |        |      |This command is no longer supported.            |
+--------------------------------------------------------------------------------
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Mapper: Libraries have:
+	domain _default_: 344 combo usable cells and 147 sequential usable cells
+Info    : Attempting to launch a super-threading server. [ST-120]
+        : Attempting to Launch server 1 of 8.
+        : The tool is entering super-threading mode and is launching a CPU server process.  This is enabled by the root attribute 'super_thread_servers' or 'auto_super_thread'.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_0' is process '2333619' on this host.
+        : The tool is entering super-threading mode and has established a connection with a CPU server process.  This is enabled by the root attributes 'super_thread_servers' or 'auto_super_thread'.
+                  Library loading done successfully on server 'localhost_1_0'.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_1' is forked process '2333776' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_2' is forked process '2333778' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_3' is forked process '2333780' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_4' is forked process '2333782' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_5' is forked process '2333784' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_6' is forked process '2333786' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_7' is forked process '2333788' on this host.
+Multi-threaded constant propagation [1|0] ...
+Multi-threaded Virtual Mapping    (8 threads per ST process, 8 of 48 CPUs usable)
+        Distributing super-thread jobs: cv32e40p_compressed_decoder_FPU0_ZFINX0 cb_part_1
+          Sending 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_7'...
+            Sent 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_7'.
+          Sending 'cb_part_1' to server 'localhost_1_6'...
+            Sent 'cb_part_1' to server 'localhost_1_6'.
+          Received 'cv32e40p_compressed_decoder_FPU0_ZFINX0' from server 'localhost_1_7'. (356 ms elapsed)
+          Received 'cb_part_1' from server 'localhost_1_6'. (368 ms elapsed)
+==================================
+Stage : first_condense 
+==================================
+  =================
+   Message Summary
+  =================
+--------------------------------------------------------------------------------
+|   Id   |Sev  |Count |                     Message Text                       |
+--------------------------------------------------------------------------------
+| ST-110 |Info |    8 |Connection established with super-threading server.     |
+|        |     |      |The tool is entering super-threading mode and has       |
+|        |     |      | established a connection with a CPU server process.    |
+|        |     |      | This is enabled by the root attributes                 |
+|        |     |      | 'super_thread_servers' or 'auto_super_thread'.         |
+| ST-120 |Info |    1 |Attempting to launch a super-threading server.          |
+|        |     |      |The tool is entering super-threading mode and is        |
+|        |     |      | launching a CPU server process.  This is enabled by    |
+|        |     |      | the root attribute 'super_thread_servers' or           |
+|        |     |      | 'auto_super_thread'.                                   |
+| ST-128 |Info |    2 |Super thread servers are launched successfully.         |
+--------------------------------------------------------------------------------
+ 
+Global mapping target info
+==========================
+Cost Group 'jtag_clk' target slack:  1452 ps
+Target path end-point (Pin: i_soc/i_core_i_debug/i_dtm/i_dmi_jtag_tap/td_o_reg/D (DFNCND1BWP7T/D))
+
+Cost Group 'sys_clk' target slack:   169 ps
+Target path end-point (Pin: i_soc/i_core_i_vector/i_post/scaled_q_reg[55]/D (EDFCNQD1BWP7T/D))
+
+
++-----------+-----------------+-----+----------------------+---------------------------+
+|   Host    |     Machine     | CPU | Physical Memory (MB) | Peak Physical Memory (MB) |
++-----------+-----------------+-----+----------------------+---------------------------+
+| localhost | tc-01a0e839f9eb |  8  |        1299.0        |          1466.7           |
++-----------+-----------------+-----+----------------------+---------------------------+
+
++---------------+----------------------+---------------------------+
+|    Server     | Physical Memory (MB) | Peak Physical Memory (MB) |
++---------------+----------------------+---------------------------+
+| localhost_1_5 |       59.4 [1]       |          [1] [2]          |
+| localhost_1_2 |       59.4 [1]       |          [1] [2]          |
+| localhost_1_3 |       59.4 [1]       |          [1] [2]          |
+| localhost_1_1 |       59.4 [1]       |          [1] [2]          |
+| localhost_1_6 |       73.6 [1]       |          [1] [2]          |
+| localhost_1_7 |       73.8 [1]       |          [1] [2]          |
+| localhost_1_4 |       59.4 [1]       |          [1] [2]          |
+| localhost_1_0 |      521.5 [3]       |         523.9 [3]         |
++---------------+----------------------+---------------------------+
+[1] Memory is included in parent localhost_1_0.
+[2] Peak physical memory is not available for forked background servers.
+[3] Memory of child processes is included.
+
+
+State Retention Synthesis Status
+================================
+
+Category                        Flops  Latches   Percentage
+-----------------------------------------------------------
+Total instances                 19931        1        100.0
+Excluded from State Retention   19931        1        100.0
+    - Will not convert          19931        1        100.0
+      - Preserved                   0        0          0.0
+      - Power intent excluded   19931        1        100.0
+    - Could not convert             0        0          0.0
+      - Scan type                   0        0          0.0
+      - No suitable cell            0        0          0.0
+State Retention instances           0        0          0.0
+-----------------------------------------------------------
+
+
++-----------+-----------------+-----+----------------------+---------------------------+
+|   Host    |     Machine     | CPU | Physical Memory (MB) | Peak Physical Memory (MB) |
++-----------+-----------------+-----+----------------------+---------------------------+
+| localhost | tc-01a0e839f9eb |  1  |        1263.4        |          1466.7           |
++-----------+-----------------+-----+----------------------+---------------------------+
+
++---------------+----------------------+---------------------------+
+|    Server     | Physical Memory (MB) | Peak Physical Memory (MB) |
++---------------+----------------------+---------------------------+
+| localhost_1_0 |        480.3         |           523.9           |
++---------------+----------------------+---------------------------+
+
+Info    : Using '2' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '0' more seconds during global map.
+PBS_Generic_Opt-Post - Elapsed_Time 73, CPU_Time 74.24491100000003
+stamp 'PBS_Generic_Opt-Post' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:01:53) |  00:01:14(00:01:13) | 100.0(100.0) |   14:07:02 (Nov03) |   1.26 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+PBS_Generic-Postgen HBO Optimizations - Elapsed_Time 1, CPU_Time 1.0
+stamp 'PBS_Generic-Postgen HBO Optimizations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:01:53) |  00:01:14(00:01:13) |  98.7( 98.6) |   14:07:02 (Nov03) |   1.26 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:01:54) |  00:00:01(00:00:01) |   1.3(  1.4) |   14:07:03 (Nov03) |   1.26 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+##>=================== Cadence Confidential (Generic-Logical) ===================
+##>=================== Cadence Confidential (Generic-Logical) ===================
+##>Main Thread Summary:
+##>----------------------------------------------------------------------------------------
+##>STEP                           Elapsed       WNS       TNS     Insts      Area    Memory
+##>----------------------------------------------------------------------------------------
+##>G:Initial                            3         -         -     76960   2876532       763
+##>G:Setup                              0         -         -         -         -         -
+##>G:Launch ST                          0         -         -         -         -         -
+##>G:Design Partition                   0         -         -         -         -         -
+##>G:Create Partition Netlists          0         -         -         -         -         -
+##>G:Init Power                         0         -         -         -         -         -
+##>G:Budgeting                          0         -         -         -         -         -
+##>G:Derenv-DB                          0         -         -         -         -         -
+##>G:Debug Outputs                      0         -         -         -         -         -
+##>G:ST loading                         0         -         -         -         -         -
+##>G:Distributed                        0         -         -         -         -         -
+##>G:Timer                              0         -         -         -         -         -
+##>G:Assembly                           0         -         -         -         -         -
+##>G:DFT                                0         -         -         -         -         -
+##>G:Const Prop                         1         -         -     76958   2876517      1263
+##>G:Misc                              73
+##>----------------------------------------------------------------------------------------
+##>Total Elapsed                       77
+##>========================================================================================
+Info    : Done synthesizing. [SYNTH-2]
+        : Done synthesizing 'mynpu_asic_top' to generic gates.
+      timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                      syn_gen
+@file(synth_chip.tcl) 13: syn_map
+##Generic Timing Info for library domain: _default_ typical gate delay: 83.7 ps std_slew: 21.0 ps std_load: 8.5 fF
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Info    : Mapping. [SYNTH-4]
+        : Mapping 'mynpu_asic_top' using 'low' effort.
+Mapper: Libraries have:
+	domain _default_: 344 combo usable cells and 147 sequential usable cells
+Configuring mapper costing (none)
+TNS Restructuring config:  at stage: map applied.
+PBS_TechMap-Start - Elapsed_Time 0, CPU_Time 0.0
+stamp 'PBS_TechMap-Start' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:01:53) |  00:01:14(00:01:13) |  90.3( 89.0) |   14:07:02 (Nov03) |   1.26 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:01:54) |  00:00:01(00:00:01) |   1.2(  1.2) |   14:07:03 (Nov03) |   1.26 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:09(00:02:02) |  00:00:07(00:00:08) |   8.5(  9.8) |   14:07:11 (Nov03) |   1.24 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+PBS_TechMap-Premap HBO Optimizations - Elapsed_Time 1, CPU_Time 2.0
+stamp 'PBS_TechMap-Premap HBO Optimizations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:01:53) |  00:01:14(00:01:13) |  88.1( 88.0) |   14:07:02 (Nov03) |   1.26 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:01:54) |  00:00:01(00:00:01) |   1.2(  1.2) |   14:07:03 (Nov03) |   1.26 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:09(00:02:02) |  00:00:07(00:00:08) |   8.3(  9.6) |   14:07:11 (Nov03) |   1.24 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:11(00:02:03) |  00:00:02(00:00:01) |   2.4(  1.2) |   14:07:12 (Nov03) |   1.24 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+Info    : Partition Based Synthesis execution skipped. [PHYS-752]
+        : 'low' effort synthesis done in non-distributed manner. Set synthesize -effort to 'medium' or 'high' to turn on distributed optimization.
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Mapper: Libraries have:
+	domain _default_: 344 combo usable cells and 147 sequential usable cells
+Updating ST server settings
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_8' is forked process '2333902' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_9' is forked process '2333904' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_10' is forked process '2333906' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_11' is forked process '2333908' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_12' is forked process '2333910' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_13' is forked process '2333912' on this host.
+Info    : Connection established with super-threading server. [ST-110]
+        : The server 'localhost_1_14' is forked process '2333914' on this host.
+Multi-threaded Virtual Mapping    (8 threads per ST process, 8 of 48 CPUs usable)
+        Distributing super-thread jobs: cv32e40p_compressed_decoder_FPU0_ZFINX0 cb_part_2
+          Sending 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_10'...
+            Sent 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_10'.
+          Sending 'cb_part_2' to server 'localhost_1_9'...
+            Sent 'cb_part_2' to server 'localhost_1_9'.
+          Received 'cv32e40p_compressed_decoder_FPU0_ZFINX0' from server 'localhost_1_10'. (342 ms elapsed)
+          Received 'cb_part_2' from server 'localhost_1_9'. (337 ms elapsed)
+==================================
+Stage : first_condense 
+==================================
+  =================
+   Message Summary
+  =================
+--------------------------------------------------------------------------------
+|    Id    |Sev  |Count |                    Message Text                      |
+--------------------------------------------------------------------------------
+| LBR-155  |Info |   24 |Mismatch in unateness between 'timing_sense'          |
+|          |     |      | attribute and the function.                          |
+|          |     |      |The 'timing_sense' attribute will be respected.       |
+| PHYS-752 |Info |    1 |Partition Based Synthesis execution skipped.          |
+| ST-110   |Info |    7 |Connection established with super-threading server.   |
+|          |     |      |The tool is entering super-threading mode and has     |
+|          |     |      | established a connection with a CPU server process.  |
+|          |     |      | This is enabled by the root attributes               |
+|          |     |      | 'super_thread_servers' or 'auto_super_thread'.       |
+| ST-112   |Info |    7 |A super-threading server has been shut down normally. |
+|          |     |      |A super-threaded optimization is complete and a CPU   |
+|          |     |      | server was successfully shut down.                   |
+| ST-128   |Info |    1 |Super thread servers are launched successfully.       |
+| SYNTH-2  |Info |    1 |Done synthesizing.                                    |
+| SYNTH-4  |Info |    1 |Mapping.                                              |
+| TIM-501  |Info |    1 |Resetting the break_timing_paths attribute of a pin   |
+|          |     |      | removes exceptions set on the pin.                   |
+|          |     |      | break_timing_paths attribute has default value of    |
+|          |     |      | false and can be reset to other values either false  |
+|          |     |      | or clock_gating depends on the enable signal.        |
+|          |     |      |Do the analysis and apply the case analysis on the    |
+|          |     |      | pin whether you want to break the timing paths or    |
+|          |     |      | not                                                  |
+| TUI-58   |Info |    1 |Removed object.                                       |
+--------------------------------------------------------------------------------
+ 
+Global mapping target info
+==========================
+Cost Group 'jtag_clk' target slack:  1452 ps
+Target path end-point (Pin: i_soc/i_core_i_debug/i_dtm/i_dmi_jtag_tap/td_o_reg/D (DFNCND1BWP7T/D))
+
+Cost Group 'sys_clk' target slack:   169 ps
+Target path end-point (Pin: i_soc/i_core_i_vector/i_post/scaled_q_reg[55]/D (EDFCNQD1BWP7T/D))
+
+Multi-threaded Technology Mapping (8 threads per ST process, 8 of 48 CPUs usable)
+        Distributing super-thread jobs: cv32e40p_compressed_decoder_FPU0_ZFINX0 cb_part_2
+          Sending 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_10'...
+            Sent 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_10'.
+          Sending 'cb_part_2' to server 'localhost_1_9'...
+            Sent 'cb_part_2' to server 'localhost_1_9'.
+          Received 'cv32e40p_compressed_decoder_FPU0_ZFINX0' from server 'localhost_1_10'. (123 ms elapsed)
+          Received 'cb_part_2' from server 'localhost_1_9'. (534 ms elapsed)
+ 
+Global mapping status
+=====================
+                                   Group   
+                                  Tot Wrst 
+                           Total  Weighted 
+Operation                   Area   Slacks  
+ global_map              3792932        0 
+
+    Cost Group            Target    Slack    Diff.  Constr.
+-----------------------------------------------------------
+       sys_clk               169     4002             20000 
+      jtag_clk              1452    47800             50000     (launch clock period: 100000)
+
+ 
+Global incremental target info
+==============================
+Cost Group 'jtag_clk' target slack:   968 ps
+Target path end-point (Pin: i_soc/i_core_i_debug/i_dtm/i_dmi_jtag_tap/td_o_reg/D (DFNCND1BWP7T/D))
+
+Cost Group 'sys_clk' target slack:   142 ps
+Target path end-point (Pin: i_soc/i_core_i_cpu_core_i_id_stage_i/controller_i/debug_fsm_cs_reg[0]/D (DFSNQD1BWP7T/D))
+
+              Distributing super-thread jobs: cv32e40p_compressed_decoder_FPU0_ZFINX0 cb_part_2
+                Sending 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_10'...
+                  Sent 'cv32e40p_compressed_decoder_FPU0_ZFINX0' to server 'localhost_1_10'.
+                Sending 'cb_part_2' to server 'localhost_1_9'...
+                  Sent 'cb_part_2' to server 'localhost_1_9'.
+                Received 'cv32e40p_compressed_decoder_FPU0_ZFINX0' from server 'localhost_1_10'. (109 ms elapsed)
+                Received 'cb_part_2' from server 'localhost_1_9'. (103 ms elapsed)
+==================================
+Stage : global_incr_map 
+==================================
+  =================
+   Message Summary
+  =================
+---------------------------------------------------------------------
+|  Id  |Sev  |Count |                 Message Text                  |
+---------------------------------------------------------------------
+| PA-7 |Info |    2 |Resetting power analysis results.              |
+|      |     |      |All computed switching activities are removed. |
+---------------------------------------------------------------------
+ 
+Global incremental optimization status
+======================================
+                                   Group   
+                                  Tot Wrst 
+                           Total  Weighted 
+Operation                   Area   Slacks  
+ global_incr             3792867        0 
+
+    Cost Group            Target    Slack    Diff.  Constr.
+-----------------------------------------------------------
+       sys_clk               142     4002             20000 
+      jtag_clk               968    47800             50000     (launch clock period: 100000)
+
+
++-----------+-----------------+-----+----------------------+---------------------------+
+|   Host    |     Machine     | CPU | Physical Memory (MB) | Peak Physical Memory (MB) |
++-----------+-----------------+-----+----------------------+---------------------------+
+| localhost | tc-01a0e839f9eb |  8  |        1448.0        |          1628.9           |
++-----------+-----------------+-----+----------------------+---------------------------+
+
++----------------+----------------------+---------------------------+
+|     Server     | Physical Memory (MB) | Peak Physical Memory (MB) |
++----------------+----------------------+---------------------------+
+| localhost_1_8  |       59.4 [1]       |          [1] [2]          |
+| localhost_1_12 |       59.4 [1]       |          [1] [2]          |
+| localhost_1_14 |       59.4 [1]       |          [1] [2]          |
+| localhost_1_9  |       75.1 [1]       |          [1] [2]          |
+| localhost_1_10 |       75.3 [1]       |          [1] [2]          |
+| localhost_1_11 |       59.4 [1]       |          [1] [2]          |
+| localhost_1_0  |      524.4 [3]       |         524.4 [3]         |
+| localhost_1_13 |       59.4 [1]       |          [1] [2]          |
++----------------+----------------------+---------------------------+
+[1] Memory is included in parent localhost_1_0.
+[2] Peak physical memory is not available for forked background servers.
+[3] Memory of child processes is included.
+
+
+State Retention Synthesis Status
+================================
+
+Category                        Flops  Latches   Percentage
+-----------------------------------------------------------
+Total instances                 19931        1        100.0
+Excluded from State Retention   19931        1        100.0
+    - Will not convert          19931        1        100.0
+      - Preserved                   0        0          0.0
+      - Power intent excluded   19931        1        100.0
+    - Could not convert             0        0          0.0
+      - Scan type                   0        0          0.0
+      - No suitable cell            0        0          0.0
+State Retention instances           0        0          0.0
+-----------------------------------------------------------
+
+INFO: skipping constant propagation
+PBS_Techmap-Global Mapping - Elapsed_Time 63, CPU_Time 88.28302900000003
+stamp 'PBS_Techmap-Global Mapping' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:01:53) |  00:01:14(00:01:13) |  43.0( 50.0) |   14:07:02 (Nov03) |   1.26 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:01:54) |  00:00:01(00:00:01) |   0.6(  0.7) |   14:07:03 (Nov03) |   1.26 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:09(00:02:02) |  00:00:07(00:00:08) |   4.1(  5.5) |   14:07:11 (Nov03) |   1.24 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:11(00:02:03) |  00:00:02(00:00:01) |   1.2(  0.7) |   14:07:12 (Nov03) |   1.24 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:39(00:03:06) |  00:01:28(00:01:03) |  51.2( 43.2) |   14:08:15 (Nov03) |   1.41 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+Info    : Wrote formal verification information. [CFM-5]
+        : Wrote 'fv/mynpu_asic_top/fv_map.fv.json' for netlist 'fv/mynpu_asic_top/fv_map.v.gz'.
+Info    : Existing dofile found. Copied as fv/mynpu_asic_top/rtl_to_fv_map.do~.
+Info    : Wrote dofile. [CFM-1]
+        : Dofile is 'fv/mynpu_asic_top/rtl_to_fv_map.do'.
+        : Alias mapping flow is enabled.
+PBS_TechMap-Datapath Postmap Operations - Elapsed_Time 15, CPU_Time 14.0
+stamp 'PBS_TechMap-Datapath Postmap Operations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:01:53) |  00:01:14(00:01:13) |  39.8( 45.3) |   14:07:02 (Nov03) |   1.26 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:01:54) |  00:00:01(00:00:01) |   0.5(  0.6) |   14:07:03 (Nov03) |   1.26 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:09(00:02:02) |  00:00:07(00:00:08) |   3.8(  5.0) |   14:07:11 (Nov03) |   1.24 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:11(00:02:03) |  00:00:02(00:00:01) |   1.1(  0.6) |   14:07:12 (Nov03) |   1.24 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:39(00:03:06) |  00:01:28(00:01:03) |  47.3( 39.1) |   14:08:15 (Nov03) |   1.41 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:53(00:03:21) |  00:00:14(00:00:15) |   7.5(  9.3) |   14:08:30 (Nov03) |   1.27 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+PBS_TechMap-Postmap HBO Optimizations - Elapsed_Time 2, CPU_Time 2.497766000000013
+stamp 'PBS_TechMap-Postmap HBO Optimizations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:01:53) |  00:01:14(00:01:13) |  39.3( 44.8) |   14:07:02 (Nov03) |   1.26 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:01:54) |  00:00:01(00:00:01) |   0.5(  0.6) |   14:07:03 (Nov03) |   1.26 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:09(00:02:02) |  00:00:07(00:00:08) |   3.7(  4.9) |   14:07:11 (Nov03) |   1.24 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:11(00:02:03) |  00:00:02(00:00:01) |   1.1(  0.6) |   14:07:12 (Nov03) |   1.24 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:39(00:03:06) |  00:01:28(00:01:03) |  46.7( 38.7) |   14:08:15 (Nov03) |   1.41 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:53(00:03:21) |  00:00:14(00:00:15) |   7.4(  9.2) |   14:08:30 (Nov03) |   1.27 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:56(00:03:23) |  00:00:02(00:00:02) |   1.3(  1.2) |   14:08:32 (Nov03) |   1.27 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+ Doing ConstProp on design:mynpu_asic_top ... 
+
+IOPT-REDREM: Performing redundancy removal: Detected 0 redundant wires. CPU time 0.000 seconds.
+
+Time taken by ConstProp Step: 00:00:01
+PBS_TechMap-Postmap Clock Gating - Elapsed_Time 2, CPU_Time 2.0
+stamp 'PBS_TechMap-Postmap Clock Gating' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:01:53) |  00:01:14(00:01:13) |  38.9( 44.2) |   14:07:02 (Nov03) |   1.26 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:01:54) |  00:00:01(00:00:01) |   0.5(  0.6) |   14:07:03 (Nov03) |   1.26 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:09(00:02:02) |  00:00:07(00:00:08) |   3.7(  4.8) |   14:07:11 (Nov03) |   1.24 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:11(00:02:03) |  00:00:02(00:00:01) |   1.0(  0.6) |   14:07:12 (Nov03) |   1.24 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:39(00:03:06) |  00:01:28(00:01:03) |  46.2( 38.2) |   14:08:15 (Nov03) |   1.41 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:53(00:03:21) |  00:00:14(00:00:15) |   7.3(  9.1) |   14:08:30 (Nov03) |   1.27 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:56(00:03:23) |  00:00:02(00:00:02) |   1.3(  1.2) |   14:08:32 (Nov03) |   1.27 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:58(00:03:25) |  00:00:02(00:00:02) |   1.0(  1.2) |   14:08:34 (Nov03) |   1.27 GB | PBS_TechMap-Postmap Clock Gating
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+-------------------------------------------------------------------------------
+ hi_fo_buf               3792621        0         0         0        0
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+       hi_fo_buf         3  (        0 /        0 )  0.12
+
+ 
+Incremental optimization status
+===============================
+                                   Group   
+                                  Tot Wrst     Total - - DRC Totals - -
+                           Total  Weighted      Neg      Max       Max 
+Operation                   Area   Slacks      Slack    Trans      Cap 
+ init_delay              3792621        0         0         0        0
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+       crit_upsz         0  (        0 /        0 )  0.00
+    plc_bal_star         0  (        0 /        0 )  0.00
+     drc_buftimb         0  (        0 /        0 )  0.00
+          plc_st         0  (        0 /        0 )  0.00
+    plc_st_fence         0  (        0 /        0 )  0.00
+        plc_star         0  (        0 /        0 )  0.00
+      plc_laf_st         0  (        0 /        0 )  0.00
+ plc_laf_st_fence         0  (        0 /        0 )  0.00
+     drc_buftims         0  (        0 /        0 )  0.00
+            fopt         0  (        0 /        0 )  0.00
+   plc_laf_lo_st         0  (        0 /        0 )  0.00
+       plc_lo_st         0  (        0 /        0 )  0.00
+        mb_split         0  (        0 /        0 )  0.00
+
+ 
+Local TNS optimization status
+=============================
+                                   Group   
+                                  Tot Wrst     Total - - DRC Totals - -
+                           Total  Weighted      Neg      Max       Max 
+Operation                   Area   Slacks      Slack    Trans      Cap 
+ init_tns                3792621        0         0         0        0
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+    plc_bal_star         0  (        0 /        0 )  0.00
+     drc_buftimb         0  (        0 /        0 )  0.00
+     drc_buftims         0  (        0 /        0 )  0.00
+       crit_upsz         0  (        0 /        0 )  0.00
+   plc_laf_lo_st         0  (        0 /        0 )  0.00
+       plc_lo_st         0  (        0 /        0 )  0.00
+            fopt         0  (        0 /        0 )  0.00
+       crit_dnsz         0  (        0 /        0 )  0.00
+             dup         0  (        0 /        0 )  0.00
+        setup_dn         0  (        0 /        0 )  0.00
+        mb_split         0  (        0 /        0 )  0.00
+
+PBS_TechMap-Postmap Cleanup - Elapsed_Time 3, CPU_Time 4.486397000000011
+stamp 'PBS_TechMap-Postmap Cleanup' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:01:53) |  00:01:14(00:01:13) |  38.0( 43.5) |   14:07:02 (Nov03) |   1.26 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:01:54) |  00:00:01(00:00:01) |   0.5(  0.6) |   14:07:03 (Nov03) |   1.26 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:09(00:02:02) |  00:00:07(00:00:08) |   3.6(  4.8) |   14:07:11 (Nov03) |   1.24 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:11(00:02:03) |  00:00:02(00:00:01) |   1.0(  0.6) |   14:07:12 (Nov03) |   1.24 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:39(00:03:06) |  00:01:28(00:01:03) |  45.2( 37.5) |   14:08:15 (Nov03) |   1.41 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:53(00:03:21) |  00:00:14(00:00:15) |   7.2(  8.9) |   14:08:30 (Nov03) |   1.27 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:56(00:03:23) |  00:00:02(00:00:02) |   1.3(  1.2) |   14:08:32 (Nov03) |   1.27 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:58(00:03:25) |  00:00:02(00:00:02) |   1.0(  1.2) |   14:08:34 (Nov03) |   1.27 GB | PBS_TechMap-Postmap Clock Gating
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:02(00:03:28) |  00:00:04(00:00:03) |   2.3(  1.8) |   14:08:37 (Nov03) |   1.33 GB | PBS_TechMap-Postmap Cleanup
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+PBS_Techmap-Post_MBCI - Elapsed_Time 0, CPU_Time 0.0
+stamp 'PBS_Techmap-Post_MBCI' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:47(00:00:40) |  00:00:00(00:00:00) |   0.0(  0.0) |   14:05:49 (Nov03) |  763.3 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:01:53) |  00:01:14(00:01:13) |  38.0( 43.2) |   14:07:02 (Nov03) |   1.26 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:01:54) |  00:00:01(00:00:01) |   0.5(  0.6) |   14:07:03 (Nov03) |   1.26 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:09(00:02:02) |  00:00:07(00:00:08) |   3.6(  4.7) |   14:07:11 (Nov03) |   1.24 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:11(00:02:03) |  00:00:02(00:00:01) |   1.0(  0.6) |   14:07:12 (Nov03) |   1.24 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:39(00:03:06) |  00:01:28(00:01:03) |  45.2( 37.3) |   14:08:15 (Nov03) |   1.41 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:53(00:03:21) |  00:00:14(00:00:15) |   7.2(  8.9) |   14:08:30 (Nov03) |   1.27 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:56(00:03:23) |  00:00:02(00:00:02) |   1.3(  1.2) |   14:08:32 (Nov03) |   1.27 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:03:58(00:03:25) |  00:00:02(00:00:02) |   1.0(  1.2) |   14:08:34 (Nov03) |   1.27 GB | PBS_TechMap-Postmap Clock Gating
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:02(00:03:28) |  00:00:04(00:00:03) |   2.3(  1.8) |   14:08:37 (Nov03) |   1.33 GB | PBS_TechMap-Postmap Cleanup
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:02(00:03:29) |  00:00:00(00:00:01) |   0.0(  0.6) |   14:08:38 (Nov03) |   1.33 GB | PBS_Techmap-Post_MBCI
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info: CPU time includes time of parent + longest thread
+##>=================== Cadence Confidential (Mapping-Logical) ===================
+##>Main Thread Summary:
+##>----------------------------------------------------------------------------------------
+##>STEP                           Elapsed       WNS       TNS     Insts      Area    Memory
+##>----------------------------------------------------------------------------------------
+##>M:Initial                            1         -         -     76958   2876517      1237
+##>M:Pre Cleanup                        0         -         -     76958   2876517      1237
+##>M:Setup                              0         -         -         -         -         -
+##>M:Launch ST                          0         -         -         -         -         -
+##>M:Design Partition                   0         -         -         -         -         -
+##>M:Create Partition Netlists          0         -         -         -         -         -
+##>M:Init Power                         0         -         -         -         -         -
+##>M:Budgeting                          0         -         -         -         -         -
+##>M:Derenv-DB                          0         -         -         -         -         -
+##>M:Debug Outputs                      0         -         -         -         -         -
+##>M:ST loading                         0         -         -         -         -         -
+##>M:Distributed                        0         -         -         -         -         -
+##>M:Timer                              0         -         -         -         -         -
+##>M:Assembly                           0         -         -         -         -         -
+##>M:DFT                                0         -         -         -         -         -
+##>M:DP Operations                     15         -         -     76961   2876525      1269
+##>M:Const Prop                         0      4001         0     76961   2876525      1269
+##>M:Cleanup                            3      4001         0     76961   2876525      1331
+##>M:MBCI                               0         -         -     76961   2876525      1331
+##>M:Const Gate Removal                 0         -         -         -         -         -
+##>M:Misc                              69
+##>----------------------------------------------------------------------------------------
+##>Total Elapsed                       88
+##>========================================================================================
+
++-----------+-----------------+-----+----------------------+---------------------------+
+|   Host    |     Machine     | CPU | Physical Memory (MB) | Peak Physical Memory (MB) |
++-----------+-----------------+-----+----------------------+---------------------------+
+| localhost | tc-01a0e839f9eb |  1  |        1331.4        |          1628.9           |
++-----------+-----------------+-----+----------------------+---------------------------+
+
++---------------+----------------------+---------------------------+
+|    Server     | Physical Memory (MB) | Peak Physical Memory (MB) |
++---------------+----------------------+---------------------------+
+| localhost_1_0 |        480.1         |           524.4           |
++---------------+----------------------+---------------------------+
+
+Info    : Done mapping. [SYNTH-5]
+        : Done mapping 'mynpu_asic_top'.
+      timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                      syn_map
+@file(synth_chip.tcl) 14: syn_opt
+Current PLE settings:
+
+Aspect ratio        : 1.00
+Shrink factor       : 1.00
+Scale of res/length : 1.00
+Scale of cap/length : 1.00
+Net derating factor : 1.00
+Thermal factor      : 1.00
+Via Resistance      : 6.40 ohm (from lef_library)
+Site size           : 4.48 um (from lef [tech+cell])
+
+                                   Capacitance  
+  Layer                             / Length         Data source:
+Name        Direction Utilization  (pF/micron)       lef_library
+------------------------------------------------
+METAL1          H         0.00        0.000139  
+METAL2          V         1.00        0.000148  
+METAL3          H         1.00        0.000148  
+METAL4          V         1.00        0.000148  
+METAL5          H         1.00        0.000147  
+METAL6          V         1.00        0.000172  
+
+                                    Resistance   
+  Layer                              / Length         Data source:
+Name        Direction Utilization  (ohm/micron)       lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.339130  
+METAL2          V         1.00         0.278571  
+METAL3          H         1.00         0.278571  
+METAL4          V         1.00         0.278571  
+METAL5          H         1.00         0.278571  
+METAL6          V         1.00         0.081818  
+
+                                        Area     
+  Layer                               / Length        Data source:
+Name        Direction Utilization     (micron)        lef_library
+-------------------------------------------------
+METAL1          H         0.00         0.230000  
+METAL2          V         1.00         0.280000  
+METAL3          H         1.00         0.280000  
+METAL4          V         1.00         0.280000  
+METAL5          H         1.00         0.280000  
+METAL6          V         1.00         0.440000  
+
+Info    : Incrementally optimizing. [SYNTH-7]
+        : Incrementally optimizing 'mynpu_asic_top' using 'low' effort.
+ 
+Incremental optimization status
+===============================
+                                   Group   
+                                  Tot Wrst     Total - - DRC Totals - -
+                           Total  Weighted      Neg      Max       Max 
+Operation                   Area   Slacks      Slack    Trans      Cap 
+ init_iopt               3792621        0         0         0        0
+-------------------------------------------------------------------------------
+ const_prop              3792621        0         0         0        0
+ 
+Incremental optimization status
+===============================
+                                   Group   
+                                  Tot Wrst     Total - - DRC Totals - -
+                           Total  Weighted      Neg      Max       Max 
+Operation                   Area   Slacks      Slack    Trans      Cap 
+ init_delay              3792621        0         0         0        0
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+       crit_upsz         0  (        0 /        0 )  0.00
+    plc_bal_star         0  (        0 /        0 )  0.00
+     drc_buftimb         0  (        0 /        0 )  0.00
+          plc_st         0  (        0 /        0 )  0.00
+    plc_st_fence         0  (        0 /        0 )  0.00
+        plc_star         0  (        0 /        0 )  0.00
+      plc_laf_st         0  (        0 /        0 )  0.00
+ plc_laf_st_fence         0  (        0 /        0 )  0.00
+     drc_buftims         0  (        0 /        0 )  0.00
+            fopt         0  (        0 /        0 )  0.00
+   plc_laf_lo_st         0  (        0 /        0 )  0.00
+       plc_lo_st         0  (        0 /        0 )  0.00
+        mb_split         0  (        0 /        0 )  0.00
+
+==================================
+Stage : incr_opt 
+==================================
+  =================
+   Message Summary
+  =================
+--------------------------------------------------------------------------------
+|   Id    |Sev  |Count |                     Message Text                      |
+--------------------------------------------------------------------------------
+| CFM-1   |Info |    1 |Wrote dofile.                                          |
+| CFM-5   |Info |    1 |Wrote formal verification information.                 |
+| LBR-155 |Info |   24 |Mismatch in unateness between 'timing_sense' attribute |
+|         |     |      | and the function.                                     |
+|         |     |      |The 'timing_sense' attribute will be respected.        |
+| PA-7    |Info |    4 |Resetting power analysis results.                      |
+|         |     |      |All computed switching activities are removed.         |
+| ST-112  |Info |    7 |A super-threading server has been shut down normally.  |
+|         |     |      |A super-threaded optimization is complete and a CPU    |
+|         |     |      | server was successfully shut down.                    |
+| SYNTH-5 |Info |    1 |Done mapping.                                          |
+| SYNTH-7 |Info |    1 |Incrementally optimizing.                              |
+| TIM-501 |Info |    2 |Resetting the break_timing_paths attribute of a pin    |
+|         |     |      | removes exceptions set on the pin. break_timing_paths |
+|         |     |      | attribute has default value of false and can be reset |
+|         |     |      | to other values either false or clock_gating depends  |
+|         |     |      | on the enable signal.                                 |
+|         |     |      |Do the analysis and apply the case analysis on the pin |
+|         |     |      | whether you want to break the timing paths or not     |
+| TUI-58  |Info |    2 |Removed object.                                        |
+--------------------------------------------------------------------------------
+Info    : Done incrementally optimizing. [SYNTH-8]
+        : Done incrementally optimizing 'mynpu_asic_top'.
+      timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                      syn_opt
+@file(synth_chip.tcl) 15: write_hdl > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/mynpu/chip_synth/mynpu_asic_top.postsyn.v
+@file(synth_chip.tcl) 16: write_sdc > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/mynpu/chip_synth/mynpu_asic_top.sdc
+Finished SDC export (command execution time mm:ss (real) = 00:01).
+@file(synth_chip.tcl) 17: report_area > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/mynpu/chip_synth/area.rpt
+@file(synth_chip.tcl) 18: report_qor > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/mynpu/chip_synth/qor.rpt
+@file(synth_chip.tcl) 19: report_timing -max_paths 10 > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/mynpu/chip_synth/timing.rpt
+Warning : Timing problems have been detected in this design. [TIM-11]
+        : The design is 'mynpu_asic_top'.
+        : Use 'check_timing_intent' or 'report timing -lint' to report more information.
+@file(synth_chip.tcl) 20: check_design > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/mynpu/chip_synth/check_design.rpt
+
+@file(synth_chip.tcl) 21: check_design -unresolved > /home/s2400012841/chip-fullstack-2026/eda-runs/20261103-logic-trim/fullchip/mynpu/chip_synth/unresolved.rpt
+
+@file(synth_chip.tcl) 22: puts FLOW_STAGE_OK_CHIP_SYNTHESIS
+FLOW_STAGE_OK_CHIP_SYNTHESIS
+@file(synth_chip.tcl) 23: exit
+
++-----------+-----------------+-----+----------------------+---------------------------+
+|   Host    |     Machine     | CPU | Physical Memory (MB) | Peak Physical Memory (MB) |
++-----------+-----------------+-----+----------------------+---------------------------+
+| localhost | tc-01a0e839f9eb |  1  |        1364.6        |          1628.9           |
++-----------+-----------------+-----+----------------------+---------------------------+
+
++---------------+----------------------+---------------------------+
+|    Server     | Physical Memory (MB) | Peak Physical Memory (MB) |
++---------------+----------------------+---------------------------+
+| localhost_1_0 |        480.1         |           524.4           |
++---------------+----------------------+---------------------------+
+
+Info    : A super-threading server has been shut down normally. [ST-112]
+        : The server 'localhost_1_0' was process '2333619' on this host.
+        : A super-threaded optimization is complete and a CPU server was successfully shut down.

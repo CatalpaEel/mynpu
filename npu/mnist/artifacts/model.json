@@ -4,8 +4,8 @@
   "layers": [
     {
       "name": "conv1",
-      "weights": 2147484672,
-      "quant": 2147484692,
+      "weights": 2147491840,
+      "quant": 2147491860,
       "in_scale": 0.025544211268424988,
       "in_zero": 17,
       "out_scale": 0.02704780362546444,
@@ -23,8 +23,8 @@
     },
     {
       "name": "conv2",
-      "weights": 2147484708,
-      "quant": 2147484780,
+      "weights": 2147491876,
+      "quant": 2147491948,
       "in_scale": 0.02704780362546444,
       "in_zero": 0,
       "out_scale": 0.033288903534412384,
@@ -42,8 +42,8 @@
     },
     {
       "name": "conv3",
-      "weights": 2147484812,
-      "quant": 2147485100,
+      "weights": 2147491980,
+      "quant": 2147492268,
       "in_scale": 0.033288903534412384,
       "in_zero": 0,
       "out_scale": 0.03470629081130028,
@@ -61,8 +61,8 @@
     },
     {
       "name": "conv4",
-      "weights": 2147485164,
-      "quant": 2147485740,
+      "weights": 2147492332,
+      "quant": 2147492908,
       "in_scale": 0.03470629081130028,
       "in_zero": 0,
       "out_scale": 0.03753579407930374,
@@ -75,13 +75,13 @@
       ],
       "stride": 2,
       "src": 2147489792,
-      "dst": 2147488768,
+      "dst": 2147500032,
       "output_bytes": 72
     },
     {
       "name": "conv5",
-      "weights": 2147485804,
-      "quant": 2147486956,
+      "weights": 2147492972,
+      "quant": 2147494124,
       "in_scale": 0.03753579407930374,
       "in_zero": 0,
       "out_scale": 0.07581540197134018,
@@ -93,14 +93,14 @@
         3
       ],
       "stride": 1,
-      "src": 2147488768,
-      "dst": 2147489792,
+      "src": 2147500032,
+      "dst": 2147500104,
       "output_bytes": 144
     },
     {
       "name": "fc1",
-      "weights": 2147487084,
-      "quant": 2147488524,
+      "weights": 2147494252,
+      "quant": 2147495692,
       "in_scale": 0.07581540197134018,
       "in_zero": 0,
       "out_scale": 0.4469708204269409,
@@ -110,12 +110,13 @@
         144
       ],
       "stride": 1,
-      "src": 2147489792,
+      "src": 2147500104,
       "dst": 2147488768,
-      "output_bytes": 10
+      "output_bytes": 10,
+      "matrix_quant": 2147495772
     }
   ],
-  "parameter_bytes": 3932,
+  "parameter_bytes": 4052,
   "checkpoint_accuracy": 99.01,
   "samples": [
     {
@@ -264,5 +265,50 @@
   "local_pytorch_test_accuracy": 99.01,
   "local_test_count": 10000,
   "fixed_point_reference_test_accuracy": 99.01,
-  "fixed_point_vs_pytorch_prediction_disagreements": 0
+  "fixed_point_vs_pytorch_prediction_disagreements": 0,
+  "parameter_base": 2147491840,
+  "firmware_bytes": 4608,
+  "setup_writes": 24,
+  "rf_bank_words": 32,
+  "intermediate_storage": "regfile with SRAM spill only for oversized tensors",
+  "cnn_output": "raw signed INT32 routed through xbar channel 0 FIFO to vector",
+  "postprocessing_unit": "generic vector program VPG2",
+  "fc_execution": "signed packed GEMM K16 tiles; VPG2 INT32 offset plus software word-pair scaling",
+  "fc_raw_base": 2147500248,
+  "stream_abi": "SD91",
+  "stream_tasks": 296,
+  "task_table": [
+    {
+      "address": 2147487056,
+      "per_channel": 28
+    },
+    {
+      "address": 2147487280,
+      "per_channel": 28
+    },
+    {
+      "address": 2147487728,
+      "per_channel": 7
+    },
+    {
+      "address": 2147487952,
+      "per_channel": 3
+    },
+    {
+      "address": 2147488048,
+      "per_channel": 3
+    },
+    {
+      "address": 2147488240,
+      "per_channel": 0
+    }
+  ],
+  "rf_weight_stage_bytes": [
+    20,
+    72,
+    0,
+    0,
+    0,
+    0
+  ]
 }

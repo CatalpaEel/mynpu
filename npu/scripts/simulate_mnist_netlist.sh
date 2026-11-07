@@ -7,7 +7,7 @@ mkdir -p "$root/build/mnist_gate"
 cd "$root/build/mnist_gate"
 cp "$root/mnist/artifacts/"*.hex .
 cp "$root/mnist/artifacts/test_meta.svh" .
-python3 - "$root/reports/npu_synth.v" <<'PY'
+python3 - "$root/reports/npu_synth.v" << 'PY'
 import sys
 from pathlib import Path
 s=Path(sys.argv[1]).read_text();head,body=s.split('`timescale',1)

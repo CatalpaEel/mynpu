@@ -1,0 +1,81 @@
+{
+  "scope": "Actual final placed instance rectangles exported by Innovus; IO region background is schematic; no route rendering; fillers in Other",
+  "groups": {
+    "Other": {
+      "cells": 56724,
+      "bbox_sum_area_mm2": 1.3913609919984817,
+      "color": "#475569"
+    },
+    "CPU": {
+      "cells": 12593,
+      "bbox_sum_area_mm2": 0.29350702080003116,
+      "color": "#60a5fa"
+    },
+    "Debug_DMA": {
+      "cells": 12566,
+      "bbox_sum_area_mm2": 0.3405216191999921,
+      "color": "#94a3b8"
+    },
+    "Matrix_Stream": {
+      "cells": 1001,
+      "bbox_sum_area_mm2": 0.027455366400000077,
+      "color": "#e879f9"
+    },
+    "MMIO": {
+      "cells": 7317,
+      "bbox_sum_area_mm2": 0.24232373759999112,
+      "color": "#a3e635"
+    },
+    "NMC": {
+      "cells": 7491,
+      "bbox_sum_area_mm2": 0.19110313599998835,
+      "color": "#fbbf24"
+    },
+    "Shared_RF": {
+      "cells": 11550,
+      "bbox_sum_area_mm2": 0.25225262719999986,
+      "color": "#fde68a"
+    },
+    "CNN_Stream": {
+      "cells": 9255,
+      "bbox_sum_area_mm2": 0.2127039039999909,
+      "color": "#fb923c"
+    },
+    "Vector": {
+      "cells": 9864,
+      "bbox_sum_area_mm2": 0.1583024575999874,
+      "color": "#4ade80"
+    },
+    "Vector_Issue": {
+      "cells": 4765,
+      "bbox_sum_area_mm2": 0.09071444480000042,
+      "color": "#2dd4bf"
+    },
+    "CNN": {
+      "cells": 2348,
+      "bbox_sum_area_mm2": 0.040042643199999735,
+      "color": "#f87171"
+    },
+    "Matrix": {
+      "cells": 541,
+      "bbox_sum_area_mm2": 0.01463320320000008,
+      "color": "#c084fc"
+    },
+    "SRAM": {
+      "cells": 2,
+      "bbox_sum_area_mm2": 0.8028871814999999,
+      "color": "#818cf8"
+    }
+  },
+  "sha256": {
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/module_instances.tsv": "a5e2a60fd19a4b7783fbefac9aedf7d7a4f31c3cceff980543c5caf1f3b93de5",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/scripts/module_map.tcl": "2a6d383eba352eed0fba89989bf957b35b49f7a47089528b98c615413cfceb1b",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/module-map.log": "fc2746eee6e6901cccccc97856f65c384a63833ed85dbf07ec7601e63a4567d1",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261105-window-prefetch-backend/chip/mynpu/pnr/checkpoints/13_finished.enc": "4345c3bd1226e2e7c257d7b1d5afb94f719c0bd799d21302dade22190a97cf3b",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/window-prefetch-module-map.svg": "1b0cb50057e78f8322cdf0cf02425082ff8d185021b678547a413d5c5e0a51d7",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/window-prefetch-module-map.png": "2833342d39b4af887544926671e0ead71779db9cd5f33c1c428121391ca88d62",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/window-prefetch-module-gui.png": "b0a274eb277b4f15eacbd7ee757321a520d4b3e2ac323ef8aa4695d4c0e6c60b",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/eda/tsmc180/render_module_map.py": "2ae285f2e8d4c1b17062e4dccab5bd12452e1436621f931c87d6b5e57295a226",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/eda/tsmc180/raster_module_map.py": "affe447eb82e14432ff09af15fec578bb7e9a54aeb31869dbd532e74365e6459"
+  }
+}

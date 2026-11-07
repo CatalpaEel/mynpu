@@ -1,0 +1,9 @@
+{
+  "scope": "Actual Innovus placement canvas, before optional area reclaim and before CTS/detailed routing. Not a closed layout.",
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261104-vector-program/fullchip-rf32",
+  "checkpoint": "08_post_tie",
+  "image_sha256": "f8b69a1614744f89e4279f9b038fa82f9296f480f0cd7eb7efd6235244bdd744",
+  "capture_tcl_sha256": "a313356a2b8fc4c76b85ba19761797557a432f4f3f3ee739771b0c32935f03be",
+  "checkpoint_file_sha256": "6d7f80804c0d79f7048b9147446e87c4fd4e9c7097c1207f814d929efd72badb",
+  "capture_log_sha256": "1555217da3bfb2cf7d094abbf26626cd83ea4658f4862851f47f85b781664e3a"
+}
