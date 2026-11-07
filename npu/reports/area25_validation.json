@@ -26,7 +26,15 @@
       ]
     },
     {
-      "result": "npu/build/vcs-area25_default-latency-macro/result.json",
+      "result": "npu/build/vcs-area25_default-quantlayers-macro/result.json",
+      "suite": "quantlayers",
+      "macro": true,
+      "summaries": [
+        "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
+      ]
+    },
+    {
+      "result": "npu/build/vcs-area25_default_final-latency-macro/result.json",
       "suite": "latency",
       "macro": true,
       "summaries": [
@@ -51,14 +59,6 @@
         "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=29565 input_to_classification_us_at_50mhz=591.30 PASS",
         "SINGLE sample=9 useful_macs=39330 kernel_cycles=24635 elapsed_cycles=29173 kernel_utilization_pct=17.74 system_utilization_pct=14.98 latency_us_at_50mhz=583.46 PASS",
         "SINGLE PASS samples=10 checks=120"
-      ]
-    },
-    {
-      "result": "npu/build/vcs-area25_default-quantlayers-macro/result.json",
-      "suite": "quantlayers",
-      "macro": true,
-      "summaries": [
-        "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
       ]
     },
     {
@@ -207,7 +207,7 @@
       ]
     },
     {
-      "result": "npu/build/vcs-area25_legacy-latency-macro/result.json",
+      "result": "npu/build/vcs-area25_legacy_final-latency-macro/result.json",
       "suite": "latency",
       "macro": true,
       "summaries": [
@@ -235,7 +235,15 @@
       ]
     },
     {
-      "result": "npu/build/vcs-area25_quant-latency-macro/result.json",
+      "result": "npu/build/vcs-area25_quant-quantlayers-macro/result.json",
+      "suite": "quantlayers",
+      "macro": true,
+      "summaries": [
+        "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
+      ]
+    },
+    {
+      "result": "npu/build/vcs-area25_quant_final-latency-macro/result.json",
       "suite": "latency",
       "macro": true,
       "summaries": [
@@ -260,14 +268,6 @@
         "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=27824 input_to_classification_us_at_50mhz=556.48 PASS",
         "SINGLE sample=9 useful_macs=39330 kernel_cycles=21032 elapsed_cycles=27432 kernel_utilization_pct=20.78 system_utilization_pct=15.93 latency_us_at_50mhz=548.64 PASS",
         "SINGLE PASS samples=10 checks=120"
-      ]
-    },
-    {
-      "result": "npu/build/vcs-area25_quant-quantlayers-macro/result.json",
-      "suite": "quantlayers",
-      "macro": true,
-      "summaries": [
-        "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
       ]
     }
   ],

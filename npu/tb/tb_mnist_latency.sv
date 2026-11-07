@@ -188,6 +188,7 @@ module tb_mnist_latency;
 `ifndef NPU_GATE_SIM
   `include "mnist_profile.svh"
 `endif
+`ifndef NPU_GATE_SIM
   // Fail at the offending CPU transfer rather than a later missing-progress check.
   always @(posedge clk)
     if (rst_n && dut.i_core.req[0] && dut.i_core.gnt[0] && dut.i_core.bus_error[0])
@@ -198,6 +199,7 @@ module tb_mnist_latency;
           dut.i_core.we[0],
           dut.i_core.wdata[0]
       );
+`endif
   initial begin
     logic [31:0] value;
     int limit, max_cycles, ignored, samples;

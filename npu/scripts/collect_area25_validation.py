@@ -9,7 +9,9 @@ ROOT = Path(__file__).resolve().parents[2]
 NPU = ROOT / "npu"
 paths = list((NPU / "build").glob("vcs-area25_final-*/result.json"))
 paths += [
-    NPU / "build" / f"vcs-area25_{v}-{s}{'-macro' if macro else ''}/result.json"
+    NPU
+    / "build"
+    / f"vcs-area25_{v}{'_final' if s == 'latency' else ''}-{s}{'-macro' if macro else ''}/result.json"
     for v, s, macro in [
         ("fixed", "sramuncached", False),
         ("boundary32", "addressranges", False),
@@ -41,7 +43,7 @@ for p in sorted(paths):
         )
     )
     if d["suite"] == "latency":
-        v = next(v for v in ["default", "quant", "legacy"] if f"area25_{v}-" in p.parent.name)
+        v = next(v for v in ["default", "quant", "legacy"] if f"area25_{v}_final-" in p.parent.name)
         cs = [
             int(re.search(r" elapsed_cycles=(\d+)", s)[1])
             for s in d["summaries"]

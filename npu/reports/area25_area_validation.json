@@ -1,0 +1,429 @@
+{
+  "passed": true,
+  "rtl_checkpoint": "bdc43c0",
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-high-18ns-regaware",
+  "source_manifest": {
+    "git_commit": "bdc43c04ca1e5d79dad8882be20d84298e55f514",
+    "branch": "experiment/independent-units",
+    "source_root": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe",
+    "source_sha256": {
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv": "3fee39d262ef44bff6ee00b591fe08830e5e35cdd1b9e5eb9eb06da6f6525805",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv": "33d7c06b0fef3ae2c8814b040abe3cdaa23065cf12643de20e8275f44f97abe1",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv": "ae738f408ba2ade41bfcf0488c8f611a2c39b26915191890dac907b8a7a518e5",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv": "afc32fcae21f6cbb834c5ee602a1aaee1b518fc436a86d4fe1b97942473d35c8",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv": "c46075cb09de0e773c91da62d02497673945b7a3e5de176363e5b5e118f82eea",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv": "7eb340f76c76d18f4ac3b6d1d61433c7372118d24f57f83a6ceae82cdbf51c2d",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv": "717fc6e7ec754807440f346d9b8bb930da302fffd294550e30ceae78009f4e87",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv": "0bf54e372850c1af22264711d311d943718dc4c8d918e47cc98e9a8d07461d44",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv": "08cc968a5b26b5a68ad2c548755e6b3b0d07a7ad75a3f11e92bc1bab71eeb7c6",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv": "cff163332b28e84904955e88691f973a47f90a4209b3f0ae0d2afe94f6a49921",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv": "3720278ce00b5591a1a63fe5515528dd4223a35070303e58cf2e48bd0b56c8c1",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv": "51322d03a0479f16a4acb66cccee48003e2e224c02a7d3188cbaea9b2f8b2756",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv": "83d9f70bab3b514062a7a79a581919afd5de466167dfcd08733c773f36ba094a",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv": "fa60eaab03518e8e145a3f0a626bc7945e79265e8322ce874a6c8f6996f0e10b",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv": "0538bf1d829187699085de361d20ab79d04a459b06060a8f04709105f61818dc",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv": "cf047a8b7654f2cb0d36050c41b57cf95bf0a0a21f5dea346d38aa0da57c24fe",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv": "e7e30ce0f0e6f652dcf59e586933cada245018b80f2529da476b4272e86e4380",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv": "5fa2656a11759ff10fd016ed885761c9c379627b9a1b83ddee6e03a35ee9e23f",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv": "ad8a13c8314b9a3c28228db2844466c9d750460d6afa8f6299a7229d80f8dd47",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv": "50d1b4d325694f4e898d5b2f2e7b26a7e631a5abdd1cd283500c900b079275ab",
+      "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv": "807cf3fb86fe7060cdb1fa21dfbc843220b09a4d694d23ad4bc1cdd3e7118264",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv": "6eca8d4c2e299adcc498417220478360cc22898ba9037cdad6a1b81e80373c7b",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv": "11035bcbb28447fa5a3e40d5cad4f257e763f75e49664ce8098ab6247a9a57cb",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv": "27931c8004e4d266c6ea02c9d5c19968c67d7e6ab86e57da4088531b13c8c48f",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv": "db90df2f8737aff29d73b3d242dd33aeb6750ae69ae7eb8e118b531180945d7f",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv": "858b172963e17529de0b40a5be6ddfdadfc60bdca967819e4fc558b0ed6d7b87",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv": "6a78a0d77d32e6795f63e5149f77b98320ce504c67c44a2e359c9aea70989224",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv": "e2cec8f3d273748783275c60b1ec89101336608638d7e7783b03dd6b9dbb0345",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv": "6e12f673e05380e34a35c38d8ee8b6878935d96b6f2dfda72c67f8a6e92a6e4e",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv": "1510df315721b370c2d86b1c1d134a3ff6beefba2d072de7a4a611e3ecffb753",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv": "6b646e6aa931f8ab56b85ee27549a422450b456270a54d68a4130329823226b6",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv": "d910cbd0751f38d349e8975de22b43d0a2937f9e905b0d9b82894fd83c53fe8a",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv": "c2a0787c07bcd6c198b6338c4c6ee372b4bce96ec4a4def467ff0ae03da4e43a",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv": "98b246d9ada45a7073d217d5c3bbc86941ee76bb00e7e0edda61d3bbec83728e",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv": "e2d1cc9bc433a093938f2d4e4268c611f9a9bf199101e85114d417ff04597626",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv": "24df51d9cb33f5c8760a8cfbc7931aafc94c2ab0523c7df55b2635e7778af16f",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv": "857962513fc5bd3eb3d6b28c55fdfb15ef53f8ce8a59173a7d583efb8caee66f",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv": "6a0cf2f15c69886ad5497222aa203f6f5b1fdd004b32a4ab87b36a0960ba2254",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv": "2b0a58e5c2f758dbe5f6e8f786c547da5508ce466007517434e2f7d817b758ed",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv": "7a2dbeded21929832b40fc8d068b35b7281c75a63c426feed207127d4da08e4e",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv": "a2fcbe6b783659ebecaf25d105f30c68af9b68c2850b833af64a2cec3ec29262",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv": "66e6078ea3b3acd3ceea4b974c0488d25e02324935532de1f2d39cdc34c875a0",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv": "cd04d46afbf778ff3f1573bdd390784e5461a09b33fd670fa126ae7d3c433e89",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv": "1cf012a83b54472931ad9944e7774e311222641a0aa026229c19467f90bf5448",
+      "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv": "2467f6b3c2745e687edad1a0c88ab5267b4ba8642c91e1fc0f282cf4223e5dc3",
+      "npu/rtl/common/npu_addr_pkg.sv": "2ce6f1077cca80c5092ff382d7e6b3d274becf7c9c25da0e1991e3f2acc9ca06",
+      "npu/rtl/cnn/npu_stream_pkg.sv": "ef20e82c6c5b95eafb639b93df6df1163d50dc3b897f6e562f27d81d86a0a7d2",
+      "npu/rtl/common/npu_rr_select.sv": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+      "npu/rtl/common/npu_clock_gate.sv": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+      "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+      "npu/rtl/cnn/npu_cnn_mac.sv": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+      "npu/rtl/top/npu_core.sv": "30173c6be81a9e3cc9db0615b7a77e525c8c1fe2c1b6c7a3acc699873a0e52f9",
+      "npu/rtl/interconnect/npu_data_regfile.sv": "7fffbed85311f8e8be3028c058bb60f25962e4b2d9dfefeb97c1a8132c9be278",
+      "npu/rtl/debug/npu_debug_boot.sv": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+      "npu/rtl/debug/npu_jtag_debug.sv": "d2324d487db499ca8b30226f438c1a527f73cba72e6c8762ba4d9237e880b69a",
+      "npu/rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+      "npu/rtl/matrix/npu_matrix_stream.sv": "87b041181495303fa76d3c06f7e738e8b249346b2ccbb37bdbe6f1e825361fee",
+      "npu/rtl/control/npu_mmio.sv": "a76d7bf4c5e5291dcaaba878fec327b6718d818be6b82be94b02e9524c35341a",
+      "npu/rtl/cnn/npu_stream.sv": "d72b6586071202ad0096e863492a7485ecad3d7c7c2a15c9310bc44686b9ab25",
+      "npu/rtl/cnn/npu_stream_control.sv": "73823f2a212697dc5e5bd0409f66d10e715f95f453eca43a6e42b062d78d3608",
+      "npu/rtl/cnn/npu_stream_engine.sv": "e2133f72789358af121720d8707aa258d9b672c6ff916af451276db1d629f55f",
+      "npu/rtl/vector/npu_vector.sv": "392777c771a92b8a8dc812db019ff1896a3b92256512278f9d2c1dd78a230dcb",
+      "npu/rtl/vector/npu_vector_stream.sv": "3c55e8e4ceda628ff4eab208711cef500e502d59bdbc233160da929da49facfd",
+      "npu/rtl/interconnect/xbar.sv": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
+      "npu/rtl/interconnect/xbar_stream.sv": "027f3b83b5199bc010ed9a46b438be81ec715def09a90bdd4befb418eb43307f",
+      "npu/rtl/interconnect/npu_multi_read.sv": "d3899799b1d54c34115f3878339321c00082d51d627fc30337d02656566b4028",
+      "npu/rtl/quant/npu_shared_quant.sv": "f36e046998f3d2ae54da8ea181a7c475370fd6b0a26441e629ba8f1055310da6",
+      "npu/rtl/top/npu_soc.sv": "397998f42b58b0fffab53adabc454945d198b78fa0dbccc685bda9fc20064a95"
+    },
+    "synth_period_ns": 18.0,
+    "report_period_ns": 20,
+    "effort": "high",
+    "clock_gating": true,
+    "sram_banks": 2,
+    "rf_bank_words": 32,
+    "cache_words_per_bank": 0,
+    "execution_units": [
+      "cnn",
+      "matrix",
+      "vector"
+    ],
+    "cnn_loop_order": "row",
+    "cnn_mac_lanes": 9,
+    "planned_pnr_width_um": 2000,
+    "planned_pnr_height_um": 2000,
+    "cell_area_budget_mm2": 3,
+    "cnn_queue_depth": 8,
+    "cnn_command_scope": "software-masked tile of one output channel, 1..8 positions",
+    "stream_task_bits": 32,
+    "cnn_window_words_per_row": 3,
+    "shared_gather_slots": 9,
+    "matrix_outer_rows": 4,
+    "matrix_outer_cols": 4,
+    "matrix_products_per_step": 16,
+    "matrix_accumulators": 16,
+    "matrix_operand_words": 8,
+    "matrix_addressing": "incremental validated 15-bit operand offsets",
+    "cnn_row_funnel_bits": 48,
+    "vector_shared_pack_result_buffer": true,
+    "vector_ld32_address_uses_alu": true,
+    "matrix_element_precisions": [
+      8,
+      16
+    ],
+    "vector_light_lanes": 0,
+    "vector_alu_count": 1,
+    "shared_quant_units": 1,
+    "shared_quant_default": "INT32 bypass",
+    "shared_quant_direct_inputs": [
+      "CNN",
+      "Matrix"
+    ],
+    "vector_simd8_lanes": 4,
+    "vector_register_width_bits": 32,
+    "vector_program_abi": "VPG2",
+    "vector_folded_stages": 0,
+    "stream_empty_forwarding": true,
+    "arbiter_implementation": "masked-first-set-onehot",
+    "rf_decode": "once-per-port",
+    "cnn_rf_sink": true,
+    "cnn_rf_weight_gather": true,
+    "stream_partial_words_in_shared_rf": 8,
+    "matrix_queue_depth": 8,
+    "vector_queue_depth": 8,
+    "scope": "Independent CNN GEMM vector units, uncached XBAR CPU JTAG (six ordinary masters + 4x16-word stream channels, no independent DMA) plus two 8KB SRAM macros; excludes PAD/PHY/DDR",
+    "seed_db": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-high-18ns/optimized.db",
+    "seed_db_sha256": "7de49b99df1676238c8ce708729663c2ed1fdcfffaec64ccb3f78d67604ed125",
+    "flow": "High-effort mapped DB reoptimization at explicit period"
+  },
+  "includes_two_sram_macros": true,
+  "pads_included": false,
+  "pnr_performed": false,
+  "scope": "TSMC180 TT Genus synthesis;18ns optimization/20ns reporting; no PAD/CTS/routing overhead",
+  "total_area_mm2": 2.5154878280000004,
+  "standard_cell_area_mm2": 1.7126006460000003,
+  "before_area_mm2": 2.8468488769999998,
+  "saved_mm2": 0.3313610489999994,
+  "saved_percent": 11.639572851130286,
+  "target_area_mm2": 2.5,
+  "target_area_met": false,
+  "timing_groups": [
+    {
+      "group": "cg_enable_group_jtag_clk",
+      "slack_ns": 97.2748,
+      "tns_ns": 0.0,
+      "violations": 0
+    },
+    {
+      "group": "cg_enable_group_sys_clk",
+      "slack_ns": 4.154100000000001,
+      "tns_ns": 0.0,
+      "violations": 0
+    },
+    {
+      "group": "jtag_clk",
+      "slack_ns": 47.9664,
+      "tns_ns": 0.0,
+      "violations": 0
+    },
+    {
+      "group": "sys_clk",
+      "slack_ns": 2.004,
+      "tns_ns": 0.0,
+      "violations": 0
+    }
+  ],
+  "setup_target_met": true,
+  "extracted_library_clock_gates": 665,
+  "rtl_regressions": 25,
+  "inference_cycles": {
+    "default": 29173,
+    "legacy": 30710,
+    "quant": 27432
+  },
+  "source_sha256": {
+    "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+    "npu/rtl/cnn/npu_cnn_mac.sv": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+    "npu/rtl/cnn/npu_stream.sv": "d72b6586071202ad0096e863492a7485ecad3d7c7c2a15c9310bc44686b9ab25",
+    "npu/rtl/cnn/npu_stream_control.sv": "73823f2a212697dc5e5bd0409f66d10e715f95f453eca43a6e42b062d78d3608",
+    "npu/rtl/cnn/npu_stream_engine.sv": "e2133f72789358af121720d8707aa258d9b672c6ff916af451276db1d629f55f",
+    "npu/rtl/cnn/npu_stream_pkg.sv": "ef20e82c6c5b95eafb639b93df6df1163d50dc3b897f6e562f27d81d86a0a7d2",
+    "npu/rtl/common/npu_addr_pkg.sv": "2ce6f1077cca80c5092ff382d7e6b3d274becf7c9c25da0e1991e3f2acc9ca06",
+    "npu/rtl/common/npu_clock_gate.sv": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+    "npu/rtl/common/npu_rr_select.sv": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+    "npu/rtl/control/npu_mmio.sv": "a76d7bf4c5e5291dcaaba878fec327b6718d818be6b82be94b02e9524c35341a",
+    "npu/rtl/debug/npu_debug_boot.sv": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+    "npu/rtl/debug/npu_jtag_debug.sv": "d2324d487db499ca8b30226f438c1a527f73cba72e6c8762ba4d9237e880b69a",
+    "npu/rtl/interconnect/npu_data_regfile.sv": "7fffbed85311f8e8be3028c058bb60f25962e4b2d9dfefeb97c1a8132c9be278",
+    "npu/rtl/interconnect/npu_multi_read.sv": "d3899799b1d54c34115f3878339321c00082d51d627fc30337d02656566b4028",
+    "npu/rtl/interconnect/xbar.sv": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
+    "npu/rtl/interconnect/xbar_stream.sv": "027f3b83b5199bc010ed9a46b438be81ec715def09a90bdd4befb418eb43307f",
+    "npu/rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+    "npu/rtl/matrix/npu_matrix_stream.sv": "87b041181495303fa76d3c06f7e738e8b249346b2ccbb37bdbe6f1e825361fee",
+    "npu/rtl/quant/npu_shared_quant.sv": "f36e046998f3d2ae54da8ea181a7c475370fd6b0a26441e629ba8f1055310da6",
+    "npu/rtl/top/npu_core.sv": "30173c6be81a9e3cc9db0615b7a77e525c8c1fe2c1b6c7a3acc699873a0e52f9",
+    "npu/rtl/top/npu_soc.sv": "397998f42b58b0fffab53adabc454945d198b78fa0dbccc685bda9fc20064a95",
+    "npu/rtl/vector/npu_vector.sv": "392777c771a92b8a8dc812db019ff1896a3b92256512278f9d2c1dd78a230dcb",
+    "npu/rtl/vector/npu_vector_stream.sv": "3c55e8e4ceda628ff4eab208711cef500e502d59bdbc233160da929da49facfd"
+  },
+  "buckets": {
+    "XBAR": {
+      "area_um2": 364594.182,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_xbar",
+          "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6",
+          "cells": 15072,
+          "area_um2": 364594.182
+        }
+      ],
+      "area_mm2": 0.364594182,
+      "percent_total": 14.493975202013976
+    },
+    "MMIO / task queues": {
+      "area_um2": 183307.981,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_mmio",
+          "module": "npu_mmio",
+          "cells": 6122,
+          "area_um2": 183307.981
+        }
+      ],
+      "area_mm2": 0.183307981,
+      "percent_total": 7.287174239508981
+    },
+    "CPU": {
+      "area_um2": 110357.094,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_cpu_core_i_id_stage_i",
+          "module": "cv32e40p_id_stage_COREV_PULP0_COREV_CLUSTER0_N_HWL",
+          "cells": 3756,
+          "area_um2": 110357.094
+        }
+      ],
+      "area_mm2": 0.110357094,
+      "percent_total": 4.387105068512381
+    },
+    "Matrix": {
+      "area_um2": 103286.355,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_matrix_stream",
+          "module": "npu_matrix_stream_GATHER1",
+          "cells": 4168,
+          "area_um2": 103286.355
+        }
+      ],
+      "area_mm2": 0.103286355,
+      "percent_total": 4.106016886677616
+    },
+    "Vector": {
+      "area_um2": 138850.79,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_vector",
+          "module": "npu_vector",
+          "cells": 4497,
+          "area_um2": 88064.838
+        },
+        {
+          "indent": 2,
+          "instance": "i_core_i_vector_stream",
+          "module": "npu_vector_stream_GATHER1",
+          "cells": 2267,
+          "area_um2": 50785.952
+        }
+      ],
+      "area_mm2": 0.13885079,
+      "percent_total": 5.519835494906636
+    },
+    "JTAG / debug": {
+      "area_um2": 85827.93,
+      "instances": [
+        {
+          "indent": 2,
+          "instance": "i_core_i_debug",
+          "module": "npu_jtag_debug",
+          "cells": 3575,
+          "area_um2": 85827.93
+        }
+      ],
+      "area_mm2": 0.08582793,
+      "percent_total": 3.411979539103537
+    },
+    "SRAM macros": {
+      "area_um2": 802887.182,
+      "count": 2,
+      "area_mm2": 0.802887182,
+      "percent_total": 31.917752614941293
+    },
+    "Top / core glue": {
+      "area_um2": 726376.3140000002,
+      "area_mm2": 0.7263763140000002,
+      "percent_total": 28.87616095433558
+    }
+  },
+  "bucket_note": "Hierarchy-only attribution; high-effort ungrouping moves some compute cells into Top/core glue. Use whole-chip total for comparison.",
+  "run_file_sha256": {
+    "synth.tcl": "4cd201743dd8af6fb007c4077f8a8028f263667db5ca0c3d45eb840d592f3408",
+    "synth.sdc": "d90e9e5ab10344eb2e134128eb048b1c024bf01f186abf1677aece3dd31b0424",
+    "report.sdc": "2aee14ac3290fcda9e3413add573bbc02cbfcb916543a10317c93b05862c3da9",
+    "optimized.v": "6a7f4c53dc84ca2d248853b048bcd51e71df301f463b1851fe96909b33c9db60",
+    "optimized.db": "e754b0616b36d6a1ea692fb435de97b7f4a59bb62db1adde89a694c76c442952"
+  },
+  "gate_smoke": [
+    {
+      "result": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-high-18ns-regaware/gls-cnnstream/result.json",
+      "suite": "cnnstream",
+      "scope": "Zero-delay gate-level functional smoke; no SDF, no physical timing signoff",
+      "summaries": [
+        "CNN STREAM PASS cases=193 checks=1140 stride1/2/borders/unaligned-rows/1..16-channels/RF/SRAM"
+      ]
+    },
+    {
+      "result": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-high-18ns-regaware/gls-latency-quant/result.json",
+      "suite": "latency",
+      "scope": "Zero-delay gate-level functional smoke; no SDF, no physical timing signoff",
+      "summaries": [
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=27824 input_to_classification_us_at_50mhz=556.48 PASS",
+        "SINGLE PASS samples=1 checks=12"
+      ]
+    },
+    {
+      "result": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-high-18ns-regaware/gls-unitroutes/result.json",
+      "suite": "unitroutes",
+      "scope": "Zero-delay gate-level functional smoke; no SDF, no physical timing signoff",
+      "summaries": [
+        "UNIT ROUTE producer=0 consumer=1 PASS",
+        "UNIT ROUTE producer=0 consumer=2 PASS",
+        "UNIT ROUTE producer=1 consumer=0 PASS",
+        "UNIT ROUTE producer=1 consumer=2 PASS",
+        "UNIT ROUTE producer=2 consumer=0 PASS",
+        "UNIT ROUTE producer=2 consumer=1 PASS",
+        "UNIT ROUTES PASS checks=24 six directed pairs, three-stage chain, 256-word GEMM, streamed DOT9 weights"
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-cg-low",
+      "area_mm2": 2.680147585,
+      "sys_setup_slack_ns": 4.0005,
+      "effort": "low",
+      "optimization_period_ns": 16,
+      "same_rtl_as_selected": false
+    },
+    {
+      "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-cg-high",
+      "area_mm2": 2.533808967,
+      "sys_setup_slack_ns": 4.0001,
+      "effort": "high",
+      "optimization_period_ns": 16,
+      "same_rtl_as_selected": false
+    },
+    {
+      "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-rtl-cg-low",
+      "area_mm2": 2.649412589,
+      "sys_setup_slack_ns": 4.0051,
+      "effort": "low",
+      "optimization_period_ns": 16,
+      "same_rtl_as_selected": true
+    },
+    {
+      "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-rtl-cg-20ns",
+      "area_mm2": 2.593327425,
+      "sys_setup_slack_ns": 0.0004,
+      "effort": "high",
+      "optimization_period_ns": 20.0,
+      "same_rtl_as_selected": true
+    },
+    {
+      "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-rtl-cg-high",
+      "area_mm2": 2.518885998,
+      "sys_setup_slack_ns": 4.0031,
+      "effort": "high",
+      "optimization_period_ns": 16,
+      "same_rtl_as_selected": true
+    },
+    {
+      "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-high-18ns",
+      "area_mm2": 2.51606297,
+      "sys_setup_slack_ns": 2.0017,
+      "effort": "high",
+      "optimization_period_ns": 18.0,
+      "same_rtl_as_selected": true
+    },
+    {
+      "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-high-19ns",
+      "area_mm2": 2.5158083270000002,
+      "sys_setup_slack_ns": 1.0071,
+      "effort": "high",
+      "optimization_period_ns": 19.0,
+      "same_rtl_as_selected": true
+    },
+    {
+      "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-high-20ns",
+      "area_mm2": 2.515742471,
+      "sys_setup_slack_ns": 0.092,
+      "effort": "high",
+      "optimization_period_ns": 20.0,
+      "same_rtl_as_selected": true
+    },
+    {
+      "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-high-18ns-regaware",
+      "area_mm2": 2.5154878280000004,
+      "sys_setup_slack_ns": 2.004,
+      "effort": "high",
+      "optimization_period_ns": 18.0,
+      "same_rtl_as_selected": true
+    }
+  ]
+}

@@ -250,7 +250,7 @@ text(
 text(
     55,
     1885,
-    "依据RTL及build_config.json；4×4外积Matrix + QT01；Stream精简后综合2.846849mm²（含SRAM、不含PAD），50MHz setup +4.0020ns；未重跑布局布线。",
+    "依据RTL及build_config.json；4×4外积Matrix + QT01；门控综合2.515488mm²（含SRAM、不含PAD），50MHz setup +2.0040ns；未重跑布局布线。",
     22,
     "#94a3b8",
 )
@@ -259,6 +259,7 @@ svg.append("</svg>")
 im.save(OUT / "architecture-detailed.png")
 files = [
     "npu/rtl/top/npu_core.sv",
+    "npu/rtl/control/npu_mmio.sv",
     "npu/rtl/interconnect/xbar.sv",
     "npu/rtl/interconnect/xbar_stream.sv",
     "npu/rtl/common/npu_addr_pkg.sv",
