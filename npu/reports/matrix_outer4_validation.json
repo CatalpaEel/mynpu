@@ -316,10 +316,14 @@
     "image_bytes": 4864
   },
   "ppa": {
-    "synthesis_measured": false,
-    "timing_measured": false,
+    "synthesis_measured": true,
+    "timing_measured": true,
     "pnr_measured": false,
-    "historical_area_note": "2.586795mm2 belongs to the previous dot-product Matrix, not this RTL"
+    "historical_area_note": "2.586795mm2 belongs to the previous dot-product Matrix, not this RTL",
+    "sta_scope": "Genus pre-layout setup only; no physical timing signoff",
+    "area_report": "npu/reports/matrix_outer4_area_validation.json",
+    "total_area_mm2": 2.976653249,
+    "setup_slack_ns_at_50mhz": 4.0012
   },
   "source_sha256": {
     "npu/mnist/firmware.py": "58a8eb8e162791564d729bea448b1e057f07d2f8d0231a66dff4f2dab760a6f7",

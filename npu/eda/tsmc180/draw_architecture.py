@@ -250,7 +250,7 @@ text(
 text(
     55,
     1885,
-    "依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、4×4外积Matrix + 单ALU INT32/SIMD8 + QT01；本版面积时序尚未重测。",
+    "依据RTL及build_config.json；4×4外积Matrix + QT01；综合2.976653mm²（含SRAM、不含PAD），50MHz setup +4.0012ns；未重跑布局布线。",
     22,
     "#94a3b8",
 )
