@@ -24,6 +24,8 @@ RF_BANK_WORDS = int(
 RF_BANK_BYTES = RF_BANK_WORDS * 4
 setup_writes = 0
 SHARED_QUANT = os.environ.get("NPU_SHARED_QUANT", "0") == "1"
+QUANT_IRQ_WAIT = SHARED_QUANT and os.environ.get("NPU_QUANT_IRQ_WAIT", "1") == "1"
+QUANT_QUEUE_IRQ_WAIT = QUANT_IRQ_WAIT and os.environ.get("NPU_QUANT_QUEUE_IRQ_WAIT", "0") == "1"
 
 
 def lbu(rd, base, off):
@@ -228,13 +230,56 @@ def rf_weight_stage_bytes(fields):
 
 
 def quant_wait(base, submitted, completed, tag):
+    """Wait on IRQ16 with mie[16]=1, mstatus.MIE=0: WFI wakes without ISR.
+
+    Tickets, rather than the pending interrupt level, determine completion.
+
+    CNN bit3 acknowledges only the sticky done flag, even while jobs run.
+    Clear BEFORE checking the ticket: a later completion remains pending across
+    WFI; a simultaneous completion is visible in the subsequent ticket read.
+    Matrix only permits its bit1 acknowledgement after the whole queue drains,
+    so it can sleep once, then poll the remaining tail if done stays asserted.
+    """
     lw(5, base, submitted)
+    if not QUANT_IRQ_WAIT:
+        label(tag)
+        lw(8, base, 4)
+        andi(11, 8, 4)
+        branch(11, 0, "fail")
+        lw(8, base, completed)
+        branch(8, 5, tag)
+        return
+    cnn = base == 6
     label(tag)
+    if cnn:
+        li(8, 8)
+        sw(8, base, 0)
     lw(8, base, 4)
     andi(11, 8, 4)
     branch(11, 0, "fail")
+    if not cnn:
+        andi(10, 8, 2)
     lw(8, base, completed)
-    branch(8, 5, tag)
+    branch(8, 5, tag + "_sleep")
+    jump(tag + "_done")
+    label(tag + "_sleep")
+    if not cnn:
+        branch(10, 0, tag + "_tail")
+    emit(0x10500073, "wfi")
+    if cnn:
+        jump(tag)
+    else:
+        label(tag + "_tail")
+        lw(8, base, 4)
+        andi(11, 8, 4)
+        branch(11, 0, "fail")
+        lw(8, base, completed)
+        branch(8, 5, tag + "_tail")
+    label(tag + "_done")
+    # Do not leave this source's level pending when switching the shared IRQ16
+    # between CNN and Matrix. Matrix is idle once all submitted tickets retire.
+    li(8, 8 if cnn else 2)
+    sw(8, base, 0)
 
 
 def quant_settings(fields, matrix=False):
@@ -313,6 +358,19 @@ def emit_quant_cnn(i, fields, stream=False):
     andi(10, 8, 255)
     shift(8, 8, 16, 5)
     branch(10, 8, "qsubmit" + str(i))
+    if QUANT_QUEUE_IRQ_WAIT:
+        # A completion can free a slot before this acknowledgement. Re-read
+        # occupancy AFTER clearing done, otherwise WFI could miss that event.
+        li(8, 8)
+        sw(8, 6, 0)
+        lw(8, 6, 4)
+        andi(11, 8, 4)
+        branch(11, 0, "fail")
+        lw(8, 6, 88)
+        andi(10, 8, 255)
+        shift(8, 8, 16, 5)
+        branch(10, 8, "qsubmit" + str(i))
+        emit(0x10500073, "wfi")
     jump("qspace" + str(i))
     label("qsubmit" + str(i))
     sw(31, 6, 0)
@@ -806,6 +864,20 @@ def generate_single():
     meta["matrix_tasks"] = 37 if SHARED_QUANT else 27
     meta["descriptor_base"] = 0x80000000 + DESC_BASE
     meta["shared_quant"] = SHARED_QUANT
+    meta["queue_space_wait"] = (
+        "CNN IRQ16/WFI with occupancy recheck"
+        if SHARED_QUANT and QUANT_QUEUE_IRQ_WAIT
+        else "polling"
+        if SHARED_QUANT
+        else "existing Vector/CNN IRQ schedule"
+    )
+    meta["completion_wait"] = (
+        "IRQ16/WFI for CNN; Matrix one IRQ wake then sticky-done tail poll"
+        if SHARED_QUANT and QUANT_IRQ_WAIT
+        else "polling"
+        if SHARED_QUANT
+        else "existing Vector/CNN IRQ schedule"
+    )
     meta["cnn_output"] = (
         "direct shared quantizer, byte writes to RF/SRAM"
         if SHARED_QUANT

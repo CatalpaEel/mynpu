@@ -1,5 +1,7 @@
 # 当前架构入口
 
+共享量化固件已加入[完成中断＋WFI等待](docs/irq-wfi-wait.md)：MNIST **27,432 → 26,092周期/张**，减少4.88%；CPU取指造成的CNN同bank等待4,424 → 2,490拍。RTL/面积不变；通用Vector固件二进制不变。以下周期统计请按报告版本区分。
+
 已补充[18ns＋门控的面积归属与软件阻塞分布](docs/area18-distribution-and-blocking.md)：最终网表leaf级面积统计、两条软件路径各10张图的CPU/轮询/逐层等待分析及三张图。RTL与固件未为统计改动。
 
 最新[面积压缩结果](docs/area25-optimization.md)：**2.515488mm²**（含两块SRAM、不含PAD），相比2.846849mm²减少 **11.64%**。采用high综合、自动门控与18ns再优化；50MHz setup slack **+2.0040ns**。全部功能、256B RF和8/8/8队列保留，推理周期不变；未重跑PNR，严格2.5mm²还差0.015488mm²。
