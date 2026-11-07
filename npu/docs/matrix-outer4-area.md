@@ -1,5 +1,7 @@
 # 4×4外积版综合面积与时序
 
+后续已完成[三种Stream精简](streams-optimized.md)，[最新面积与时序](streams-optimized-area.md)另列。本文记录外积版初始实现与当时测量。
+
 RTL检查点 `14260a5`。与旧点积Matrix、同样带共享QT01的版本比较。
 
 | 项目 | 旧点积版 mm² | 4×4外积版 mm² |

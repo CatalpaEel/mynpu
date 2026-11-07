@@ -326,9 +326,13 @@
     "firmware_changed": false
   },
   "ppa": {
-    "synthesis_measured": false,
-    "timing_measured": false,
-    "pnr_measured": false
+    "synthesis_measured": true,
+    "timing_measured": true,
+    "pnr_measured": false,
+    "area_report": "npu/reports/streams_optimized_area_validation.json",
+    "sta_scope": "Genus pre-layout setup only; no physical timing signoff",
+    "total_area_mm2": 2.8468488769999998,
+    "setup_slack_ns_at_50mhz": 4.002
   },
   "source_sha256": {
     "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",

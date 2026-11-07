@@ -1,6 +1,8 @@
 # RTL文件导航
 
-当前Matrix已改为[4×4外积、16个INT32累加器](../docs/matrix-outer4.md)；支持INT8/INT16、转置、尾块及可选量化。旧2.586795mm²综合数据属于点积版；[本版综合](../docs/matrix-outer4-area.md)总面积 **2.976653mm²**（含SRAM、不含PAD），50MHz setup slack **+4.0012ns**，未重跑布局布线。
+当前已完成[Matrix、CNN、Vector Stream精简](../docs/streams-optimized.md)：递增寻址、CNN行窗口选择共享、Vector缓冲与地址ALU复用。21组验证通过，默认/共享量化/旧固件分别为29,173 / 27,432 / 30,710周期，均与本轮优化前一致。[最新综合面积与时序](../docs/streams-optimized-area.md)：总面积 **2.846849mm²**（含两块SRAM，不含PAD），50MHz setup slack **+4.0020ns**，本轮未跑PNR。下列数值为各历史版本。
+
+当前Matrix已改为[4×4外积、16个INT32累加器](../docs/matrix-outer4.md)；支持INT8/INT16、转置、尾块及可选量化。旧2.586795mm²综合数据属于点积版；[Stream精简前综合](../docs/matrix-outer4-area.md)总面积 **2.976653mm²**（含SRAM、不含PAD），50MHz setup slack **+4.0012ns**，未重跑布局布线。
 
 [旧点积Matrix版QT01综合](../docs/shared-quant-area.md)：总面积 **2.586795mm²**（含两块SRAM、不含PAD），比量化前同配置增加6.20%；50MHz综合setup slack **+4.0014ns**。未重跑布局布线。
 

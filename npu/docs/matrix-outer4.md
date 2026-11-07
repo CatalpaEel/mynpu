@@ -1,5 +1,7 @@
 # Matrix 4×4 外积计算单元
 
+后续已完成[三种Stream精简](streams-optimized.md)，[最新面积与时序](streams-optimized-area.md)另列。本文记录外积版初始实现与当时测量。
+
 从检查点 `d7b1794` 改为4×4外积。`npu_matmul.sv` 只保留计算和握手：16个INT32累加器；每个有效计算步接受4个A和4个B，更新 `C[r,c] += A[r]*B[c]`。INT8和INT16均支持，INT8由Stream符号扩展到16位。乘加按INT32回绕。
 
 ```mermaid
