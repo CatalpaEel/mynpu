@@ -45,6 +45,10 @@ module matrix_task_fixture (
     .data_o       (matrix_result_data)
   );
   npu_matrix_stream i_stream (
+    .quant_enable_i        (1'b0),
+    .quant_pack_i          (1'b0),
+    .quant_dst_i           (32'b0),
+    .be_o                  (),
     .compute_extra_valid_o (),
     .compute_extra_a_o     (),
     .compute_extra_b_o     (),

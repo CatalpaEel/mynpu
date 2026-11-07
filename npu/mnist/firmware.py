@@ -23,6 +23,7 @@ RF_BANK_WORDS = int(
 )
 RF_BANK_BYTES = RF_BANK_WORDS * 4
 setup_writes = 0
+SHARED_QUANT = os.environ.get("NPU_SHARED_QUANT", "0") == "1"
 
 
 def lbu(rd, base, off):
@@ -146,7 +147,14 @@ for i, fields in enumerate(layer_fields):
                     right = int((x + n - 1) * fields[8] + 1 >= fields[4])
                     assert co < 16 and y < 32 and x < 32
                     stream_commands.append(
-                        co | y << 4 | x << 9 | n << 14 | rows << 18 | left << 21 | right << 22
+                        co
+                        | y << 4
+                        | x << 9
+                        | n << 14
+                        | rows << 18
+                        | left << 21
+                        | right << 22
+                        | ((y * fields[9] + x) << 23 if SHARED_QUANT else 0)
                     )
     task_ranges.append(dict(address=0x80000000 + start, per_channel=per_channel))
 assert TASK_BASE + len(stream_commands) * 4 <= PROGRAM_BYTES
@@ -217,9 +225,174 @@ def rf_weight_stage_bytes(fields):
     )
 
 
+def quant_wait(base, submitted, completed, tag):
+    lw(5, base, submitted)
+    label(tag)
+    lw(8, base, 4)
+    andi(11, 8, 4)
+    branch(11, 0, "fail")
+    lw(8, base, completed)
+    branch(8, 5, tag)
+
+
+def quant_settings(fields, matrix=False):
+    # x16 parameter pair/triple, x17 destination; all previous work has drained.
+    li(30, 0x40000740 if matrix else 0x40000700)
+    lw(8, 16, 0)
+    sw(8, 30, 4)
+    lw(8, 16, 4)
+    sw(8, 30, 8)
+    li(8, 24)
+    sw(8, 30, 12)
+    li(8, fields[12])
+    sw(8, 30, 16)
+    li(8, 0 if matrix else fields[12])
+    sw(8, 30, 20)
+    li(8, 255)
+    sw(8, 30, 24)
+    if matrix:
+        lw(8, 16, 8)
+    else:
+        li(8, 0)
+    sw(8, 30, 28)
+    sw(17, 30, 32)
+    li(8, 3)
+    sw(8, 30, 0)
+
+
+def emit_quant_cnn(i, fields, stream=False):
+    # Layer-wide addressing is unchanged. Quant parameters are per channel;
+    # finish that channel's queue before changing its immutable settings.
+    for field, offset in {0: 8, 1: 12, 4: 20, 6: 28, 8: 32, 11: 44}.items():
+        lw(8, 7, i * 56 + field * 4)
+        if stream and field == 0 and fields[field] == A:
+            alu(8, 8, 20, 0)
+        sw(8, 6, offset)
+    li(8, RF_BASE + 2 * RF_BANK_BYTES - 32)
+    sw(8, 6, 24)
+    li(8, 0x80006000)
+    sw(8, 6, 16)
+    li(8, fields[4] * fields[5])
+    sw(8, 6, 36)
+    li(8, 0)
+    sw(8, 6, 48)
+    stage_bytes = rf_weight_stage_bytes(fields)
+    if stage_bytes:
+        # The previous layer has drained both queues; RF scratch is unowned.
+        lw(9, 7, i * 56 + 4)
+        li(10, RF_BASE)
+        li(11, stage_bytes // 4)
+        label("weight_cache" + str(i))
+        lw(8, 9, 0)
+        sw(8, 10, 0)
+        addi(9, 9, 4)
+        addi(10, 10, 4)
+        addi(11, 11, -1)
+        branch(11, 0, "weight_cache" + str(i))
+        li(8, RF_BASE)
+        sw(8, 6, 0x0C)
+    li(31, 1)
+    lw(1, 7, i * 56 + 28)
+    lw(16, 7, i * 56 + 8)
+    lw(17, 7, i * 56 + 12)
+    if stream and fields[3] == A:
+        alu(17, 17, 20, 0)
+    li(15, task_ranges[i]["address"])
+    li(2, task_ranges[i]["per_channel"])
+    label("qchannel" + str(i))
+    quant_settings(fields)
+    li(3, 0)
+    label("qrow" + str(i))
+    lw(8, 15, 0)
+    sw(8, 6, 40)
+    addi(15, 15, 4)
+    label("qspace" + str(i))
+    lw(8, 6, 88)
+    andi(10, 8, 255)
+    shift(8, 8, 16, 5)
+    branch(10, 8, "qsubmit" + str(i))
+    jump("qspace" + str(i))
+    label("qsubmit" + str(i))
+    sw(31, 6, 0)
+    addi(3, 3, 1)
+    branch(3, 2, "qrow" + str(i))
+    quant_wait(6, 96, 92, "qdrain" + str(i))
+    li(8, fields[9] * fields[10])
+    alu(17, 17, 8, 0)
+    addi(16, 16, 8)
+    addi(1, 1, -1)
+    branch(1, 0, "qchannel" + str(i))
+    li(8, 0)
+    sw(8, 30, 0)
+
+
+def emit_quant_fc(i, fields, stream=False):
+    # Eight raw K16 tiles, then one final K16 tile with optional quantization.
+    li(13, 0x40000100)
+    li(31, 1)
+    lw(15, 7, i * 56)
+    lw(16, 7, i * 56 + 8)
+    lw(17, 7, i * 56 + 12)
+    if stream and fields[3] == A:
+        alu(17, 17, 20, 0)
+    lw(18, 7, i * 56 + 4)
+    li(29, fc_raw_base(fields))
+    addi(9, 15, 0)
+    li(10, 0x80808080)
+    li(11, 36)
+    label("qfc_recenter")
+    lw(8, 9, 0)
+    alu(8, 8, 10, 4)
+    sw(8, 9, 0)
+    addi(9, 9, 4)
+    addi(11, 11, -1)
+    branch(11, 0, "qfc_recenter")
+    li(8, 1)
+    sw(8, 13, 20)
+    sw(8, 13, 24)
+    li(8, 16)
+    sw(8, 13, 28)
+    li(1, 10)
+    label("qfc_channel")
+    li(30, 0x40000740)
+    li(8, 0)
+    sw(8, 30, 0)
+    sw(29, 13, 16)
+    addi(9, 15, 0)
+    addi(10, 18, 0)
+    li(2, 8)
+    li(4, 8)
+    label("qfc_tile")
+    sw(9, 13, 8)
+    sw(10, 13, 12)
+    sw(4, 13, 48)
+    sw(31, 13, 0)
+    li(4, 12)
+    addi(9, 9, 16)
+    addi(10, 10, 16)
+    addi(2, 2, -1)
+    branch(2, 0, "qfc_tile")
+    quant_wait(13, 44, 40, "qfc_raw_drain")
+    quant_settings(fields, True)
+    sw(9, 13, 8)
+    sw(10, 13, 12)
+    sw(4, 13, 48)
+    sw(31, 13, 0)
+    quant_wait(13, 44, 40, "qfc_final_drain")
+    li(8, 0)
+    sw(8, 30, 0)
+    addi(18, 18, 144)
+    addi(17, 17, 1)
+    addi(16, 16, 12)
+    addi(1, 1, -1)
+    branch(1, 0, "qfc_channel")
+
+
 def emit_cnn_rows(i, fields, previous, stream=False):
     """Software prepares all borders; hardware queues 32-bit transfer tasks."""
     global setup_writes
+    if SHARED_QUANT:
+        return emit_quant_cnn(i, fields, stream)
     assert not fields[13]
     mapping = {0: 8, 1: 0x0C, 4: 0x14, 6: 0x1C, 8: 0x20, 11: 0x2C}
     for field, offset in mapping.items():
@@ -385,6 +558,8 @@ def emit_matrix_fc(i, fields, stream=False):
     final input in place; no duplicate weight matrix or new hardware is needed.
     x19..x28 hold stream ownership state and are deliberately preserved.
     """
+    if SHARED_QUANT:
+        return emit_quant_fc(i, fields, stream)
     assert fields[4] == 144 and fields[7] == 10
     li(13, 0x40000100)
     li(14, 0x40000200)
@@ -646,8 +821,15 @@ def generate_single():
     meta["stream_abi"] = "SD91"
     meta["stream_tasks"] = len(stream_commands)
     meta["task_table"] = task_ranges
-    meta["cnn_output"] = "raw signed INT32 routed through xbar channel 0 FIFO to vector"
-    meta["postprocessing_unit"] = "generic vector program VPG2"
+    meta["shared_quant"] = SHARED_QUANT
+    meta["cnn_output"] = (
+        "direct shared quantizer, byte writes to RF/SRAM"
+        if SHARED_QUANT
+        else "raw signed INT32 routed through xbar channel 0 FIFO to vector"
+    )
+    meta["postprocessing_unit"] = (
+        "shared optional quantizer QT01" if SHARED_QUANT else "generic vector program VPG2"
+    )
     (OUT / "model.json").write_text(json.dumps(meta, indent=2))
 
     (OUT / "boot.bin").write_bytes(image)

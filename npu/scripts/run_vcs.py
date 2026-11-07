@@ -16,8 +16,10 @@ p.add_argument(
         "readbatch",
         "sharedoperands",
         "vectorsimd",
+        "sharedquant",
         "ops",
         "jtag",
+        "quantlayers",
         "soc",
         "xbarstream",
         "unitroutes",
@@ -36,6 +38,7 @@ p.add_argument(
         "regfile",
         "vectorprogram",
         "vectorsimd",
+        "sharedquant",
     ],
     required=True,
 )
@@ -87,6 +90,7 @@ tops = {
     "sharedoperands": "tb_shared_operands",
     "ops": "tb_ops",
     "jtag": "tb_jtag",
+    "quantlayers": "tb_quant_layers",
     "soc": "tb_npu_soc",
     "xbarstream": "tb_xbar_stream",
     "unitroutes": "tb_unit_routes",
@@ -105,6 +109,7 @@ tops = {
     "regfile": "tb_regfile",
     "vectorprogram": "tb_vector_program",
     "vectorsimd": "tb_vector_simd",
+    "sharedquant": "tb_shared_quant",
 }
 top = tops[a.suite]
 tb = ROOT / "tb" / (top + ".sv")
@@ -190,8 +195,10 @@ if a.macro:
     if a.suite not in [
         "sharedoperands",
         "vectorsimd",
+        "sharedquant",
         "ops",
         "jtag",
+        "quantlayers",
         "unitroutes",
         "soc",
         "burst",
@@ -208,12 +215,14 @@ if a.macro:
     wrapper = out / "npu_soc_macro.sv"
     wrapper.write_text(text)
     files = [f for f in files if f.name not in ["npu_soc.sv", "sram_ff.sv"]] + [wrapper, macro]
-cwd = a.artifacts_dir if a.suite in ["jtag", "layers", "latency", "stream"] else out
+cwd = a.artifacts_dir if a.suite in ["jtag", "quantlayers", "layers", "latency", "stream"] else out
 if a.suite == "soc":
     subprocess.run(["/usr/bin/python3.12", str(ROOT / "sw/gen_boot.py")], check=True)
     shutil.copy2(ROOT / "sw/boot.hex", out / "boot.hex")
 assets = (
-    list(cwd.glob("*.hex")) if a.suite in ["jtag", "layers", "latency", "stream", "soc"] else []
+    list(cwd.glob("*.hex"))
+    if a.suite in ["jtag", "quantlayers", "layers", "latency", "stream", "soc"]
+    else []
 )
 tracked = (
     files
@@ -223,7 +232,7 @@ tracked = (
     + list(inc.glob("*"))
     + assets
 )
-if a.suite in ["latency", "layers", "stream", "jtag"]:
+if a.suite in ["latency", "layers", "stream", "jtag", "quantlayers"]:
     tracked.append(a.artifacts_dir / "test_meta.svh")
 hashes = {str(f): hashlib.sha256(f.read_bytes()).hexdigest() for f in tracked if f.is_file()}
 cmd = [
@@ -275,6 +284,7 @@ markers = {
     "sharedoperands": "SHARED OPERANDS PASS",
     "ops": "OPERATORS PASS",
     "jtag": "JTAG PASS",
+    "quantlayers": "QUANT LAYERS PASS",
     "soc": "ALL PASS",
     "xbarstream": "XBAR STREAM PASS",
     "unitroutes": "UNIT ROUTES PASS",
@@ -294,6 +304,7 @@ markers = {
     "regfile": "REGFILE PASS",
     "vectorprogram": "VECTOR PROGRAM PASS",
     "vectorsimd": "VECTOR SIMD PASS",
+    "sharedquant": "SHARED QUANT PASS",
 }
 changed = [
     str(f)

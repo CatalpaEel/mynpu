@@ -6,12 +6,18 @@ module npu_stream #(
   parameter int RF_SINK = 0,
   QUEUE_DEPTH = `NPU_CNN_QUEUE_DEPTH
 ) (
+  output logic [3:0] rf_sink_be_o,
   output logic rf_sink_req_o,
   output logic [31:0] rf_sink_addr_o,
   rf_sink_wdata_o,
   input logic rf_sink_gnt_i,
   rf_sink_rvalid_i,
   rf_sink_error_i,
+  input logic result_pending_i,
+  input logic quant_enable_i,
+  quant_pack_i,
+  input logic [31:0] quant_dst_i,
+  output logic quant_final_o,
   input logic clk_i,
   rst_ni,
   csr_req_i,
@@ -62,6 +68,7 @@ module npu_stream #(
   npu_stream_control #(
     .QUEUE_DEPTH(QUEUE_DEPTH)
   ) i_control (
+    .quant_pack_i,
     .events_i (events),
     .config_o (config_q),
     .command_o(command),

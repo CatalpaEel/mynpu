@@ -21,3 +21,5 @@ vector/npu_vector_stream.sv
 interconnect/xbar.sv
 interconnect/xbar_stream.sv
 interconnect/npu_multi_read.sv
+
+quant/npu_shared_quant.sv

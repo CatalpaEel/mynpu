@@ -4,6 +4,7 @@
 module npu_stream_engine #(
   parameter int RF_SINK = 0
 ) (
+  output logic [3:0] rf_sink_be_o,
   output logic rf_sink_req_o,
   output logic [31:0] rf_sink_addr_o,
   rf_sink_wdata_o,
@@ -11,6 +12,11 @@ module npu_stream_engine #(
   rf_sink_rvalid_i,
   rf_sink_error_i,
 
+  input logic result_pending_i,
+  input logic quant_enable_i,
+  quant_pack_i,
+  input logic [31:0] quant_dst_i,
+  output logic quant_final_o,
   input logic clk_i,
   rst_ni,
   start_i,
@@ -91,6 +97,11 @@ module npu_stream_engine #(
   logic [3:0] tap_count;
   logic [2:0] output_position;
   logic output_final;
+  logic [31:0] output_address;
+  assign quant_final_o = output_final;
+  assign output_address=output_final && quant_enable_i ?
+    quant_dst_i + (quant_pack_i ? 32'(cmd.dst_words)+32'(output_position) : 4*(32'(cmd.dst_words)+32'(output_position))) :
+    {17'h10000,15'((output_final ? cfg.dst+{cmd.dst_words,2'b0}:cfg.partial)+{output_position,2'b0})};
   logic pending, pending_write, pending_last;
   logic [1:0] pending_slot;
   logic [1:0] pending_row, selected_row;
@@ -216,16 +227,14 @@ module npu_stream_engine #(
   assign mac_offset_o = $signed({1'b0, cfg.offset});
   assign write_selected = mac_result_valid_i;
   assign rf_write_selected = RF_SINK && write_selected && (!output_final || is_rf_address(
-      {17'h10000, cfg.dst}
+      output_address
   ));
   assign rf_sink_req_o = rf_write_selected;
-  assign rf_sink_addr_o = {
-    17'h10000,
-    15'((output_final ? cfg.dst + {cmd.dst_words, 2'b0} : cfg.partial) + {output_position, 2'b0})
-  };
-  assign rf_sink_wdata_o = mac_result_data_i;
+  assign rf_sink_addr_o = {output_address[31:2], 2'b0};
+  assign rf_sink_be_o = output_final && quant_pack_i ? 4'b1 << output_address[1:0] : 4'hf;
+  assign rf_sink_wdata_o = output_final && quant_pack_i ? {24'b0,mac_result_data_i[7:0]}<<{output_address[1:0],3'b0}:mac_result_data_i;
   assign accepted = req_o && gnt_i;
-  assign drained=!mac_result_valid_i && !pending && !rf_pending && port_pending==0 && row_inflight==0 && seed_inflight==0;
+  assign drained=!mac_result_valid_i && !result_pending_i && !pending && !rf_pending && port_pending==0 && row_inflight==0 && seed_inflight==0;
   assign fault=(rf_pending && rf_sink_rvalid_i && rf_sink_error_i) || (pending && rvalid_i && error_i) || (|(port_pending & gather_valid_i & gather_error_i));
   assign events_o.busy = state != IDLE;
   assign events_o.start = state == START;
@@ -266,10 +275,12 @@ module npu_stream_engine #(
     if (write_selected && !rf_write_selected) begin
       req_o = 1;
       we_o = 1;
-      addr_o = {
-        17'h10000,
-        15'((output_final ? cfg.dst+{cmd.dst_words,2'b0}:cfg.partial)+{output_position,2'b0})
-      };
+      addr_o = output_address;
+      if (output_final && quant_pack_i) begin
+        be_o = 4'b1 << output_address[1:0];
+        wdata_o = {24'b0, mac_result_data_i[7:0]} << {output_address[1:0], 3'b0};
+        addr_o = {output_address[31:2], 2'b0};
+      end
     end else if (load_state == WREQ) begin
       req_o = 1;
       addr_o = {17'h10000, weight_ptr};
@@ -283,8 +294,8 @@ module npu_stream_engine #(
       end
     end
     if (req_o) begin
-      if (we_o && output_final && is_stream_address({17'h10000, cfg.dst}))
-        addr_o = {17'h10000, cfg.dst};
+      if (we_o && output_final && is_stream_address(output_address))
+        addr_o = {output_address[31:8], 8'b0};
       else if (!we_o && load_state == WREQ && is_stream_address({17'h10000, cfg.weights}))
         addr_o = {17'h10000, cfg.weights};
       else if (!we_o && load_state == AREQ && is_stream_address({17'h10000, cfg.src}))

@@ -31,6 +31,13 @@ module npu_core #(
   output logic [1:0][31:0] sram_wdata_o,
   input logic [1:0][31:0] sram_rdata_i
 );
+  logic is_quant_mmio, quant_error, cnn_quant_final;
+  logic [31:0] quant_rdata;
+  logic [1:0] quant_enable, quant_pack, quant_valid, quant_ready, quant_out_valid, quant_out_ready;
+  logic [1:0][31:0] quant_dst, quant_in_data, quant_out_data;
+  logic cnn_filtered_valid, cnn_filtered_ready, matrix_filtered_valid, matrix_filtered_ready;
+  logic [31:0] cnn_filtered_data, matrix_filtered_data;
+  logic [3:0] matrix_be;
   logic [5:0] req, we, gnt, rvalid, bus_error;
   logic debug_req, dm_req, dm_we;
   logic [3:0] dm_be;
@@ -55,7 +62,7 @@ module npu_core #(
   logic [1:0] control_irq;
   logic cnn_irq;
   logic cnn_busy, cnn_done, cnn_error, cnn_req, cnn_we, mat_req, mat_we;
-  logic [3:0] cnn_be;
+  logic [3:0] cnn_be, cnn_rf_sink_be;
   logic [31:0] cnn_rdata, cnn_addr, cnn_wdata, mat_addr, mat_wdata;
   logic [2:0] cnn_gather_req, cnn_gather_gnt, cnn_gather_valid, cnn_gather_error;
   logic [2:0][31:0] cnn_gather_addr, cnn_gather_data;
@@ -134,7 +141,7 @@ module npu_core #(
   // Independent masters: 0 CPU data, 1 CNN, 2 Vector, 3 Host/JTAG,
   // 4 CPU fetch, 5 Matrix. FIFO endpoints support concurrent producer/consumer.
   assign be[1] = cnn_be;
-  assign be[5] = 4'hf;
+  assign be[5] = matrix_be;
   assign req[5] = mat_req;
   assign we[5] = mat_we;
   assign addr[5] = mat_addr;
@@ -159,8 +166,9 @@ module npu_core #(
     else if (req[4] && gnt[4] && addr[4][31:14] == 18'h20000) boot_wait <= 0;
   end
   assign removed_dma_page = mmio_addr[11:8] >= 3 && mmio_addr[11:8] <= 5;
-  assign mmio_rdata = is_cnn_mmio ? cnn_rdata : control_rdata;
-  assign mmio_error = removed_dma_page || (is_cnn_mmio ? cnn_error : control_error);
+  assign is_quant_mmio = mmio_addr[11:8] == 7;
+  assign mmio_rdata = is_quant_mmio ? quant_rdata : is_cnn_mmio ? cnn_rdata : control_rdata;
+  assign mmio_error = removed_dma_page || (is_quant_mmio ? quant_error : is_cnn_mmio ? cnn_error : control_error);
   assign irq_o[4:2] = 0;
   assign irq_o[1] = control_irq[1];
   assign irq_o[0] = control_irq[0] || cnn_irq;
@@ -214,6 +222,7 @@ module npu_core #(
     .NUM_MASTERS (6),
     .RF_SINK     (1)
   ) i_xbar (
+    .rf_sink_be_i    (cnn_rf_sink_be),
     .rf_sink_req_i   (cnn_rf_sink_req),
     .rf_sink_addr_i  (cnn_rf_sink_addr),
     .rf_sink_wdata_i (cnn_rf_sink_wdata),
@@ -262,7 +271,7 @@ module npu_core #(
   npu_mmio i_mmio (
     .clk_i            (clk_i),
     .rst_ni           (system_rst_no),
-    .req_i            (mmio_req && !removed_dma_page && !is_cnn_mmio),
+    .req_i            (mmio_req && !removed_dma_page && !is_cnn_mmio && !is_quant_mmio),
     .we_i             (mmio_we),
     .addr_i           (mmio_addr),
     .wdata_i          (mmio_wdata),
@@ -330,6 +339,10 @@ module npu_core #(
   npu_matrix_stream #(
     .GATHER(PARALLEL_UNITS)
   ) i_matrix_stream (
+    .quant_enable_i        (quant_enable[1]),
+    .quant_pack_i          (quant_pack[1]),
+    .quant_dst_i           (quant_dst[1]),
+    .be_o                  (matrix_be),
     .compute_extra_valid_o (matrix_extra_valid),
     .compute_extra_a_o     (matrix_extra_a),
     .compute_extra_b_o     (matrix_extra_b),
@@ -347,9 +360,9 @@ module npu_core #(
     .compute_a_o           (matrix_compute_a),
     .compute_b_o           (matrix_compute_b),
     .compute_addend_o      (matrix_compute_addend),
-    .compute_result_valid_i(matrix_result_valid),
-    .compute_result_ready_o(matrix_result_ready),
-    .compute_result_data_i (matrix_result_data),
+    .compute_result_valid_i(matrix_filtered_valid),
+    .compute_result_ready_o(matrix_filtered_ready),
+    .compute_result_data_i (matrix_filtered_data),
 
     .clk_i   (clk_i),
     .rst_ni  (system_rst_no),
@@ -407,6 +420,12 @@ module npu_core #(
   npu_stream #(
     .RF_SINK(1)
   ) i_stream (
+    .result_pending_i  (dot_result_valid),
+    .quant_enable_i    (quant_enable[0]),
+    .quant_pack_i      (quant_pack[0]),
+    .quant_dst_i       (quant_dst[0]),
+    .quant_final_o     (cnn_quant_final),
+    .rf_sink_be_o      (cnn_rf_sink_be),
     .rf_sink_req_o     (cnn_rf_sink_req),
     .rf_sink_addr_o    (cnn_rf_sink_addr),
     .rf_sink_wdata_o   (cnn_rf_sink_wdata),
@@ -424,9 +443,9 @@ module npu_core #(
     .mac_w_o           (dot_w),
     .mac_mask_o        (dot_mask),
     .mac_seed_o        (dot_seed),
-    .mac_result_valid_i(dot_result_valid),
-    .mac_result_ready_o(dot_result_ready),
-    .mac_result_data_i (dot_result),
+    .mac_result_valid_i(cnn_filtered_valid),
+    .mac_result_ready_o(cnn_filtered_ready),
+    .mac_result_data_i (cnn_filtered_data),
     .gather_req_o      (cnn_gather_req),
     .gather_addr_o     (cnn_gather_addr),
     .gather_gnt_i      (cnn_gather_gnt),
@@ -458,6 +477,38 @@ module npu_core #(
     .rvalid_i   (rvalid[1]),
     .error_i    (bus_error[1]),
     .rdata_i    (rdata[1])
+  );
+  assign quant_valid = {
+    matrix_result_valid && quant_enable[1], dot_result_valid && quant_enable[0] && cnn_quant_final
+  };
+  assign quant_in_data = {matrix_result_data, dot_result};
+  assign quant_out_ready = {matrix_filtered_ready, cnn_filtered_ready};
+  assign matrix_filtered_valid = quant_enable[1] ? quant_out_valid[1] : matrix_result_valid;
+  assign matrix_filtered_data = quant_enable[1] ? quant_out_data[1] : matrix_result_data;
+  assign matrix_result_ready = quant_enable[1] ? quant_ready[1] : matrix_filtered_ready;
+  assign cnn_filtered_valid=quant_enable[0] && cnn_quant_final ? quant_out_valid[0]:dot_result_valid;
+  assign cnn_filtered_data = quant_enable[0] && cnn_quant_final ? quant_out_data[0] : dot_result;
+  assign dot_result_ready=quant_enable[0] && cnn_quant_final ? quant_ready[0]:cnn_filtered_ready;
+  npu_shared_quant i_quant (
+    .clk_i,
+    .rst_ni     (system_rst_no),
+    .csr_req_i  (mmio_req && is_quant_mmio),
+    .csr_we_i   (mmio_we),
+    .csr_addr_i (mmio_addr[7:0]),
+    .csr_wdata_i(mmio_wdata),
+    .csr_rdata_o(quant_rdata),
+    .csr_error_o(quant_error),
+    .blocked_i  ({mat_pending || mat_busy || mat_start, cnn_busy}),
+    .flush_i    ({matrix_compute_flush, dot_flush}),
+    .valid_i    (quant_valid),
+    .ready_o    (quant_ready),
+    .valid_o    (quant_out_valid),
+    .ready_i    (quant_out_ready),
+    .data_i     (quant_in_data),
+    .data_o     (quant_out_data),
+    .enable_o   (quant_enable),
+    .pack_o     (quant_pack),
+    .dst_o      (quant_dst)
   );
   logic [4:0] vector_compute_op;
   logic signed [31:0] vector_compute_a, vector_compute_b, vector_compute_c, vector_compute_data;

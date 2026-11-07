@@ -29,6 +29,10 @@ module npu_matrix_stream #(
   output logic compute_result_ready_o,
   input logic [31:0] compute_result_data_i,
 
+  input logic quant_enable_i,
+  quant_pack_i,
+  input logic [31:0] quant_dst_i,
+  output logic [3:0] be_o,
   input logic clk_i,
   rst_ni,
   start_i,
@@ -69,6 +73,7 @@ module npu_matrix_stream #(
     D_WAIT
   } state_t;
   state_t state_q;
+  logic [31:0] quant_ptr;
   logic [31:0] a_row, b_base, b_col, a_ptr, b_ptr, d_ptr;
   logic [6:0] a_inner, b_inner, a_row_step, b_col_step;
   logic [4:0] m_q, n_q, k_q, row_q, col_q, inner_q;
@@ -146,8 +151,9 @@ module npu_matrix_stream #(
   assign busy_o = state_q != IDLE;
   assign req_o = (state_q == A_WAIT && batch_req) || state_q == C_REQ || (state_q == D_REQ && compute_result_valid_i);
   assign we_o = state_q == D_REQ;
-  assign addr_o = state_q == A_WAIT ? batch_addr : d_ptr;
-  assign wdata_o = compute_result_data_i;
+  assign addr_o = state_q==A_WAIT ? batch_addr : state_q==D_REQ && quant_enable_i ? (quant_pack_i ? {quant_ptr[31:2],2'b0}:quant_ptr) : d_ptr;
+  assign wdata_o = quant_pack_i ? {24'b0,compute_result_data_i[7:0]}<<{quant_ptr[1:0],3'b0}:compute_result_data_i;
+  assign be_o = state_q == D_REQ && quant_pack_i ? 4'b1 << quant_ptr[1:0] : 4'hf;
   // A start snapshots the descriptor only in IDLE. Validation belongs to MMIO;
   // each granted transfer must receive a response, including writes. A fault
   // stops this job but does not roll back writes already accepted by memory.
@@ -162,6 +168,7 @@ module npu_matrix_stream #(
       a_ptr <= 0;
       b_ptr <= 0;
       d_ptr <= 0;
+      quant_ptr <= 0;
       a_inner <= 0;
       b_inner <= 0;
       a_row_step <= 0;
@@ -190,6 +197,7 @@ module npu_matrix_stream #(
             a_ptr <= a_i;
             b_ptr <= b_i;
             d_ptr <= d_i;
+            quant_ptr <= quant_dst_i;
             m_q <= m_i;
             n_q <= n_i;
             k_q <= k_i;
@@ -227,6 +235,7 @@ module npu_matrix_stream #(
               state_q <= IDLE;
             end else begin
               d_ptr <= data_advance(d_ptr, 4);
+              quant_ptr <= data_advance(quant_ptr, quant_pack_i ? 1 : 4);
               inner_q <= 0;
               state_q <= A_REQ;
               if (col_q + 1'b1 == n_q) begin

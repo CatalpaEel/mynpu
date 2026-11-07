@@ -3,6 +3,7 @@
 module npu_stream_control #(
   parameter int QUEUE_DEPTH = 16
 ) (
+  input logic quant_pack_i,
   input logic clk_i,
   rst_ni,
   csr_req_i,
@@ -62,7 +63,7 @@ module npu_stream_control #(
       end
       'h10: begin
         csr_rdata_o = {17'h10000, cfg.dst};
-        valid_write = data_range_ok(csr_wdata_i, 4) && csr_wdata_i[1:0] == 0;
+        valid_write = data_range_ok(csr_wdata_i, 4) && (quant_pack_i || csr_wdata_i[1:0] == 0);
       end
       'h14: begin
         csr_rdata_o = {17'b0, cfg.row_stride};

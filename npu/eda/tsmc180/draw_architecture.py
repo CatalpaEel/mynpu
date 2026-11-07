@@ -105,7 +105,7 @@ box(
     660,
     310,
     "CNN Stream  ·  npu_stream / control / engine",
-    "8项 × 32bit命令FIFO；软件准备tile边界\n3行 × 3words循环窗口 = 36B\n双份9B权重缓冲；读返回直通\n跨输入通道部分和存共享RF\n末通道结果可写RF / SRAM / xbar流FIFO",
+    "8项 × 32bit命令FIFO；软件准备tile边界\n3行 × 3words循环窗口 = 36B\n双份9B权重缓冲；读返回直通\n跨输入通道部分和存共享RF\n末通道可直连共享QT01量化；或原始INT32写回",
     col="#fb923c",
     size=26,
 )
@@ -115,7 +115,7 @@ box(
     660,
     310,
     "Matrix Stream  ·  npu_matrix_stream",
-    "8项GEMM任务FIFO由MMIO管理\n执行M/N/K循环、地址步进与INT8解包\nA/B读请求、旧D读取、结果写回\nRF并行读A/B；SRAM分周期读取\n独立master 5，可与CNN / Vector并行",
+    "8项GEMM任务FIFO由MMIO管理\n执行M/N/K循环、地址步进与INT8解包\nA/B读请求、旧D读取、结果写回\nRF并行读A/B；SRAM分周期读取\n结果可直连共享QT01；关闭时原始INT32",
     col="#c084fc",
     size=26,
 )
@@ -172,7 +172,7 @@ box(
     2130,
     175,
     "数据通路入口  ·  6个普通master + 4条流通道 + RF gather / sink",
-    "M0 CPU数据  |  M1 CNN  |  M2 Vector  |  M3 Host / JTAG SBA共享  |  M4 CPU取指  |  M5 Matrix\nCNN / Matrix / Vector共9个逻辑gather槽，共享8个RF物理bank。\n本图控制箭头表示逻辑关系；实际CPU配置读写也经过XBAR。计算核仅连接各自供数/发射器。",
+    "M0 CPU数据  |  M1 CNN  |  M2 Vector  |  M3 Host / JTAG SBA共享  |  M4 CPU取指  |  M5 Matrix\nCNN / Matrix / Vector共9个逻辑gather槽，共享8个RF物理bank。\n本图控制箭头表示逻辑关系；实际CPU配置读写也经过XBAR。CNN / Matrix可直连QT01，量化输入不经过XBAR。",
     col="#60a5fa",
     size=24,
 )
@@ -250,7 +250,7 @@ text(
 text(
     55,
     1885,
-    "依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、单ALU INT32 / SIMD8版本；本版综合与布局布线尚未重跑。",
+    "依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、单ALU INT32 / SIMD8 + 共享可选QT01版本；本版综合与布局布线尚未重跑。",
     22,
     "#94a3b8",
 )
@@ -267,6 +267,7 @@ files = [
     "npu/rtl/interconnect/npu_multi_read.sv",
     "npu/rtl/matrix/npu_matmul.sv",
     "npu/rtl/matrix/npu_matrix_stream.sv",
+    "npu/rtl/quant/npu_shared_quant.sv",
     "npu/rtl/vector/npu_vector.sv",
     "npu/rtl/vector/npu_vector_stream.sv",
     "npu/build_config.json",

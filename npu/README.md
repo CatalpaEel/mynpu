@@ -1,5 +1,7 @@
 # 当前架构入口
 
+新增[CNN / Matrix 直连的共享可选量化单元 QT01](docs/shared-quant.md)：默认原始 INT32 旁路，可选量化后32位或字节写回。MNIST实验固件实测27,633周期/张；旧固件仍29,817周期。
+
 当前Vector已改为[单ALU：INT32 / 4×INT8 SIMD](docs/vector-simd.md)，删除独立轻量ALU。以下含旧版本测量，请按各报告对应源码版本区分。
 
 当前已[删除透明SRAM读缓存](docs/no-sram-cache.md)，由软件显式管理RF暂存。11组回归通过，10张MNIST仍为29,817周期；SRAM缓存能力报告为零。最新综合总面积 **2.438904mm²**（含两块SRAM、不含PAD），比带缓存版减少4.11%；XBAR **0.417720mm²**。

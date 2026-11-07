@@ -19,6 +19,7 @@ module xbar #(
   error_o,
   output logic [NUM_MASTERS-1:0][31:0] rdata_o,
   // Optional RF-only full-word store lane. It does not enter SRAM arbitration.
+  input logic [3:0] rf_sink_be_i,
   input logic rf_sink_req_i,
   input logic [31:0] rf_sink_addr_i,
   rf_sink_wdata_i,
@@ -73,7 +74,7 @@ module xbar #(
     ) || rf_sink_addr_i[1:0] != 0) && rst_ni;
     assign rf_req[NUM_MASTERS] = rf_sink_req_i && !bad;
     assign rf_we[NUM_MASTERS] = 1;
-    assign rf_be[NUM_MASTERS] = 4'hf;
+    assign rf_be[NUM_MASTERS] = rf_sink_be_i;
     assign rf_addr[NUM_MASTERS] = rf_sink_addr_i;
     assign rf_wdata[NUM_MASTERS] = rf_sink_wdata_i;
     assign rf_sink_gnt_o = bad || rf_gnt[NUM_MASTERS];

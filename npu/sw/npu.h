@@ -189,6 +189,44 @@ static inline int npu_gemm_start(const struct npu_gemm_descriptor *d) {
   npu_write(0x100, 1);
   return npu_read(NPU_MAT_SUBMITTED) == before + 1u ? 0 : -1;
 }
+/* Optional direct CNN/Matrix result quantizer. Configure only after that
+ * source's active and queued jobs drain. A zero control preserves raw INT32.
+ * Destination describes the final output; Matrix D still names raw partials.
+ */
+#define NPU_QUANT_CNN 0u
+#define NPU_QUANT_MATRIX 1u
+#define NPU_QUANT_CAP 0x780u
+#define NPU_QUANT_ABI 0x51543031u
+struct npu_quant_config {
+  uint32_t control, multiplier, bias, shift, zero, lower, upper, input_offset, dst;
+};
+static inline int npu_quant_configure(uint32_t source, const struct npu_quant_config *q) {
+  if (source > 1u || !q || npu_read(NPU_QUANT_CAP) != NPU_QUANT_ABI || q->control > 3u ||
+      q->control == 2u || q->shift > 32u || (int32_t)q->lower > (int32_t)q->upper ||
+      (q->control == 1u && (q->dst & 3u)) ||
+      (q->control == 3u && q->dst >= 0x80006000u && q->dst < 0x80006400u) ||
+      (npu_read(source ? NPU_MAT_STATUS : 0x604u) & NPU_BUSY))
+    return -1;
+  uint32_t base = 0x700u + source * 64u;
+  if (q->control && !((q->dst - NPU_SRAM_BASE < NPU_SRAM_BYTES) ||
+                      (q->dst - NPU_REGFILE_BASE < 2u * npu_regfile_bank_bytes()) ||
+                      (q->control == 1u && q->dst >= 0x80006000u && q->dst < 0x80006400u)))
+    return -1;
+  npu_write(base, 0);
+  if (!q->control)
+    return 0;
+  npu_write(base + 4, q->multiplier);
+  npu_write(base + 8, q->bias);
+  npu_write(base + 12, q->shift);
+  npu_write(base + 16, q->zero);
+  npu_write(base + 20, q->lower);
+  npu_write(base + 24, q->upper);
+  npu_write(base + 28, q->input_offset);
+  npu_write(base + 32, q->dst);
+  npu_fence();
+  npu_write(base, q->control);
+  return 0;
+}
 static inline int npu_elementwise_start(const struct npu_vector_descriptor *d) {
   uint32_t opcode = d->op & 31u;
   int program = (d->op == 0x20u || d->op == 0xa0u || d->op == 0x60u);

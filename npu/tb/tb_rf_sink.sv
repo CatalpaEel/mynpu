@@ -28,6 +28,7 @@ module tb_rf_sink;
   xbar #(
     .RF_SINK(1)
   ) dut (
+    .rf_sink_be_i(4'hf),
     .*,
     .mmio_rdata_i(32'b0),
     .mmio_error_i(1'b0),
