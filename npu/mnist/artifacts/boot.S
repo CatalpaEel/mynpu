@@ -1,5 +1,5 @@
 _start:
-    lui x5, 0x10
+    lui x5, 0x70
     addi x5, x5, 0
     csrw mie,x5
     csrci mstatus,8
@@ -16,6 +16,10 @@ _start:
     lw x8, -1428(x6)
     lui x5, 0x30
     addi x5, x5, 1028
+    bne x8, x5, fail
+    lw x8, -1424(x6)
+    lui x5, 0x70
+    addi x5, x5, 0
     bne x8, x5, fail
     lw x8, 84(x6)
     lui x5, 0x53444
@@ -105,6 +109,7 @@ weight_cache0:
     sw x8, 20(x14)
     lw x8, 48(x7)
     sw x8, 48(x14)
+    addi x4, x0, 8
 channel0:
     sw x17, 12(x14)
     sw x16, 24(x14)
@@ -129,14 +134,18 @@ space0:
     andi x10, x8, 255
     shift
     bne x10, x8, submit0
-    addi x8, x0, 8
-    sw x8, 0(x6)
+    sw x4, 0(x6)
+    sw x4, 0(x14)
     lw x8, 4(x6)
     andi x10, x8, 4
     bne x10, x0, fail
     lw x8, 4(x14)
     andi x10, x8, 4
     bne x10, x0, fail
+    lw x8, 88(x6)
+    andi x10, x8, 255
+    shift
+    bne x10, x8, submit0
     wfi
     jal x0, space0
 submit0:
@@ -150,8 +159,8 @@ submit0:
     bne x1, x0, channel0
     lw x5, 96(x6)
 cnn_drain0:
-    addi x8, x0, 8
-    sw x8, 0(x6)
+    sw x4, 0(x6)
+    sw x4, 0(x14)
     lw x8, 4(x6)
     andi x10, x8, 4
     bne x10, x0, fail
@@ -165,11 +174,10 @@ cnn_sleep0:
     wfi
     jal x0, cnn_drain0
 cnn_drained0:
-    lui x8, 0x20
-    addi x8, x8, 0
-    csrs mie,x8
+    sw x4, 0(x6)
     lw x5, 44(x14)
 vector_drain0:
+    sw x4, 0(x14)
     lw x8, 4(x14)
     andi x10, x8, 4
     bne x10, x0, fail
@@ -182,9 +190,6 @@ vector_sleep0:
 vector_drained0:
     addi x8, x0, 2
     sw x8, 0(x14)
-    lui x8, 0x20
-    addi x8, x8, 0
-    csrc mie,x8
     addi x13, x0, 1
     sw x13, 4(x12)
     lw x5, 12(x12)
@@ -228,6 +233,7 @@ weight_cache1:
     lui x15, 0x80001
     addi x15, x15, -208
     lw x16, 64(x7)
+    addi x4, x0, 8
 channel1:
     sw x17, 12(x14)
     sw x16, 24(x14)
@@ -252,14 +258,18 @@ space1:
     andi x10, x8, 255
     shift
     bne x10, x8, submit1
-    addi x8, x0, 8
-    sw x8, 0(x6)
+    sw x4, 0(x6)
+    sw x4, 0(x14)
     lw x8, 4(x6)
     andi x10, x8, 4
     bne x10, x0, fail
     lw x8, 4(x14)
     andi x10, x8, 4
     bne x10, x0, fail
+    lw x8, 88(x6)
+    andi x10, x8, 255
+    shift
+    bne x10, x8, submit1
     wfi
     jal x0, space1
 submit1:
@@ -273,8 +283,8 @@ submit1:
     bne x1, x0, channel1
     lw x5, 96(x6)
 cnn_drain1:
-    addi x8, x0, 8
-    sw x8, 0(x6)
+    sw x4, 0(x6)
+    sw x4, 0(x14)
     lw x8, 4(x6)
     andi x10, x8, 4
     bne x10, x0, fail
@@ -288,11 +298,10 @@ cnn_sleep1:
     wfi
     jal x0, cnn_drain1
 cnn_drained1:
-    lui x8, 0x20
-    addi x8, x8, 0
-    csrs mie,x8
+    sw x4, 0(x6)
     lw x5, 44(x14)
 vector_drain1:
+    sw x4, 0(x14)
     lw x8, 4(x14)
     andi x10, x8, 4
     bne x10, x0, fail
@@ -305,9 +314,6 @@ vector_sleep1:
 vector_drained1:
     addi x8, x0, 2
     sw x8, 0(x14)
-    lui x8, 0x20
-    addi x8, x8, 0
-    csrc mie,x8
     addi x13, x0, 2
     sw x13, 4(x12)
     lw x5, 12(x12)
@@ -333,6 +339,7 @@ acked1:
     lw x16, 120(x7)
     addi x8, x0, 49
     sw x8, 16(x14)
+    addi x4, x0, 8
 channel2:
     sw x17, 12(x14)
     sw x16, 24(x14)
@@ -357,14 +364,18 @@ space2:
     andi x10, x8, 255
     shift
     bne x10, x8, submit2
-    addi x8, x0, 8
-    sw x8, 0(x6)
+    sw x4, 0(x6)
+    sw x4, 0(x14)
     lw x8, 4(x6)
     andi x10, x8, 4
     bne x10, x0, fail
     lw x8, 4(x14)
     andi x10, x8, 4
     bne x10, x0, fail
+    lw x8, 88(x6)
+    andi x10, x8, 255
+    shift
+    bne x10, x8, submit2
     wfi
     jal x0, space2
 submit2:
@@ -378,8 +389,8 @@ submit2:
     bne x1, x0, channel2
     lw x5, 96(x6)
 cnn_drain2:
-    addi x8, x0, 8
-    sw x8, 0(x6)
+    sw x4, 0(x6)
+    sw x4, 0(x14)
     lw x8, 4(x6)
     andi x10, x8, 4
     bne x10, x0, fail
@@ -393,11 +404,10 @@ cnn_sleep2:
     wfi
     jal x0, cnn_drain2
 cnn_drained2:
-    lui x8, 0x20
-    addi x8, x8, 0
-    csrs mie,x8
+    sw x4, 0(x6)
     lw x5, 44(x14)
 vector_drain2:
+    sw x4, 0(x14)
     lw x8, 4(x14)
     andi x10, x8, 4
     bne x10, x0, fail
@@ -410,9 +420,6 @@ vector_sleep2:
 vector_drained2:
     addi x8, x0, 2
     sw x8, 0(x14)
-    lui x8, 0x20
-    addi x8, x8, 0
-    csrc mie,x8
     addi x13, x0, 3
     sw x13, 4(x12)
     lw x5, 12(x12)
@@ -440,6 +447,7 @@ acked2:
     lw x16, 176(x7)
     addi x8, x0, 9
     sw x8, 16(x14)
+    addi x4, x0, 8
 channel3:
     sw x17, 12(x14)
     sw x16, 24(x14)
@@ -464,14 +472,18 @@ space3:
     andi x10, x8, 255
     shift
     bne x10, x8, submit3
-    addi x8, x0, 8
-    sw x8, 0(x6)
+    sw x4, 0(x6)
+    sw x4, 0(x14)
     lw x8, 4(x6)
     andi x10, x8, 4
     bne x10, x0, fail
     lw x8, 4(x14)
     andi x10, x8, 4
     bne x10, x0, fail
+    lw x8, 88(x6)
+    andi x10, x8, 255
+    shift
+    bne x10, x8, submit3
     wfi
     jal x0, space3
 submit3:
@@ -485,8 +497,8 @@ submit3:
     bne x1, x0, channel3
     lw x5, 96(x6)
 cnn_drain3:
-    addi x8, x0, 8
-    sw x8, 0(x6)
+    sw x4, 0(x6)
+    sw x4, 0(x14)
     lw x8, 4(x6)
     andi x10, x8, 4
     bne x10, x0, fail
@@ -500,11 +512,10 @@ cnn_sleep3:
     wfi
     jal x0, cnn_drain3
 cnn_drained3:
-    lui x8, 0x20
-    addi x8, x8, 0
-    csrs mie,x8
+    sw x4, 0(x6)
     lw x5, 44(x14)
 vector_drain3:
+    sw x4, 0(x14)
     lw x8, 4(x14)
     andi x10, x8, 4
     bne x10, x0, fail
@@ -517,9 +528,6 @@ vector_sleep3:
 vector_drained3:
     addi x8, x0, 2
     sw x8, 0(x14)
-    lui x8, 0x20
-    addi x8, x8, 0
-    csrc mie,x8
     addi x13, x0, 4
     sw x13, 4(x12)
     lw x5, 12(x12)
@@ -545,6 +553,7 @@ acked3:
     lui x15, 0x80001
     addi x15, x15, 560
     lw x16, 232(x7)
+    addi x4, x0, 8
 channel4:
     sw x17, 12(x14)
     sw x16, 24(x14)
@@ -569,14 +578,18 @@ space4:
     andi x10, x8, 255
     shift
     bne x10, x8, submit4
-    addi x8, x0, 8
-    sw x8, 0(x6)
+    sw x4, 0(x6)
+    sw x4, 0(x14)
     lw x8, 4(x6)
     andi x10, x8, 4
     bne x10, x0, fail
     lw x8, 4(x14)
     andi x10, x8, 4
     bne x10, x0, fail
+    lw x8, 88(x6)
+    andi x10, x8, 255
+    shift
+    bne x10, x8, submit4
     wfi
     jal x0, space4
 submit4:
@@ -590,8 +603,8 @@ submit4:
     bne x1, x0, channel4
     lw x5, 96(x6)
 cnn_drain4:
-    addi x8, x0, 8
-    sw x8, 0(x6)
+    sw x4, 0(x6)
+    sw x4, 0(x14)
     lw x8, 4(x6)
     andi x10, x8, 4
     bne x10, x0, fail
@@ -605,11 +618,10 @@ cnn_sleep4:
     wfi
     jal x0, cnn_drain4
 cnn_drained4:
-    lui x8, 0x20
-    addi x8, x8, 0
-    csrs mie,x8
+    sw x4, 0(x6)
     lw x5, 44(x14)
 vector_drain4:
+    sw x4, 0(x14)
     lw x8, 4(x14)
     andi x10, x8, 4
     bne x10, x0, fail
@@ -622,9 +634,6 @@ vector_sleep4:
 vector_drained4:
     addi x8, x0, 2
     sw x8, 0(x14)
-    lui x8, 0x20
-    addi x8, x8, 0
-    csrc mie,x8
     addi x13, x0, 5
     sw x13, 4(x12)
     lw x5, 12(x12)

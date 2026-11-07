@@ -1,5 +1,7 @@
 # 共享量化固件：用完成中断唤醒WFI
 
+后续已实现[独立IRQ与故障唤醒](irq-independent.md)，并更新固件。本文保留原测量/IRQ共享版本的历史记录，不是当前RTL的PPA或当前中断编号。
+
 已在 `NPU_SHARED_QUANT=1` 的单图固件中默认启用完成中断等待。RTL没有修改，也没有新增ISR、寄存器或存储；此前18ns＋门控面积/静态时序仍对应同一RTL。本轮不重跑综合。通用Vector路径生成的boot.bin、boot.hex、params.hex、test_meta.svh均与原来逐字节相同。
 
 ## 机制与正确性

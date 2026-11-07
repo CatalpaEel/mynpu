@@ -1,0 +1,351 @@
+{
+  "passed": true,
+  "irq_ids": {
+    "matrix": 16,
+    "vector": 17,
+    "cnn": 18,
+    "boot": 31
+  },
+  "irq_cap_address": "0x40000070",
+  "irq_cap_mask": "0x00070000",
+  "done_or_error_per_unit": true,
+  "done_ack_bit": 3,
+  "done_ack_while_busy": true,
+  "new_event_dominates_ack": true,
+  "rtl_changed": true,
+  "old_wfi_firmware_requires_regeneration": true,
+  "top_irq_vector_width_unchanged": 5,
+  "tests": [
+    {
+      "suite": "queues",
+      "result": "npu/build/vcs-irqv2_first-queues/result.json",
+      "rf_bank_words": 32,
+      "macro": false,
+      "summaries": [
+        "QUEUES PASS matrix_depth=8 vector_depth=8 checks=348 snapshots, wrap, overflow, concurrent engines, invalid descriptor, reset"
+      ]
+    },
+    {
+      "suite": "irqcontrol",
+      "result": "npu/build/vcs-irqv2_first-irqcontrol/result.json",
+      "rf_bank_words": 32,
+      "macro": false,
+      "summaries": [
+        "IRQ CONTROL PASS checks=38 active-W1C/set-dominant/fault-wakeup/independent-levels/tickets"
+      ]
+    },
+    {
+      "suite": "irqwake",
+      "result": "npu/build/vcs-irqv2_routes32-irqwake-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "IRQ WAKE CASE unit=0 irq=16 fault=0 PASS",
+        "IRQ WAKE CASE unit=0 irq=16 fault=1 PASS",
+        "IRQ WAKE CASE unit=1 irq=17 fault=0 PASS",
+        "IRQ WAKE CASE unit=1 irq=17 fault=1 PASS",
+        "IRQ WAKE CASE unit=2 irq=18 fault=0 PASS",
+        "IRQ WAKE CASE unit=2 irq=18 fault=1 PASS",
+        "IRQ MASK PASS unrelated-source-stays-asleep/two-pending-MIP/independent-ACK",
+        "IRQ WAKE PASS cases=7 real-CPU-WFI/three-distinct-sources/completion/runtime-fault/MIP/tickets"
+      ]
+    },
+    {
+      "suite": "irqwake",
+      "result": "npu/build/vcs-irqv2_routes64-irqwake-macro/result.json",
+      "rf_bank_words": 64,
+      "macro": true,
+      "summaries": [
+        "IRQ WAKE CASE unit=0 irq=16 fault=0 PASS",
+        "IRQ WAKE CASE unit=0 irq=16 fault=1 PASS",
+        "IRQ WAKE CASE unit=1 irq=17 fault=0 PASS",
+        "IRQ WAKE CASE unit=1 irq=17 fault=1 PASS",
+        "IRQ WAKE CASE unit=2 irq=18 fault=0 PASS",
+        "IRQ WAKE CASE unit=2 irq=18 fault=1 PASS",
+        "IRQ MASK PASS unrelated-source-stays-asleep/two-pending-MIP/independent-ACK",
+        "IRQ WAKE PASS cases=7 real-CPU-WFI/three-distinct-sources/completion/runtime-fault/MIP/tickets"
+      ]
+    },
+    {
+      "suite": "cnnqueues",
+      "result": "npu/build/vcs-irqv2_regress-cnnqueues/result.json",
+      "rf_bank_words": 32,
+      "macro": false,
+      "summaries": [
+        "CNN QUEUE PASS depth=8 descriptor_bits=32 checks=85 compact tasks, immutable config, order, overflow, reset, faults"
+      ]
+    },
+    {
+      "suite": "sharedquant",
+      "result": "npu/build/vcs-irqv2_regress-sharedquant-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "SHARED QUANT PASS checks=350 raw/quant32/quant8/concurrent/CNN-partial/Matrix-accumulate/signed-round/wrap/tail/RF/SRAM"
+      ]
+    },
+    {
+      "suite": "outergemm",
+      "result": "npu/build/vcs-irqv2_regress-outergemm-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "OUTER GEMM PASS checks=29782 macs=358806 full_steps=21187 flags/strides/tails/tiles/SRAM/RF/K0"
+      ]
+    },
+    {
+      "suite": "cnnstream",
+      "result": "npu/build/vcs-irqv2_regress-cnnstream-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "CNN STREAM PASS cases=193 checks=1140 stride1/2/borders/unaligned-rows/1..16-channels/RF/SRAM"
+      ]
+    },
+    {
+      "suite": "vectorsimd",
+      "result": "npu/build/vcs-irqv2_regress-vectorsimd-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "VECTOR SIMD PASS checks=12637 direct/program/SRAM/RF/inplace/scalar/tail/fault"
+      ]
+    },
+    {
+      "suite": "unitroutes",
+      "result": "npu/build/vcs-irqv2_regress-unitroutes-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "UNIT ROUTE producer=0 consumer=1 PASS",
+        "UNIT ROUTE producer=0 consumer=2 PASS",
+        "UNIT ROUTE producer=1 consumer=0 PASS",
+        "UNIT ROUTE producer=1 consumer=2 PASS",
+        "UNIT ROUTE producer=2 consumer=0 PASS",
+        "UNIT ROUTE producer=2 consumer=1 PASS",
+        "UNIT ROUTES PASS checks=24 six directed pairs, three-stage chain, 256-word GEMM, streamed DOT9 weights"
+      ]
+    },
+    {
+      "suite": "sharedoperands",
+      "result": "npu/build/vcs-irqv2_regress-sharedoperands-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "SHARED OPERANDS PASS checks=3409 matrix_terms=10848 matrix_parallel_reads=1190 vector_parallel_reads=312"
+      ]
+    },
+    {
+      "suite": "enginefaults",
+      "result": "npu/build/vcs-irqv2_regress-enginefaults/result.json",
+      "rf_bank_words": 32,
+      "macro": false,
+      "summaries": [
+        "ENGINE FAULTS PASS failed_jobs=12 successful_retries=12 checks=584"
+      ]
+    },
+    {
+      "suite": "vectorprogram",
+      "result": "npu/build/vcs-irqv2_regress-vectorprogram/result.json",
+      "rf_bank_words": 32,
+      "macro": false,
+      "summaries": [
+        "VECTOR PROGRAM PASS jobs=116 checks=3402 memory source, signed INT32, ties, saturation, byte masks, faults/retry"
+      ]
+    },
+    {
+      "suite": "blocking",
+      "result": "npu/build/vcs-irqv2_canonical_default-blocking-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "BLOCKING PASS sample=0 cycles=29298",
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=0 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "BLOCKING PASS sample=1 cycles=29298",
+        "SINGLE_INPUT sample=1 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=1 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "BLOCKING PASS sample=2 cycles=29298",
+        "SINGLE_INPUT sample=2 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=2 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "BLOCKING PASS sample=3 cycles=29298",
+        "SINGLE_INPUT sample=3 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=3 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "BLOCKING PASS sample=4 cycles=29298",
+        "SINGLE_INPUT sample=4 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=4 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "BLOCKING PASS sample=5 cycles=29298",
+        "SINGLE_INPUT sample=5 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=5 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "BLOCKING PASS sample=6 cycles=29298",
+        "SINGLE_INPUT sample=6 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=6 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "BLOCKING PASS sample=7 cycles=29298",
+        "SINGLE_INPUT sample=7 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=7 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "BLOCKING PASS sample=8 cycles=29298",
+        "SINGLE_INPUT sample=8 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=8 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "BLOCKING PASS sample=9 cycles=29298",
+        "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=9 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE PASS samples=10 checks=120"
+      ]
+    },
+    {
+      "suite": "quantlayers",
+      "result": "npu/build/vcs-irqv2_canonical_default-quantlayers-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
+      ]
+    },
+    {
+      "suite": "jtag",
+      "result": "npu/build/vcs-irqv2_canonical_default-jtag-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "JTAG PASS checks=42"
+      ]
+    },
+    {
+      "suite": "blocking",
+      "result": "npu/build/vcs-irqv2_final_quant-blocking-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "BLOCKING PASS sample=0 cycles=25965",
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=26357 input_to_classification_us_at_50mhz=527.14 PASS",
+        "SINGLE sample=0 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=25965 kernel_utilization_pct=22.87 system_utilization_pct=16.83 latency_us_at_50mhz=519.30 PASS",
+        "BLOCKING PASS sample=1 cycles=25965",
+        "SINGLE_INPUT sample=1 ingress_cycles=392 input_to_classification_cycles=26357 input_to_classification_us_at_50mhz=527.14 PASS",
+        "SINGLE sample=1 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=25965 kernel_utilization_pct=22.87 system_utilization_pct=16.83 latency_us_at_50mhz=519.30 PASS",
+        "BLOCKING PASS sample=2 cycles=25965",
+        "SINGLE_INPUT sample=2 ingress_cycles=392 input_to_classification_cycles=26357 input_to_classification_us_at_50mhz=527.14 PASS",
+        "SINGLE sample=2 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=25965 kernel_utilization_pct=22.87 system_utilization_pct=16.83 latency_us_at_50mhz=519.30 PASS",
+        "BLOCKING PASS sample=3 cycles=25965",
+        "SINGLE_INPUT sample=3 ingress_cycles=392 input_to_classification_cycles=26357 input_to_classification_us_at_50mhz=527.14 PASS",
+        "SINGLE sample=3 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=25965 kernel_utilization_pct=22.87 system_utilization_pct=16.83 latency_us_at_50mhz=519.30 PASS",
+        "BLOCKING PASS sample=4 cycles=25965",
+        "SINGLE_INPUT sample=4 ingress_cycles=392 input_to_classification_cycles=26357 input_to_classification_us_at_50mhz=527.14 PASS",
+        "SINGLE sample=4 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=25965 kernel_utilization_pct=22.87 system_utilization_pct=16.83 latency_us_at_50mhz=519.30 PASS",
+        "BLOCKING PASS sample=5 cycles=25965",
+        "SINGLE_INPUT sample=5 ingress_cycles=392 input_to_classification_cycles=26357 input_to_classification_us_at_50mhz=527.14 PASS",
+        "SINGLE sample=5 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=25965 kernel_utilization_pct=22.87 system_utilization_pct=16.83 latency_us_at_50mhz=519.30 PASS",
+        "BLOCKING PASS sample=6 cycles=25965",
+        "SINGLE_INPUT sample=6 ingress_cycles=392 input_to_classification_cycles=26357 input_to_classification_us_at_50mhz=527.14 PASS",
+        "SINGLE sample=6 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=25965 kernel_utilization_pct=22.87 system_utilization_pct=16.83 latency_us_at_50mhz=519.30 PASS",
+        "BLOCKING PASS sample=7 cycles=25965",
+        "SINGLE_INPUT sample=7 ingress_cycles=392 input_to_classification_cycles=26357 input_to_classification_us_at_50mhz=527.14 PASS",
+        "SINGLE sample=7 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=25965 kernel_utilization_pct=22.87 system_utilization_pct=16.83 latency_us_at_50mhz=519.30 PASS",
+        "BLOCKING PASS sample=8 cycles=25965",
+        "SINGLE_INPUT sample=8 ingress_cycles=392 input_to_classification_cycles=26357 input_to_classification_us_at_50mhz=527.14 PASS",
+        "SINGLE sample=8 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=25965 kernel_utilization_pct=22.87 system_utilization_pct=16.83 latency_us_at_50mhz=519.30 PASS",
+        "BLOCKING PASS sample=9 cycles=25965",
+        "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=26357 input_to_classification_us_at_50mhz=527.14 PASS",
+        "SINGLE sample=9 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=25965 kernel_utilization_pct=22.87 system_utilization_pct=16.83 latency_us_at_50mhz=519.30 PASS",
+        "SINGLE PASS samples=10 checks=120"
+      ]
+    },
+    {
+      "suite": "quantlayers",
+      "result": "npu/build/vcs-irqv2_final_quant-quantlayers-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
+      ]
+    },
+    {
+      "suite": "jtag",
+      "result": "npu/build/vcs-irqv2_final_quant-jtag-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "JTAG PASS checks=42"
+      ]
+    },
+    {
+      "suite": "latency",
+      "result": "npu/build/vcs-irqv2_canonical-latency-macro/result.json",
+      "rf_bank_words": 32,
+      "macro": true,
+      "summaries": [
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=0 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE_INPUT sample=1 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=1 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE_INPUT sample=2 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=2 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE_INPUT sample=3 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=3 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE_INPUT sample=4 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=4 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE_INPUT sample=5 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=5 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE_INPUT sample=6 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=6 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE_INPUT sample=7 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=7 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE_INPUT sample=8 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=8 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=29690 input_to_classification_us_at_50mhz=593.80 PASS",
+        "SINGLE sample=9 useful_macs=39330 kernel_cycles=24753 elapsed_cycles=29298 kernel_utilization_pct=17.65 system_utilization_pct=14.92 latency_us_at_50mhz=585.96 PASS",
+        "SINGLE PASS samples=10 checks=120"
+      ]
+    }
+  ],
+  "inference_cycles": {
+    "default": 29298,
+    "quant": 25965
+  },
+  "previous_cycles": {
+    "default": 29173,
+    "quant": 26092
+  },
+  "layer_tensors_per_path": 60,
+  "golden_bytes_per_path": 17940,
+  "canonical_default_updated": true,
+  "parameters_inputs_goldens_unchanged": true,
+  "c_header_host_syntax_checked": true,
+  "rtl_sha256": {
+    "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+    "npu/rtl/cnn/npu_cnn_mac.sv": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+    "npu/rtl/cnn/npu_stream.sv": "d72b6586071202ad0096e863492a7485ecad3d7c7c2a15c9310bc44686b9ab25",
+    "npu/rtl/cnn/npu_stream_control.sv": "386ffc45f8bb7104ee3fe2a159f9af1f2ab88fb0335e3e563198d2c6c6f3a615",
+    "npu/rtl/cnn/npu_stream_engine.sv": "e2133f72789358af121720d8707aa258d9b672c6ff916af451276db1d629f55f",
+    "npu/rtl/cnn/npu_stream_pkg.sv": "ef20e82c6c5b95eafb639b93df6df1163d50dc3b897f6e562f27d81d86a0a7d2",
+    "npu/rtl/common/npu_addr_pkg.sv": "13ea5f2b45104bc37b7560ef2a11071007c87d39a81775d8862d038af0ac3624",
+    "npu/rtl/common/npu_clock_gate.sv": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+    "npu/rtl/common/npu_rr_select.sv": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+    "npu/rtl/control/npu_mmio.sv": "7d1cf78dd57d9189e6fabf6e078a73aad1e5dcbcecf89536673f5a5ee374950e",
+    "npu/rtl/debug/npu_debug_boot.sv": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+    "npu/rtl/debug/npu_jtag_debug.sv": "d2324d487db499ca8b30226f438c1a527f73cba72e6c8762ba4d9237e880b69a",
+    "npu/rtl/interconnect/npu_data_regfile.sv": "7fffbed85311f8e8be3028c058bb60f25962e4b2d9dfefeb97c1a8132c9be278",
+    "npu/rtl/interconnect/npu_multi_read.sv": "d3899799b1d54c34115f3878339321c00082d51d627fc30337d02656566b4028",
+    "npu/rtl/interconnect/xbar.sv": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
+    "npu/rtl/interconnect/xbar_stream.sv": "027f3b83b5199bc010ed9a46b438be81ec715def09a90bdd4befb418eb43307f",
+    "npu/rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+    "npu/rtl/matrix/npu_matrix_stream.sv": "87b041181495303fa76d3c06f7e738e8b249346b2ccbb37bdbe6f1e825361fee",
+    "npu/rtl/quant/npu_shared_quant.sv": "f36e046998f3d2ae54da8ea181a7c475370fd6b0a26441e629ba8f1055310da6",
+    "npu/rtl/top/npu_core.sv": "238717bd253216cb5214c3d39d0f0e4ebfaed12f838a94e46e69886d5048d0b6",
+    "npu/rtl/top/npu_soc.sv": "397998f42b58b0fffab53adabc454945d198b78fa0dbccc685bda9fc20064a95",
+    "npu/rtl/vector/npu_vector.sv": "392777c771a92b8a8dc812db019ff1896a3b92256512278f9d2c1dd78a230dcb",
+    "npu/rtl/vector/npu_vector_stream.sv": "3c55e8e4ceda628ff4eab208711cef500e502d59bdbc233160da929da49facfd"
+  },
+  "firmware_source_sha256": "c0148847a6a36a89f2365b56a21a78fcae3600d95c9c6e7ac9d71e9aef3b7abc",
+  "boot_sha256": {
+    "default": "63c50f8fe63c79c8a967b54041e2f6f1b3c5f8c5ef967ff3cc330c1bf1513805",
+    "quant": "c67f1b14fbb4c2d7adafc3afecbb4d1d790a8184d223d4b13fe33bfbef1ffd9b"
+  },
+  "synthesis_rerun": false,
+  "pnr_rerun": false,
+  "gate_level_rerun": false,
+  "notes": [
+    "Real-CPU WFI tests cover completion and runtime fault for all three units, plus masked-source isolation and two simultaneous pending sources. Both 256B and 512B RF builds pass.",
+    "Completion counters still count successful jobs; a failed batch must follow the error path, not wait forever for its submitted ticket.",
+    "No new area/timing/physical-signoff claim for this changed RTL."
+  ]
+}

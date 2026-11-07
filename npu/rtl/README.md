@@ -1,5 +1,7 @@
 # RTL文件导航
 
+当前已[拆分Matrix/Vector/CNN为IRQ16/17/18](../docs/irq-independent.md)，完成与错误均可唤醒WFI，支持运行中确认done及同拍新事件优先。默认固件已重生成，旧WFI镜像需要更新。共享QT01为25,965周期/张，通用Vector为29,298周期/张。本轮RTL有改动，以下旧面积/时序测量不能代表当前IRQ版本，尚未重测PPA。
+
 共享量化固件已加入[完成中断＋WFI等待](../docs/irq-wfi-wait.md)：MNIST **27,432 → 26,092周期/张**，减少4.88%；CPU取指造成的CNN同bank等待4,424 → 2,490拍。RTL/面积不变；通用Vector固件二进制不变。以下周期统计请按报告版本区分。
 
 已补充[18ns＋门控的面积归属与软件阻塞分布](../docs/area18-distribution-and-blocking.md)：最终网表leaf级面积统计、两条软件路径各10张图的CPU/轮询/逐层等待分析及三张图。RTL与固件未为统计改动。

@@ -24,7 +24,7 @@ MAIL = 0x80001FA0
 DESC = 0x80000000 + DESC_BASE
 stream_fields = make_layer_fields(A, B, A)
 label("_start")
-li(5, 1 << 16)
+li(5, 0x00070000)
 emit((0x304 << 20) | (5 << 15) | (1 << 12) | 0x73, "csrw mie")
 emit((0x300 << 20) | (8 << 15) | (7 << 12) | 0x73, "csrci mstatus,8")
 li(6, 0x40000600)

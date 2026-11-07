@@ -1,6 +1,15 @@
 #ifndef NPU_H
 #define NPU_H
 #include <stdint.h>
+/* Local machine interrupt IDs. Boot wake remains IRQ31. */
+#define NPU_IRQ_MATRIX 16u
+#define NPU_IRQ_VECTOR 17u
+#define NPU_IRQ_CNN 18u
+#define NPU_IRQ_MASK 0x00070000u
+#define NPU_IRQ_CAP 0x070u
+#define NPU_CONTROL_START 1u
+#define NPU_CONTROL_CLEAR_IDLE 2u
+#define NPU_CONTROL_ACK_DONE 8u
 #define NPU_SRAM_BASE 0x80000000u
 #define NPU_SRAM_BYTES 16384u
 #define NPU_BANK_BYTES 8192u
@@ -100,6 +109,16 @@ static inline void npu_write(uint32_t offset, uint32_t value) {
 }
 static inline uint32_t npu_read(uint32_t offset) {
   return *(volatile uint32_t *)(uintptr_t)(NPU_MMIO_BASE + offset);
+}
+/* Read only NPU-local pending sources; CPU mie controls wake/interrupt masks. */
+static inline uint32_t npu_irq_pending(void) {
+  uint32_t value;
+  __asm__ volatile("csrr %0, mip" : "=r"(value));
+  return value & NPU_IRQ_MASK;
+}
+/* Acknowledge done while active; error and completion counters are unchanged. */
+static inline void npu_irq_ack_done(uint32_t control_offset) {
+  npu_write(control_offset, NPU_CONTROL_ACK_DONE);
 }
 static inline void npu_fence(void) { __asm__ volatile("fence iorw, iorw" ::: "memory"); }
 static inline uint32_t npu_regfile_bank_bytes(void) {

@@ -152,10 +152,7 @@ module npu_stream_control #(
     end else begin
       if (events_i.busy) total_cycles <= total_cycles + 1'b1;
       if (events_i.mac_valid) total_macs <= total_macs + 32'(events_i.macs);
-      if (events_i.done) begin
-        completed <= completed + 1'b1;
-        done_o <= 1;
-      end
+      if (events_i.done && !events_i.fault) completed <= completed + 1'b1;
       if (push) begin
         tail <= advance(tail);
         submitted <= submitted + 1'b1;
@@ -193,6 +190,8 @@ module npu_stream_control #(
           'h2c: cfg.offset <= csr_wdata_i[7:0];
           default: ;
         endcase
+      // Set-dominant done acknowledgement: a new event must remain pending.
+      if (events_i.done && !events_i.fault) done_o <= 1;
       if (events_i.fault) begin
         fault <= 1;
         done_o <= 0;

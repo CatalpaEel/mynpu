@@ -11,10 +11,10 @@
 <text x="575" y="203" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#60a5fa">CV32E40P CPU</text>
 <text x="575" y="246" font-family="Noto Sans CJK SC,sans-serif" font-size="23" fill="#e2e8f0">SRAM取指；普通load/store访问数据</text>
 <text x="575" y="281" font-family="Noto Sans CJK SC,sans-serif" font-size="23" fill="#e2e8f0">MMIO配置、任务提交、依赖同步</text>
-<text x="575" y="316" font-family="Noto Sans CJK SC,sans-serif" font-size="23" fill="#e2e8f0">软件决定tile、地址、边界与算子程序</text>
+<text x="575" y="316" font-family="Noto Sans CJK SC,sans-serif" font-size="23" fill="#e2e8f0">IRQ16 Matrix / 17 Vector / 18 CNN</text>
 <rect x="1065" y="160" width="1120" height="190" rx="14" fill="#1e293b" stroke="#c084fc" stroke-width="2"/>
 <text x="1085" y="203" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#c084fc">控制与任务入口  ·  CPU经XBAR译码访问MMIO</text>
-<text x="1085" y="247" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">Matrix / Vector：配置快照、FIFO、完成票据、依赖检查、错误/IRQ</text>
+<text x="1085" y="247" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">独立完成/错误IRQ；活动中W1C确认done；新事件优先于确认</text>
 <text x="1085" y="283" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">CNN Stream Control：公共配置、32bit tile命令FIFO、任务完成与错误</text>
 <text x="1085" y="319" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">独立DMA及外部流接口已删除；保留测试host，9信号PAD的程序与输入统一经JTAG SBA装载</text>
 <polyline points="485,240 555,240" fill="none" stroke="#60a5fa" stroke-width="4"/>
@@ -121,5 +121,5 @@
 <polyline points="1810,1565 1810,1630" fill="none" stroke="#fbbf24" stroke-width="4"/>
 <polygon points="1810,1630 1817.0,1616.0 1803.0,1616.0" fill="#fbbf24"/>
 <text x="55" y="1855" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#2dd4bf">并行边界：CNN / Matrix / Vector可并行，任意有向连接经xbar FIFO转发；CNN读请求、RF gather、计算与写回重叠，各主端口受bank冲突和FIFO反压约束。</text>
-<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">依据RTL及build_config.json；4×4外积Matrix + QT01；门控综合2.515488mm²（含SRAM、不含PAD），50MHz setup +2.0040ns；未重跑布局布线。</text>
+<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">当前IRQ已独立，改动后未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。</text>
 </svg>

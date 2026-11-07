@@ -230,55 +230,31 @@ def rf_weight_stage_bytes(fields):
 
 
 def quant_wait(base, submitted, completed, tag):
-    """Wait on IRQ16 with mie[16]=1, mstatus.MIE=0: WFI wakes without ISR.
+    """Independent IRQ16/18 wakes WFI; tickets determine batch completion.
 
-    Tickets, rather than the pending interrupt level, determine completion.
-
-    CNN bit3 acknowledges only the sticky done flag, even while jobs run.
-    Clear BEFORE checking the ticket: a later completion remains pending across
-    WFI; a simultaneous completion is visible in the subsequent ticket read.
-    Matrix only permits its bit1 acknowledgement after the whole queue drains,
-    so it can sleep once, then poll the remaining tail if done stays asserted.
+    All engines support bit3 done acknowledgement while active. Clear before
+    checking tickets; fresh simultaneous events remain pending in hardware.
+    Error levels also wake the CPU and are checked before sleeping again.
     """
     lw(5, base, submitted)
-    if not QUANT_IRQ_WAIT:
-        label(tag)
-        lw(8, base, 4)
-        andi(11, 8, 4)
-        branch(11, 0, "fail")
-        lw(8, base, completed)
-        branch(8, 5, tag)
-        return
-    cnn = base == 6
     label(tag)
-    if cnn:
+    if QUANT_IRQ_WAIT:
         li(8, 8)
         sw(8, base, 0)
     lw(8, base, 4)
     andi(11, 8, 4)
     branch(11, 0, "fail")
-    if not cnn:
-        andi(10, 8, 2)
     lw(8, base, completed)
+    if not QUANT_IRQ_WAIT:
+        branch(8, 5, tag)
+        return
     branch(8, 5, tag + "_sleep")
     jump(tag + "_done")
     label(tag + "_sleep")
-    if not cnn:
-        branch(10, 0, tag + "_tail")
     emit(0x10500073, "wfi")
-    if cnn:
-        jump(tag)
-    else:
-        label(tag + "_tail")
-        lw(8, base, 4)
-        andi(11, 8, 4)
-        branch(11, 0, "fail")
-        lw(8, base, completed)
-        branch(8, 5, tag + "_tail")
+    jump(tag)
     label(tag + "_done")
-    # Do not leave this source's level pending when switching the shared IRQ16
-    # between CNN and Matrix. Matrix is idle once all submitted tickets retire.
-    li(8, 8 if cnn else 2)
+    li(8, 8)
     sw(8, base, 0)
 
 
@@ -553,6 +529,7 @@ def emit_cnn_rows(i, fields, previous, stream=False):
     if previous is None or fields[12] != previous[12]:
         lw(8, 7, i * 56 + 48)
         sw(8, 14, 0x30)
+    li(4, 8)  # reuse the done-ACK constant across queue/drain checks
     label("channel" + str(i))
     sw(17, 14, 0x0C)
     sw(16, 14, 0x18)
@@ -577,14 +554,19 @@ def emit_cnn_rows(i, fields, previous, stream=False):
     andi(10, 8, 255)
     shift(8, 8, 16, 5)
     branch(10, 8, "submit" + str(i))
-    li(8, 8)
-    sw(8, 6, 0)
+    sw(4, 6, 0)
+    sw(4, 14, 0)  # acknowledge done only; errors still wake either source
     lw(8, 6, 4)
     andi(10, 8, 4)
     branch(10, 0, "fail")
     lw(8, 14, 4)
     andi(10, 8, 4)
     branch(10, 0, "fail")
+    # Recheck after ACK so a completion/slot freed before the ACK is not lost.
+    lw(8, 6, 0x58)
+    andi(10, 8, 255)
+    shift(8, 8, 16, 5)
+    branch(10, 8, "submit" + str(i))
     emit(0x10500073, "wfi")
     jump("space" + str(i))
     label("submit" + str(i))
@@ -598,8 +580,8 @@ def emit_cnn_rows(i, fields, previous, stream=False):
     branch(1, 0, "channel" + str(i))
     lw(5, 6, 0x60)
     label("cnn_drain" + str(i))
-    li(8, 8)
-    sw(8, 6, 0)
+    sw(4, 6, 0)
+    sw(4, 14, 0)  # acknowledge done only; errors still wake either source
     lw(8, 6, 4)
     andi(10, 8, 4)
     branch(10, 0, "fail")
@@ -613,10 +595,10 @@ def emit_cnn_rows(i, fields, previous, stream=False):
     emit(0x10500073, "wfi")
     jump("cnn_drain" + str(i))
     label("cnn_drained" + str(i))
-    li(8, 1 << 17)
-    emit((0x304 << 20) | (8 << 15) | (2 << 12) | 0x73, "csrs mie,x8")
+    sw(4, 6, 0)  # clear the fully drained CNN source before waiting on Vector
     lw(5, 14, 0x2C)
     label("vector_drain" + str(i))
+    sw(4, 14, 0)
     lw(8, 14, 4)
     andi(10, 8, 4)
     branch(10, 0, "fail")
@@ -629,8 +611,6 @@ def emit_cnn_rows(i, fields, previous, stream=False):
     label("vector_drained" + str(i))
     li(8, 2)
     sw(8, 14, 0)
-    li(8, 1 << 17)
-    emit((0x304 << 20) | (8 << 15) | (3 << 12) | 0x73, "csrc mie,x8")
     if stream:
         lw(27, 6, 0x64)
         lw(28, 6, 0x68)
@@ -735,6 +715,9 @@ def emit_platform_check():
     lw(8, 6, -0x594)
     li(5, 0x00030404)
     branch(8, 5, "fail")
+    lw(8, 6, -0x590)
+    li(5, 0x00070000)
+    branch(8, 5, "fail")
     lw(8, 6, 0x54)
     li(5, 0x53443931)
     branch(8, 5, "fail")
@@ -745,7 +728,7 @@ def generate_single():
     reset()
 
     label("_start")
-    li(5, 1 << 16)
+    li(5, 0x00070000)
     emit((0x304 << 20) | (5 << 15) | (1 << 12) | 0x73, "csrw mie,x5")
     emit((0x300 << 20) | (8 << 15) | (7 << 12) | 0x73, "csrci mstatus,8")
     li(6, 0x40000600)
@@ -863,20 +846,21 @@ def generate_single():
     meta["matrix_execution"] = "4x4 outer product; 16 INT32 accumulators; FC output blocks4/4/2"
     meta["matrix_tasks"] = 37 if SHARED_QUANT else 27
     meta["descriptor_base"] = 0x80000000 + DESC_BASE
+    meta["irq_ids"] = {"matrix": 16, "vector": 17, "cnn": 18}
     meta["shared_quant"] = SHARED_QUANT
     meta["queue_space_wait"] = (
-        "CNN IRQ16/WFI with occupancy recheck"
+        "CNN IRQ18/WFI with occupancy recheck"
         if SHARED_QUANT and QUANT_QUEUE_IRQ_WAIT
         else "polling"
         if SHARED_QUANT
-        else "existing Vector/CNN IRQ schedule"
+        else "independent IRQ18 CNN / IRQ17 Vector concurrent progress/error wake"
     )
     meta["completion_wait"] = (
-        "IRQ16/WFI for CNN; Matrix one IRQ wake then sticky-done tail poll"
+        "independent IRQ18 CNN / IRQ16 Matrix, WFI with active done acknowledgement"
         if SHARED_QUANT and QUANT_IRQ_WAIT
         else "polling"
         if SHARED_QUANT
-        else "existing Vector/CNN IRQ schedule"
+        else "independent IRQ18 CNN / IRQ17 Vector concurrent progress/error wake"
     )
     meta["cnn_output"] = (
         "direct shared quantizer, byte writes to RF/SRAM"

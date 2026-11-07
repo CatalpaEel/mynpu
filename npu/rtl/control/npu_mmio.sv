@@ -162,7 +162,7 @@ module npu_mmio #(
   assign vpop = vc != 0 && !vec_busy_i && !vec_start_o;
   assign mpush = req_i && we_i && addr_i == 12'h100 && wdata_i[0] && !error_o && mat_ok;
   assign vpush = req_i && we_i && addr_i == 12'h200 && wdata_i[0] && !error_o && vec_ok;
-  assign irq_o = {vec_done_q, mat_done_q};
+  assign irq_o = {vec_done_q || vec_error_q, mat_done_q || mat_error_q};
   always_comb begin
     rdata_o = 0;
     known = 1;
@@ -277,6 +277,10 @@ module npu_mmio #(
       12'h130: rdata_o = mf_q;
       12'h134: rdata_o = {16'b0, mat_lda_o};
       12'h138: rdata_o = {16'b0, mat_ldb_o};
+      12'h070: begin
+        rdata_o = IRQ_MASK;
+        writable = 0;
+      end
       12'h06c: begin
         rdata_o = 32'h00030404;
         writable = 0;
@@ -392,16 +396,8 @@ module npu_mmio #(
       vec_start_o <= 0;
       if (mat_busy_i) mat_cycles_q <= mat_cycles_q + 1;
       if (vec_busy_i) vec_cycles_q <= vec_cycles_q + 1;
-      if (mat_done_i) begin
-        mat_done_q <= 1;
-        mat_completed <= mat_completed + 1;
-      end
-      if (vec_done_i) begin
-        vec_done_q <= 1;
-        vec_completed <= vec_completed + 1;
-      end
-      if (mat_fault_i) mat_error_q <= 1;
-      if (vec_fault_i) vec_error_q <= 1;
+      if (mat_done_i && !mat_fault_i) mat_completed <= mat_completed + 1;
+      if (vec_done_i && !vec_fault_i) vec_completed <= vec_completed + 1;
       case ({
         mpush, mpop
       })
@@ -460,6 +456,8 @@ module npu_mmio #(
             12'h008: cpu_release_o <= wdata_i[0];
             12'h00c: cpu_boot_addr_o <= wdata_i;
             12'h100: begin
+              // bit3 acknowledges done without touching work or sticky errors.
+              if (wdata_i[3]) mat_done_q <= 0;
               if (wdata_i[1]) begin
                 if (mat_occupied) mat_error_q <= 1;
                 else begin
@@ -473,6 +471,7 @@ module npu_mmio #(
               end
             end
             12'h200: begin
+              if (wdata_i[3]) vec_done_q <= 0;
               if (wdata_i[1]) begin
                 if (vec_occupied) vec_error_q <= 1;
                 else begin
@@ -506,6 +505,12 @@ module npu_mmio #(
               vec_program_o[addr_i[5:2]] <= wdata_i;
           endcase
       end
+      // Fresh events dominate simultaneous software acknowledgement/submission.
+      // Errors wake WFI even when no successful task completes.
+      if (mat_done_i && !mat_fault_i) mat_done_q <= 1;
+      if (vec_done_i && !vec_fault_i) vec_done_q <= 1;
+      if (mat_fault_i) mat_error_q <= 1;
+      if (vec_fault_i) vec_error_q <= 1;
     end
   end
 endmodule

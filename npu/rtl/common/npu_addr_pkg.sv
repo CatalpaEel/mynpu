@@ -4,6 +4,9 @@
 `define NPU_RF_BANK_WORDS 256
 `endif
 package npu_addr_pkg;
+  // Independent local interrupt sources; boot/debug wake retains IRQ31.
+  localparam int IRQ_MATRIX = 16, IRQ_VECTOR = 17, IRQ_CNN = 18;
+  localparam logic [31:0] IRQ_MASK = 32'h00070000;
   localparam int RF_BANK_WORDS = `NPU_RF_BANK_WORDS;
   localparam int RF_BANK_BITS = $clog2(RF_BANK_WORDS);
   localparam int RF_BYTES = RF_BANK_WORDS * 8;

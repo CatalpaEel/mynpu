@@ -170,9 +170,10 @@ module npu_core #(
   assign is_quant_mmio = mmio_addr[11:8] == 7;
   assign mmio_rdata = is_quant_mmio ? quant_rdata : is_cnn_mmio ? cnn_rdata : control_rdata;
   assign mmio_error = removed_dma_page || (is_quant_mmio ? quant_error : is_cnn_mmio ? cnn_error : control_error);
-  assign irq_o[4:2] = 0;
+  assign irq_o[4:3] = 0;
+  assign irq_o[2] = cnn_irq;
   assign irq_o[1] = control_irq[1];
-  assign irq_o[0] = control_irq[0] || cnn_irq;
+  assign irq_o[0] = control_irq[0];
   assign sram_req_o = mem_req;
   assign sram_wen_o = mem_wen;
   assign sram_addr_o = mem_addr;

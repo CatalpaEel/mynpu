@@ -81,7 +81,7 @@ box(
     440,
     190,
     "CV32E40P CPU",
-    "SRAM取指；普通load/store访问数据\nMMIO配置、任务提交、依赖同步\n软件决定tile、地址、边界与算子程序",
+    "SRAM取指；普通load/store访问数据\nMMIO配置、任务提交、依赖同步\nIRQ16 Matrix / 17 Vector / 18 CNN",
     size=23,
 )
 box(
@@ -90,7 +90,7 @@ box(
     1120,
     190,
     "控制与任务入口  ·  CPU经XBAR译码访问MMIO",
-    "Matrix / Vector：配置快照、FIFO、完成票据、依赖检查、错误/IRQ\nCNN Stream Control：公共配置、32bit tile命令FIFO、任务完成与错误\n独立DMA及外部流接口已删除；保留测试host，9信号PAD的程序与输入统一经JTAG SBA装载",
+    "独立完成/错误IRQ；活动中W1C确认done；新事件优先于确认\nCNN Stream Control：公共配置、32bit tile命令FIFO、任务完成与错误\n独立DMA及外部流接口已删除；保留测试host，9信号PAD的程序与输入统一经JTAG SBA装载",
     col="#c084fc",
     size=24,
 )
@@ -250,7 +250,7 @@ text(
 text(
     55,
     1885,
-    "依据RTL及build_config.json；4×4外积Matrix + QT01；门控综合2.515488mm²（含SRAM、不含PAD），50MHz setup +2.0040ns；未重跑布局布线。",
+    "当前IRQ已独立，改动后未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。",
     22,
     "#94a3b8",
 )

@@ -10,11 +10,13 @@ p = argparse.ArgumentParser()
 p.add_argument(
     "--suite",
     choices=[
+        "irqcontrol",
         "addressranges",
         "sramuncached",
         "arbiter",
         "rfequivalence",
         "readbatch",
+        "irqwake",
         "sharedoperands",
         "outergemm",
         "cnnstream",
@@ -86,6 +88,8 @@ subprocess.run(["/usr/bin/python3.12", str(ROOT / "scripts/gen_sources.py")], ch
 files = [Path(s) for s in (ROOT / "build/sources.f").read_text().splitlines()]
 assert files, "Generated source list is empty"
 tops = {
+    "irqcontrol": "tb_irq_control",
+    "irqwake": "tb_irq_wake",
     "addressranges": "tb_address_ranges",
     "sramuncached": "tb_sram_uncached",
     "arbiter": "tb_arbiter",
@@ -205,6 +209,7 @@ if any(f.name in ["npu_data_regfile.sv", "xbar_stream.sv", "xbar.sv"] for f in f
         files.append(helper)
 if a.macro:
     if a.suite not in [
+        "irqwake",
         "sharedoperands",
         "outergemm",
         "cnnstream",
@@ -376,6 +381,8 @@ with (out / "run-launcher.log").open("w") as f:
     r = subprocess.run(cmd, cwd=cwd, stdout=f, stderr=subprocess.STDOUT)
 text = (out / "run.log").read_text()
 markers = {
+    "irqcontrol": "IRQ CONTROL PASS",
+    "irqwake": "IRQ WAKE PASS",
     "addressranges": "ADDRESS RANGES PASS",
     "sramuncached": "SRAM UNCACHED PASS",
     "arbiter": "ARBITER PASS",

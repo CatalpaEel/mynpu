@@ -314,5 +314,12 @@
   "matrix_execution": "4x4 outer product; 16 INT32 accumulators; FC output blocks4/4/2",
   "matrix_tasks": 27,
   "descriptor_base": 2147486976,
-  "shared_quant": false
+  "shared_quant": false,
+  "irq_ids": {
+    "matrix": 16,
+    "vector": 17,
+    "cnn": 18
+  },
+  "queue_space_wait": "independent IRQ18 CNN / IRQ17 Vector concurrent progress/error wake",
+  "completion_wait": "independent IRQ18 CNN / IRQ17 Vector concurrent progress/error wake"
 }
