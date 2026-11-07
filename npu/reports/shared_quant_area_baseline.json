@@ -1,0 +1,560 @@
+{
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-pre-quant-simd-area",
+  "scope": "mapped cell area, two SRAM macros included, PADs and PNR overhead excluded",
+  "total_area_mm2": 2.4357054789999997,
+  "standard_cell_area_mm2": 1.6328182969999998,
+  "buckets": {
+    "XBAR": {
+      "area_um2": 417994.618,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_xbar",
+          "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6",
+          "cells": 14911,
+          "area_um2": 417994.618
+        }
+      ],
+      "area_mm2": 0.41799461800000004,
+      "percent_total": 17.161131409517186
+    },
+    "MMIO / task queues": {
+      "area_um2": 249370.33,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_mmio",
+          "module": "npu_mmio",
+          "cells": 7774,
+          "area_um2": 249370.33
+        }
+      ],
+      "area_mm2": 0.24937032999999997,
+      "percent_total": 10.238115082057506
+    },
+    "CNN": {
+      "area_um2": 204136.039,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_stream_i_engine",
+          "module": "npu_stream_engine_RF_SINK1",
+          "cells": 7766,
+          "area_um2": 157139.002
+        },
+        {
+          "indent": 4,
+          "instance": "i_stream_i_control",
+          "module": "npu_stream_control_QUEUE_DEPTH8",
+          "cells": 1477,
+          "area_um2": 46997.037
+        }
+      ],
+      "area_mm2": 0.204136039,
+      "percent_total": 8.380982050580673
+    },
+    "Vector": {
+      "area_um2": 192850.515,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_vector",
+          "module": "npu_vector",
+          "cells": 6774,
+          "area_um2": 117206.118
+        },
+        {
+          "indent": 4,
+          "instance": "i_vector_stream",
+          "module": "npu_vector_stream_GATHER1",
+          "cells": 3425,
+          "area_um2": 75644.397
+        }
+      ],
+      "area_mm2": 0.192850515,
+      "percent_total": 7.917645079124118
+    },
+    "CPU": {
+      "area_um2": 294000.94100000005,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_id_stage_i",
+          "module": "cv32e40p_id_stage_COREV_PULP0_COREV_CLUSTER0_N_HWL",
+          "cells": 5131,
+          "area_um2": 127547.706
+        },
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_ex_stage_i",
+          "module": "cv32e40p_ex_stage_COREV_PULP0_FPU0_APU_NARGS_CPU3_",
+          "cells": 3949,
+          "area_um2": 79090.861
+        },
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_cs_registers_i",
+          "module": "cv32e40p_cs_registers_N_HWLP2_APU0_A_EXTENSION0_FP",
+          "cells": 1820,
+          "area_um2": 48621.485
+        },
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_if_stage_i",
+          "module": "cv32e40p_if_stage_COREV_PULP0_PULP_OBI0_PULP_SECUR",
+          "cells": 1064,
+          "area_um2": 28552.966
+        },
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_load_store_unit_i",
+          "module": "cv32e40p_load_store_unit_PULP_OBI0",
+          "cells": 529,
+          "area_um2": 10010.112
+        },
+        {
+          "indent": 4,
+          "instance": "i_cpu_core_i_sleep_unit_i",
+          "module": "cv32e40p_sleep_unit_COREV_CLUSTER0",
+          "cells": 7,
+          "area_um2": 177.811
+        }
+      ],
+      "area_mm2": 0.29400094100000007,
+      "percent_total": 12.070463507792605
+    },
+    "JTAG / debug": {
+      "area_um2": 105286.182,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_debug",
+          "module": "npu_jtag_debug",
+          "cells": 4476,
+          "area_um2": 104820.8
+        },
+        {
+          "indent": 4,
+          "instance": "i_boot",
+          "module": "npu_debug_boot",
+          "cells": 41,
+          "area_um2": 465.382
+        }
+      ],
+      "area_mm2": 0.105286182,
+      "percent_total": 4.322615476614446
+    },
+    "Matrix": {
+      "area_um2": 47765.357,
+      "instances": [
+        {
+          "indent": 4,
+          "instance": "i_matrix_stream",
+          "module": "npu_matrix_stream_GATHER1",
+          "cells": 1992,
+          "area_um2": 47765.357
+        }
+      ],
+      "area_mm2": 0.047765357,
+      "percent_total": 1.9610481403363467
+    },
+    "SRAM macros": {
+      "area_um2": 802887.182,
+      "count": 2,
+      "area_mm2": 0.802887182,
+      "percent_total": 32.96322929526079
+    },
+    "Top / core glue": {
+      "area_um2": 121414.31499999971,
+      "area_mm2": 0.12141431499999972,
+      "percent_total": 4.984769958716331
+    }
+  },
+  "hierarchical_rows": [
+    {
+      "indent": 0,
+      "instance": "npu_asic_top",
+      "module": null,
+      "cells": 66858,
+      "area_um2": 2435705.479
+    },
+    {
+      "indent": 2,
+      "instance": "i_core",
+      "module": "npu_core",
+      "cells": 66846,
+      "area_um2": 1632752.442
+    },
+    {
+      "indent": 4,
+      "instance": "i_xbar",
+      "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6",
+      "cells": 14911,
+      "area_um2": 417994.618
+    },
+    {
+      "indent": 6,
+      "instance": "i_regfile",
+      "module": "npu_data_regfile_GATHER_PORTS9_NUM_MASTERS7_ID_W3",
+      "cells": 7620,
+      "area_um2": 204838.502
+    },
+    {
+      "indent": 6,
+      "instance": "i_stream_routes",
+      "module": "xbar_stream_MASTERS6",
+      "cells": 5255,
+      "area_um2": 169230.163
+    },
+    {
+      "indent": 8,
+      "instance": "g_arbiters[3].i_reader",
+      "module": "npu_rr_select_N6_IW3_7776",
+      "cells": 37,
+      "area_um2": 485.139
+    },
+    {
+      "indent": 8,
+      "instance": "g_arbiters[2].i_reader",
+      "module": "npu_rr_select_N6_IW3_7777",
+      "cells": 37,
+      "area_um2": 485.139
+    },
+    {
+      "indent": 8,
+      "instance": "g_arbiters[1].i_reader",
+      "module": "npu_rr_select_N6_IW3_7778",
+      "cells": 37,
+      "area_um2": 485.139
+    },
+    {
+      "indent": 8,
+      "instance": "g_arbiters[0].i_reader",
+      "module": "npu_rr_select_N6_IW3",
+      "cells": 37,
+      "area_um2": 485.139
+    },
+    {
+      "indent": 6,
+      "instance": "g_memory_select[1].i_select",
+      "module": "npu_rr_select_N6_IW3_7774",
+      "cells": 35,
+      "area_um2": 465.382
+    },
+    {
+      "indent": 6,
+      "instance": "i_auxiliary_select",
+      "module": "npu_rr_select_N6_IW3_7773",
+      "cells": 34,
+      "area_um2": 458.797
+    },
+    {
+      "indent": 6,
+      "instance": "g_memory_select[0].i_select",
+      "module": "npu_rr_select_N6_IW3_7775",
+      "cells": 34,
+      "area_um2": 452.211
+    },
+    {
+      "indent": 4,
+      "instance": "i_mmio",
+      "module": "npu_mmio",
+      "cells": 7774,
+      "area_um2": 249370.33
+    },
+    {
+      "indent": 4,
+      "instance": "i_stream_i_engine",
+      "module": "npu_stream_engine_RF_SINK1",
+      "cells": 7766,
+      "area_um2": 157139.002
+    },
+    {
+      "indent": 4,
+      "instance": "i_vector",
+      "module": "npu_vector",
+      "cells": 6774,
+      "area_um2": 117206.118
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_id_stage_i",
+      "module": "cv32e40p_id_stage_COREV_PULP0_COREV_CLUSTER0_N_HWL",
+      "cells": 5131,
+      "area_um2": 127547.706
+    },
+    {
+      "indent": 6,
+      "instance": "register_file_i",
+      "module": "cv32e40p_register_file_ADDR_WIDTH6_DATA_WIDTH32_FP",
+      "cells": 3578,
+      "area_um2": 93972.122
+    },
+    {
+      "indent": 6,
+      "instance": "controller_i",
+      "module": "cv32e40p_controller_COREV_CLUSTER0_COREV_PULP0_FPU",
+      "cells": 306,
+      "area_um2": 3964.531
+    },
+    {
+      "indent": 6,
+      "instance": "decoder_i",
+      "module": "cv32e40p_decoder_COREV_PULP0_COREV_CLUSTER0_A_EXTE",
+      "cells": 302,
+      "area_um2": 3505.734
+    },
+    {
+      "indent": 6,
+      "instance": "int_controller_i",
+      "module": "cv32e40p_int_controller_PULP_SECURE0",
+      "cells": 12,
+      "area_um2": 256.838
+    },
+    {
+      "indent": 4,
+      "instance": "i_debug",
+      "module": "npu_jtag_debug",
+      "cells": 4476,
+      "area_um2": 104820.8
+    },
+    {
+      "indent": 6,
+      "instance": "i_dm_i_dm_csrs",
+      "module": "dm_csrs_NrHarts1_BusWidth32_SelectableHarts1",
+      "cells": 2744,
+      "area_um2": 63401.766
+    },
+    {
+      "indent": 6,
+      "instance": "i_dtm",
+      "module": "dmi_jtag",
+      "cells": 629,
+      "area_um2": 22669.83
+    },
+    {
+      "indent": 8,
+      "instance": "i_dmi_cdc",
+      "module": "dmi_cdc",
+      "cells": 178,
+      "area_um2": 9931.085
+    },
+    {
+      "indent": 10,
+      "instance": "i_cdc_req",
+      "module": "cdc_2phase_Ttype_dm_dmi_req_t_220_25",
+      "cells": 99,
+      "area_um2": 5531.904
+    },
+    {
+      "indent": 12,
+      "instance": "i_dst",
+      "module": "cdc_2phase_dst_Ttype_dm_dmi_req_t_220_25",
+      "cells": 51,
+      "area_um2": 2805.466
+    },
+    {
+      "indent": 12,
+      "instance": "i_src",
+      "module": "cdc_2phase_src_Ttype_dm_dmi_req_t_220_25",
+      "cells": 48,
+      "area_um2": 2726.438
+    },
+    {
+      "indent": 10,
+      "instance": "i_cdc_resp",
+      "module": "cdc_2phase_Ttype_dm_dmi_resp_t_226_26",
+      "cells": 79,
+      "area_um2": 4399.181
+    },
+    {
+      "indent": 12,
+      "instance": "i_dst",
+      "module": "cdc_2phase_dst_Ttype_dm_dmi_resp_t_226_26",
+      "cells": 41,
+      "area_um2": 2236.909
+    },
+    {
+      "indent": 12,
+      "instance": "i_src",
+      "module": "cdc_2phase_src_Ttype_dm_dmi_resp_t_226_26",
+      "cells": 38,
+      "area_um2": 2162.272
+    },
+    {
+      "indent": 8,
+      "instance": "i_dmi_jtag_tap",
+      "module": "dmi_jtag_tap_IrLength5_IdcodeValue1",
+      "cells": 236,
+      "area_um2": 6135.584
+    },
+    {
+      "indent": 6,
+      "instance": "i_dm_i_dm_mem",
+      "module": "dm_mem_NrHarts1_BusWidth32_SelectableHarts1_DmBase",
+      "cells": 913,
+      "area_um2": 14639.789
+    },
+    {
+      "indent": 8,
+      "instance": "gen_rom_snd_scratch.i_debug_rom",
+      "module": "debug_rom",
+      "cells": 148,
+      "area_um2": 2280.813
+    },
+    {
+      "indent": 6,
+      "instance": "i_reset",
+      "module": "rstgen",
+      "cells": 4,
+      "area_um2": 195.373
+    },
+    {
+      "indent": 8,
+      "instance": "i_rstgen_bypass",
+      "module": "rstgen_bypass",
+      "cells": 4,
+      "area_um2": 195.373
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_ex_stage_i",
+      "module": "cv32e40p_ex_stage_COREV_PULP0_FPU0_APU_NARGS_CPU3_",
+      "cells": 3949,
+      "area_um2": 79090.861
+    },
+    {
+      "indent": 6,
+      "instance": "alu_i",
+      "module": "cv32e40p_alu",
+      "cells": 2102,
+      "area_um2": 38312.826
+    },
+    {
+      "indent": 8,
+      "instance": "alu_div_i",
+      "module": "cv32e40p_alu_div",
+      "cells": 586,
+      "area_um2": 14494.906
+    },
+    {
+      "indent": 8,
+      "instance": "ff_one_i",
+      "module": "cv32e40p_ff_one",
+      "cells": 72,
+      "area_um2": 796.858
+    },
+    {
+      "indent": 4,
+      "instance": "i_vector_stream",
+      "module": "npu_vector_stream_GATHER1",
+      "cells": 3425,
+      "area_um2": 75644.397
+    },
+    {
+      "indent": 6,
+      "instance": "i_operand_read",
+      "module": "npu_multi_read_GATHER1_1",
+      "cells": 324,
+      "area_um2": 11066.003
+    },
+    {
+      "indent": 4,
+      "instance": "i_matrix_stream",
+      "module": "npu_matrix_stream_GATHER1",
+      "cells": 1992,
+      "area_um2": 47765.357
+    },
+    {
+      "indent": 6,
+      "instance": "i_operand_read",
+      "module": "npu_multi_read_GATHER1",
+      "cells": 328,
+      "area_um2": 10899.168
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_cs_registers_i",
+      "module": "cv32e40p_cs_registers_N_HWLP2_APU0_A_EXTENSION0_FP",
+      "cells": 1820,
+      "area_um2": 48621.485
+    },
+    {
+      "indent": 4,
+      "instance": "i_stream_i_control",
+      "module": "npu_stream_control_QUEUE_DEPTH8",
+      "cells": 1477,
+      "area_um2": 46997.037
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_if_stage_i",
+      "module": "cv32e40p_if_stage_COREV_PULP0_PULP_OBI0_PULP_SECUR",
+      "cells": 1064,
+      "area_um2": 28552.966
+    },
+    {
+      "indent": 6,
+      "instance": "prefetch_buffer_i",
+      "module": "cv32e40p_prefetch_buffer_PULP_OBI0_COREV_PULP0",
+      "cells": 355,
+      "area_um2": 12547.763
+    },
+    {
+      "indent": 8,
+      "instance": "fifo_i",
+      "module": "cv32e40p_fifo_FALL_THROUGH0_DATA_WIDTH32_DEPTH2",
+      "cells": 118,
+      "area_um2": 5022.618
+    },
+    {
+      "indent": 6,
+      "instance": "aligner_i",
+      "module": "cv32e40p_aligner",
+      "cells": 201,
+      "area_um2": 5885.331
+    },
+    {
+      "indent": 6,
+      "instance": "compressed_decoder_i",
+      "module": "cv32e40p_compressed_decoder_FPU0_ZFINX0",
+      "cells": 255,
+      "area_um2": 3068.89
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_load_store_unit_i",
+      "module": "cv32e40p_load_store_unit_PULP_OBI0",
+      "cells": 529,
+      "area_um2": 10010.112
+    },
+    {
+      "indent": 4,
+      "instance": "i_boot",
+      "module": "npu_debug_boot",
+      "cells": 41,
+      "area_um2": 465.382
+    },
+    {
+      "indent": 4,
+      "instance": "i_cpu_core_i_sleep_unit_i",
+      "module": "cv32e40p_sleep_unit_COREV_CLUSTER0",
+      "cells": 7,
+      "area_um2": 177.811
+    },
+    {
+      "indent": 6,
+      "instance": "core_clock_gate_i",
+      "module": "cv32e40p_clock_gate",
+      "cells": 2,
+      "area_um2": 41.709
+    }
+  ],
+  "xbar_breakdown": {
+    "shared_rf_mm2": 0.204838502,
+    "stream_fifo_mm2": 0.169230163,
+    "sram_arbitration_and_response_mm2": 0.04392595300000001
+  },
+  "sram_cache_words_per_bank": 0,
+  "compute_boundaries_preserved": false
+}

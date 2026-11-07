@@ -250,7 +250,7 @@ text(
 text(
     55,
     1885,
-    "依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、单ALU INT32 / SIMD8 + 共享可选QT01版本；本版综合与布局布线尚未重跑。",
+    "依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、单ALU INT32 / SIMD8 + 共享可选QT01版本；综合2.586795mm²（含SRAM、不含PAD），布局布线尚未重跑。",
     22,
     "#94a3b8",
 )

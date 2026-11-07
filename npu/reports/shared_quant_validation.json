@@ -236,10 +236,12 @@
     }
   },
   "ppa": {
-    "synthesis_measured": false,
-    "sta_measured": false,
+    "synthesis_measured": true,
+    "sta_measured": true,
     "pnr_measured": false,
-    "note": "50MHz is a latency conversion target, not measured timing closure."
+    "note": "Genus TT pre-layout setup measured at 50MHz; CTS/routing/signoff not performed.",
+    "sta_scope": "Genus pre-layout setup only, no physical signoff",
+    "area_report": "npu/reports/shared_quant_area_validation.json"
   },
   "sha256": {
     "npu/mnist/firmware.py": "dfb9feafc4af23a5cbebaca105988a94ebb569559f5a4d2fecbee5d6f44c21f5",

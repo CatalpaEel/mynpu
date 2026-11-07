@@ -121,5 +121,5 @@
 <polyline points="1810,1565 1810,1630" fill="none" stroke="#fbbf24" stroke-width="4"/>
 <polygon points="1810,1630 1817.0,1616.0 1803.0,1616.0" fill="#fbbf24"/>
 <text x="55" y="1855" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#2dd4bf">并行边界：CNN / Matrix / Vector可并行，任意有向连接经xbar FIFO转发；CNN读请求、RF gather、计算与写回重叠，各主端口受bank冲突和FIFO反压约束。</text>
-<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、单ALU INT32 / SIMD8 + 共享可选QT01版本；本版综合与布局布线尚未重跑。</text>
+<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、单ALU INT32 / SIMD8 + 共享可选QT01版本；综合2.586795mm²（含SRAM、不含PAD），布局布线尚未重跑。</text>
 </svg>

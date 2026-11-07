@@ -38,6 +38,8 @@ for row in children:
         group = "XBAR"
     elif name.startswith("i_mmio"):
         group = "MMIO / task queues"
+    elif name.startswith("i_quant"):
+        group = "Shared quantizer"
     elif name.startswith(("i_vector",)):
         group = "Vector"
     elif name.startswith(("i_matrix", "i_matmul")):
