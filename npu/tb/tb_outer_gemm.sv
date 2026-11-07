@@ -286,6 +286,60 @@ module tb_outer_gemm;
     end
     wait_done(1);
     wr('h40000740, 0);
+    // Largest valid row strides and active words at SRAM/RF aperture ends.
+    for (int i = 0; i < 4; i++) wr('h80000000 + 4096 * i, 32'(i + 1));
+    wr('h80003100, 7);
+    wr('h40000108, 0);
+    wr('h4000010c, 'h80003100);
+    // Correct the normalized SRAM base explicitly (A=0 remains invalid in MMIO).
+    wr('h40000108, 'h80000000);
+    wr('h40000110, 'h80003800);
+    wr('h40000114, 4);
+    wr('h40000118, 1);
+    wr('h4000011c, 1);
+    wr('h40000130, 8);
+    wr('h40000134, 4096);
+    wr('h40000138, 0);
+    start(1);
+    wait_done(1);
+    for (int i = 0; i < 4; i++) begin
+      rd('h80003800 + 4 * i, got);
+      if (got !== 32'(7 * (i + 1))) $fatal(1, "large LDA");
+      checks++;
+    end
+    wr('h40000108, 'h80003100);
+    wr('h4000010c, 'h80000000);
+    wr('h40000114, 1);
+    wr('h40000118, 4);
+    wr('h40000130, 10);
+    wr('h40000134, 0);
+    wr('h40000138, 4096);
+    start(1);
+    wait_done(1);
+    for (int i = 0; i < 4; i++) begin
+      rd('h80003800 + 4 * i, got);
+      if (got !== 32'(7 * (i + 1))) $fatal(1, "large LDB");
+      checks++;
+    end
+    wr('h40000138, 0);
+    wr('h40000118, 1);
+    wr('h40000130, 16);
+    wr('h80003ffc, 'h00008000);
+    wr('h80003000, 2);
+    wr('h40000108, 'h80003ffc);
+    wr('h4000010c, 'h80003000);
+    start(1);
+    wait_done(1);
+    rd('h80003800, got);
+    if (got !== 32'(-65536)) $fatal(1, "SRAM end");
+    checks++;
+    wr('h800040fc, 'h00008000);
+    wr('h40000108, 'h800040fc);
+    start(1);
+    wait_done(1);
+    rd('h80003800, got);
+    if (got !== 32'(-65536)) $fatal(1, "RF end");
+    checks++;
     if (full_steps < 1000) $fatal(1, "full 4x4 not exercised");
     $display(
         "OUTER GEMM PASS checks=%0d macs=%0d full_steps=%0d flags/strides/tails/tiles/SRAM/RF/K0",

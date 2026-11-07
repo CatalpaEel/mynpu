@@ -73,8 +73,8 @@ module npu_stream_engine #(
   load_t load_state, pending_type;
   stream_config_t cfg;
   stream_task_t cmd;
-  logic [4:0] cursor;
-  logic [3:0] position;
+  logic [3:0] cursor;
+  logic [2:0] position;
   logic [14:0] row_start[3], row_cursor[3], weight_base, weight_start, weight_ptr;
   logic [12:0] low_word[3];
   logic [31:0] window_data[3][3];
@@ -120,9 +120,6 @@ module npu_stream_engine #(
   function automatic logic horizontal_valid(input int k);
     return !(position==0 && cmd.left_pad && k==0) &&
       !(position+1==cmd.count && cmd.right_pad && k==2);
-  endfunction
-  function automatic logic [14:0] input_address(input int t);
-    return row_cursor[t/3] + 15'(t % 3);
   endfunction
   always_comb begin
     seed_ready = seed_valid[position[0]];
@@ -204,17 +201,30 @@ module npu_stream_engine #(
       end
     end
     mac_mask_o = 0;
-    tap_count = 0;
-    for (int t = 0; t < 9; t++) begin
-      logic [1:0] slot;
-      logic [31:0] word;
-      a = input_address(t);
-      slot = a[14:2] == low_word[t/3] ? window_head[t/3] : ring_next(window_head[t/3]);
-      word = window_word(t / 3, slot) >> {a[1:0], 3'b0};
-      mac_mask_o[t] = cmd.row_mask[t/3] && horizontal_valid(t % 3);
-      mac_a_o[t] = mac_mask_o[t] ? $signed({1'b0, word[7:0]}) : 9'sd0;
-      mac_w_o[t] = weights[bank][t];
-      if (mac_mask_o[t]) tap_count++;
+    begin
+      logic [2:0] horizontal;
+      logic [1:0] live_rows, live_cols;
+      for (int c = 0; c < 3; c++) horizontal[c] = horizontal_valid(c);
+      live_rows = {1'b0, cmd.row_mask[0]} + {1'b0, cmd.row_mask[1]} + {1'b0, cmd.row_mask[2]};
+      live_cols = {1'b0, horizontal[0]} + {1'b0, horizontal[1]} + {1'b0, horizontal[2]};
+      tap_count = 4'(live_rows) * 4'(live_cols);
+      for (int r = 0; r < 3; r++) begin
+        logic [31:0] head_word, high_word;
+        logic [47:0] pair_words;
+        logic [23:0] pixels;
+        head_word = window_word(r, window_head[r]);
+        high_word = window_word(r, ring_next(window_head[r]));
+        pair_words = {high_word[15:0], head_word};
+        pixels = 24'(pair_words >> {row_cursor[r][1:0], 3'b0});
+        // At a left border, low_word may describe the first real pixel,
+        // while row_cursor points to the masked byte in the preceding word.
+        if (row_cursor[r][14:2] != low_word[r]) pixels = {head_word[15:0], 8'b0};
+        for (int c = 0; c < 3; c++) begin
+          mac_mask_o[3*r+c] = cmd.row_mask[r] && horizontal[c];
+          mac_a_o[3*r+c] = mac_mask_o[3*r+c] ? $signed({1'b0, pixels[8*c+:8]}) : 9'sd0;
+          mac_w_o[3*r+c] = weights[bank][3*r+c];
+        end
+      end
     end
   end
   assign mac_valid_o = state == RUN && ready;

@@ -67,11 +67,20 @@ module npu_matrix_stream #(
     D_WAIT
   } state_t;
   state_t state;
-  logic [31:0] a_base, b_base, d_base;
-  logic [15:0] lda, ldb;
+  // Parent MMIO validates complete input/raw-D spans in the 0x80000000
+  // aperture before dispatch. Fifteen-bit byte offsets therefore preserve all
+  // active addresses; FIFO cursors retain their independent low-byte wrap.
+  logic [14:0] a_tile, b_tile, b_origin, d_base;
+  logic [14:0] a_row_step, a_k_step, b_col_step, b_k_step;
+  logic [7:0][14:0] operand_ptr, initial_ptr;
+  logic a_stream, b_stream, d_stream;
+  logic [7:0] row_index, tile_index, linear_index;
+  logic [7:0] row_index_step;
+  logic [14:0] lda_bytes, ldb_bytes, element_bytes;
+  logic [15:0] lda_value, ldb_value;
   logic [4:0] m, n, k, flags, tile_row, tile_col, inner;
   logic [1:0] out_r, out_c;
-  logic [2:0] rows, cols, element_shift;
+  logic [2:0] rows, cols;
   logic scalar_stream;
   logic [7:0] word_valid, needed;
   logic [7:0][31:0] operand_addr, word_data;
@@ -80,24 +89,33 @@ module npu_matrix_stream #(
   logic [2:0][31:0] batch_addresses, batch_data;
   logic [2:0][7:0] targets, reply_targets;
   logic batch_ready, batch_valid, batch_req, all_available, response_error;
-  logic [31:0] batch_addr, d_address, output_address, linear_index;
+  logic [31:0] batch_addr, d_address, output_address;
+  function automatic logic [14:0] advance_input(input logic [14:0] ptr, step, input logic stream);
+    return stream ? {ptr[14:8], 8'(ptr[7:0] + step[7:0])} : ptr + step;
+  endfunction
+  assign lda_value = lda_i != 0 ? lda_i : flags_i[0] ? 16'(m_i) : 16'(k_i);
+  assign ldb_value = ldb_i != 0 ? ldb_i : flags_i[1] ? 16'(k_i) : 16'(n_i);
+  assign element_bytes = flags_i[3] ? (flags_i[4] ? 15'd2 : 15'd1) : 15'd4;
+  assign lda_bytes = 15'(lda_value) << (flags_i[3] ? (flags_i[4] ? 1 : 0) : 2);
+  assign ldb_bytes = 15'(ldb_value) << (flags_i[3] ? (flags_i[4] ? 1 : 0) : 2);
+  assign row_index_step = scalar_stream ? 8'(n) : 8'(n) << 2;
+  assign initial_ptr[0] = a_tile;
+  assign initial_ptr[4] = b_tile;
+  for (genvar lane = 1; lane < 4; lane++) begin : g_initial_ptr
+    assign initial_ptr[lane] = advance_input(initial_ptr[lane-1], a_row_step, a_stream);
+    assign initial_ptr[lane+4] = advance_input(initial_ptr[lane+3], b_col_step, b_stream);
+  end
   // Stream endpoints preserve the original scalar traversal/pop ordering.
-  assign scalar_stream = is_stream_address(
-      a_base
-  ) || is_stream_address(
-      b_base
-  ) || is_stream_address(
-      d_base
-  ) || (quant_enable_i && is_stream_address(
+  assign scalar_stream = a_stream || b_stream || d_stream || (quant_enable_i && is_stream_address(
       quant_dst_i
   ));
-  assign rows = scalar_stream ? 1 : m - tile_row >= 4 ? 4 : 3'(m - tile_row);
-  assign cols = scalar_stream ? 1 : n - tile_col >= 4 ? 4 : 3'(n - tile_col);
-  assign element_shift = flags[3] ? (flags[4] ? 1 : 0) : 2;
-  assign linear_index = (32'(tile_row) + 32'(out_r)) * 32'(n) + 32'(tile_col) + 32'(out_c);
-  assign d_address = data_advance(d_base, linear_index << 2);
+  assign rows = scalar_stream ? 3'd1 : m - tile_row >= 5'd4 ? 3'd4 : 3'(m - tile_row);
+  assign cols = scalar_stream ? 3'd1 : n - tile_col >= 5'd4 ? 3'd4 : 3'(n - tile_col);
+  assign d_address = {17'h10000, advance_input(d_base, {5'b0, linear_index, 2'b0}, d_stream)};
+  // Quant destinations retain full address carry/fault semantics. Only the
+  // already-validated operand and raw-D apertures use bounded offsets.
   assign output_address = quant_enable_i ? data_advance(
-      quant_dst_i, linear_index << (quant_pack_i ? 0 : 2)
+      quant_dst_i, {24'b0, linear_index} << (quant_pack_i ? 0 : 2)
   ) : d_address;
   assign all_available = needed == 0;
   function automatic logic signed [15:0] unpack_value(input logic [31:0] word,
@@ -109,7 +127,6 @@ module npu_matrix_stream #(
   always_comb begin
     logic [7:0] covered;
     logic found;
-    logic [31:0] index;
     needed = 0;
     operand_addr = 0;
     compute_a_o = 0;
@@ -117,10 +134,8 @@ module npu_matrix_stream #(
     compute_row_mask_o = 0;
     compute_col_mask_o = 0;
     for (int lane = 0; lane < 4; lane++) begin
-      index=flags[0] ? 32'(inner)*32'(lda)+32'(tile_row)+32'(lane) : (32'(tile_row)+32'(lane))*32'(lda)+32'(inner);
-      operand_addr[lane] = data_advance(a_base, index << element_shift);
-      index=flags[1] ? (32'(tile_col)+32'(lane))*32'(ldb)+32'(inner) : 32'(inner)*32'(ldb)+32'(tile_col)+32'(lane);
-      operand_addr[4+lane] = data_advance(b_base, index << element_shift);
+      operand_addr[lane] = {17'h10000, operand_ptr[lane]};
+      operand_addr[4+lane] = {17'h10000, operand_ptr[4+lane]};
       compute_row_mask_o[lane] = lane < int'(rows);
       compute_col_mask_o[lane] = lane < int'(cols);
       needed[lane]=lane<int'(rows) && !(word_valid[lane] && word_tag[lane]==operand_addr[lane][14:2]);
@@ -140,9 +155,7 @@ module npu_matrix_stream #(
         batch_mask[p] = 1;
         batch_addresses[p] = {operand_addr[lane][31:2], 2'b0};
         for (int other = 0; other < 8; other++)
-        if (needed[other] && (other == lane || (!is_stream_address(
-                operand_addr[lane]
-            ) && operand_addr[other][31:2] == operand_addr[lane][31:2]))) begin
+        if (needed[other] && (other == lane || (!(lane<4 ? a_stream:b_stream) && operand_addr[other][31:2] == operand_addr[lane][31:2]))) begin
           targets[p][other] = 1;
           covered[other] = 1;
         end
@@ -195,11 +208,21 @@ module npu_matrix_stream #(
       state <= IDLE;
       done_o <= 0;
       fault_o <= 0;
-      a_base <= 0;
-      b_base <= 0;
+      a_tile <= 0;
+      b_tile <= 0;
+      b_origin <= 0;
       d_base <= 0;
-      lda <= 0;
-      ldb <= 0;
+      a_row_step <= 0;
+      a_k_step <= 0;
+      b_col_step <= 0;
+      b_k_step <= 0;
+      a_stream <= 0;
+      b_stream <= 0;
+      d_stream <= 0;
+      operand_ptr <= 0;
+      row_index <= 0;
+      tile_index <= 0;
+      linear_index <= 0;
       m <= 0;
       n <= 0;
       k <= 0;
@@ -223,21 +246,31 @@ module npu_matrix_stream #(
         case (state)
           IDLE:
           if (start_i) begin
-            a_base <= a_i;
-            b_base <= b_i;
-            d_base <= d_i;
+            a_tile <= a_i[14:0];
+            b_tile <= b_i[14:0];
+            b_origin <= b_i[14:0];
+            d_base <= d_i[14:0];
+            a_stream <= is_stream_address(a_i);
+            b_stream <= is_stream_address(b_i);
+            d_stream <= is_stream_address(d_i);
+            a_row_step <= flags_i[0] ? element_bytes : lda_bytes;
+            a_k_step <= flags_i[0] ? lda_bytes : element_bytes;
+            b_col_step <= flags_i[1] ? ldb_bytes : element_bytes;
+            b_k_step <= flags_i[1] ? element_bytes : ldb_bytes;
+            row_index <= 0;
+            tile_index <= 0;
             m <= m_i;
             n <= n_i;
             k <= k_i;
             flags <= flags_i;
-            lda <= lda_i != 0 ? lda_i : flags_i[0] ? 16'(m_i) : 16'(k_i);
-            ldb <= ldb_i != 0 ? ldb_i : flags_i[1] ? 16'(k_i) : 16'(n_i);
             tile_row <= 0;
             tile_col <= 0;
             state <= CLEAR;
           end
           CLEAR: begin
             word_valid <= 0;
+            operand_ptr <= initial_ptr;
+            linear_index <= tile_index;
             inner <= 0;
             out_r <= 0;
             out_c <= 0;
@@ -247,7 +280,13 @@ module npu_matrix_stream #(
           if (all_available) begin
             if (compute_ready_i) begin
               if (inner + 1 == k) state <= flags[2] ? C_REQ : EMIT;
-              else inner <= inner + 1;
+              else begin
+                inner <= inner + 1;
+                for (int lane = 0; lane < 4; lane++) begin
+                  operand_ptr[lane] <= advance_input(operand_ptr[lane], a_k_step, a_stream);
+                  operand_ptr[4+lane] <= advance_input(operand_ptr[4+lane], b_k_step, b_stream);
+                end
+              end
             end
           end else if (batch_ready) begin
             reply_targets <= targets;
@@ -270,18 +309,30 @@ module npu_matrix_stream #(
           D_REQ: if (gnt_i) state <= D_WAIT;
           D_WAIT:
           if (rvalid_i) begin
-            if (32'(out_c) + 1 < 32'(cols)) begin
+            if ({1'b0, out_c} + 3'd1 < cols) begin
               out_c <= out_c + 1;
+              linear_index <= linear_index + 1;
               state <= flags[2] ? C_REQ : EMIT;
-            end else if (32'(out_r) + 1 < 32'(rows)) begin
+            end else if ({1'b0, out_r} + 3'd1 < rows) begin
               out_r <= out_r + 1;
+              linear_index <= linear_index + 8'(n) - 8'(cols) + 1;
               out_c <= 0;
               state <= flags[2] ? C_REQ : EMIT;
             end else if (tile_col + 5'(cols) < n) begin
               tile_col <= tile_col + 5'(cols);
+              b_tile <= advance_input(
+                  b_tile, scalar_stream ? b_col_step : b_col_step << 2, b_stream
+              );
+              tile_index <= tile_index + 8'(cols);
               state <= CLEAR;
             end else if (tile_row + 5'(rows) < m) begin
               tile_row <= tile_row + 5'(rows);
+              a_tile <= advance_input(
+                  a_tile, scalar_stream ? a_row_step : a_row_step << 2, a_stream
+              );
+              b_tile <= b_origin;
+              row_index <= row_index + row_index_step;
+              tile_index <= row_index + row_index_step;
               tile_col <= 0;
               state <= CLEAR;
             end else begin

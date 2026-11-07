@@ -64,7 +64,7 @@ module npu_vector_stream #(
     D_WAIT
   } state_t;
   state_t state;
-  logic [31:0] a_ptr, b_ptr, d_ptr, scalar, write_data, load_addr, pack_data;
+  logic [31:0] a_ptr, d_ptr, scalar, write_data, load_addr;
   logic [3:0] write_be, pack_be;
   logic [10:0] remaining;
   logic [7:0] mode;
@@ -84,7 +84,7 @@ module npu_vector_stream #(
 
   logic simd_mode;
   assign simd_mode = mode[6];
-  assign compute_simd_o = simd_mode;
+  assign compute_simd_o = simd_mode && operation != 27;
   npu_multi_read #(
     .GATHER(GATHER)
   ) i_operand_read (
@@ -112,8 +112,17 @@ module npu_vector_stream #(
     .rdata_i
   );
   assign batch_mask = !program_mode && binary_op && !mode[7] ? 3'b011 : 3'b001;
-  assign batch_addresses = {32'b0, b_ptr, a_ptr};
+  assign batch_addresses = {32'b0, regs[1], a_ptr};
 
+  function automatic logic [3:0] tail_mask(input logic [10:0] left, input logic simd);
+    if (!simd || left >= 4) return 4'hf;
+    case (left[1:0])
+      0: return 4'h0;
+      1: return 4'h1;
+      2: return 4'h3;
+      default: return 4'h7;
+    endcase
+  endfunction
   // Operand representation belongs to the issuer, arithmetic to npu_vector.
   function automatic logic signed [31:0] sx32(input logic [31:0] value);
     return value;
@@ -125,17 +134,15 @@ module npu_vector_stream #(
   assign dst = program_mode ? instruction[6:5] : 0;
   assign src_a = instruction[8:7];
   assign src_b = instruction[10:9];
-  assign operand_a = program_mode ? regs[src_a] : (state == A_WAIT ? sx32(batch_data[0]) : regs[0]);
-  assign operand_b=program_mode ?
+  assign operand_a = program_mode ? regs[src_a] : batch_data[0];
+  assign operand_b=program_mode && operation==27 ? {{12{instruction[31]}},instruction[31:12]}:program_mode ?
     (instruction[11] ? (simd_mode ? {4{instruction[19:12]}} : {{12{instruction[31]}},instruction[31:12]}) : regs[src_b]) :
     (mode[7] ? sx32(
       (simd_mode ? {4{scalar[7:0]}} : scalar)
-  ) : state == A_WAIT ? sx32(
-      batch_data[1]
-  ) : regs[1]);
+  ) : batch_data[1]);
   assign operand_c = operation == 29 ? (simd_mode ? {4{scalar[7:0]}} : scalar) : {26'b0,instruction[19:14]};
   assign compute_carry_o = carry;
-  assign compute_op_o = operation;
+  assign compute_op_o = operation == 27 ? 5'd1 : operation;
   assign compute_a_o = operand_a;
   assign compute_b_o = operand_b;
   assign compute_c_o = operand_c;
@@ -150,9 +157,9 @@ module npu_vector_stream #(
   assign wdata_o = write_data;
   assign be_o = write_be;
   assign response_error = (state == A_WAIT && !program_mode && batch_valid && |batch_error) || (rvalid_i && error_i && (state==LOAD_WAIT || state==D_WAIT || (program_mode && state==A_WAIT)));
-  assign output_value = state == EXEC && dst == 0 ? folded[31:0] : regs[0][31:0];
+  assign output_value = regs[0];
   always_comb begin
-    assembled = pack_data;
+    assembled = write_data;
     assembled[d_ptr[1:0]*8+:8] = output_value[7:0];
     assembled_be = pack_be | (4'b1 << d_ptr[1:0]);
   end
@@ -163,7 +170,6 @@ module npu_vector_stream #(
       done_o <= 0;
       fault_o <= 0;
       a_ptr <= 0;
-      b_ptr <= 0;
       d_ptr <= 0;
       scalar <= 0;
       remaining <= 0;
@@ -175,7 +181,6 @@ module npu_vector_stream #(
       load_addr <= 0;
       write_data <= 0;
       write_be <= 0;
-      pack_data <= 0;
       pack_be <= 0;
 
 
@@ -196,7 +201,6 @@ module npu_vector_stream #(
           if (start_i) begin
             carry <= 0;
             a_ptr <= a_i;
-            b_ptr <= b_i;
             d_ptr <= d_i;
             scalar <= scalar_i;
             remaining <= len_i;
@@ -208,8 +212,8 @@ module npu_vector_stream #(
             regs[1] <= sx32(b_i);
             regs[2] <= 0;
             regs[3] <= op_i[6] ? {4{scalar_i[7:0]}} : scalar_i;
-            pack_data <= 0;
             pack_be <= 0;
+            write_data <= 0;
             write_be <= 4'hf;
 
 
@@ -218,19 +222,19 @@ module npu_vector_stream #(
           A_REQ: if (program_mode ? gnt_i : batch_ready) state <= A_WAIT;
           A_WAIT:
           if (program_mode ? rvalid_i : batch_valid) begin
-            regs[0] <= sx32(program_mode ? rdata_i : batch_data[0]);
+            if (program_mode) regs[0] <= rdata_i;
             pc <= loop_pc;
             if (program_mode) state <= EXEC;
             else begin
               write_data <= result[31:0];
-              write_be <= simd_mode && remaining < 4 ? 4'((32'b1 << remaining) - 1) : 4'hf;
+              write_be <= tail_mask(remaining, simd_mode);
               state <= D_REQ;
             end
           end
           EXEC:
           if (program_mode && operation == 27 && pc < slots) begin
             // Generic LD32 rd,[ra+signed immediate20], for constants or tables.
-            load_addr <= operand_a[31:0] + {{12{instruction[31]}}, instruction[31:12]};
+            load_addr <= compute_data_i;
             load_dst <= dst;
             state <= LOAD_REQ;
           end else if((operation<=24 || operation==26 || operation==29) && (!program_mode || pc<slots) && (!(operation==21 || operation==22) || instruction[19:14]<=32) && (!simd_mode || operation<=15 || operation>=18 && operation<=20 || operation==24 || operation==26 || operation==29)) begin
@@ -254,10 +258,9 @@ module npu_vector_stream #(
           end
           OUTPUT: begin
             if (packed_mode) begin
-              pack_data <= assembled;
+              write_data <= assembled;
               pack_be <= assembled_be;
               if (d_ptr[1:0] == 3 || remaining == 1) begin
-                write_data <= assembled;
                 write_be <= assembled_be;
                 state <= D_REQ;
               end else begin
@@ -268,14 +271,14 @@ module npu_vector_stream #(
               end
             end else begin
               write_data <= regs[0][31:0];
-              write_be <= simd_mode && remaining < 4 ? 4'((32'b1 << remaining) - 1) : 4'hf;
+              write_be <= tail_mask(remaining, simd_mode);
               state <= D_REQ;
             end
           end
           D_REQ: if (gnt_i) state <= D_WAIT;
           D_WAIT:
           if (rvalid_i) begin
-            pack_data <= 0;
+            write_data <= 0;
             pack_be <= 0;
             if (remaining <= (simd_mode ? 4 : 1)) begin
               state <= IDLE;
@@ -283,7 +286,7 @@ module npu_vector_stream #(
             end else begin
               remaining <= remaining - (simd_mode ? 4 : 1);
               a_ptr <= data_advance(a_ptr, 4);
-              b_ptr <= data_advance(b_ptr, 4);
+              if (!program_mode) regs[1] <= data_advance(regs[1], 4);
               d_ptr <= data_advance(d_ptr, packed_mode ? 1 : 4);
               state <= A_REQ;
             end
