@@ -38,6 +38,8 @@ module npu_mmio #(
   output logic [31:0] vec_scalar_o,
   output logic [31:0] vec_program_cfg_o,
   output logic [15:0][31:0] vec_program_o,
+  output logic [15:0] mat_lda_o,
+  mat_ldb_o,
   output logic [4:0] mat_flags_o,
   input logic mat_busy_i,
   mat_done_i,
@@ -57,7 +59,7 @@ module npu_mmio #(
       mat_cycles_q, vec_cycles_q, mat_completed, vec_completed, mat_submitted, vec_submitted;
   logic mat_done_q, mat_error_q, vec_done_q, vec_error_q, mat_ok, vec_ok;
   logic mat_occupied, vec_occupied, writable, known, mpush, vpush, mpop, vpop;
-  logic [31:0] a_words, b_words, d_words;
+  logic [31:0] a_words, b_words, d_words, lda, ldb, a_span, b_span;
   logic vec_direct_ok, vec_program_ok;
   logic [31:0] vec_words;
   assign vec_words = vo_q[6] ? (vl_q + 3) >> 2 : vl_q;
@@ -93,22 +95,25 @@ module npu_mmio #(
     return {1'b0,a} < ({1'b0,b} + ({1'b0,bw} << 2))
       && {1'b0,b} < ({1'b0,a} + ({1'b0,aw} << 2));
   endfunction
-  assign a_words = ((({27'b0,mm_q[4:0]} * {27'b0,mk_q[4:0]}) << (mf_q[3] ? (mf_q[4] ? 1 : 0) : 2))+3)>>2;
-  assign b_words = ((({27'b0,mk_q[4:0]} * {27'b0,mn_q[4:0]}) << (mf_q[3] ? (mf_q[4] ? 1 : 0) : 2))+3)>>2;
+  assign lda=mat_lda_o!=0 ? {19'b0,mat_lda_o[12:0]} : mf_q[0] ? {27'b0,mm_q[4:0]}:{27'b0,mk_q[4:0]};
+  assign ldb=mat_ldb_o!=0 ? {19'b0,mat_ldb_o[12:0]} : mf_q[1] ? {27'b0,mk_q[4:0]}:{27'b0,mn_q[4:0]};
+  assign a_span=32'(4'((mf_q[0] ? mk_q[4:0]:mm_q[4:0])-1))*lda+(mf_q[0] ? {27'b0,mm_q[4:0]}:{27'b0,mk_q[4:0]});
+  assign b_span=32'(4'((mf_q[1] ? mn_q[4:0]:mk_q[4:0])-1))*ldb+(mf_q[1] ? {27'b0,mk_q[4:0]}:{27'b0,mn_q[4:0]});
+  assign a_words = ((a_span << (mf_q[3] ? (mf_q[4] ? 1 : 0) : 2)) + 3) >> 2;
+  assign b_words = ((b_span << (mf_q[3] ? (mf_q[4] ? 1 : 0) : 2)) + 3) >> 2;
   assign d_words = {27'b0, mm_q[4:0]} * {27'b0, mn_q[4:0]};
-  assign mat_ok = mm_q >= 1 && mm_q <= 16 && mn_q >= 1 && mn_q <= 16
-    && mk_q >= 1 && mk_q <= 16 && mf_q <= 31
-    && range_ok(
+  assign mat_ok=mm_q>=1 && mm_q<=16 && mn_q>=1 && mn_q<=16 && mf_q<=31 &&
+    mk_q<=16 && (mk_q>=1 || mf_q[2]) && range_ok(
+      md_q, d_words
+  ) && (mk_q == 0 || (lda >= (mf_q[0] ? mm_q : mk_q) && ldb >= (mf_q[1] ? mk_q : mn_q) && range_ok(
       ma_q, a_words
   ) && range_ok(
       mb_q, b_words
-  ) && range_ok(
-      md_q, d_words
   ) && !overlaps(
       md_q, d_words, ma_q, a_words
   ) && !overlaps(
       md_q, d_words, mb_q, b_words
-  );
+  )));
   // Direct 32-bit operations; wide VPG1 operations are no longer accepted.
   // Former fused REQUANT encodings are deliberately rejected.
   assign vec_direct_ok = vl_q>=1 && vl_q<=1024 && (vo_q&32'hffffff20)==0
@@ -267,6 +272,12 @@ module npu_mmio #(
         writable = 0;
       end
       12'h130: rdata_o = mf_q;
+      12'h134: rdata_o = {16'b0, mat_lda_o};
+      12'h138: rdata_o = {16'b0, mat_ldb_o};
+      12'h06c: begin
+        rdata_o = 32'h00030404;
+        writable = 0;
+      end
       12'h12c: begin
         rdata_o = mat_submitted;
         writable = 0;
@@ -309,7 +320,7 @@ module npu_mmio #(
         end
       end
     endcase
-    error_o=(we_i && vec_occupied && (addr_i==12'h234 || (addr_i>=12'h240 && addr_i<=12'h27c))) || !known || (we_i&&!writable) || (we_i && addr_i==12'h00c &&
+    error_o=(we_i && (addr_i==12'h134 || addr_i==12'h138) && (mat_occupied || wdata_i>4096)) || (we_i && vec_occupied && (addr_i==12'h234 || (addr_i>=12'h240 && addr_i<=12'h27c))) || !known || (we_i&&!writable) || (we_i && addr_i==12'h00c &&
       (cpu_release_o || wdata_i[31:14]!=18'h20000 || wdata_i[1:0]!=0)) ||
       (we_i && addr_i==12'h100 && wdata_i[0] && mc==MATRIX_QUEUE_DEPTH && !mpop) ||
       (we_i && addr_i==12'h200 && wdata_i[0] && vc==VECTOR_QUEUE_DEPTH && !vpop);
@@ -328,6 +339,8 @@ module npu_mmio #(
       vl_q <= 0;
       vo_q <= 0;
       mf_q <= 0;
+      mat_lda_o <= 0;
+      mat_ldb_o <= 0;
       vs_q <= 0;
       vec_program_cfg_o <= 0;
       vec_program_o <= 0;
@@ -479,6 +492,8 @@ module npu_mmio #(
             12'h214: vo_q <= wdata_i;
             12'h218: vb_q <= wdata_i;
             12'h130: mf_q <= wdata_i;
+            12'h134: mat_lda_o <= wdata_i[15:0];
+            12'h138: mat_ldb_o <= wdata_i[15:0];
             12'h230: vs_q <= wdata_i;
             12'h234: vec_program_cfg_o <= wdata_i;
             default:

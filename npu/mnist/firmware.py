@@ -120,7 +120,7 @@ def prepare_fc_parameters():
         blob.extend(struct.pack("<iii", multiplier, bias, offset))
     meta["parameter_bytes"] = len(blob)
     meta["fc_execution"] = (
-        "signed packed GEMM K16 tiles; VPG2 INT32 offset plus software word-pair scaling"
+        "4x4 outer-product GEMM; FC 1x4/1x4/1x2 blocks, K16, B leading dimension144"
     )
     (OUT / "params.hex").write_text("".join(f"{v:02x}\n" for v in blob))
 
@@ -130,8 +130,10 @@ prepare_fc_parameters()
 layer_fields = make_layer_fields(0x80001400, 0x80001800, 0x80001400)
 
 
-TASK_BASE = 0xD50
-PROGRAM_BYTES = 0x1200
+DESC_BASE = 0xD00
+TASK_BASE = DESC_BASE + 6 * 56
+PROGRAM_BYTES = 0x1300
+assert PROGRAM_BYTES <= A
 stream_commands = []
 task_ranges = []
 for i, fields in enumerate(layer_fields):
@@ -326,9 +328,14 @@ def emit_quant_cnn(i, fields, stream=False):
     sw(8, 30, 0)
 
 
-def emit_quant_fc(i, fields, stream=False):
-    # Eight raw K16 tiles, then one final K16 tile with optional quantization.
+def emit_outer_fc_raw(i, fields, stream=False):
+    """Reuse each activation across 4 output channels; weights remain single-copy.
+
+    B is transposed with leading dimension144, so nine K16 tasks update
+    1x4/1x4/1x2 blocks. Shared strides are immutable until the queue drains.
+    """
     li(13, 0x40000100)
+    li(14, 0x40000200)
     li(31, 1)
     lw(15, 7, i * 56)
     lw(16, 7, i * 56 + 8)
@@ -340,52 +347,85 @@ def emit_quant_fc(i, fields, stream=False):
     addi(9, 15, 0)
     li(10, 0x80808080)
     li(11, 36)
-    label("qfc_recenter")
+    label("outer_fc_recenter")
     lw(8, 9, 0)
     alu(8, 8, 10, 4)
     sw(8, 9, 0)
     addi(9, 9, 4)
     addi(11, 11, -1)
-    branch(11, 0, "qfc_recenter")
+    branch(11, 0, "outer_fc_recenter")
     li(8, 1)
     sw(8, 13, 20)
-    sw(8, 13, 24)
     li(8, 16)
     sw(8, 13, 28)
-    li(1, 10)
-    label("qfc_channel")
-    li(30, 0x40000740)
     li(8, 0)
-    sw(8, 30, 0)
+    sw(8, 13, 52)
+    li(8, 144)
+    sw(8, 13, 56)
+    li(1, 3)
+    label("outer_fc_block")
+    li(3, 4)
+    li(11, 1)
+    branch(1, 11, "outer_fc_full")
+    li(3, 2)
+    label("outer_fc_full")
+    sw(3, 13, 24)
     sw(29, 13, 16)
     addi(9, 15, 0)
     addi(10, 18, 0)
-    li(2, 8)
-    li(4, 8)
-    label("qfc_tile")
+    li(2, 9)
+    li(4, 10)
+    label("outer_fc_tile")
     sw(9, 13, 8)
     sw(10, 13, 12)
     sw(4, 13, 48)
+    label("outer_fc_space")
+    lw(8, 13, 36)
+    andi(11, 8, 255)
+    shift(8, 8, 16, 5)
+    branch(11, 8, "outer_fc_submit")
+    jump("outer_fc_space")
+    label("outer_fc_submit")
     sw(31, 13, 0)
-    li(4, 12)
+    li(4, 14)
     addi(9, 9, 16)
     addi(10, 10, 16)
     addi(2, 2, -1)
-    branch(2, 0, "qfc_tile")
-    quant_wait(13, 44, 40, "qfc_raw_drain")
+    branch(2, 0, "outer_fc_tile")
+    addi(18, 18, 576)
+    addi(29, 29, 16)
+    addi(1, 1, -1)
+    branch(1, 0, "outer_fc_block")
+    quant_wait(13, 44, 40, "outer_fc_raw_drain")
+    li(8, 0)
+    sw(8, 13, 56)
+    li(29, fc_raw_base(fields))
+
+
+def emit_quant_fc(i, fields, stream=False):
+    # Raw batched outer products; each channel then uses K=0, ACCUMULATE
+    # to export its completed INT32 D through the optional quantizer.
+    emit_outer_fc_raw(i, fields, stream)
+    li(8, 1)
+    sw(8, 13, 20)
+    sw(8, 13, 24)
+    li(8, 0)
+    sw(8, 13, 28)
+    li(8, 4)
+    sw(8, 13, 48)
+    li(1, 10)
+    label("outer_fc_quant_channel")
     quant_settings(fields, True)
-    sw(9, 13, 8)
-    sw(10, 13, 12)
-    sw(4, 13, 48)
+    sw(29, 13, 16)
     sw(31, 13, 0)
-    quant_wait(13, 44, 40, "qfc_final_drain")
+    quant_wait(13, 44, 40, "outer_fc_quant_drain")
     li(8, 0)
     sw(8, 30, 0)
-    addi(18, 18, 144)
+    addi(29, 29, 4)
     addi(17, 17, 1)
     addi(16, 16, 12)
     addi(1, 1, -1)
-    branch(1, 0, "qfc_channel")
+    branch(1, 0, "outer_fc_quant_channel")
 
 
 def emit_cnn_rows(i, fields, previous, stream=False):
@@ -551,78 +591,16 @@ def fc_raw_base(fields):
 
 
 def emit_matrix_fc(i, fields, stream=False):
-    """FC is GEMM plus vector; CNN receives no FC command.
+    """FC uses 4/4/2 outer-GEMM blocks, then QT01 or general Vector math.
 
-    The existing general GEMM accepts K<=16, so software queues nine partial
-    dots per output with ACCUMULATE after the first tile. Transform the dead
-    final input in place; no duplicate weight matrix or new hardware is needed.
-    x19..x28 hold stream ownership state and are deliberately preserved.
+    Each output block receives nine K16 updates, with ACCUMULATE after the
+    first tile. Recenter the dead final input in place and keep weights
+    single-copy. x19..x28 preserve continuous-input ownership state.
     """
     if SHARED_QUANT:
         return emit_quant_fc(i, fields, stream)
     assert fields[4] == 144 and fields[7] == 10
-    li(13, 0x40000100)
-    li(14, 0x40000200)
-    lw(15, 7, i * 56)
-    lw(16, 7, i * 56 + 8)
-    lw(17, 7, i * 56 + 12)
-    if stream and fields[3] == A:
-        alu(17, 17, 20, 0)
-    lw(18, 7, i * 56 + 4)
-    li(29, fc_raw_base(fields))
-    addi(9, 15, 0)
-    li(10, 0x80808080)
-    li(11, 36)
-    label("fc_recenter")
-    lw(8, 9, 0)
-    alu(8, 8, 10, 4)
-    sw(8, 9, 0)
-    addi(9, 9, 4)
-    addi(11, 11, -1)
-    branch(11, 0, "fc_recenter")
-    li(8, 1)
-    sw(8, 13, 0x14)
-    sw(8, 13, 0x18)
-    li(8, 16)
-    sw(8, 13, 0x1C)
-    li(1, 10)
-    label("fc_channel")
-    sw(29, 13, 0x10)
-    addi(9, 15, 0)
-    addi(10, 18, 0)
-    li(2, 9)
-    li(4, 8)  # PACKED, signed INT8, overwrite first partial sum
-    label("fc_tile")
-    sw(9, 13, 8)
-    sw(10, 13, 12)
-    sw(4, 13, 0x30)
-    label("fc_matrix_space")
-    lw(8, 13, 4)
-    andi(11, 8, 4)
-    branch(11, 0, "fail")
-    lw(8, 13, 0x24)
-    andi(11, 8, 255)
-    shift(8, 8, 16, 5)
-    branch(11, 8, "fc_matrix_submit")
-    jump("fc_matrix_space")
-    label("fc_matrix_submit")
-    sw(31, 13, 0)
-    li(4, 12)  # PACKED | ACCUMULATE, same D for remaining eight tiles
-    addi(9, 9, 16)
-    addi(10, 10, 16)
-    addi(2, 2, -1)
-    branch(2, 0, "fc_tile")
-    addi(18, 18, 144)
-    addi(29, 29, 4)
-    addi(1, 1, -1)
-    branch(1, 0, "fc_channel")
-    lw(5, 13, 0x2C)
-    label("fc_matrix_drain")
-    lw(8, 13, 4)
-    andi(11, 8, 4)
-    branch(11, 0, "fail")
-    lw(8, 13, 0x28)
-    branch(8, 5, "fc_matrix_drain")
+    emit_outer_fc_raw(i, fields, stream)
     li(8, 2)
     sw(8, 13, 0)
     # Raw FC dot plus its bounded INT32 zero-point correction, then the
@@ -696,6 +674,9 @@ def emit_platform_check():
     lw(8, 6, -0x5A8)
     li(5, 0x56504732)
     branch(8, 5, "fail")
+    lw(8, 6, -0x594)
+    li(5, 0x00030404)
+    branch(8, 5, "fail")
     lw(8, 6, 0x54)
     li(5, 0x53443931)
     branch(8, 5, "fail")
@@ -711,7 +692,7 @@ def generate_single():
     emit((0x300 << 20) | (8 << 15) | (7 << 12) | 0x73, "csrci mstatus,8")
     li(6, 0x40000600)
     emit_platform_check()
-    li(7, 0x80000C00)
+    li(7, 0x80000000 + DESC_BASE)
     li(12, 0x80001F00)
     setup_writes = 0
     for i, fields in enumerate(layer_fields):
@@ -758,7 +739,7 @@ def generate_single():
     label("halt")
     jump("halt")
     resolve()
-    assert 0x80 + len(code) * 4 <= 0xC00
+    assert 0x80 + len(code) * 4 <= DESC_BASE
     image = bytearray(PROGRAM_BYTES)
     write_task_table(image)
     for i, w in enumerate(code):
@@ -787,7 +768,7 @@ def generate_single():
             int(i == 5),
         ]
         for j, w in enumerate(fields):
-            struct.pack_into("<I", image, 0xC00 + i * 56 + j * 4, w)
+            struct.pack_into("<I", image, DESC_BASE + i * 56 + j * 4, w)
         L.update(src=src, dst=dst, output_bytes=out * out * cout)
         h = out
         cin = cout
@@ -795,7 +776,7 @@ def generate_single():
     (OUT / "boot.S").write_text("\n".join(listing))
     (OUT / "model.json").write_text(json.dumps(meta, indent=2))
     (OUT / "test_meta.svh").write_text(
-        f"localparam int PROGRAM_BYTES={PROGRAM_BYTES};\nlocalparam int STREAM_TASKS={len(stream_commands)};\n"
+        f"`define NPU_EXPECTED_MATRIX_JOBS {37 if SHARED_QUANT else 27}\nlocalparam int PROGRAM_BYTES={PROGRAM_BYTES};\nlocalparam int STREAM_TASKS={len(stream_commands)};\n"
         + "localparam int PARAM_BYTES="
         + str(meta["parameter_bytes"])
         + ";\n"
@@ -821,6 +802,9 @@ def generate_single():
     meta["stream_abi"] = "SD91"
     meta["stream_tasks"] = len(stream_commands)
     meta["task_table"] = task_ranges
+    meta["matrix_execution"] = "4x4 outer product; 16 INT32 accumulators; FC output blocks4/4/2"
+    meta["matrix_tasks"] = 37 if SHARED_QUANT else 27
+    meta["descriptor_base"] = 0x80000000 + DESC_BASE
     meta["shared_quant"] = SHARED_QUANT
     meta["cnn_output"] = (
         "direct shared quantizer, byte writes to RF/SRAM"

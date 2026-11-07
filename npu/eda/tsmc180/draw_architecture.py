@@ -115,7 +115,7 @@ box(
     660,
     310,
     "Matrix Stream  ·  npu_matrix_stream",
-    "8项GEMM任务FIFO由MMIO管理\n执行M/N/K循环、地址步进与INT8解包\nA/B读请求、旧D读取、结果写回\nRF并行读A/B；SRAM分周期读取\n结果可直连共享QT01；关闭时原始INT32",
+    "8项GEMM任务FIFO由MMIO管理\n4×4分块、M/N/K循环、LDA/LDB寻址\n8×32bit操作数暂存；按需去重/复用\nRF并行读A/B；SRAM分周期读取\n结果可直连共享QT01；关闭时原始INT32",
     col="#c084fc",
     size=26,
 )
@@ -149,8 +149,8 @@ box(
     815,
     660,
     205,
-    "Matrix纯计算核  ·  MAC / ADD32",
-    "最多4路INT8 / 2路INT16乘积归约\n或使用INT32加数合并已有部分结果\n保留累加器、结果valid；无M/N/K状态",
+    "Matrix纯计算核  ·  4×4外积",
+    "16路INT8 / INT16外积乘加\n16个INT32累加器；行列mask处理尾块\n按索引加旧D / 导出结果；无地址或循环",
     col="#c084fc",
     size=25,
 )
@@ -250,7 +250,7 @@ text(
 text(
     55,
     1885,
-    "依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、单ALU INT32 / SIMD8 + 共享可选QT01版本；综合2.586795mm²（含SRAM、不含PAD），布局布线尚未重跑。",
+    "依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、4×4外积Matrix + 单ALU INT32/SIMD8 + QT01；本版面积时序尚未重测。",
     22,
     "#94a3b8",
 )

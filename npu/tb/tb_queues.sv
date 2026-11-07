@@ -19,7 +19,11 @@ module tb_queues;
   logic [31:0] test_result_o, cpu_boot_addr_o;
   logic cpu_release_o;
   int mat_jobs = 0, vec_jobs = 0, mtimer = 0, vtimer = 0, checks = 0, md, vd;
-  npu_mmio dut (.*);
+  npu_mmio dut (
+    .mat_lda_o(),
+    .mat_ldb_o(),
+    .*
+  );
   assign mat_busy_i = mtimer != 0;
   assign vec_busy_i = !run_engines || vtimer != 0;
   assign mat_blocked_i = !run_engines;
@@ -106,6 +110,11 @@ module tb_queues;
         write_reg('h230, 123 + round * vd + j);
         write_reg('h200, 1);
       end
+      // Leading dimensions must not change queued tasks.
+      write_reg('h134, 144, 1);
+      write_reg('h138, 144, 1);
+      check_reg('h134, 0);
+      check_reg('h138, 0);
       check_reg('h124, 32'(md << 16 | md));
       check_reg('h224, 32'(vd << 16 | vd));
       write_reg('h100, 1, 1);

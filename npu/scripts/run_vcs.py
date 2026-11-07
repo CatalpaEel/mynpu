@@ -15,6 +15,7 @@ p.add_argument(
         "rfequivalence",
         "readbatch",
         "sharedoperands",
+        "outergemm",
         "vectorsimd",
         "sharedquant",
         "ops",
@@ -29,6 +30,7 @@ p.add_argument(
         "cnnqueues",
         "cnncompute",
         "purecompute",
+        "matrixouter",
         "rfsink",
         "burst",
         "layers",
@@ -37,8 +39,6 @@ p.add_argument(
         "enginefaults",
         "regfile",
         "vectorprogram",
-        "vectorsimd",
-        "sharedquant",
     ],
     required=True,
 )
@@ -100,6 +100,8 @@ tops = {
     "cnnqueues": "tb_cnn_queue",
     "cnncompute": "tb_cnn_compute",
     "purecompute": "tb_pure_compute",
+    "matrixouter": "tb_matrix_outer",
+    "outergemm": "tb_outer_gemm",
     "rfsink": "tb_rf_sink",
     "burst": "tb_queue_burst",
     "layers": "tb_mnist",
@@ -141,6 +143,8 @@ if a.suite == "rfequivalence":
     ]
 if a.suite == "readbatch":
     files = [ROOT / "rtl/common/npu_addr_pkg.sv", ROOT / "rtl/interconnect/npu_multi_read.sv"]
+if a.suite == "matrixouter":
+    files = [ROOT / "rtl/matrix/npu_matmul.sv"]
 if a.suite == "purecompute":
     files = [ROOT / "rtl/matrix/npu_matmul.sv", ROOT / "rtl/vector/npu_vector.sv"]
 if a.suite == "cnncompute":
@@ -194,6 +198,7 @@ if any(f.name in ["npu_data_regfile.sv", "xbar_stream.sv", "xbar.sv"] for f in f
 if a.macro:
     if a.suite not in [
         "sharedoperands",
+        "outergemm",
         "vectorsimd",
         "sharedquant",
         "ops",
@@ -295,6 +300,8 @@ markers = {
     "cnnqueues": "CNN QUEUE PASS",
     "cnncompute": "CNN COMPUTE PASS",
     "purecompute": "PURE COMPUTE PASS",
+    "matrixouter": "MATRIX OUTER PASS",
+    "outergemm": "OUTER GEMM PASS",
     "rfsink": "RF SINK PASS",
     "burst": "BURST PASS",
     "layers": "MNIST PASS",

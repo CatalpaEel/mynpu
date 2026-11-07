@@ -1,5 +1,7 @@
 # CNN / Matrix 共享可选量化单元
 
+当前Matrix已改为[4×4外积](matrix-outer4.md)。本文的27,633周期和2.586795mm²为旧点积Matrix检查点记录；量化数学与CSR接口保持有效。
+
 修改前检查点提交：`d4a89a9`。纯计算核仍负责乘加；新增 `npu_shared_quant.sv` 直接接收 CNN、Matrix 的结果。进入量化单元不经过 XBAR。写回 RF / SRAM 或流 FIFO 仍使用各自原有 Stream 接口。
 
 ```mermaid

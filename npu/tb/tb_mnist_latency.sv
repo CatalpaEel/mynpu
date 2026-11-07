@@ -107,6 +107,11 @@ module tb_mnist_latency;
   endtask
 
   `include "test_meta.svh"
+`ifdef NPU_EXPECTED_MATRIX_JOBS
+  localparam int MATRIX_EXPECTED_JOBS = `NPU_EXPECTED_MATRIX_JOBS;
+`else
+  localparam int MATRIX_EXPECTED_JOBS = 90;
+`endif
   logic [7:0] payload[8192];
   logic [7:0] golden[784];
   // Test-only preload; actual pin-level loading is covered by tb_jtag SBA.
@@ -257,7 +262,7 @@ module tb_mnist_latency;
         $fatal(1, "Inference exceeds cycle limit got=%0d limit=%0d", elapsed, max_cycles);
       if (!cpu_pass) $fatal(1, "CPU failed");
 `ifndef NPU_GATE_SIM
-      if (!cpu_pass || dut.i_core.i_stream.i_control.completed != STREAM_TASKS || macs != 39330 || dut.i_core.i_mmio.mat_completed != 90)
+      if (!cpu_pass || dut.i_core.i_stream.i_control.completed != STREAM_TASKS || macs != 39330 || dut.i_core.i_mmio.mat_completed != MATRIX_EXPECTED_JOBS)
         $fatal(1, "Single accounting/result failed jobs=%0d macs=%0d", jobs, macs);
 `endif
       expect_word(SRAM + 'h1f00, prediction[sample]);

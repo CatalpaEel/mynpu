@@ -12,10 +12,10 @@ string profile_names[45] = '{
     "cnn_input",
     "cnn_other",
     "matrix_busy",
-    "matrix_areq",
-    "matrix_await",
-    "matrix_breq",
-    "matrix_bwait",
+    "matrix_fetch",
+    "matrix_words",
+    "matrix_clear",
+    "matrix_emit",
     "matrix_creq",
     "matrix_cwait",
     "matrix_dreq",
@@ -71,21 +71,21 @@ always @(posedge clk)
       else profile_count[profile_stage][7]++;
     end
     if (dut.i_core.mat_busy) profile_count[profile_stage][8]++;
-    if (dut.i_core.i_matrix_stream.state_q == dut.i_core.i_matrix_stream.A_REQ)
+    if (dut.i_core.i_matrix_stream.state == dut.i_core.i_matrix_stream.FETCH)
       profile_count[profile_stage][9]++;
-    if (dut.i_core.i_matrix_stream.state_q == dut.i_core.i_matrix_stream.A_WAIT)
+    if (dut.i_core.i_matrix_stream.state == dut.i_core.i_matrix_stream.WAIT_WORDS)
       profile_count[profile_stage][10]++;
-    if (dut.i_core.i_matrix_stream.state_q == dut.i_core.i_matrix_stream.B_REQ)
+    if (dut.i_core.i_matrix_stream.state == dut.i_core.i_matrix_stream.CLEAR)
       profile_count[profile_stage][11]++;
-    if (dut.i_core.i_matrix_stream.state_q == dut.i_core.i_matrix_stream.B_WAIT)
+    if (dut.i_core.i_matrix_stream.state == dut.i_core.i_matrix_stream.EMIT)
       profile_count[profile_stage][12]++;
-    if (dut.i_core.i_matrix_stream.state_q == dut.i_core.i_matrix_stream.C_REQ)
+    if (dut.i_core.i_matrix_stream.state == dut.i_core.i_matrix_stream.C_REQ)
       profile_count[profile_stage][13]++;
-    if (dut.i_core.i_matrix_stream.state_q == dut.i_core.i_matrix_stream.C_WAIT)
+    if (dut.i_core.i_matrix_stream.state == dut.i_core.i_matrix_stream.C_WAIT)
       profile_count[profile_stage][14]++;
-    if (dut.i_core.i_matrix_stream.state_q == dut.i_core.i_matrix_stream.D_REQ)
+    if (dut.i_core.i_matrix_stream.state == dut.i_core.i_matrix_stream.D_REQ)
       profile_count[profile_stage][15]++;
-    if (dut.i_core.i_matrix_stream.state_q == dut.i_core.i_matrix_stream.D_WAIT)
+    if (dut.i_core.i_matrix_stream.state == dut.i_core.i_matrix_stream.D_WAIT)
       profile_count[profile_stage][16]++;
     if (dut.i_core.vec_busy) profile_count[profile_stage][17]++;
     if (dut.i_core.vec_busy) begin

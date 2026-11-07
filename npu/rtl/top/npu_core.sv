@@ -88,6 +88,7 @@ module npu_core #(
       vec_done,
       vec_fault;
   logic [31:0] ma, mb, md, va, vb, vd;
+  logic [15:0] matrix_lda, matrix_ldb;
   logic [4:0] mm, mn, mk;
   logic [10:0] vl;
   logic [7:0] vo;
@@ -298,6 +299,8 @@ module npu_core #(
     .vec_program_cfg_o(vector_program_cfg),
     .vec_program_o    (vector_program),
     .mat_flags_o      (mf),
+    .mat_lda_o        (matrix_lda),
+    .mat_ldb_o        (matrix_ldb),
     .mat_busy_i       (mat_busy),
     .mat_blocked_i    (1'b0),
     .mat_done_i       (mat_done),
@@ -312,29 +315,26 @@ module npu_core #(
   );
   logic matrix_compute_valid, matrix_compute_ready, matrix_compute_flush;
   logic matrix_compute_multiply, matrix_compute_emit, matrix_result_valid, matrix_result_ready;
-  logic signed [15:0] matrix_compute_a, matrix_compute_b;
+  logic signed [3:0][15:0] matrix_compute_a, matrix_compute_b;
   logic [31:0] matrix_compute_addend, matrix_result_data;
-  logic [2:0] matrix_extra_valid;
-  logic signed [2:0][15:0] matrix_extra_a, matrix_extra_b;
-  npu_matmul #(
-    .PARALLEL(PARALLEL_UNITS)
-  ) i_matmul (
-    .extra_valid_i(matrix_extra_valid),
-    .extra_a_i    (matrix_extra_a),
-    .extra_b_i    (matrix_extra_b),
+  logic [3:0] matrix_row_mask, matrix_col_mask, matrix_index;
+  npu_matmul i_matmul (
+    .row_mask_i(matrix_row_mask),
+    .col_mask_i(matrix_col_mask),
+    .index_i   (matrix_index),
     .clk_i,
-    .rst_ni       (system_rst_no),
-    .flush_i      (matrix_compute_flush),
-    .valid_i      (matrix_compute_valid),
-    .ready_o      (matrix_compute_ready),
-    .multiply_i   (matrix_compute_multiply),
-    .emit_i       (matrix_compute_emit),
-    .a_i          (matrix_compute_a),
-    .b_i          (matrix_compute_b),
-    .addend_i     (matrix_compute_addend),
-    .valid_o      (matrix_result_valid),
-    .ready_i      (matrix_result_ready),
-    .data_o       (matrix_result_data)
+    .rst_ni    (system_rst_no),
+    .flush_i   (matrix_compute_flush),
+    .valid_i   (matrix_compute_valid),
+    .ready_o   (matrix_compute_ready),
+    .multiply_i(matrix_compute_multiply),
+    .emit_i    (matrix_compute_emit),
+    .a_i       (matrix_compute_a),
+    .b_i       (matrix_compute_b),
+    .addend_i  (matrix_compute_addend),
+    .valid_o   (matrix_result_valid),
+    .ready_i   (matrix_result_ready),
+    .data_o    (matrix_result_data)
   );
   npu_matrix_stream #(
     .GATHER(PARALLEL_UNITS)
@@ -343,9 +343,11 @@ module npu_core #(
     .quant_pack_i          (quant_pack[1]),
     .quant_dst_i           (quant_dst[1]),
     .be_o                  (matrix_be),
-    .compute_extra_valid_o (matrix_extra_valid),
-    .compute_extra_a_o     (matrix_extra_a),
-    .compute_extra_b_o     (matrix_extra_b),
+    .compute_row_mask_o    (matrix_row_mask),
+    .compute_col_mask_o    (matrix_col_mask),
+    .compute_index_o       (matrix_index),
+    .lda_i                 (matrix_lda),
+    .ldb_i                 (matrix_ldb),
     .gather_req_o          (all_gather_req[5:3]),
     .gather_addr_o         (all_gather_addr[5:3]),
     .gather_gnt_i          (all_gather_gnt[5:3]),

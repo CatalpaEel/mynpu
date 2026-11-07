@@ -8,9 +8,11 @@ module tb_pure_compute;
   wire ready_o, valid_o;
   wire [31:0] data_o;
   npu_matmul matrix (
-    .extra_valid_i(3'b0),
-    .extra_a_i    (48'b0),
-    .extra_b_i    (48'b0),
+    .row_mask_i(4'b1),
+    .col_mask_i(4'b1),
+    .index_i   (4'b0),
+    .a_i       ({48'b0, a_i}),
+    .b_i       ({48'b0, b_i}),
     .*
   );
   logic [4:0] op = 0;

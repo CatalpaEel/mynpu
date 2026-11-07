@@ -24,34 +24,37 @@ module matrix_task_fixture (
 );
   logic matrix_compute_valid, matrix_compute_ready, matrix_compute_flush;
   logic matrix_compute_multiply, matrix_compute_emit, matrix_result_valid, matrix_result_ready;
-  logic signed [15:0] matrix_compute_a, matrix_compute_b;
+  logic signed [3:0][15:0] matrix_compute_a, matrix_compute_b;
   logic [31:0] matrix_compute_addend, matrix_result_data;
+  logic [3:0] matrix_rows, matrix_cols, matrix_index;
   npu_matmul i_matmul (
-    .extra_valid_i(3'b0),
-    .extra_a_i    (48'b0),
-    .extra_b_i    (48'b0),
+    .row_mask_i(matrix_rows),
+    .col_mask_i(matrix_cols),
+    .index_i   (matrix_index),
     .clk_i,
-    .rst_ni       (rst_ni),
-    .flush_i      (matrix_compute_flush),
-    .valid_i      (matrix_compute_valid),
-    .ready_o      (matrix_compute_ready),
-    .multiply_i   (matrix_compute_multiply),
-    .emit_i       (matrix_compute_emit),
-    .a_i          (matrix_compute_a),
-    .b_i          (matrix_compute_b),
-    .addend_i     (matrix_compute_addend),
-    .valid_o      (matrix_result_valid),
-    .ready_i      (matrix_result_ready),
-    .data_o       (matrix_result_data)
+    .rst_ni    (rst_ni),
+    .flush_i   (matrix_compute_flush),
+    .valid_i   (matrix_compute_valid),
+    .ready_o   (matrix_compute_ready),
+    .multiply_i(matrix_compute_multiply),
+    .emit_i    (matrix_compute_emit),
+    .a_i       (matrix_compute_a),
+    .b_i       (matrix_compute_b),
+    .addend_i  (matrix_compute_addend),
+    .valid_o   (matrix_result_valid),
+    .ready_i   (matrix_result_ready),
+    .data_o    (matrix_result_data)
   );
   npu_matrix_stream i_stream (
     .quant_enable_i        (1'b0),
     .quant_pack_i          (1'b0),
     .quant_dst_i           (32'b0),
     .be_o                  (),
-    .compute_extra_valid_o (),
-    .compute_extra_a_o     (),
-    .compute_extra_b_o     (),
+    .compute_row_mask_o    (matrix_rows),
+    .compute_col_mask_o    (matrix_cols),
+    .compute_index_o       (matrix_index),
+    .lda_i                 (16'b0),
+    .ldb_i                 (16'b0),
     .compute_valid_o       (matrix_compute_valid),
     .compute_ready_i       (matrix_compute_ready),
     .compute_flush_o       (matrix_compute_flush),

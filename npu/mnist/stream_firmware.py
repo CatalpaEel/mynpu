@@ -21,7 +21,7 @@ B = 0x80001670
 C = 0x80001980
 PACKETS = 0x80001C90
 MAIL = 0x80001FA0
-DESC = 0x80000C00
+DESC = 0x80000000 + DESC_BASE
 stream_fields = make_layer_fields(A, B, A)
 label("_start")
 li(5, 1 << 16)
@@ -110,7 +110,7 @@ sw(5, 6, 4)
 label("halt")
 jump("halt")
 resolve()
-assert 0x80 + len(code) * 4 <= 0xC00, len(code)
+assert 0x80 + len(code) * 4 <= DESC_BASE, len(code)
 image = bytearray(PROGRAM_BYTES)
 write_task_table(image)
 for i, w in enumerate(code):
@@ -122,7 +122,7 @@ for i, L in enumerate(meta["layers"]):
     cout = L["shape"][0]
     fields = stream_fields[i]
     for j, w in enumerate(fields):
-        struct.pack_into("<I", image, 0xC00 + i * 56 + j * 4, w)
+        struct.pack_into("<I", image, DESC_BASE + i * 56 + j * 4, w)
     h = out
     cin = cout
 (OUT / "stream_boot.hex").write_text("".join(f"{v:02x}\n" for v in image))
@@ -139,10 +139,12 @@ for i, L in enumerate(meta["layers"]):
             raw_result_regfile_words=32,
             rf_bank_words=RF_BANK_WORDS,
             layer_destinations=[f[3] for f in stream_fields],
-            conv_vector_stream_path=True,
+            conv_vector_stream_path=not SHARED_QUANT,
+            matrix_outer_rows=4,
+            matrix_outer_cols=4,
             fc_execution_unit="matrix",
             fc_raw_base=fc_raw_base(stream_fields[-1]),
-            xbar_cache_data_bytes=128,
+            xbar_cache_data_bytes=0,
             setup_writes=fw.setup_writes,
             firmware_bytes=len(image),
             instructions=len(code),

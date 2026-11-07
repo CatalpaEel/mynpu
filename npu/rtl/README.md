@@ -1,6 +1,8 @@
 # RTL文件导航
 
-[最新QT01版综合](../docs/shared-quant-area.md)：总面积 **2.586795mm²**（含两块SRAM、不含PAD），比量化前同配置增加6.20%；50MHz综合setup slack **+4.0014ns**。未重跑布局布线。
+当前Matrix已改为[4×4外积、16个INT32累加器](../docs/matrix-outer4.md)；支持INT8/INT16、转置、尾块及可选量化。旧2.586795mm²综合数据属于点积版，本版面积时序尚未重测。
+
+[旧点积Matrix版QT01综合](../docs/shared-quant-area.md)：总面积 **2.586795mm²**（含两块SRAM、不含PAD），比量化前同配置增加6.20%；50MHz综合setup slack **+4.0014ns**。未重跑布局布线。
 
 新增[CNN / Matrix 直连的共享可选量化单元 QT01](../docs/shared-quant.md)：默认原始 INT32 旁路，可选量化后32位或字节写回。MNIST实验固件实测27,633周期/张；旧固件仍29,817周期。
 
@@ -21,7 +23,7 @@
 | `control/` | `npu_mmio.sv`：公共CSR、Matrix/Vector任务队列、完成计数和程序配置 |
 | `debug/` | `npu_jtag_debug.sv`：TAP/DTM/DM和SBA接入；`npu_debug_boot.sv`：启动引导逻辑 |
 | `cnn/` | `npu_cnn.sv`、`npu_cnn_mac.sv`：纯DOT9计算；`npu_stream*.sv`：CNN任务格式、队列、窗口与访存供数 |
-| `matrix/` | `npu_matmul.sv`：纯MAC；`npu_matrix_stream.sv`：GEMM循环、取数及写回 |
+| `matrix/` | `npu_matmul.sv`：纯4×4外积MAC；`npu_matrix_stream.sv`：GEMM循环、取数及写回 |
 | `vector/` | `npu_vector.sv`：纯整数ALU；`npu_vector_stream.sv`：通用程序发射、临时寄存器和访存 |
 
 `cnn/`中的`npu_stream`专属于CNN，不是全局互连；全局流转发由`interconnect/xbar_stream.sv`完成。CPU、Debug Module及SRAM模型/宏来自工程外部依赖，不复制进此目录。

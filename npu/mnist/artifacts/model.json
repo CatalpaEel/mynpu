@@ -267,39 +267,39 @@
   "fixed_point_reference_test_accuracy": 99.01,
   "fixed_point_vs_pytorch_prediction_disagreements": 0,
   "parameter_base": 2147491840,
-  "firmware_bytes": 4608,
+  "firmware_bytes": 4864,
   "setup_writes": 24,
   "rf_bank_words": 32,
   "intermediate_storage": "regfile with SRAM spill only for oversized tensors",
   "cnn_output": "raw signed INT32 routed through xbar channel 0 FIFO to vector",
   "postprocessing_unit": "generic vector program VPG2",
-  "fc_execution": "signed packed GEMM K16 tiles; VPG2 INT32 offset plus software word-pair scaling",
+  "fc_execution": "4x4 outer-product GEMM; FC 1x4/1x4/1x2 blocks, K16, B leading dimension144",
   "fc_raw_base": 2147500248,
   "stream_abi": "SD91",
   "stream_tasks": 296,
   "task_table": [
     {
-      "address": 2147487056,
+      "address": 2147487312,
       "per_channel": 28
     },
     {
-      "address": 2147487280,
+      "address": 2147487536,
       "per_channel": 28
     },
     {
-      "address": 2147487728,
+      "address": 2147487984,
       "per_channel": 7
     },
     {
-      "address": 2147487952,
+      "address": 2147488208,
       "per_channel": 3
     },
     {
-      "address": 2147488048,
+      "address": 2147488304,
       "per_channel": 3
     },
     {
-      "address": 2147488240,
+      "address": 2147488496,
       "per_channel": 0
     }
   ],
@@ -310,5 +310,9 @@
     0,
     0,
     0
-  ]
+  ],
+  "matrix_execution": "4x4 outer product; 16 INT32 accumulators; FC output blocks4/4/2",
+  "matrix_tasks": 27,
+  "descriptor_base": 2147486976,
+  "shared_quant": false
 }

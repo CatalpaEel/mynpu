@@ -33,8 +33,8 @@
 <rect x="790" y="450" width="660" height="310" rx="14" fill="#1e293b" stroke="#c084fc" stroke-width="2"/>
 <text x="810" y="493" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#c084fc">Matrix Stream  ·  npu_matrix_stream</text>
 <text x="810" y="539" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">8项GEMM任务FIFO由MMIO管理</text>
-<text x="810" y="577" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">执行M/N/K循环、地址步进与INT8解包</text>
-<text x="810" y="615" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">A/B读请求、旧D读取、结果写回</text>
+<text x="810" y="577" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">4×4分块、M/N/K循环、LDA/LDB寻址</text>
+<text x="810" y="615" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">8×32bit操作数暂存；按需去重/复用</text>
 <text x="810" y="653" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">RF并行读A/B；SRAM分周期读取</text>
 <text x="810" y="691" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">结果可直连共享QT01；关闭时原始INT32</text>
 <rect x="1525" y="450" width="660" height="310" rx="14" fill="#1e293b" stroke="#2dd4bf" stroke-width="2"/>
@@ -65,10 +65,10 @@
 <text x="75" y="940" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">输入零点扣除 / mask / seed / INT32累加</text>
 <text x="75" y="977" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">ready/valid、emit、flush；无地址或量化</text>
 <rect x="790" y="815" width="660" height="205" rx="14" fill="#1e293b" stroke="#c084fc" stroke-width="2"/>
-<text x="810" y="858" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#c084fc">Matrix纯计算核  ·  MAC / ADD32</text>
-<text x="810" y="903" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">最多4路INT8 / 2路INT16乘积归约</text>
-<text x="810" y="940" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">或使用INT32加数合并已有部分结果</text>
-<text x="810" y="977" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">保留累加器、结果valid；无M/N/K状态</text>
+<text x="810" y="858" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#c084fc">Matrix纯计算核  ·  4×4外积</text>
+<text x="810" y="903" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">16路INT8 / INT16外积乘加</text>
+<text x="810" y="940" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">16个INT32累加器；行列mask处理尾块</text>
+<text x="810" y="977" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">按索引加旧D / 导出结果；无地址或循环</text>
 <rect x="1525" y="815" width="660" height="205" rx="14" fill="#1e293b" stroke="#2dd4bf" stroke-width="2"/>
 <text x="1545" y="858" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#2dd4bf">Vector纯计算核  ·  通用整数ALU</text>
 <text x="1545" y="903" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#e2e8f0">MUL32 / MULH / MULHU；32bit加法与进位</text>
@@ -121,5 +121,5 @@
 <polyline points="1810,1565 1810,1630" fill="none" stroke="#fbbf24" stroke-width="4"/>
 <polygon points="1810,1630 1817.0,1616.0 1803.0,1616.0" fill="#fbbf24"/>
 <text x="55" y="1855" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#2dd4bf">并行边界：CNN / Matrix / Vector可并行，任意有向连接经xbar FIFO转发；CNN读请求、RF gather、计算与写回重叠，各主端口受bank冲突和FIFO反压约束。</text>
-<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、单ALU INT32 / SIMD8 + 共享可选QT01版本；综合2.586795mm²（含SRAM、不含PAD），布局布线尚未重跑。</text>
+<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">依据：npu_core.sv / xbar.sv / npu_data_regfile.sv / build_config.json；2026-11-07无透明SRAM缓存、4×4外积Matrix + 单ALU INT32/SIMD8 + QT01；本版面积时序尚未重测。</text>
 </svg>

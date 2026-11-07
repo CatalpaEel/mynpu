@@ -1,12 +1,8 @@
-// Pure signed 16x16 MAC / INT32 add. No task, address, memory port or shape.
-// INT8 values are sign-extended by the operand feeder. Accumulation wraps INT32.
-// emit marks a result for ready/valid consumption; flush discards all math state.
-module npu_matmul #(
-  parameter bit PARALLEL = 0
-) (
-  input logic [2:0] extra_valid_i,
-  input logic signed [2:0][15:0] extra_a_i,
-  extra_b_i,
+// Pure 4x4 outer-product engine: C[r,c] += A[r]*B[c], modulo INT32.
+// Masks disable tail rows/columns. Non-multiply operations add one INT32 seed
+// to index_i, and emit optionally exposes that cell through ready/valid.
+// Tile loops, operand staging and addresses belong to npu_matrix_stream.
+module npu_matmul (
   input logic clk_i,
   rst_ni,
   flush_i,
@@ -14,37 +10,40 @@ module npu_matmul #(
   output logic ready_o,
   input logic multiply_i,
   emit_i,
-  input logic signed [15:0] a_i,
+  input logic [3:0] row_mask_i,
+  col_mask_i,
+  index_i,
+  input logic signed [3:0][15:0] a_i,
   b_i,
   input logic [31:0] addend_i,
   output logic valid_o,
   input logic ready_i,
   output logic [31:0] data_o
 );
-  logic [31:0] accumulator, term;
-  logic [31:0] products[4];
-  assign products[0] = 32'($signed(a_i) * $signed(b_i));
-  for (genvar p = 0; p < 3; p++) begin : g_products
-    if (PARALLEL)
-      assign products[p+1] = extra_valid_i[p] ? 32'($signed(
-          extra_a_i[p]
-      ) * $signed(
-          extra_b_i[p]
-      )) : 0;
-    else assign products[p+1] = 0;
-  end
-  assign term = multiply_i ? (products[0] + products[1]) + (products[2] + products[3]) : addend_i;
-  assign data_o = accumulator;
+  logic [31:0] accumulator[16];
+  logic [3:0] output_index;
   assign ready_o = rst_ni && !flush_i && (!valid_o || ready_i);
-  always_ff @(posedge clk_i or negedge rst_ni)
+  assign data_o = accumulator[output_index];
+  always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
-      accumulator <= 0;
+      for (int slot = 0; slot < 16; slot++) accumulator[slot] <= 0;
       valid_o <= 0;
+      output_index <= 0;
     end else if (flush_i) begin
-      accumulator <= 0;
+      for (int slot = 0; slot < 16; slot++) accumulator[slot] <= 0;
       valid_o <= 0;
+      output_index <= 0;
     end else if (ready_o) begin
       valid_o <= valid_i && emit_i;
-      if (valid_i) accumulator <= accumulator + term;
+      if (valid_i) begin
+        if (emit_i) output_index <= index_i;
+        if (multiply_i) begin
+          for (int r = 0; r < 4; r++)
+          for (int c = 0; c < 4; c++)
+          if (row_mask_i[r] && col_mask_i[c])
+            accumulator[4*r+c] <= accumulator[4*r+c] + 32'($signed(a_i[r]) * $signed(b_i[c]));
+        end else accumulator[index_i] <= accumulator[index_i] + addend_i;
+      end
     end
+  end
 endmodule

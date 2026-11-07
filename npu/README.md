@@ -1,6 +1,8 @@
 # 当前架构入口
 
-[最新QT01版综合](docs/shared-quant-area.md)：总面积 **2.586795mm²**（含两块SRAM、不含PAD），比量化前同配置增加6.20%；50MHz综合setup slack **+4.0014ns**。未重跑布局布线。
+当前Matrix已改为[4×4外积、16个INT32累加器](docs/matrix-outer4.md)；支持INT8/INT16、转置、尾块及可选量化。旧2.586795mm²综合数据属于点积版，本版面积时序尚未重测。
+
+[旧点积Matrix版QT01综合](docs/shared-quant-area.md)：总面积 **2.586795mm²**（含两块SRAM、不含PAD），比量化前同配置增加6.20%；50MHz综合setup slack **+4.0014ns**。未重跑布局布线。
 
 新增[CNN / Matrix 直连的共享可选量化单元 QT01](docs/shared-quant.md)：默认原始 INT32 旁路，可选量化后32位或字节写回。MNIST实验固件实测27,633周期/张；旧固件仍29,817周期。
 

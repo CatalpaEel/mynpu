@@ -172,6 +172,19 @@ static inline int npu_vector_start(uint32_t a, uint32_t b, uint32_t d, uint32_t 
 /* Dense row-major GEMM, D=op(A)*op(B), or D+= when ACCUMULATE.
  * All bases are 4-byte aligned; packed rows need no padding. INT32 output.
  * Inputs: signed INT8/INT16; arithmetic accumulates modulo 2^32. */
+#define NPU_MATRIX_OUTER_CAP 0x06cu
+#define NPU_MATRIX_LDA 0x134u
+#define NPU_MATRIX_LDB 0x138u
+/* Shared per-batch element strides; zero chooses the dense leading dimension.
+ * Finish all matrix jobs before changing them. K=0 with ACCUMULATE emits old D. */
+static inline int npu_gemm_leading_dims(uint32_t lda, uint32_t ldb) {
+  if (lda > 4096u || ldb > 4096u || (npu_read(NPU_MAT_STATUS) & NPU_BUSY) ||
+      npu_read(NPU_MATRIX_OUTER_CAP) != 0x00030404u)
+    return -1;
+  npu_write(NPU_MATRIX_LDA, lda);
+  npu_write(NPU_MATRIX_LDB, ldb);
+  return 0;
+}
 static inline int npu_gemm_start(const struct npu_gemm_descriptor *d) {
   if ((npu_read(NPU_OPERATOR_ABI) >> 16) != 1u || (d->flags & ~npu_read(NPU_GEMM_CAP)))
     return -1;

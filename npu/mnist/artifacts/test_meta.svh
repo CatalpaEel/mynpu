@@ -1,4 +1,5 @@
-localparam int PROGRAM_BYTES=4608;
+`define NPU_EXPECTED_MATRIX_JOBS 27
+localparam int PROGRAM_BYTES=4864;
 localparam int STREAM_TASKS=296;
 localparam int PARAM_BYTES=4052;
 int layer_len[6]='{392,784,392,72,144,10};

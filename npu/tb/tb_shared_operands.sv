@@ -118,7 +118,11 @@ module tb_shared_operands;
       if (dut.i_core.vec_busy) vector_busy_cycles++;
       if ((|dut.i_core.all_gather_req[5:3]) && (|dut.i_core.all_gather_req[8:6])) both_request++;
       if (dut.i_core.matrix_compute_valid && dut.i_core.matrix_compute_ready && dut.i_core.matrix_compute_multiply)
-        matrix_terms += 1 + $countones(dut.i_core.matrix_extra_valid);
+        matrix_terms += $countones(
+            dut.i_core.matrix_row_mask
+        ) * $countones(
+            dut.i_core.matrix_col_mask
+        );
 
       if ($countones(dut.i_core.all_gather_gnt[5:3]) >= 2) matrix_parallel_reads++;
       if ($countones(dut.i_core.all_gather_gnt[8:6]) >= 2) vector_parallel_reads++;

@@ -1,15 +1,15 @@
 {
   "scope": "Logical architecture, not physical placement; arrows show interface relationships",
   "source_sha256": {
-    "npu/rtl/top/npu_core.sv": "413c8c452c536d54aba07333d2ae5f1dc203f8de4d54328cd2855b2bf3279eef",
+    "npu/rtl/top/npu_core.sv": "30173c6be81a9e3cc9db0615b7a77e525c8c1fe2c1b6c7a3acc699873a0e52f9",
     "npu/rtl/interconnect/xbar.sv": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
     "npu/rtl/interconnect/xbar_stream.sv": "027f3b83b5199bc010ed9a46b438be81ec715def09a90bdd4befb418eb43307f",
     "npu/rtl/common/npu_addr_pkg.sv": "1a5040304bf619a93d2afd7d1f98b4d9bfe37db27077fd503c809a09051e8238",
     "npu/rtl/interconnect/npu_data_regfile.sv": "7fffbed85311f8e8be3028c058bb60f25962e4b2d9dfefeb97c1a8132c9be278",
     "npu/rtl/common/npu_rr_select.sv": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
     "npu/rtl/interconnect/npu_multi_read.sv": "d3899799b1d54c34115f3878339321c00082d51d627fc30337d02656566b4028",
-    "npu/rtl/matrix/npu_matmul.sv": "1b8689913f060951d651806539a51889b48551cefda328c1053ae924a29ec610",
-    "npu/rtl/matrix/npu_matrix_stream.sv": "0db313f939731e939710e441b67cb6c22bae397cafc929a8f816905adf3cd1a8",
+    "npu/rtl/matrix/npu_matmul.sv": "777d02d922589ab8f0e88ff6f4242f34a8b4074b334a75ef6321a9e6f27355c3",
+    "npu/rtl/matrix/npu_matrix_stream.sv": "eddcf583f36fd4f7ddd3336bd9970c02490fe25332efa0159aa861f4a535997b",
     "npu/rtl/quant/npu_shared_quant.sv": "997a28f41e3c90002af99ac6d5eb16820df2531450f23d12c636a2e71fb0be9a",
     "npu/rtl/vector/npu_vector.sv": "392777c771a92b8a8dc812db019ff1896a3b92256512278f9d2c1dd78a230dcb",
     "npu/rtl/vector/npu_vector_stream.sv": "8e9e215b84a7b20f1a0570e6412d752b79dc121f9c06207cee8f9747ba736c88",

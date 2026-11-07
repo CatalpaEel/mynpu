@@ -66,6 +66,8 @@ module tb_engine_faults;
     @(negedge clk_i);
     start[unit_id] = 0;
     check(busy[unit_id] && !done[unit_id] && !fault[unit_id], "Start was not accepted");
+    for (int delay = 0; delay < 20 && !req[unit_id]; delay++) @(negedge clk_i);
+    check(req[unit_id], "Initial operand request timeout");
     // error without ownership of a reply must not abort an ungranted request.
     error[unit_id] = 1;
     rvalid[unit_id] = 1;
