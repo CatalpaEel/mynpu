@@ -10,6 +10,7 @@ p = argparse.ArgumentParser()
 p.add_argument(
     "--suite",
     choices=[
+        "addressranges",
         "sramuncached",
         "arbiter",
         "rfequivalence",
@@ -84,6 +85,7 @@ subprocess.run(["/usr/bin/python3.12", str(ROOT / "scripts/gen_sources.py")], ch
 files = [Path(s) for s in (ROOT / "build/sources.f").read_text().splitlines()]
 assert files, "Generated source list is empty"
 tops = {
+    "addressranges": "tb_address_ranges",
     "sramuncached": "tb_sram_uncached",
     "arbiter": "tb_arbiter",
     "rfequivalence": "tb_rf_equivalence",
@@ -145,6 +147,8 @@ if a.suite == "rfequivalence":
     ]
 if a.suite == "readbatch":
     files = [ROOT / "rtl/common/npu_addr_pkg.sv", ROOT / "rtl/interconnect/npu_multi_read.sv"]
+if a.suite == "addressranges":
+    files = [ROOT / "rtl/common/npu_addr_pkg.sv"]
 if a.suite == "matrixouter":
     files = [ROOT / "rtl/matrix/npu_matmul.sv"]
 if a.suite == "purecompute":
@@ -285,6 +289,7 @@ with (out / "run-launcher.log").open("w") as f:
     r = subprocess.run(cmd, cwd=cwd, stdout=f, stderr=subprocess.STDOUT)
 text = (out / "run.log").read_text()
 markers = {
+    "addressranges": "ADDRESS RANGES PASS",
     "sramuncached": "SRAM UNCACHED PASS",
     "arbiter": "ARBITER PASS",
     "rfequivalence": "RF EQUIVALENCE PASS",

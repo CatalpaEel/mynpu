@@ -25,6 +25,7 @@ module tb_sram_uncached;
   logic mmio_error_i = 0;
   xbar dut (
     .*,
+    .rf_sink_be_i    (4'b0),
     .rf_sink_req_i   (1'b0),
     .rf_sink_addr_i  (32'b0),
     .rf_sink_wdata_i (32'b0),

@@ -20,12 +20,14 @@ package npu_addr_pkg;
     return is_stream_address(a) ? {a[31:8], 8'(a[7:0] + delta)} : a + delta;
   endfunction
   function automatic logic data_range_ok(input logic [31:0] base, bytes);
-    logic [32:0] ending;
-    ending = {1'b0, base} + {1'b0, bytes};
+    // Valid SRAM/RF spans fit the low 15-bit aperture. Bound bytes before
+    // narrowing it, so arbitrary 32-bit lengths and address wrap stay rejected.
+    logic [15:0] ending;
+    ending = {1'b0, base[14:0]} + {1'b0, bytes[14:0]};
     return bytes != 0 && (is_stream_address(
         base
-    ) || ((base[31:14] == 18'h20000 && ending <= {1'b0, RF_BASE}) || (is_rf_address(
+    ) || ((base[31:14] == 18'h20000 && bytes <= 16384 && ending <= 16'h4000) || (is_rf_address(
         base
-    ) && ending <= {1'b0, RF_BASE} + RF_BYTES)));
+    ) && bytes <= RF_BYTES && ending <= 16'h4000 + RF_BYTES)));
   endfunction
 endpackage

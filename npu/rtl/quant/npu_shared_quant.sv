@@ -77,12 +77,14 @@ module npu_shared_quant (
     end
   end
   always_comb begin
-    logic signed [63:0] rounded;
-    logic [63:0] mask;
+    logic signed [31:0] rounded;
+    logic [31:0] mask;
     logic signed [31:0] translated;
-    rounded = biased >>> shift;
-    mask = shift == 0 ? 0 : (64'b1 << (shift - 1)) - 1;
-    if (shift != 0 && biased[shift-1] && ((biased & mask) != 0 || rounded[0]))
+    // CSR validation limits shift to 0..32; only the low result word and
+    // low 32 discarded bits affect rounding, including INT32 wrap.
+    rounded = 32'(biased >>> shift);
+    mask = shift == 0 ? 0 : (32'b1 << (shift - 1)) - 1;
+    if (shift != 0 && biased[5'(shift-1)] && ((biased[31:0] & mask) != 0 || rounded[0]))
       rounded = rounded + 1;
     translated = 32'(rounded) + zero;  // match VPG2 low-word and zero-point wrap
     result = translated < lower ? lower : translated > upper ? upper : translated;

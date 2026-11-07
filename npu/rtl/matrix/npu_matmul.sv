@@ -37,12 +37,15 @@ module npu_matmul (
       valid_o <= valid_i && emit_i;
       if (valid_i) begin
         if (emit_i) output_index <= index_i;
-        if (multiply_i) begin
-          for (int r = 0; r < 4; r++)
-          for (int c = 0; c < 4; c++)
-          if (row_mask_i[r] && col_mask_i[c])
-            accumulator[4*r+c] <= accumulator[4*r+c] + 32'($signed(a_i[r]) * $signed(b_i[c]));
-        end else accumulator[index_i] <= accumulator[index_i] + addend_i;
+        // Select the addend before each accumulator's single adder. A dynamic
+        // indexed seed update otherwise infers a second accumulator read tree.
+        for (int r = 0; r < 4; r++)
+        for (int c = 0; c < 4; c++) begin
+          logic [31:0] delta;
+          delta = multiply_i ? 32'($signed(a_i[r]) * $signed(b_i[c])) : addend_i;
+          if (multiply_i ? row_mask_i[r] && col_mask_i[c] : index_i == 4'(4 * r + c))
+            accumulator[4*r+c] <= accumulator[4*r+c] + delta;
+        end
       end
     end
   end

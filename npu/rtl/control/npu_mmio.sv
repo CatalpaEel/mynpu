@@ -92,8 +92,11 @@ module npu_mmio #(
     return base[1:0] == 0 && words != 0 && words <= 4096 && data_range_ok(base, words << 2);
   endfunction
   function automatic logic overlaps(input logic [31:0] a, aw, b, bw);
-    return {1'b0,a} < ({1'b0,b} + ({1'b0,bw} << 2))
-      && {1'b0,b} < ({1'b0,a} + ({1'b0,aw} << 2));
+    // Callers also validate both addresses and lengths (<=4096 words).
+    // All data targets share the same upper 17 address bits. Keep the carry
+    // for FIFO spans extending beyond the aperture; do not wrap the endpoint.
+    return {1'b0,a[14:0]} < ({1'b0,b[14:0]} + {1'b0,bw[12:0],2'b0})
+      && {1'b0,b[14:0]} < ({1'b0,a[14:0]} + {1'b0,aw[12:0],2'b0});
   endfunction
   assign lda=mat_lda_o!=0 ? {19'b0,mat_lda_o[12:0]} : mf_q[0] ? {27'b0,mm_q[4:0]}:{27'b0,mk_q[4:0]};
   assign ldb=mat_ldb_o!=0 ? {19'b0,mat_ldb_o[12:0]} : mf_q[1] ? {27'b0,mk_q[4:0]}:{27'b0,mn_q[4:0]};
@@ -325,6 +328,12 @@ module npu_mmio #(
       (we_i && addr_i==12'h100 && wdata_i[0] && mc==MATRIX_QUEUE_DEPTH && !mpop) ||
       (we_i && addr_i==12'h200 && wdata_i[0] && vc==VECTOR_QUEUE_DEPTH && !vpop);
   end
+  // Occupancy reset invalidates payload. No read occurs before a fresh push.
+  always_ff @(posedge clk_i) begin
+    if (mpush)
+      mq[mt] <= {ma_q[14:0], mb_q[14:0], md_q[14:0], mm_q[4:0], mn_q[4:0], mk_q[4:0], mf_q[4:0]};
+    if (vpush) vq[vt] <= {va_q[14:0], vb_q[14:0], vd_q[14:0], vl_q[10:0], vo_q[7:0], vs_q};
+  end
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       ma_q <= 0;
@@ -363,8 +372,6 @@ module npu_mmio #(
       vt <= 0;
       mc <= 0;
       vc <= 0;
-      for (int i = 0; i < MATRIX_QUEUE_DEPTH; i++) mq[i] <= '0;
-      for (int i = 0; i < VECTOR_QUEUE_DEPTH; i++) vq[i] <= '0;
       mat_start_o <= 0;
       vec_start_o <= 0;
       mat_done_q <= 0;
@@ -413,14 +420,12 @@ module npu_mmio #(
       // only for one-sided transfers; queue data and active ports are separate.
       if (mpush) begin
         if (!mat_occupied) mat_error_q <= 0;
-        mq[mt] <= {ma_q[14:0], mb_q[14:0], md_q[14:0], mm_q[4:0], mn_q[4:0], mk_q[4:0], mf_q[4:0]};
         mt <= mnext(mt);
         mat_submitted <= mat_submitted + 1;
         mat_done_q <= 0;
       end
       if (vpush) begin
         if (!vec_occupied) vec_error_q <= 0;
-        vq[vt] <= {va_q[14:0], vb_q[14:0], vd_q[14:0], vl_q[10:0], vo_q[7:0], vs_q};
         vt <= vnext(vt);
         vec_submitted <= vec_submitted + 1;
         vec_done_q <= 0;

@@ -41,6 +41,9 @@ p.add_argument(
     choices=[32, 64, 128, 256],
     default=json.loads((ROOT / "build_config.json").read_text())["rf_bank_words"],
 )
+p.add_argument(
+    "--clock-gating", action="store_true", help="Extract library clock gates for enabled registers"
+)
 p.add_argument("--effort", choices=["low", "medium", "high"], default="medium")
 a = p.parse_args()
 r = a.out.resolve()
@@ -95,6 +98,7 @@ lefs = [
             "synth_period_ns": a.synth_period,
             "report_period_ns": a.report_period,
             "effort": a.effort,
+            "clock_gating": a.clock_gating,
             "sram_banks": 2,
             "rf_bank_words": a.rf_bank_words,
             "cache_words_per_bank": 0,
@@ -170,7 +174,7 @@ set_db init_hdl_search_path {{{r / "inputs" / inc}}}
 read_libs {listing(libs)}
 read_physical -lef {listing(lefs)}
 read_hdl -sv -define {{SYNTHESIS NPU_RF_BANK_WORDS={a.rf_bank_words} NPU_CNN_QUEUE_DEPTH={a.cnn_queue_depth} NPU_MATRIX_QUEUE_DEPTH={a.matrix_queue_depth} NPU_VECTOR_QUEUE_DEPTH={a.vector_queue_depth}}} {listing([r / "inputs" / f.relative_to(ROOT.parent) for f in files] + [r / "inputs/npu_asic_top.sv"])}
-elaborate npu_asic_top
+{("set_db lp_insert_clock_gating true" + chr(10)) if a.clock_gating else ""}elaborate npu_asic_top
 check_design > {r / "reports/elaborated_check.rpt"}
 check_design -unresolved > {r / "reports/elaborated_unresolved.rpt"}
 read_sdc {r / "synth.sdc"}
