@@ -101,7 +101,7 @@ module tb_cnn_stream;
   endtask
   task automatic wait_done(input int id);
     logic [31:0] status;
-    for (int k = 0; k < 1000; k++) begin
+    for (int k = 0; k < 30000; k++) begin
       rd('h40000004 + (id == 0 ? 'h600 : id == 1 ? 'h100 : 'h200), status);
       if (status[2]) $fatal(1, "engine fault id=%0d", id);
       if (status[1] && !status[0]) return;
@@ -114,7 +114,7 @@ module tb_cnn_stream;
     int input_bytes, weight_bytes;
     logic [31:0] a, b, d, got, word;
     logic [7:0] pixels[4096];
-    int weights[288];
+    int weights[4608];
     w = sample % 17 + 1;
     h = (sample * 3) % 9 + 1;
     ci = sample % 4 + 1;
@@ -123,6 +123,11 @@ module tb_cnn_stream;
       ci = sample[0] ? 16 : 8;
       w = sample % 5 + 1;
       h = sample % 3 + 1;
+    end
+    if (sample >= 192) begin
+      ci = sample == 192 ? 17 : sample == 193 ? 31 : sample == 194 ? 255 : 256;
+      w = 1;
+      h = 1;
     end
     oh = (h + step - 1) / step;
     ow = (w + step - 1) / step;
@@ -201,7 +206,7 @@ module tb_cnn_stream;
     repeat (5) @(negedge clk);
     rst_n = 1;
     repeat (8) @(negedge clk);
-    for (int sample = 0; sample < 192; sample ++) convolution(sample);
+    for (int sample = 0; sample < 196; sample ++) convolution(sample);
     // Packed FIFO input, circular window across four word boundaries.
     for (int w = 0; w < 4; w++) begin
       logic [31:0] word;
@@ -223,7 +228,7 @@ module tb_cnn_stream;
       checks++;
     end
     $display(
-        "CNN STREAM PASS cases=193 checks=%0d stride1/2/borders/unaligned-rows/1..16-channels/RF/SRAM",
+        "CNN STREAM PASS cases=197 checks=%0d stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM",
         checks);
     $finish;
   end

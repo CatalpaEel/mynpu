@@ -75,8 +75,8 @@ module npu_stream_control #(
             csr_wdata_i[1:0] == 0;
       end
       'h1c: begin
-        csr_rdata_o = {27'b0, cfg.ci};
-        valid_write = csr_wdata_i >= 1 && csr_wdata_i <= 16;
+        csr_rdata_o = {23'b0, cfg.ci};
+        valid_write = csr_wdata_i >= 1 && csr_wdata_i <= 256;
       end
       'h20: begin
         csr_rdata_o = cfg.step2 ? 2 : 1;
@@ -183,7 +183,7 @@ module npu_stream_control #(
           'h10: cfg.dst <= csr_wdata_i[14:0];
           'h14: cfg.row_stride <= csr_wdata_i[14:0];
           'h18: cfg.partial <= csr_wdata_i[14:0];
-          'h1c: cfg.ci <= csr_wdata_i[4:0];
+          'h1c: cfg.ci <= csr_wdata_i[8:0];
           'h20: cfg.step2 <= csr_wdata_i == 2;
           'h24: cfg.plane_stride <= csr_wdata_i[14:0];
           'h28: command <= csr_wdata_i;

@@ -29,11 +29,11 @@ module npu_mmio #(
   mat_d_o,
   output logic [4:0] mat_m_o,
   mat_n_o,
-  mat_k_o,
+  output logic [8:0] mat_k_o,
   output logic [31:0] vec_a_o,
   vec_b_o,
   vec_d_o,
-  output logic [10:0] vec_len_o,
+  output logic [12:0] vec_len_o,
   output logic [7:0] vec_op_o,
   output logic [31:0] vec_scalar_o,
   output logic [31:0] vec_program_cfg_o,
@@ -65,12 +65,13 @@ module npu_mmio #(
   assign vec_words = vo_q[6] ? (vl_q + 3) >> 2 : vl_q;
   typedef struct packed {
     logic [14:0] a, b, d;
-    logic [4:0] m, n, k;
+    logic [4:0] m, n;
+    logic [8:0] k;
     logic [4:0] flags;
   } mat_desc_t;
   typedef struct packed {
     logic [14:0] a, b, d;
-    logic [10:0] len;
+    logic [12:0] len;
     logic [7:0] op;
     logic [31:0] scalar;
   } vec_desc_t;
@@ -98,15 +99,15 @@ module npu_mmio #(
     return {1'b0,a[14:0]} < ({1'b0,b[14:0]} + {1'b0,bw[12:0],2'b0})
       && {1'b0,b[14:0]} < ({1'b0,a[14:0]} + {1'b0,aw[12:0],2'b0});
   endfunction
-  assign lda=mat_lda_o!=0 ? {19'b0,mat_lda_o[12:0]} : mf_q[0] ? {27'b0,mm_q[4:0]}:{27'b0,mk_q[4:0]};
-  assign ldb=mat_ldb_o!=0 ? {19'b0,mat_ldb_o[12:0]} : mf_q[1] ? {27'b0,mk_q[4:0]}:{27'b0,mn_q[4:0]};
-  assign a_span=32'(4'((mf_q[0] ? mk_q[4:0]:mm_q[4:0])-1))*lda+(mf_q[0] ? {27'b0,mm_q[4:0]}:{27'b0,mk_q[4:0]});
-  assign b_span=32'(4'((mf_q[1] ? mn_q[4:0]:mk_q[4:0])-1))*ldb+(mf_q[1] ? {27'b0,mk_q[4:0]}:{27'b0,mn_q[4:0]});
+  assign lda=mat_lda_o!=0 ? {19'b0,mat_lda_o[12:0]} : mf_q[0] ? {27'b0,mm_q[4:0]}:{23'b0,mk_q[8:0]};
+  assign ldb=mat_ldb_o!=0 ? {19'b0,mat_ldb_o[12:0]} : mf_q[1] ? {23'b0,mk_q[8:0]}:{27'b0,mn_q[4:0]};
+  assign a_span=32'(8'((mf_q[0] ? mk_q[8:0]:mm_q[4:0])-1))*lda+(mf_q[0] ? {27'b0,mm_q[4:0]}:{23'b0,mk_q[8:0]});
+  assign b_span=32'(8'((mf_q[1] ? mn_q[4:0]:mk_q[8:0])-1))*ldb+(mf_q[1] ? {23'b0,mk_q[8:0]}:{27'b0,mn_q[4:0]});
   assign a_words = ((a_span << (mf_q[3] ? (mf_q[4] ? 1 : 0) : 2)) + 3) >> 2;
   assign b_words = ((b_span << (mf_q[3] ? (mf_q[4] ? 1 : 0) : 2)) + 3) >> 2;
   assign d_words = {27'b0, mm_q[4:0]} * {27'b0, mn_q[4:0]};
   assign mat_ok=mm_q>=1 && mm_q<=16 && mn_q>=1 && mn_q<=16 && mf_q<=31 &&
-    mk_q<=16 && (mk_q>=1 || mf_q[2]) && range_ok(
+    mk_q<=256 && (mk_q>=1 || mf_q[2]) && range_ok(
       md_q, d_words
   ) && (mk_q == 0 || (lda >= (mf_q[0] ? mm_q : mk_q) && ldb >= (mf_q[1] ? mk_q : mn_q) && range_ok(
       ma_q, a_words
@@ -119,7 +120,7 @@ module npu_mmio #(
   )));
   // Direct 32-bit operations; wide VPG1 operations are no longer accepted.
   // Former fused REQUANT encodings are deliberately rejected.
-  assign vec_direct_ok = vl_q>=1 && vl_q<=1024 && (vo_q&32'hffffff20)==0
+  assign vec_direct_ok = vl_q>=1 && vl_q<=4096 && (vo_q&32'hffffff20)==0
     && (vo_q[4:0]<=15 || (vo_q[4:0]>=18 && vo_q[4:0]<=20) || vo_q[4:0]==24 || vo_q[4:0]==26)
     && range_ok(
       va_q, vec_words
@@ -136,7 +137,7 @@ module npu_mmio #(
   // Program instructions are global and immutable until the active job and
   // queue drain. Scalar/program scratch values are private to the active job.
   assign vec_program_ok = (vo_q==32'h20 || vo_q==32'ha0 || vo_q==32'h60)
-    && vl_q>=1 && vl_q<=1024 && vec_program_cfg_o[4:0]>=1 && vec_program_cfg_o[4:0]<=16
+    && vl_q>=1 && vl_q<=4096 && vec_program_cfg_o[4:0]>=1 && vec_program_cfg_o[4:0]<=16
     && vec_program_cfg_o[12:8]<vec_program_cfg_o[4:0]
     && (range_ok(
       va_q, vec_words
@@ -277,6 +278,18 @@ module npu_mmio #(
       12'h130: rdata_o = mf_q;
       12'h134: rdata_o = {16'b0, mat_lda_o};
       12'h138: rdata_o = {16'b0, mat_ldb_o};
+      12'h074: begin
+        rdata_o = {16'd256, 8'd16, 8'd16};  // K, N, M
+        writable = 0;
+      end
+      12'h078: begin
+        rdata_o = 4096;  // Elements, independent of vector precision.
+        writable = 0;
+      end
+      12'h07c: begin
+        rdata_o = 256;  // CNN input channels.
+        writable = 0;
+      end
       12'h070: begin
         rdata_o = IRQ_MASK;
         writable = 0;
@@ -335,8 +348,8 @@ module npu_mmio #(
   // Occupancy reset invalidates payload. No read occurs before a fresh push.
   always_ff @(posedge clk_i) begin
     if (mpush)
-      mq[mt] <= {ma_q[14:0], mb_q[14:0], md_q[14:0], mm_q[4:0], mn_q[4:0], mk_q[4:0], mf_q[4:0]};
-    if (vpush) vq[vt] <= {va_q[14:0], vb_q[14:0], vd_q[14:0], vl_q[10:0], vo_q[7:0], vs_q};
+      mq[mt] <= {ma_q[14:0], mb_q[14:0], md_q[14:0], mm_q[4:0], mn_q[4:0], mk_q[8:0], mf_q[4:0]};
+    if (vpush) vq[vt] <= {va_q[14:0], vb_q[14:0], vd_q[14:0], vl_q[12:0], vo_q[7:0], vs_q};
   end
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin

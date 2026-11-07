@@ -29,7 +29,7 @@ module npu_vector_stream #(
   b_i,
   d_i,
   scalar_i,
-  input logic [10:0] len_i,
+  input logic [12:0] len_i,
   input logic [7:0] op_i,
   input logic [31:0] program_cfg_i,
   input logic [15:0][31:0] program_i,
@@ -66,7 +66,7 @@ module npu_vector_stream #(
   state_t state;
   logic [31:0] a_ptr, d_ptr, scalar, write_data, load_addr;
   logic [3:0] write_be, pack_be;
-  logic [10:0] remaining;
+  logic [12:0] remaining;
   logic [7:0] mode;
   logic [4:0] pc, slots, loop_pc;
   logic [1:0] load_dst;
@@ -114,7 +114,7 @@ module npu_vector_stream #(
   assign batch_mask = !program_mode && binary_op && !mode[7] ? 3'b011 : 3'b001;
   assign batch_addresses = {32'b0, regs[1], a_ptr};
 
-  function automatic logic [3:0] tail_mask(input logic [10:0] left, input logic simd);
+  function automatic logic [3:0] tail_mask(input logic [12:0] left, input logic simd);
     if (!simd || left >= 4) return 4'hf;
     case (left[1:0])
       0: return 4'h0;

@@ -191,6 +191,15 @@ static inline int npu_vector_start(uint32_t a, uint32_t b, uint32_t d, uint32_t 
 /* Dense row-major GEMM, D=op(A)*op(B), or D+= when ACCUMULATE.
  * All bases are 4-byte aligned; packed rows need no padding. INT32 output.
  * Inputs: signed INT8/INT16; arithmetic accumulates modulo 2^32. */
+/* Per-job limits; address capacity can impose a tighter bound. */
+#define NPU_MATRIX_SHAPE_CAP 0x074u /* [31:16]=K, [15:8]=N, [7:0]=M */
+#define NPU_VECTOR_LENGTH_CAP 0x078u
+#define NPU_CNN_INPUT_CHANNEL_CAP 0x07cu
+#define NPU_MATRIX_MAX_M 16u
+#define NPU_MATRIX_MAX_N 16u
+#define NPU_MATRIX_MAX_K 256u
+#define NPU_VECTOR_MAX_ELEMENTS 4096u
+#define NPU_CNN_MAX_INPUT_CHANNELS 256u
 #define NPU_MATRIX_OUTER_CAP 0x06cu
 #define NPU_MATRIX_LDA 0x134u
 #define NPU_MATRIX_LDB 0x138u
@@ -341,7 +350,7 @@ static inline int npu_stream_configure(const struct npu_stream_config *d) {
       (!d->mode && ((d->dst & 3u) || !npu_data_span(d->dst, 4, rf_bytes))) ||
       d->partial < NPU_REGFILE_BASE || (d->partial & 3u) ||
       !npu_data_span(d->partial, 32, rf_bytes) || !d->row_stride || d->row_stride > 32767 ||
-      !d->plane_stride || d->plane_stride > 32767 || !d->cin || d->cin > 16 ||
+      !d->plane_stride || d->plane_stride > 32767 || !d->cin || d->cin > 256 ||
       (d->stride != 1 && d->stride != 2) || d->input_zero > 255 || d->mode != 0)
     return -1;
   npu_write(0x608, d->src);
@@ -381,7 +390,7 @@ struct npu_cnn_descriptor {
 };
 static inline int npu_cnn_descriptor_valid(const struct npu_cnn_descriptor *d, uint32_t rf_bytes) {
   if (rf_bytes < 32 || d->op != 0 || !d->width || d->width > 28 || !d->height || d->height > 28 ||
-      !d->cin || d->cin > 16 || (d->stride != 1 && d->stride != 2) || d->input_zero > 255 ||
+      !d->cin || d->cin > 256 || (d->stride != 1 && d->stride != 2) || d->input_zero > 255 ||
       (d->src & 3u))
     return 0;
   if (!d->output_width || d->output_width > (d->width + d->stride - 1) / d->stride ||

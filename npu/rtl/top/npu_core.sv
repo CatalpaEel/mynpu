@@ -89,8 +89,9 @@ module npu_core #(
       vec_fault;
   logic [31:0] ma, mb, md, va, vb, vd;
   logic [15:0] matrix_lda, matrix_ldb;
-  logic [4:0] mm, mn, mk;
-  logic [10:0] vl;
+  logic [4:0] mm, mn;
+  logic [8:0] mk;
+  logic [12:0] vl;
   logic [7:0] vo;
   logic [31:0] vs, vector_program_cfg;
   logic [15:0][31:0] vector_program;

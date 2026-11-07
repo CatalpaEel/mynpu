@@ -1,5 +1,8 @@
 # 当前架构入口
 
+已[扩大单次任务规模](docs/task-scale.md)：Matrix K≤256、Vector≤4096 元素、CNN 输入通道≤256，保留原有计算阵列与缓存；九组回归通过，尚未重测 PPA。
+
+
 当前已[拆分Matrix/Vector/CNN为IRQ16/17/18](docs/irq-independent.md)，完成与错误均可唤醒WFI，支持运行中确认done及同拍新事件优先。默认固件已重生成，旧WFI镜像需要更新。共享QT01为25,965周期/张，通用Vector为29,298周期/张。本轮RTL有改动，以下旧面积/时序测量不能代表当前IRQ版本，尚未重测PPA。
 
 共享量化固件已加入[完成中断＋WFI等待](docs/irq-wfi-wait.md)：MNIST **27,432 → 26,092周期/张**，减少4.88%；CPU取指造成的CNN同bank等待4,424 → 2,490拍。RTL/面积不变；通用Vector固件二进制不变。以下周期统计请按报告版本区分。

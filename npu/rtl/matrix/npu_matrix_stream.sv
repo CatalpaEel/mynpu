@@ -40,8 +40,8 @@ module npu_matrix_stream #(
   ldb_i,
   input logic [4:0] m_i,
   n_i,
-  k_i,
   flags_i,
+  input logic [8:0] k_i,
   output logic busy_o,
   done_o,
   fault_o,
@@ -78,7 +78,8 @@ module npu_matrix_stream #(
   logic [7:0] row_index_step;
   logic [14:0] lda_bytes, ldb_bytes, element_bytes;
   logic [15:0] lda_value, ldb_value;
-  logic [4:0] m, n, k, flags, tile_row, tile_col, inner;
+  logic [4:0] m, n, flags, tile_row, tile_col;
+  logic [8:0] k, inner;
   logic [1:0] out_r, out_c;
   logic [2:0] rows, cols;
   logic scalar_stream;

@@ -117,8 +117,8 @@ module tb_outer_gemm;
     end
   task automatic gemm_case(input int m, n, k, flags, padded, kinds, seed);
     int lda, ldb, aspan, bspan, size, before_macs, expected;
-    int av[512], bv[512];
-    logic [31:0] aw[512], bw[512], a, b, d, got, mask;
+    int av[1024], bv[1024];
+    logic [31:0] aw[1024], bw[1024], a, b, d, got, mask;
     a = kinds[0] ? 'h80004000 : 'h80001000;
     b = kinds[1] ? 'h80004080 : 'h80002000;
     d = 'h80001800;
@@ -340,6 +340,20 @@ module tb_outer_gemm;
     rd('h80003800, got);
     if (got !== 32'(-65536)) $fatal(1, "RF end");
     checks++;
+    // Extended reduction length: tails, transposes, packed INT8/INT16 and INT32.
+    for (int kk = 0; kk < 4; kk++) begin
+      int depth;
+      depth = kk == 0 ? 17 : kk == 1 ? 31 : kk == 2 ? 255 : 256;
+      for (int f = 0; f < 4; f++) begin
+        gemm_case(1, 1, depth, f, 0, 0, depth);
+        gemm_case(1, 1, depth, 8 | f, 0, 0, depth);
+        gemm_case(1, 1, depth, 24 | f, 0, 0, depth);
+      end
+    end
+    gemm_case(4, 4, 256, 8, 0, 0, 71);
+    gemm_case(4, 4, 256, 11, 0, 0, 72);
+    gemm_case(4, 4, 256, 24, 0, 0, 73);
+    gemm_case(4, 4, 256, 27, 0, 0, 74);
     if (full_steps < 1000) $fatal(1, "full 4x4 not exercised");
     $display(
         "OUTER GEMM PASS checks=%0d macs=%0d full_steps=%0d flags/strides/tails/tiles/SRAM/RF/K0",

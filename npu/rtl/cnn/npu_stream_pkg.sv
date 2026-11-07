@@ -5,7 +5,7 @@ package npu_stream_pkg;
   typedef struct packed {
     logic [14:0] src, weights, dst, partial;
     logic [14:0] row_stride, plane_stride;
-    logic [4:0] ci;
+    logic [8:0] ci;
     logic step2;
     logic [7:0] offset;
   } stream_config_t;

@@ -103,6 +103,9 @@ module tb_irq_control;
     repeat (4) @(negedge clk);
     rst = 1;
     check('h070, 'h70000, 0);
+    check('h074, 'h01001010, 0);
+    check('h078, 4096, 0);
+    check('h07c, 256, 0);
     for (int u = 0; u < 2; u++) begin
       int base;
       base = u == 0 ? 'h100 : 'h200;

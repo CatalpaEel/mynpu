@@ -73,7 +73,7 @@ module npu_stream_engine #(
   load_t load_state, pending_type;
   stream_config_t cfg;
   stream_task_t cmd;
-  logic [3:0] cursor;
+  logic [7:0] cursor;
   logic [2:0] position;
   logic [14:0] row_start[3], row_cursor[3], weight_base, weight_start, weight_ptr;
   logic [12:0] low_word[3];

@@ -101,7 +101,7 @@ module tb_vector_simd;
   endtask
   task automatic wait_done(input int id);
     logic [31:0] status;
-    for (int k = 0; k < 1000; k++) begin
+    for (int k = 0; k < 30000; k++) begin
       rd('h40000004 + (id == 0 ? 'h600 : id == 1 ? 'h100 : 'h200), status);
       if (status[2]) $fatal(1, "engine fault id=%0d", id);
       if (status[1] && !status[0]) return;
@@ -295,7 +295,7 @@ module tb_vector_simd;
     wr(CHANNEL + 4, 'h000000fb);
     configure_simd(CHANNEL, 0, 'h80001800, 5, 'hc8);  // XOR scalar -3
     start(2);
-    for (int k = 0; k < 1000; k++) begin
+    for (int k = 0; k < 30000; k++) begin
       rd('h40000204, got);
       if (got[2]) $fatal(1, "SIMD FIFO fault");
       if (!got[0] && got[1]) break;
@@ -322,6 +322,59 @@ module tb_vector_simd;
         if (got[2] && !got[0]) break;
       end
       if (!got[2] || got[0]) $fatal(1, "Unsupported SIMD op=%0d did not fault", op);
+      checks++;
+    end
+    // Long jobs use SRAM in place, so the test also reaches the aperture end.
+    for (int len_case = 0; len_case < 5; len_case++) begin
+      int length;
+      logic [31:0] before_jobs, after_jobs;
+      length = len_case == 0 ? 1025 : len_case == 1 ? 2048 : len_case == 2 ? 2049 : len_case == 3 ? 4095 : 4096;
+      for (int i = 0; i < length; i++) wr('h80000000 + 4 * i, 32'(i));
+      configure_simd('h80000000, 0, 'h80000000, length, 'h81);
+      wr('h40000230, 7);
+      start(2);
+      wait_done(2);
+      for (int i = 0; i < length; i++) begin
+        rd('h80000000 + 4 * i, got);
+        if (got !== 32'(i + 7)) $fatal(1, "long INT32 length=%0d index=%0d", length, i);
+        checks++;
+      end
+      // Packed INT8, then generic INT32 program, both on the same long job count.
+      configure_simd('h80000000, 0, 'h80000000, length, 'hc8);
+      wr('h40000230, 8'h55);
+      start(2);
+      wait_done(2);
+      for (int i = 0; i < (length + 3) / 4; i++) begin
+        logic [31:0] expected;
+        expected = 32'(i + 7);
+        for (int b = 0; b < 4; b++) if (i * 4 + b < length) expected[8*b+:8] ^= 8'h55;
+        rd('h80000000 + 4 * i, got);
+        if (got !== expected) $fatal(1, "long SIMD tail length=%0d index=%0d", length, i);
+        checks++;
+      end
+      wr('h40000234, 1);
+      wr('h40000240, ins(1, 0, 0, 0, 1, 3));
+      configure_simd('h80000000, 0, 'h80000000, length, 'h20);
+      start(2);
+      wait_done(2);
+      for (int i = 0; i < length; i++) begin
+        logic [31:0] expected;
+        expected = 32'(i + 7);
+        for (int b = 0; b < 4; b++) if (i * 4 + b < length) expected[8*b+:8] ^= 8'h55;
+        expected += 3;
+        rd('h80000000 + 4 * i, got);
+        if (got !== expected) $fatal(1, "long program length=%0d index=%0d", length, i);
+        checks++;
+      end
+    end
+    rd('h4000022c, got);
+    begin
+      logic [31:0] submitted;
+      submitted = got;
+      configure_simd('h80000000, 0, 'h80000000, 4097, 'hc8);
+      start(2);
+      rd('h4000022c, got);
+      if (got !== submitted) $fatal(1, "oversized vector job accepted");
       checks++;
     end
     $display("VECTOR SIMD PASS checks=%0d direct/program/SRAM/RF/inplace/scalar/tail/fault",
