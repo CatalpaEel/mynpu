@@ -51,7 +51,25 @@ int main(void) {
   CHECK(!npu_cnn_descriptor_valid(&d, 256));
   CHECK(!npu_data_span(0xfffffffcu, 8, 256));
   CHECK(!npu_data_span(NPU_REGFILE_BASE + 256, 1, 256));
-  CHECK(npu_stream_task(31, 31, 8, 7, 1, 1, 511) == 0xfffe3ff0u);
+  CHECK(npu_stream_task(127, 127, 8, 7, 1, 1, 511) == 0xfffffff8u);
+  CHECK(npu_vector_insn(1, 2, 3, 1, -7, 1) == 0xffff97a1u);
+  CHECK(npu_vector_shift_pair(22, 1, 2, 3, 32) ==
+        (22u | (1u << 6) | (2u << 8) | (3u << 10) | (32u << 12)));
+  CHECK(npu_vector_shift_pair(22, 1, 2, 3, 33) == 31u);
+  d.src = 0x80001400u;
+  d.weights = 0x80002000u;
+  d.dst = 0x80003d00u;
+  d.width = 1;
+  d.height = 128;
+  d.cin = 1;
+  d.stride = 1;
+  d.output_width = 1;
+  d.output_row = 127;
+  d.input_zero = 0;
+  d.op = 0;
+  CHECK(npu_cnn_descriptor_valid(&d, 256));
+  d.output_row = 128;
+  CHECK(!npu_cnn_descriptor_valid(&d, 256));
   printf(
       "STREAM SOFTWARE CHECK PASS checks=%u shape, borders, aliases, overflow, command encoding\n",
       checks);

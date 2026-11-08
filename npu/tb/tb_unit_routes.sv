@@ -74,7 +74,7 @@ module tb_unit_routes;
         wr('h40000624, 1);
         wr('h4000062c, 0);
         wr('h40000630, 0);
-        wr('h40000628, (1 << 14) | (2 << 18) | (1 << 21) | (1 << 22));
+        wr('h40000628, (1 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
       end
       1: begin
         wr(MATRIX_B, 32'(multiplier));
@@ -84,7 +84,7 @@ module tb_unit_routes;
         wr('h40000114, 1);
         wr('h40000118, 1);
         wr('h4000011c, 1);
-        wr('h40000130, 0);
+        matrix_config(0);
       end
       2: begin
         wr('h40000208, src);
@@ -107,6 +107,12 @@ module tb_unit_routes;
       if (status[1] && !status[0]) return;
     end
     $fatal(1, "route deadlock id=%0d", id);
+  endtask
+  // Translate the regression oracle's old layout tuple into explicit MMIO fields.
+  task automatic matrix_config(input logic [31:0] f);
+    wr('h4000013c, {31'b0, f[4]});
+    wr('h40000140, f[3] ? (f[4] ? 2 : 1) : 4);
+    wr('h40000130, f <= 31 ? (f & 7) : f);
   endtask
   initial begin
     logic [31:0] result;
@@ -158,7 +164,10 @@ module tb_unit_routes;
     repeat (5) @(negedge clk);
     rst_n = 1;
     repeat (8) @(negedge clk);
-    for (int k = 0; k < 256; k++) wr(INPUT_A + 4 * k, 32'(k % 7 + 1));
+    for (int group = 0; group < 4; group++)
+    for (int k = 0; k < 16; k++)
+    for (int row = 0; row < 4; row++)
+    wr(INPUT_A + 4 * (group * 64 + k * 4 + row), 32'(((group * 4 + row) * 16 + k) % 7 + 1));
     configure(1, CHANNEL, 'h80001800, 3);
     for (int k = 0; k < 16; k++) wr(MATRIX_B + 4 * k, 3);
     wr('h40000114, 16);

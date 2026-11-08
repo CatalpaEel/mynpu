@@ -75,7 +75,7 @@ module tb_shared_quant;
         wr('h40000624, 1);
         wr('h4000062c, 0);
         wr('h40000630, 0);
-        wr('h40000628, (1 << 14) | (2 << 18) | (1 << 21) | (1 << 22));
+        wr('h40000628, (1 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
       end
       1: begin
         wr(MATRIX_B, 32'(multiplier));
@@ -85,7 +85,7 @@ module tb_shared_quant;
         wr('h40000114, 1);
         wr('h40000118, 1);
         wr('h4000011c, 1);
-        wr('h40000130, 0);
+        matrix_config(0);
       end
       2: begin
         wr('h40000208, src);
@@ -152,6 +152,12 @@ module tb_shared_quant;
     logic [31:0] ignored;
     bus(1, a, d, ignored, 1);
     checks++;
+  endtask
+  // Translate the regression oracle's old layout tuple into explicit MMIO fields.
+  task automatic matrix_config(input logic [31:0] f);
+    wr('h4000013c, {31'b0, f[4]});
+    wr('h40000140, f[3] ? (f[4] ? 2 : 1) : 4);
+    wr('h40000130, f <= 31 ? (f & 7) : f);
   endtask
   initial begin
     logic [31:0] got, mul, bias, offset, zero, lo, hi, cd, md, expected_c, expected_m;
@@ -257,7 +263,7 @@ module tb_shared_quant;
     wr(INPUT_A, 6);
     configure(1, INPUT_A, 'h80001904, 3);
     wr('h80001904, 7);
-    wr('h40000130, 4);
+    matrix_config(4);
     start(1);
     wait_done(1);
     rd('h80001800, got);
@@ -266,7 +272,7 @@ module tb_shared_quant;
     // Matrix waiting on an empty stream owns immutable quant settings.
     settings(1, 3, 2, 0, 0, 0, 0, 255, 'h80001800, 0);
     configure(1, CHANNEL, 'h80001904, 3);
-    wr('h40000130, 0);
+    matrix_config(0);
     start(1);
     bad_wr('h40000744, 99);
     rd('h40000744, got);
@@ -285,7 +291,7 @@ module tb_shared_quant;
     for (int w = 0; w < 12; w++) wr(INPUT_A + 4 * w, 'h06060606);
     configure(0, INPUT_A, 'h80001900, 3);
     for (int task_id = 0; task_id < 3; task_id++) begin
-      wr('h40000628, 32'(task_id * 8) << 9 | 8 << 14 | 2 << 18 | (task_id == 0 ? 1 << 21 : 0));
+      wr('h40000628, 32'(task_id * 8) << 9 | 8 << 0 | 2 << 4 | (task_id == 0 ? 1 << 7 : 0));
       start(0);
     end
     repeat (300) @(negedge clk);

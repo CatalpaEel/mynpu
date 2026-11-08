@@ -74,7 +74,7 @@ module tb_outer_gemm;
         wr('h40000624, 1);
         wr('h4000062c, 0);
         wr('h40000630, 0);
-        wr('h40000628, (1 << 14) | (2 << 18) | (1 << 21) | (1 << 22));
+        wr('h40000628, (1 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
       end
       1: begin
         wr(MATRIX_B, 32'(multiplier));
@@ -84,7 +84,7 @@ module tb_outer_gemm;
         wr('h40000114, 1);
         wr('h40000118, 1);
         wr('h4000011c, 1);
-        wr('h40000130, 0);
+        matrix_config(0);
       end
       2: begin
         wr('h40000208, src);
@@ -115,7 +115,7 @@ module tb_outer_gemm;
       mac_count += $countones(dut.i_core.matrix_row_mask) * $countones(dut.i_core.matrix_col_mask);
       if (dut.i_core.matrix_row_mask == 15 && dut.i_core.matrix_col_mask == 15) full_steps++;
     end
-  task automatic gemm_case(input int m, n, k, flags, padded, kinds, seed);
+  task automatic gemm_case(input int m, n, k, flags, padded, kinds, seed, storage_bytes = 0);
     int lda, ldb, aspan, bspan, size, before_macs, expected;
     int av[1024], bv[1024];
     logic [31:0] aw[1024], bw[1024], a, b, d, got, mask;
@@ -126,7 +126,7 @@ module tb_outer_gemm;
     ldb = (flags[1] ? k : n) + padded * 3;
     aspan = ((flags[0] ? k : m) - 1) * lda + (flags[0] ? m : k);
     bspan = ((flags[1] ? n : k) - 1) * ldb + (flags[1] ? k : n);
-    size = flags[3] ? (flags[4] ? 2 : 1) : 4;
+    size = storage_bytes != 0 ? storage_bytes : flags[3] ? (flags[4] ? 2 : 1) : 4;
     mask = flags[4] ? 'hffff : 'hff;
     for (int w = 0; w < 512; w++) begin
       aw[w] = 0;
@@ -152,7 +152,8 @@ module tb_outer_gemm;
     wr('h40000114, 32'(m));
     wr('h40000118, 32'(n));
     wr('h4000011c, 32'(k));
-    wr('h40000130, 32'(flags));
+    matrix_config(32'(flags));
+    if (storage_bytes != 0) wr('h40000140, 32'(storage_bytes));
     before_macs = mac_count;
     start(1);
     wait_done(1);
@@ -193,6 +194,12 @@ module tb_outer_gemm;
     if (got !== 'hdeadbeef) $fatal(1, "tail overwrite");
     checks++;
   endtask
+  // Translate the regression oracle's old layout tuple into explicit MMIO fields.
+  task automatic matrix_config(input logic [31:0] f);
+    wr('h4000013c, {31'b0, f[4]});
+    wr('h40000140, f[3] ? (f[4] ? 2 : 1) : 4);
+    wr('h40000130, f <= 31 ? (f & 7) : f);
+  endtask
   initial begin
     logic [31:0] got;
     int ms[7] = '{1, 4, 5, 8, 9, 16, 3};
@@ -202,7 +209,7 @@ module tb_outer_gemm;
     rst_n = 1;
     repeat (8) @(negedge clk);
     rd('h4000006c, got);
-    if (got !== 'h00030404) $fatal(1, "outer capability %h", got);
+    if (got !== 'h00040404) $fatal(1, "outer capability %h", got);
     for (int flags = 0; flags < 32; flags++)
     for (int pad = 0; pad < 2; pad++)
     for (int shape = 0; shape < 7; shape++)
@@ -230,7 +237,7 @@ module tb_outer_gemm;
     wr('h40000114, 5);
     wr('h40000118, 7);
     wr('h4000011c, 3);
-    wr('h40000130, 8);
+    matrix_config(8);
     start(1);
     wait_done(1);
     for (int w = 0; w < 10; w++) begin
@@ -248,7 +255,7 @@ module tb_outer_gemm;
     wr('h40000114, 1);
     wr('h40000118, 1);
     wr('h4000011c, 0);
-    wr('h40000130, 4);
+    matrix_config(4);
     wr('h80001800, 'h81234567);
     wr('h40000110, 'h80001800);
     wr('h40000108, 0);
@@ -276,12 +283,15 @@ module tb_outer_gemm;
     wr('h40000114, 5);
     wr('h40000118, 7);
     wr('h4000011c, 1);
-    wr('h40000130, 0);
+    matrix_config(0);
     start(1);
-    for (int i = 0; i < 35; i++) begin
+    for (int tr = 0; tr < 5; tr += 4)
+    for (int tc = 0; tc < 7; tc += 4)
+    for (int r = tr; r < 5 && r < tr + 4; r++)
+    for (int c = tc; c < 7 && c < tc + 4; c++) begin
       rd(CHANNEL, got);
-      if (got !== 32'((i / 7 + 1) * (i % 7 + 1)))
-        $fatal(1, "quant32 FIFO row order element=%0d got=%h", i, got);
+      if (got !== 32'((r + 1) * (c + 1)))
+        $fatal(1, "quant32 FIFO tile order r/c=%0d/%0d got=%h", r, c, got);
       checks++;
     end
     wait_done(1);
@@ -297,7 +307,7 @@ module tb_outer_gemm;
     wr('h40000114, 4);
     wr('h40000118, 1);
     wr('h4000011c, 1);
-    wr('h40000130, 8);
+    matrix_config(8);
     wr('h40000134, 4096);
     wr('h40000138, 0);
     start(1);
@@ -311,7 +321,7 @@ module tb_outer_gemm;
     wr('h4000010c, 'h80000000);
     wr('h40000114, 1);
     wr('h40000118, 4);
-    wr('h40000130, 10);
+    matrix_config(10);
     wr('h40000134, 0);
     wr('h40000138, 4096);
     start(1);
@@ -323,7 +333,7 @@ module tb_outer_gemm;
     end
     wr('h40000138, 0);
     wr('h40000118, 1);
-    wr('h40000130, 16);
+    matrix_config(16);
     wr('h80003ffc, 'h00008000);
     wr('h80003000, 2);
     wr('h40000108, 'h80003ffc);
@@ -354,6 +364,10 @@ module tb_outer_gemm;
     gemm_case(4, 4, 256, 11, 0, 0, 72);
     gemm_case(4, 4, 256, 24, 0, 0, 73);
     gemm_case(4, 4, 256, 27, 0, 0, 74);
+    // Independent format: INT8 in two-byte slots has no legacy PACKED encoding.
+    gemm_case(5, 7, 17, 0, 0, 0, 91, 2);
+    gemm_case(5, 7, 17, 3, 0, 0, 92, 2);
+    gemm_case(1, 1, 256, 0, 0, 0, 93, 2);
     if (full_steps < 1000) $fatal(1, "full 4x4 not exercised");
     $display(
         "OUTER GEMM PASS checks=%0d macs=%0d full_steps=%0d flags/strides/tails/tiles/SRAM/RF/K0",

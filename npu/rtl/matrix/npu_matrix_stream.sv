@@ -42,6 +42,8 @@ module npu_matrix_stream #(
   n_i,
   flags_i,
   input logic [8:0] k_i,
+  input logic precision_i,
+  input logic [1:0] element_log2_i,
   output logic busy_o,
   done_o,
   fault_o,
@@ -82,7 +84,7 @@ module npu_matrix_stream #(
   logic [8:0] k, inner;
   logic [1:0] out_r, out_c;
   logic [2:0] rows, cols;
-  logic scalar_stream;
+  logic precision;
   logic [7:0] word_valid, needed;
   logic [7:0][31:0] operand_addr, word_data;
   logic [7:0][12:0] word_tag;
@@ -92,26 +94,24 @@ module npu_matrix_stream #(
   logic batch_ready, batch_valid, batch_req, all_available, response_error;
   logic [31:0] batch_addr, d_address, output_address;
   function automatic logic [14:0] advance_input(input logic [14:0] ptr, step, input logic stream);
-    return stream ? {ptr[14:8], 8'(ptr[7:0] + step[7:0])} : ptr + step;
+    return stream ? {ptr[14:8], 8'b0} : ptr + step;
   endfunction
   assign lda_value = lda_i != 0 ? lda_i : flags_i[0] ? 16'(m_i) : 16'(k_i);
   assign ldb_value = ldb_i != 0 ? ldb_i : flags_i[1] ? 16'(k_i) : 16'(n_i);
-  assign element_bytes = flags_i[3] ? (flags_i[4] ? 15'd2 : 15'd1) : 15'd4;
-  assign lda_bytes = 15'(lda_value) << (flags_i[3] ? (flags_i[4] ? 1 : 0) : 2);
-  assign ldb_bytes = 15'(ldb_value) << (flags_i[3] ? (flags_i[4] ? 1 : 0) : 2);
-  assign row_index_step = scalar_stream ? 8'(n) : 8'(n) << 2;
+  assign element_bytes = 15'd1 << element_log2_i;
+  assign lda_bytes = 15'(lda_value) << element_log2_i;
+  assign ldb_bytes = 15'(ldb_value) << element_log2_i;
+  assign row_index_step = 8'(n) << 2;
   assign initial_ptr[0] = a_tile;
   assign initial_ptr[4] = b_tile;
   for (genvar lane = 1; lane < 4; lane++) begin : g_initial_ptr
     assign initial_ptr[lane] = advance_input(initial_ptr[lane-1], a_row_step, a_stream);
     assign initial_ptr[lane+4] = advance_input(initial_ptr[lane+3], b_col_step, b_stream);
   end
-  // Stream endpoints preserve the original scalar traversal/pop ordering.
-  assign scalar_stream = a_stream || b_stream || d_stream || (quant_enable_i && is_stream_address(
-      quant_dst_i
-  ));
-  assign rows = scalar_stream ? 3'd1 : m - tile_row >= 5'd4 ? 3'd4 : 3'(m - tile_row);
-  assign cols = scalar_stream ? 3'd1 : n - tile_col >= 5'd4 ? 3'd4 : 3'(n - tile_col);
+  // FIFO tokens are tile-major, K-major, A rows then B columns; one word/lane.
+  // Streaming operands cannot be reread: producers repeat them for each tile.
+  assign rows = m - tile_row >= 5'd4 ? 3'd4 : 3'(m - tile_row);
+  assign cols = n - tile_col >= 5'd4 ? 3'd4 : 3'(n - tile_col);
   assign d_address = {17'h10000, advance_input(d_base, {5'b0, linear_index, 2'b0}, d_stream)};
   // Quant destinations retain full address carry/fault semantics. Only the
   // already-validated operand and raw-D apertures use bounded offsets.
@@ -141,8 +141,8 @@ module npu_matrix_stream #(
       compute_col_mask_o[lane] = lane < int'(cols);
       needed[lane]=lane<int'(rows) && !(word_valid[lane] && word_tag[lane]==operand_addr[lane][14:2]);
       needed[4+lane]=lane<int'(cols) && !(word_valid[4+lane] && word_tag[4+lane]==operand_addr[4+lane][14:2]);
-      compute_a_o[lane] = unpack_value(word_data[lane], operand_addr[lane][1:0], flags[4]);
-      compute_b_o[lane] = unpack_value(word_data[4+lane], operand_addr[4+lane][1:0], flags[4]);
+      compute_a_o[lane] = unpack_value(word_data[lane], operand_addr[lane][1:0], precision);
+      compute_b_o[lane] = unpack_value(word_data[4+lane], operand_addr[4+lane][1:0], precision);
     end
     covered = ~needed;
     batch_mask = 0;
@@ -228,6 +228,7 @@ module npu_matrix_stream #(
       n <= 0;
       k <= 0;
       flags <= 0;
+      precision <= 0;
       tile_row <= 0;
       tile_col <= 0;
       inner <= 0;
@@ -264,6 +265,7 @@ module npu_matrix_stream #(
             n <= n_i;
             k <= k_i;
             flags <= flags_i;
+            precision <= precision_i;
             tile_row <= 0;
             tile_col <= 0;
             state <= CLEAR;
@@ -283,6 +285,9 @@ module npu_matrix_stream #(
               if (inner + 1 == k) state <= flags[2] ? C_REQ : EMIT;
               else begin
                 inner <= inner + 1;
+                // A FIFO read is destructive. Retain SRAM/RF word reuse only.
+                if (a_stream) word_valid[3:0] <= 0;
+                if (b_stream) word_valid[7:4] <= 0;
                 for (int lane = 0; lane < 4; lane++) begin
                   operand_ptr[lane] <= advance_input(operand_ptr[lane], a_k_step, a_stream);
                   operand_ptr[4+lane] <= advance_input(operand_ptr[4+lane], b_k_step, b_stream);
@@ -321,16 +326,12 @@ module npu_matrix_stream #(
               state <= flags[2] ? C_REQ : EMIT;
             end else if (tile_col + 5'(cols) < n) begin
               tile_col <= tile_col + 5'(cols);
-              b_tile <= advance_input(
-                  b_tile, scalar_stream ? b_col_step : b_col_step << 2, b_stream
-              );
+              b_tile <= advance_input(b_tile, b_col_step << 2, b_stream);
               tile_index <= tile_index + 8'(cols);
               state <= CLEAR;
             end else if (tile_row + 5'(rows) < m) begin
               tile_row <= tile_row + 5'(rows);
-              a_tile <= advance_input(
-                  a_tile, scalar_stream ? a_row_step : a_row_step << 2, a_stream
-              );
+              a_tile <= advance_input(a_tile, a_row_step << 2, a_stream);
               b_tile <= b_origin;
               row_index <= row_index + row_index_step;
               tile_index <= row_index + row_index_step;

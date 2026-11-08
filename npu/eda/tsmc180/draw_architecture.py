@@ -90,7 +90,7 @@ box(
     1120,
     190,
     "控制与任务入口  ·  CPU经XBAR译码访问MMIO",
-    "独立完成/错误IRQ；活动中W1C确认done；新事件优先于确认\nCNN Stream Control：共享几何配置、卷积核地址随任务入FIFO、任务完成与错误\n独立DMA及外部流接口已删除；保留测试host，9信号PAD的程序与输入统一经JTAG SBA装载",
+    "独立完成/错误IRQ；活动中W1C确认done；新事件优先于确认\nCNN Stream Control：共享输入与卷积核配置、32bit窗口任务FIFO、任务完成与错误\n独立DMA及外部流接口已删除；保留测试host，9信号PAD的程序与输入统一经JTAG SBA装载",
     col="#c084fc",
     size=24,
 )
@@ -105,7 +105,7 @@ box(
     660,
     310,
     "CNN Stream  ·  npu_stream / control / engine",
-    "8项 × 43bit任务FIFO；显式卷积核地址\n3行 × 3words循环窗口 = 36B\n48bit行窗口选择；双份9B权重；返回直通\n跨输入通道部分和存共享RF\n末通道可直连共享QT01量化；或原始INT32写回",
+    "8项 × 32bit任务FIFO；输入与卷积核共享\n3行 × 3words循环窗口 = 36B\n48bit行窗口选择；双份9B权重；返回直通\n跨输入通道部分和存共享RF\n末通道可直连共享QT01量化；或原始INT32写回",
     col="#fb923c",
     size=26,
 )
@@ -115,7 +115,7 @@ box(
     660,
     310,
     "Matrix Stream  ·  npu_matrix_stream",
-    "8项GEMM任务FIFO由MMIO管理\n4×4分块、M/N/K循环；递增指针寻址\n8×32bit操作数暂存；按需去重/复用\nRF并行读A/B；SRAM分周期读取\n结果可直连共享QT01；关闭时原始INT32",
+    "8项 × 96bit任务；含精度、间距、lda/ldb\nSRAM / RF / FIFO均支持4×4外积\n8×32bit操作数暂存；按需去重/复用\nRF并行读A/B；SRAM分周期读取\n结果可直连共享QT01；关闭时原始INT32",
     col="#c084fc",
     size=26,
 )
@@ -125,7 +125,7 @@ box(
     660,
     310,
     "Vector Stream  ·  npu_vector_stream",
-    "8项任务FIFO由MMIO管理\n软件配置通用程序；PC + 4×32bit寄存器 + 进位标志\nLD32复用ALU；打包与结果共用缓冲\n经xbar读取RF / SRAM或流FIFO\n逐条执行；软件编排高低字运算",
+    "8项 × 99bit任务；标量与打包独立\nVPG3；PC + 4×32bit寄存器 + 进位标志\nLD32复用ALU；打包与结果共用缓冲\n经xbar读取RF / SRAM或流FIFO\n逐条执行；软件编排高低字运算",
     col="#2dd4bf",
     size=26,
 )
@@ -250,7 +250,7 @@ text(
 text(
     55,
     1885,
-    "当前已独立IRQ并使用SD92卷积核地址任务；未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。",
+    "当前SD93共享卷积核 / Matrix流4×4 / VPG3；未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。",
     22,
     "#94a3b8",
 )

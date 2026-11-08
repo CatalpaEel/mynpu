@@ -41,7 +41,7 @@ static inline uint32_t npu_regfile_bank_bytes(void);
 #define NPU_VEC_QUEUE 0x224u
 #define NPU_VEC_COMPLETED 0x228u
 #define NPU_VEC_SUBMITTED 0x22cu
-/* Operator ABI 1.0, project-defined integer kernels (not an ISA extension). */
+/* Operator ABI 2.1, project-defined integer kernels (not an ISA extension). */
 #define NPU_OPERATOR_ABI 0x040u
 #define NPU_GEMM_CAP 0x044u
 #define NPU_VECTOR_CAP 0x048u
@@ -51,8 +51,10 @@ static inline uint32_t npu_regfile_bank_bytes(void);
 #define NPU_GEMM_TRANS_A 1u
 #define NPU_GEMM_TRANS_B 2u
 #define NPU_GEMM_ACCUMULATE 4u
-#define NPU_GEMM_PACKED 8u
-#define NPU_GEMM_INT16 16u
+#define NPU_MATRIX_PRECISION 0x13cu
+#define NPU_MATRIX_ELEMENT_BYTES 0x140u
+#define NPU_PRECISION_INT8 0u
+#define NPU_PRECISION_INT16 1u
 #define NPU_VECTOR_SCALAR 128u
 enum npu_vector_op {
   NPU_V_RELU = 0,
@@ -84,18 +86,18 @@ enum npu_vector_op {
   NPU_V_ADCSX = 23,
   NPU_V_SCALAR = 29
 };
-enum npu_cnn_op { NPU_CONV = 0, NPU_FC = 1 };
+enum npu_cnn_op { NPU_CONV = 0 };
 #define NPU_V_PROGRAM 32u
 #define NPU_V_SIMD8 64u
 #define NPU_V_SCALAR_INPUT 128u
 #define NPU_VECTOR_SIMD_CAP 0x068u
-#define NPU_V_PACK_U8 128u
+#define NPU_V_PACK_U8 256u
 #define NPU_VECTOR_PROGRAM_ABI 0x058u
-#define NPU_VECTOR_PROGRAM_ABI_V2 0x56504732u
+#define NPU_VECTOR_PROGRAM_ABI_V3 0x56504733u
 #define NPU_VEC_PROGRAM_CFG 0x234u
 #define NPU_VEC_PROGRAM_WORDS 0x240u
 struct npu_gemm_descriptor {
-  uint32_t a, b, d, m, n, k, flags;
+  uint32_t a, b, d, m, n, k, flags, precision, element_bytes, lda, ldb;
 };
 struct npu_vector_descriptor {
   uint32_t a, b, d, len, op, scalar;
@@ -168,6 +170,10 @@ static inline int npu_matmul_start(uint32_t a, uint32_t b, uint32_t d, uint32_t 
   npu_write(0x114, m);
   npu_write(0x118, n);
   npu_write(0x11c, k);
+  npu_write(NPU_MATRIX_PRECISION, NPU_PRECISION_INT8);
+  npu_write(NPU_MATRIX_ELEMENT_BYTES, 4);
+  npu_write(0x134, 0);
+  npu_write(0x138, 0);
   npu_write(NPU_MAT_FLAGS, 0);
   npu_fence();
   npu_write(0x100, 1);
@@ -190,7 +196,8 @@ static inline int npu_vector_start(uint32_t a, uint32_t b, uint32_t d, uint32_t 
 }
 /* Dense row-major GEMM, D=op(A)*op(B), or D+= when ACCUMULATE.
  * All bases are 4-byte aligned; packed rows need no padding. INT32 output.
- * Inputs: signed INT8/INT16; arithmetic accumulates modulo 2^32. */
+ * Precision selects signed INT8/INT16. element_bytes independently selects
+ * a 1/2/4-byte storage slot; INT16 needs at least 2. Accumulation wraps INT32. */
 /* Per-job limits; address capacity can impose a tighter bound. */
 #define NPU_MATRIX_SHAPE_CAP 0x074u /* [31:16]=K, [15:8]=N, [7:0]=M */
 #define NPU_VECTOR_LENGTH_CAP 0x078u
@@ -203,18 +210,21 @@ static inline int npu_vector_start(uint32_t a, uint32_t b, uint32_t d, uint32_t 
 #define NPU_MATRIX_OUTER_CAP 0x06cu
 #define NPU_MATRIX_LDA 0x134u
 #define NPU_MATRIX_LDB 0x138u
-/* Shared per-batch element strides; zero chooses the dense leading dimension.
- * Finish all matrix jobs before changing them. K=0 with ACCUMULATE emits old D. */
+/* Configure stride shadows for raw-MMIO submissions; START snapshots them.
+ * npu_gemm_start uses its descriptor lda/ldb. Zero selects dense layout. */
 static inline int npu_gemm_leading_dims(uint32_t lda, uint32_t ldb) {
-  if (lda > 4096u || ldb > 4096u || (npu_read(NPU_MAT_STATUS) & NPU_BUSY) ||
-      npu_read(NPU_MATRIX_OUTER_CAP) != 0x00030404u)
+  if (lda > 4096u || ldb > 4096u || npu_read(NPU_MATRIX_OUTER_CAP) != 0x00040404u)
     return -1;
   npu_write(NPU_MATRIX_LDA, lda);
   npu_write(NPU_MATRIX_LDB, ldb);
   return 0;
 }
 static inline int npu_gemm_start(const struct npu_gemm_descriptor *d) {
-  if ((npu_read(NPU_OPERATOR_ABI) >> 16) != 1u || (d->flags & ~npu_read(NPU_GEMM_CAP)))
+  if ((npu_read(NPU_OPERATOR_ABI) >> 16) != 2u || (d->flags & ~npu_read(NPU_GEMM_CAP)))
+    return -1;
+  if (d->precision > 1 ||
+      (d->element_bytes != 1 && d->element_bytes != 2 && d->element_bytes != 4) ||
+      (d->precision && d->element_bytes < 2) || d->lda > 4096 || d->ldb > 4096)
     return -1;
   if (!npu_queue_has_space(NPU_MAT_QUEUE))
     return -1;
@@ -225,6 +235,10 @@ static inline int npu_gemm_start(const struct npu_gemm_descriptor *d) {
   npu_write(0x114, d->m);
   npu_write(0x118, d->n);
   npu_write(0x11c, d->k);
+  npu_write(NPU_MATRIX_PRECISION, d->precision);
+  npu_write(NPU_MATRIX_ELEMENT_BYTES, d->element_bytes);
+  npu_write(NPU_MATRIX_LDA, d->lda);
+  npu_write(NPU_MATRIX_LDB, d->ldb);
   npu_write(NPU_MAT_FLAGS, d->flags);
   npu_fence();
   npu_write(0x100, 1);
@@ -270,9 +284,9 @@ static inline int npu_quant_configure(uint32_t source, const struct npu_quant_co
 }
 static inline int npu_elementwise_start(const struct npu_vector_descriptor *d) {
   uint32_t opcode = d->op & 31u;
-  int program = (d->op == 0x20u || d->op == 0xa0u || d->op == 0x60u);
-  if ((npu_read(NPU_OPERATOR_ABI) >> 16) != 1u ||
-      (program ? npu_read(NPU_VECTOR_PROGRAM_ABI) != NPU_VECTOR_PROGRAM_ABI_V2
+  int program = (d->op == 0x20u || d->op == 0x120u || d->op == 0x60u);
+  if ((npu_read(NPU_OPERATOR_ABI) >> 16) != 2u ||
+      (program ? npu_read(NPU_VECTOR_PROGRAM_ABI) != NPU_VECTOR_PROGRAM_ABI_V3
                : ((d->op & ~0xdfu) != 0 || !(npu_read(NPU_VECTOR_CAP) & (1u << opcode)))))
     return -1;
   if (!npu_queue_has_space(NPU_VEC_QUEUE))
@@ -298,18 +312,18 @@ static inline int npu_elementwise_start(const struct npu_vector_descriptor *d) {
  */
 static inline uint32_t npu_vector_insn(unsigned op, unsigned rd, unsigned ra, unsigned rb,
                                        int immediate, int use_immediate) {
-  return (op & 31u) | ((rd & 3u) << 5) | ((ra & 3u) << 7) | ((rb & 3u) << 9) |
-         ((use_immediate != 0) << 11) | (((uint32_t)immediate & 0xfffffu) << 12);
+  return (op & 31u) | ((rd & 3u) << 6) | ((ra & 3u) << 8) | ((rb & 3u) << 10) |
+         ((use_immediate != 0) << 5) | (((uint32_t)immediate & 0xfffffu) << 12);
 }
 /* SHRD/RSHRD take low/high registers and a 0..32 immediate shift. */
 static inline uint32_t npu_vector_shift_pair(unsigned op, unsigned rd, unsigned low, unsigned high,
                                              unsigned shift) {
-  return shift <= 32u ? npu_vector_insn(op, rd, low, high, 0, 0) | (shift << 14) : 31u;
+  return shift <= 32u ? npu_vector_insn(op, rd, low, high, 0, 0) | (shift << 12) : 31u;
 }
 static inline int npu_vector_program_configure(const uint32_t *words, unsigned count,
                                                unsigned loop) {
   if (count == 0 || count > 16 || loop >= count ||
-      npu_read(NPU_VECTOR_PROGRAM_ABI) != NPU_VECTOR_PROGRAM_ABI_V2 ||
+      npu_read(NPU_VECTOR_PROGRAM_ABI) != NPU_VECTOR_PROGRAM_ABI_V3 ||
       (npu_read(NPU_VEC_STATUS) & NPU_BUSY))
     return -1;
   for (unsigned i = 0; i < count; i++)
@@ -318,10 +332,10 @@ static inline int npu_vector_program_configure(const uint32_t *words, unsigned c
   npu_fence();
   return 0;
 }
-/* SD92 transfer ABI. Geometry is immutable until the queue drains.
- * Kernel/window shadows are mutable while busy and snapshotted together at START. */
+/* SD93: input, kernel and geometry are shared until the queue drains.
+ * Only the 32-bit window shadow is snapshotted at START. */
 #define NPU_STREAM_ABI 0x654u
-#define NPU_STREAM_ABI_V2 0x53443932u
+#define NPU_STREAM_ABI_V3 0x53443933u
 #define NPU_CNN_KERNEL 0x60cu
 #define NPU_CNN_WINDOW 0x628u
 #define NPU_CNN_QUEUE 0x658u
@@ -345,7 +359,7 @@ static inline int npu_spans_overlap(uint32_t a, uint32_t n, uint32_t b, uint32_t
 }
 static inline int npu_stream_configure(const struct npu_stream_config *d) {
   uint32_t rf_bytes = npu_regfile_bank_bytes() * 2;
-  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V2 || (npu_read(0x604) & (NPU_BUSY | NPU_ERROR)))
+  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V3 || (npu_read(0x604) & (NPU_BUSY | NPU_ERROR)))
     return -1;
   if ((d->src & 3u) || !npu_data_span(d->src, 1, rf_bytes) ||
       !npu_data_span(d->kernel, 1, rf_bytes) ||
@@ -370,17 +384,17 @@ static inline int npu_stream_configure(const struct npu_stream_config *d) {
 }
 static inline uint32_t npu_stream_task(unsigned y, unsigned x, unsigned count, unsigned rows,
                                        int left, int right, unsigned dst_words) {
-  return ((y & 31u) << 4) | ((x & 31u) << 9) | ((count & 15u) << 14) | ((rows & 7u) << 18) |
-         ((left != 0) << 21) | ((right != 0) << 22) | ((dst_words & 511u) << 23);
+  return (count & 15u) | ((rows & 7u) << 4) | ((left != 0) << 7) | ((right != 0) << 8) |
+         ((x & 127u) << 9) | ((y & 127u) << 16) | ((dst_words & 511u) << 23);
 }
-static inline int npu_stream_submit(uint32_t kernel, uint32_t task) {
-  unsigned count = (task >> 14) & 15u;
-  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V2 || (task & 15u) || !count || count > 8 ||
-      !npu_data_span(kernel, npu_read(0x61c) * 9u, npu_regfile_bank_bytes() * 2u) ||
+static inline int npu_stream_submit(uint32_t task) {
+  unsigned count = task & 15u;
+  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V3 || !count || count > 8 ||
+      !npu_data_span(npu_read(NPU_CNN_KERNEL), npu_read(0x61c) * 9u,
+                     npu_regfile_bank_bytes() * 2u) ||
       !npu_queue_has_space(NPU_CNN_QUEUE) || (npu_read(0x604) & NPU_ERROR))
     return -1;
   uint32_t before = npu_read(NPU_CNN_SUBMITTED);
-  npu_write(NPU_CNN_KERNEL, kernel); // Snapshotted with the window word when START is accepted.
   npu_write(NPU_CNN_WINDOW, task);
   npu_fence();
   npu_write(0x600, 1);
@@ -393,7 +407,7 @@ struct npu_cnn_descriptor {
   uint32_t src, weights, dst, width, height, cin, stride, output_width, output_row, input_zero, op;
 };
 static inline int npu_cnn_descriptor_valid(const struct npu_cnn_descriptor *d, uint32_t rf_bytes) {
-  if (rf_bytes < 32 || d->op != 0 || !d->width || d->width > 28 || !d->height || d->height > 28 ||
+  if (rf_bytes < 32 || d->op != 0 || !d->width || d->width > 128 || !d->height || d->height > 128 ||
       !d->cin || d->cin > 256 || (d->stride != 1 && d->stride != 2) || d->input_zero > 255 ||
       (d->src & 3u))
     return 0;
@@ -438,8 +452,8 @@ static inline int npu_cnn_start(const struct npu_cnn_descriptor *d) {
   }
   for (unsigned x = 0; x < d->output_width; x += 8) {
     unsigned n = d->output_width - x > 8 ? 8 : d->output_width - x;
-    if (npu_stream_submit(d->weights, npu_stream_task(d->output_row, x, n, mask, x == 0,
-                                                      (x + n - 1) * d->stride + 1 >= d->width, x)))
+    if (npu_stream_submit(npu_stream_task(d->output_row, x, n, mask, x == 0,
+                                          (x + n - 1) * d->stride + 1 >= d->width, x)))
       return -1;
   }
   return 0;

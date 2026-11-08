@@ -11,10 +11,10 @@ _start:
     bne x8, x5, fail
     lw x8, -1448(x6)
     lui x5, 0x56504
-    addi x5, x5, 1842
+    addi x5, x5, 1843
     bne x8, x5, fail
     lw x8, -1428(x6)
-    lui x5, 0x30
+    lui x5, 0x40
     addi x5, x5, 1028
     bne x8, x5, fail
     lw x8, -1424(x6)
@@ -23,7 +23,7 @@ _start:
     bne x8, x5, fail
     lw x8, 84(x6)
     lui x5, 0x53444
-    addi x5, x5, -1742
+    addi x5, x5, -1741
     bne x8, x5, fail
     lui x7, 0x80001
     addi x7, x7, -768
@@ -64,31 +64,34 @@ weight_cache0:
     addi x10, x10, 4
     addi x11, x11, -1
     bne x11, x0, weight_cache0
-    lui x8, 0x5
-    addi x8, x8, -1829
+    lui x8, 0x4
+    addi x8, x8, 443
     sw x8, 64(x14)
-    lui x8, 0x1
-    addi x8, x8, -1861
+    addi x8, x0, 379
     sw x8, 68(x14)
-    addi x8, x0, 632
+    addi x8, x0, 1240
     sw x8, 72(x14)
-    addi x8, x0, 532
+    addi x8, x0, 1044
     sw x8, 76(x14)
-    addi x8, x0, 1520
+    lui x8, 0x1
+    addi x8, x8, -1072
     sw x8, 80(x14)
-    addi x8, x0, 1047
+    lui x8, 0x1
+    addi x8, x8, -2025
     sw x8, 84(x14)
-    lui x8, 0x60
-    addi x8, x8, 406
+    lui x8, 0x18
+    addi x8, x8, 790
     sw x8, 88(x14)
-    addi x8, x0, 125
+    addi x8, x0, 221
     sw x8, 92(x14)
-    addi x8, x0, 1537
+    lui x8, 0x1
+    addi x8, x8, -1023
     sw x8, 96(x14)
-    addi x8, x0, 1541
+    lui x8, 0x1
+    addi x8, x8, -1019
     sw x8, 100(x14)
-    lui x8, 0x100
-    addi x8, x8, -2044
+    lui x8, 0xff
+    addi x8, x8, 36
     sw x8, 104(x14)
     addi x8, x0, 523
     sw x8, 52(x14)
@@ -102,7 +105,7 @@ weight_cache0:
     lw x16, 8(x7)
     addi x8, x0, 196
     sw x8, 16(x14)
-    addi x8, x0, 160
+    addi x8, x0, 288
     sw x8, 20(x14)
     lw x8, 48(x7)
     sw x8, 48(x14)
@@ -150,14 +153,8 @@ submit0:
     sw x31, 0(x6)
     addi x3, x3, 1
     bne x3, x2, row0
-    addi x8, x0, 196
-    alu
-    addi x16, x16, 8
-    addi x18, x18, 9
-    addi x1, x1, -1
-    bne x1, x0, channel0
     lw x5, 96(x6)
-cnn_drain0:
+kernel_drain0:
     sw x4, 0(x6)
     sw x4, 0(x14)
     lw x8, 4(x6)
@@ -167,12 +164,18 @@ cnn_drain0:
     andi x10, x8, 4
     bne x10, x0, fail
     lw x8, 92(x6)
-    bne x8, x5, cnn_sleep0
-    jal x0, cnn_drained0
-cnn_sleep0:
+    bne x8, x5, kernel_sleep0
+    jal x0, kernel_ready0
+kernel_sleep0:
     wfi
-    jal x0, cnn_drain0
-cnn_drained0:
+    jal x0, kernel_drain0
+kernel_ready0:
+    addi x8, x0, 196
+    alu
+    addi x16, x16, 8
+    addi x18, x18, 9
+    addi x1, x1, -1
+    bne x1, x0, channel0
     sw x4, 0(x6)
     lw x5, 44(x14)
 vector_drain0:
@@ -273,14 +276,8 @@ submit1:
     sw x31, 0(x6)
     addi x3, x3, 1
     bne x3, x2, row1
-    addi x8, x0, 196
-    alu
-    addi x16, x16, 8
-    addi x18, x18, 18
-    addi x1, x1, -1
-    bne x1, x0, channel1
     lw x5, 96(x6)
-cnn_drain1:
+kernel_drain1:
     sw x4, 0(x6)
     sw x4, 0(x14)
     lw x8, 4(x6)
@@ -290,12 +287,18 @@ cnn_drain1:
     andi x10, x8, 4
     bne x10, x0, fail
     lw x8, 92(x6)
-    bne x8, x5, cnn_sleep1
-    jal x0, cnn_drained1
-cnn_sleep1:
+    bne x8, x5, kernel_sleep1
+    jal x0, kernel_ready1
+kernel_sleep1:
     wfi
-    jal x0, cnn_drain1
-cnn_drained1:
+    jal x0, kernel_drain1
+kernel_ready1:
+    addi x8, x0, 196
+    alu
+    addi x16, x16, 8
+    addi x18, x18, 18
+    addi x1, x1, -1
+    bne x1, x0, channel1
     sw x4, 0(x6)
     lw x5, 44(x14)
 vector_drain1:
@@ -380,14 +383,8 @@ submit2:
     sw x31, 0(x6)
     addi x3, x3, 1
     bne x3, x2, row2
-    addi x8, x0, 49
-    alu
-    addi x16, x16, 8
-    addi x18, x18, 36
-    addi x1, x1, -1
-    bne x1, x0, channel2
     lw x5, 96(x6)
-cnn_drain2:
+kernel_drain2:
     sw x4, 0(x6)
     sw x4, 0(x14)
     lw x8, 4(x6)
@@ -397,12 +394,18 @@ cnn_drain2:
     andi x10, x8, 4
     bne x10, x0, fail
     lw x8, 92(x6)
-    bne x8, x5, cnn_sleep2
-    jal x0, cnn_drained2
-cnn_sleep2:
+    bne x8, x5, kernel_sleep2
+    jal x0, kernel_ready2
+kernel_sleep2:
     wfi
-    jal x0, cnn_drain2
-cnn_drained2:
+    jal x0, kernel_drain2
+kernel_ready2:
+    addi x8, x0, 49
+    alu
+    addi x16, x16, 8
+    addi x18, x18, 36
+    addi x1, x1, -1
+    bne x1, x0, channel2
     sw x4, 0(x6)
     lw x5, 44(x14)
 vector_drain2:
@@ -489,14 +492,8 @@ submit3:
     sw x31, 0(x6)
     addi x3, x3, 1
     bne x3, x2, row3
-    addi x8, x0, 9
-    alu
-    addi x16, x16, 8
-    addi x18, x18, 72
-    addi x1, x1, -1
-    bne x1, x0, channel3
     lw x5, 96(x6)
-cnn_drain3:
+kernel_drain3:
     sw x4, 0(x6)
     sw x4, 0(x14)
     lw x8, 4(x6)
@@ -506,12 +503,18 @@ cnn_drain3:
     andi x10, x8, 4
     bne x10, x0, fail
     lw x8, 92(x6)
-    bne x8, x5, cnn_sleep3
-    jal x0, cnn_drained3
-cnn_sleep3:
+    bne x8, x5, kernel_sleep3
+    jal x0, kernel_ready3
+kernel_sleep3:
     wfi
-    jal x0, cnn_drain3
-cnn_drained3:
+    jal x0, kernel_drain3
+kernel_ready3:
+    addi x8, x0, 9
+    alu
+    addi x16, x16, 8
+    addi x18, x18, 72
+    addi x1, x1, -1
+    bne x1, x0, channel3
     sw x4, 0(x6)
     lw x5, 44(x14)
 vector_drain3:
@@ -596,14 +599,8 @@ submit4:
     sw x31, 0(x6)
     addi x3, x3, 1
     bne x3, x2, row4
-    addi x8, x0, 9
-    alu
-    addi x16, x16, 8
-    addi x18, x18, 72
-    addi x1, x1, -1
-    bne x1, x0, channel4
     lw x5, 96(x6)
-cnn_drain4:
+kernel_drain4:
     sw x4, 0(x6)
     sw x4, 0(x14)
     lw x8, 4(x6)
@@ -613,12 +610,18 @@ cnn_drain4:
     andi x10, x8, 4
     bne x10, x0, fail
     lw x8, 92(x6)
-    bne x8, x5, cnn_sleep4
-    jal x0, cnn_drained4
-cnn_sleep4:
+    bne x8, x5, kernel_sleep4
+    jal x0, kernel_ready4
+kernel_sleep4:
     wfi
-    jal x0, cnn_drain4
-cnn_drained4:
+    jal x0, kernel_drain4
+kernel_ready4:
+    addi x8, x0, 9
+    alu
+    addi x16, x16, 8
+    addi x18, x18, 72
+    addi x1, x1, -1
+    bne x1, x0, channel4
     sw x4, 0(x6)
     lw x5, 44(x14)
 vector_drain4:
@@ -674,6 +677,10 @@ outer_fc_recenter:
     sw x8, 52(x13)
     addi x8, x0, 144
     sw x8, 56(x13)
+    addi x8, x0, 0
+    sw x8, 60(x13)
+    addi x8, x0, 1
+    sw x8, 64(x13)
     addi x1, x0, 3
 outer_fc_block:
     addi x3, x0, 4
@@ -686,7 +693,7 @@ outer_fc_full:
     addi x9, x15, 0
     addi x10, x18, 0
     addi x2, x0, 9
-    addi x4, x0, 10
+    addi x4, x0, 2
 outer_fc_tile:
     sw x9, 8(x13)
     sw x10, 12(x13)
@@ -699,7 +706,7 @@ outer_fc_space:
     jal x0, outer_fc_space
 outer_fc_submit:
     sw x31, 0(x13)
-    addi x4, x0, 14
+    addi x4, x0, 6
     addi x9, x9, 16
     addi x10, x10, 16
     addi x2, x2, -1
@@ -721,39 +728,40 @@ outer_fc_raw_drain:
     addi x29, x29, 216
     addi x8, x0, 2
     sw x8, 0(x13)
-    lui x8, 0x5
-    addi x8, x8, -1829
+    lui x8, 0x4
+    addi x8, x8, 443
     sw x8, 64(x14)
-    lui x8, 0x1
-    addi x8, x8, -1861
+    addi x8, x0, 379
     sw x8, 68(x14)
-    addi x8, x0, 125
+    addi x8, x0, 221
     sw x8, 72(x14)
-    addi x8, x0, 1537
-    sw x8, 76(x14)
-    addi x8, x0, 632
-    sw x8, 80(x14)
-    addi x8, x0, 532
-    sw x8, 84(x14)
-    addi x8, x0, 1520
-    sw x8, 88(x14)
-    addi x8, x0, 1047
-    sw x8, 92(x14)
-    lui x8, 0x60
-    addi x8, x8, 406
-    sw x8, 96(x14)
-    lui x8, 0x4c
-    addi x8, x8, -2047
-    sw x8, 100(x14)
     lui x8, 0x1
-    addi x8, x8, -2043
+    addi x8, x8, -1023
+    sw x8, 76(x14)
+    addi x8, x0, 1240
+    sw x8, 80(x14)
+    addi x8, x0, 1044
+    sw x8, 84(x14)
+    lui x8, 0x1
+    addi x8, x8, -1072
+    sw x8, 88(x14)
+    lui x8, 0x1
+    addi x8, x8, -2025
+    sw x8, 92(x14)
+    lui x8, 0x18
+    addi x8, x8, 790
+    sw x8, 96(x14)
+    lui x8, 0x4b
+    addi x8, x8, 33
+    sw x8, 100(x14)
+    addi x8, x0, 37
     sw x8, 104(x14)
-    lui x8, 0x100
-    addi x8, x8, -2044
+    lui x8, 0xff
+    addi x8, x8, 36
     sw x8, 108(x14)
     addi x8, x0, 524
     sw x8, 52(x14)
-    addi x8, x0, 160
+    addi x8, x0, 288
     sw x8, 20(x14)
     addi x8, x0, 1
     sw x8, 16(x14)

@@ -272,10 +272,10 @@
   "rf_bank_words": 32,
   "intermediate_storage": "regfile with SRAM spill only for oversized tensors",
   "cnn_output": "raw signed INT32 routed through xbar channel 0 FIFO to vector",
-  "postprocessing_unit": "generic vector program VPG2",
+  "postprocessing_unit": "generic vector program VPG3",
   "fc_execution": "4x4 outer-product GEMM; FC 1x4/1x4/1x2 blocks, K16, B leading dimension144",
   "fc_raw_base": 2147500248,
-  "stream_abi": "SD92",
+  "stream_abi": "SD93",
   "stream_tasks": 296,
   "task_table": [
     {
@@ -322,6 +322,12 @@
   },
   "queue_space_wait": "independent IRQ18 CNN / IRQ17 Vector concurrent progress/error wake",
   "completion_wait": "independent IRQ18 CNN / IRQ17 Vector concurrent progress/error wake",
-  "stream_task_bits": 43,
-  "cnn_kernel_address_per_task": true
+  "stream_task_bits": 32,
+  "cnn_kernel_address_per_task": false,
+  "operator_abi": "2.1",
+  "vector_program_abi": "VPG3",
+  "matrix_precision": "INT8",
+  "matrix_element_bytes": 1,
+  "matrix_strides_per_task": true,
+  "matrix_stream_order": "tile/K/A-rows/B-cols; one FIFO word per operand"
 }

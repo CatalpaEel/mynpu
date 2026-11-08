@@ -34,13 +34,15 @@ module npu_mmio #(
   vec_b_o,
   vec_d_o,
   output logic [12:0] vec_len_o,
-  output logic [7:0] vec_op_o,
+  output logic [8:0] vec_op_o,
   output logic [31:0] vec_scalar_o,
   output logic [31:0] vec_program_cfg_o,
   output logic [15:0][31:0] vec_program_o,
   output logic [15:0] mat_lda_o,
   mat_ldb_o,
   output logic [4:0] mat_flags_o,
+  output logic mat_precision_o,
+  output logic [1:0] mat_element_log2_o,
   input logic mat_busy_i,
   mat_done_i,
   mat_fault_i,
@@ -59,6 +61,8 @@ module npu_mmio #(
       mat_cycles_q, vec_cycles_q, mat_completed, vec_completed, mat_submitted, vec_submitted;
   logic mat_done_q, mat_error_q, vec_done_q, vec_error_q, mat_ok, vec_ok;
   logic mat_occupied, vec_occupied, writable, known, mpush, vpush, mpop, vpop;
+  logic [31:0] mla_q, mlb_q, mp_q, me_q;
+  logic [1:0] element_log2;
   logic [31:0] a_words, b_words, d_words, lda, ldb, a_span, b_span;
   logic vec_direct_ok, vec_program_ok;
   logic [31:0] vec_words;
@@ -67,12 +71,15 @@ module npu_mmio #(
     logic [14:0] a, b, d;
     logic [4:0] m, n;
     logic [8:0] k;
-    logic [4:0] flags;
+    logic [2:0] flags;
+    logic precision;
+    logic [1:0] element_log2;
+    logic [12:0] lda, ldb;
   } mat_desc_t;
   typedef struct packed {
     logic [14:0] a, b, d;
     logic [12:0] len;
-    logic [7:0] op;
+    logic [8:0] op;
     logic [31:0] scalar;
   } vec_desc_t;
   localparam int MPW = MATRIX_QUEUE_DEPTH > 1 ? $clog2(MATRIX_QUEUE_DEPTH) : 1;
@@ -90,23 +97,30 @@ module npu_mmio #(
     return p == VECTOR_QUEUE_DEPTH - 1 ? '0 : p + 1'b1;
   endfunction
   function automatic logic range_ok(input logic [31:0] base, words);
-    return base[1:0] == 0 && words != 0 && words <= 4096 && data_range_ok(base, words << 2);
+    return base[1:0] == 0 && words != 0 &&
+        (is_stream_address(base) || (words <= 4096 && data_range_ok(base, words << 2)));
   endfunction
   function automatic logic overlaps(input logic [31:0] a, aw, b, bw);
+    // FIFO endpoints are channels, not linear byte ranges. Their synthetic
+    // tensor span must not alias the next channel when K grows.
+    if (is_stream_address(a) || is_stream_address(b))
+      return is_stream_address(a) && is_stream_address(b) && a[9:8] == b[9:8];
     // Callers also validate both addresses and lengths (<=4096 words).
     // All data targets share the same upper 17 address bits. Keep the carry
     // for FIFO spans extending beyond the aperture; do not wrap the endpoint.
     return {1'b0,a[14:0]} < ({1'b0,b[14:0]} + {1'b0,bw[12:0],2'b0})
       && {1'b0,b[14:0]} < ({1'b0,a[14:0]} + {1'b0,aw[12:0],2'b0});
   endfunction
-  assign lda=mat_lda_o!=0 ? {19'b0,mat_lda_o[12:0]} : mf_q[0] ? {27'b0,mm_q[4:0]}:{23'b0,mk_q[8:0]};
-  assign ldb=mat_ldb_o!=0 ? {19'b0,mat_ldb_o[12:0]} : mf_q[1] ? {23'b0,mk_q[8:0]}:{27'b0,mn_q[4:0]};
+  assign lda = mla_q != 0 ? mla_q : mf_q[0] ? {27'b0, mm_q[4:0]} : {23'b0, mk_q[8:0]};
+  assign ldb = mlb_q != 0 ? mlb_q : mf_q[1] ? {23'b0, mk_q[8:0]} : {27'b0, mn_q[4:0]};
   assign a_span=32'(8'((mf_q[0] ? mk_q[8:0]:mm_q[4:0])-1))*lda+(mf_q[0] ? {27'b0,mm_q[4:0]}:{23'b0,mk_q[8:0]});
   assign b_span=32'(8'((mf_q[1] ? mn_q[4:0]:mk_q[8:0])-1))*ldb+(mf_q[1] ? {23'b0,mk_q[8:0]}:{27'b0,mn_q[4:0]});
-  assign a_words = ((a_span << (mf_q[3] ? (mf_q[4] ? 1 : 0) : 2)) + 3) >> 2;
-  assign b_words = ((b_span << (mf_q[3] ? (mf_q[4] ? 1 : 0) : 2)) + 3) >> 2;
+  assign element_log2 = me_q == 1 ? 0 : me_q == 2 ? 1 : 2;
+  assign a_words = ((a_span << element_log2) + 3) >> 2;
+  assign b_words = ((b_span << element_log2) + 3) >> 2;
   assign d_words = {27'b0, mm_q[4:0]} * {27'b0, mn_q[4:0]};
-  assign mat_ok=mm_q>=1 && mm_q<=16 && mn_q>=1 && mn_q<=16 && mf_q<=31 &&
+  assign mat_ok=mm_q>=1 && mm_q<=16 && mn_q>=1 && mn_q<=16 && mf_q<=7 && mp_q<=1 &&
+    (me_q==1 || me_q==2 || me_q==4) && (!mp_q || me_q>=2) &&
     mk_q<=256 && (mk_q>=1 || mf_q[2]) && range_ok(
       md_q, d_words
   ) && (mk_q == 0 || (lda >= (mf_q[0] ? mm_q : mk_q) && ldb >= (mf_q[1] ? mk_q : mn_q) && range_ok(
@@ -136,18 +150,18 @@ module npu_mmio #(
   ))));
   // Program instructions are global and immutable until the active job and
   // queue drain. Scalar/program scratch values are private to the active job.
-  assign vec_program_ok = (vo_q==32'h20 || vo_q==32'ha0 || vo_q==32'h60)
+  assign vec_program_ok = (vo_q==32'h20 || vo_q==32'h120 || vo_q==32'h60)
     && vl_q>=1 && vl_q<=4096 && vec_program_cfg_o[4:0]>=1 && vec_program_cfg_o[4:0]<=16
     && vec_program_cfg_o[12:8]<vec_program_cfg_o[4:0]
     && (range_ok(
       va_q, vec_words
-  )) && (vo_q[7] ? data_range_ok(
+  )) && (vo_q[8] ? data_range_ok(
       vd_q, vec_words
   ) : range_ok(
       vd_q, vec_words
   )) && (vec_program_cfg_o[12:8] == 0 || range_ok(
       vb_q, 1
-  )) && ((vo_q[7] ? !({1'b0, vd_q} < {1'b0, va_q} + ({1'b0, vl_q} << 2) &&
+  )) && ((vo_q[8] ? !({1'b0, vd_q} < {1'b0, va_q} + ({1'b0, vl_q} << 2) &&
                       {1'b0, va_q} < {1'b0, vd_q} + vl_q) : va_q == vd_q || !overlaps(
       va_q, vec_words, vd_q, vec_words
   )));
@@ -213,11 +227,11 @@ module npu_mmio #(
         writable = 0;
       end
       12'h040: begin
-        rdata_o = 32'h00010001;
+        rdata_o = 32'h00020001;
         writable = 0;
       end
       12'h044: begin
-        rdata_o = 32'h0000001f;
+        rdata_o = 32'h00000007;
         writable = 0;
       end
       12'h048: begin
@@ -237,7 +251,7 @@ module npu_mmio #(
         writable = 0;
       end
       12'h058: begin
-        rdata_o = 32'h56504732;  // VPG2: generic vector program ABI
+        rdata_o = 32'h56504733;  // VPG3: ordered fields and independent output format
         writable = 0;
       end
       12'h054: begin
@@ -276,8 +290,10 @@ module npu_mmio #(
         writable = 0;
       end
       12'h130: rdata_o = mf_q;
-      12'h134: rdata_o = {16'b0, mat_lda_o};
-      12'h138: rdata_o = {16'b0, mat_ldb_o};
+      12'h134: rdata_o = mla_q;
+      12'h138: rdata_o = mlb_q;
+      12'h13c: rdata_o = mp_q;
+      12'h140: rdata_o = me_q;
       12'h074: begin
         rdata_o = {16'd256, 8'd16, 8'd16};  // K, N, M
         writable = 0;
@@ -295,7 +311,7 @@ module npu_mmio #(
         writable = 0;
       end
       12'h06c: begin
-        rdata_o = 32'h00030404;
+        rdata_o = 32'h00040404;
         writable = 0;
       end
       12'h12c: begin
@@ -340,7 +356,7 @@ module npu_mmio #(
         end
       end
     endcase
-    error_o=(we_i && (addr_i==12'h134 || addr_i==12'h138) && (mat_occupied || wdata_i>4096)) || (we_i && vec_occupied && (addr_i==12'h234 || (addr_i>=12'h240 && addr_i<=12'h27c))) || !known || (we_i&&!writable) || (we_i && addr_i==12'h00c &&
+    error_o=(we_i && (addr_i==12'h134 || addr_i==12'h138) && (wdata_i>4096)) || (we_i && vec_occupied && (addr_i==12'h234 || (addr_i>=12'h240 && addr_i<=12'h27c))) || !known || (we_i&&!writable) || (we_i && addr_i==12'h00c &&
       (cpu_release_o || wdata_i[31:14]!=18'h20000 || wdata_i[1:0]!=0)) ||
       (we_i && addr_i==12'h100 && wdata_i[0] && mc==MATRIX_QUEUE_DEPTH && !mpop) ||
       (we_i && addr_i==12'h200 && wdata_i[0] && vc==VECTOR_QUEUE_DEPTH && !vpop);
@@ -348,8 +364,20 @@ module npu_mmio #(
   // Occupancy reset invalidates payload. No read occurs before a fresh push.
   always_ff @(posedge clk_i) begin
     if (mpush)
-      mq[mt] <= {ma_q[14:0], mb_q[14:0], md_q[14:0], mm_q[4:0], mn_q[4:0], mk_q[8:0], mf_q[4:0]};
-    if (vpush) vq[vt] <= {va_q[14:0], vb_q[14:0], vd_q[14:0], vl_q[12:0], vo_q[7:0], vs_q};
+      mq[mt] <= {
+        ma_q[14:0],
+        mb_q[14:0],
+        md_q[14:0],
+        mm_q[4:0],
+        mn_q[4:0],
+        mk_q[8:0],
+        mf_q[2:0],
+        mp_q[0],
+        element_log2,
+        lda[12:0],
+        ldb[12:0]
+      };
+    if (vpush) vq[vt] <= {va_q[14:0], vb_q[14:0], vd_q[14:0], vl_q[12:0], vo_q[8:0], vs_q};
   end
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -366,6 +394,12 @@ module npu_mmio #(
       vo_q <= 0;
       mf_q <= 0;
       mat_lda_o <= 0;
+      mla_q <= 0;
+      mlb_q <= 0;
+      mp_q <= 0;
+      me_q <= 4;
+      mat_precision_o <= 0;
+      mat_element_log2_o <= 2;
       mat_ldb_o <= 0;
       vs_q <= 0;
       vec_program_cfg_o <= 0;
@@ -446,7 +480,11 @@ module npu_mmio #(
         mat_m_o <= mq[mh].m;
         mat_n_o <= mq[mh].n;
         mat_k_o <= mq[mh].k;
-        mat_flags_o <= mq[mh].flags;
+        mat_flags_o <= {2'b0, mq[mh].flags};
+        mat_precision_o <= mq[mh].precision;
+        mat_element_log2_o <= mq[mh].element_log2;
+        mat_lda_o <= {3'b0, mq[mh].lda};
+        mat_ldb_o <= {3'b0, mq[mh].ldb};
         mh <= mnext(mh);
         mat_start_o <= 1;
       end
@@ -509,8 +547,10 @@ module npu_mmio #(
             12'h214: vo_q <= wdata_i;
             12'h218: vb_q <= wdata_i;
             12'h130: mf_q <= wdata_i;
-            12'h134: mat_lda_o <= wdata_i[15:0];
-            12'h138: mat_ldb_o <= wdata_i[15:0];
+            12'h134: mla_q <= wdata_i;
+            12'h13c: mp_q <= wdata_i;
+            12'h140: me_q <= wdata_i;
+            12'h138: mlb_q <= wdata_i;
             12'h230: vs_q <= wdata_i;
             12'h234: vec_program_cfg_o <= wdata_i;
             default:

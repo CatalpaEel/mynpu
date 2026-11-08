@@ -86,7 +86,7 @@ module npu_shared_quant (
     mask = shift == 0 ? 0 : (32'b1 << (shift - 1)) - 1;
     if (shift != 0 && biased[5'(shift-1)] && ((biased[31:0] & mask) != 0 || rounded[0]))
       rounded = rounded + 1;
-    translated = 32'(rounded) + zero;  // match VPG2 low-word and zero-point wrap
+    translated = 32'(rounded) + zero;  // match vector low-word and zero-point wrap
     result = translated < lower ? lower : translated > upper ? upper : translated;
   end
   always_ff @(posedge clk_i or negedge rst_ni) begin

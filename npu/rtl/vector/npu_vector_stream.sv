@@ -30,7 +30,7 @@ module npu_vector_stream #(
   d_i,
   scalar_i,
   input logic [12:0] len_i,
-  input logic [7:0] op_i,
+  input logic [8:0] op_i,
   input logic [31:0] program_cfg_i,
   input logic [15:0][31:0] program_i,
   output logic busy_o,
@@ -67,7 +67,7 @@ module npu_vector_stream #(
   logic [31:0] a_ptr, d_ptr, scalar, write_data, load_addr;
   logic [3:0] write_be, pack_be;
   logic [12:0] remaining;
-  logic [7:0] mode;
+  logic [8:0] mode;
   logic [4:0] pc, slots, loop_pc;
   logic [1:0] load_dst;
   logic signed [31:0] regs[4];
@@ -128,19 +128,19 @@ module npu_vector_stream #(
     return value;
   endfunction
   assign program_mode = mode[5];
-  assign packed_mode = program_mode && mode[7];
+  assign packed_mode = program_mode && mode[8];
   assign instruction = program_i[pc[3:0]];
   assign operation = program_mode ? instruction[4:0] : mode[4:0];
-  assign dst = program_mode ? instruction[6:5] : 0;
-  assign src_a = instruction[8:7];
-  assign src_b = instruction[10:9];
+  assign dst = program_mode ? instruction[7:6] : 0;
+  assign src_a = instruction[9:8];
+  assign src_b = instruction[11:10];
   assign operand_a = program_mode ? regs[src_a] : batch_data[0];
   assign operand_b=program_mode && operation==27 ? {{12{instruction[31]}},instruction[31:12]}:program_mode ?
-    (instruction[11] ? (simd_mode ? {4{instruction[19:12]}} : {{12{instruction[31]}},instruction[31:12]}) : regs[src_b]) :
+    ((instruction[5] && operation!=21 && operation!=22) ? (simd_mode ? {4{instruction[19:12]}} : {{12{instruction[31]}},instruction[31:12]}) : regs[src_b]) :
     (mode[7] ? sx32(
       (simd_mode ? {4{scalar[7:0]}} : scalar)
   ) : batch_data[1]);
-  assign operand_c = operation == 29 ? (simd_mode ? {4{scalar[7:0]}} : scalar) : {26'b0,instruction[19:14]};
+  assign operand_c = operation == 29 ? (simd_mode ? {4{scalar[7:0]}} : scalar) : {26'b0,instruction[17:12]};
   assign compute_carry_o = carry;
   assign compute_op_o = operation == 27 ? 5'd1 : operation;
   assign compute_a_o = operand_a;
@@ -237,7 +237,7 @@ module npu_vector_stream #(
             load_addr <= compute_data_i;
             load_dst <= dst;
             state <= LOAD_REQ;
-          end else if((operation<=24 || operation==26 || operation==29) && (!program_mode || pc<slots) && (!(operation==21 || operation==22) || instruction[19:14]<=32) && (!simd_mode || operation<=15 || operation>=18 && operation<=20 || operation==24 || operation==26 || operation==29)) begin
+          end else if((operation<=24 || operation==26 || operation==29) && (!program_mode || pc<slots) && (!(operation==21 || operation==22) || instruction[31:12]<=32) && (!simd_mode || operation<=15 || operation>=18 && operation<=20 || operation==24 || operation==26 || operation==29)) begin
             if (operation == 16 || operation == 17 || operation == 23) carry <= compute_carry_i;
             regs[dst] <= folded;
             if (!program_mode || last_pc) state <= OUTPUT;

@@ -41,7 +41,7 @@ module tb_engine_faults;
     .d_i     (32'h80000200),
     .scalar_i(32'd0),
     .len_i   (13'd2),
-    .op_i    (8'd1),
+    .op_i    (9'd1),
     .busy_o  (busy[1]),
     .done_o  (done[1]),
     .fault_o (fault[1]),

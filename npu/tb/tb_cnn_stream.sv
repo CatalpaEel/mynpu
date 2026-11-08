@@ -74,7 +74,7 @@ module tb_cnn_stream;
         wr('h40000624, 1);
         wr('h4000062c, 0);
         wr('h40000630, 0);
-        wr('h40000628, (1 << 14) | (2 << 18) | (1 << 21) | (1 << 22));
+        wr('h40000628, (1 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
       end
       1: begin
         wr(MATRIX_B, 32'(multiplier));
@@ -84,7 +84,7 @@ module tb_cnn_stream;
         wr('h40000114, 1);
         wr('h40000118, 1);
         wr('h4000011c, 1);
-        wr('h40000130, 0);
+        matrix_config(0);
       end
       2: begin
         wr('h40000208, src);
@@ -129,10 +129,21 @@ module tb_cnn_stream;
       w = 1;
       h = 1;
     end
+    if (sample == 196) begin
+      ci = 1;
+      h = 65;
+      w = 1;
+    end
+    if (sample == 197) begin
+      ci = 1;
+      h = 1;
+      w = 97;
+    end
     oh = (h + step - 1) / step;
     ow = (w + step - 1) / step;
     count = ow < 8 ? ow : 8;
     y = sample % 2 ? oh - 1 : 0;
+    if (sample == 196) y = oh - 1;
     x = sample % 3 ? ow - count : 0;
     co = sample % 2;
     zero = (sample * 37) % 256;
@@ -169,7 +180,7 @@ module tb_cnn_stream;
     wr('h4000062c, 32'(zero));
     wr('h40000630, 0);
     wr('h40000628,
-       32'(y)<<4|32'(x)<<9|32'(count)<<14|32'(rows)<<18|32'(x==0)<<21|32'((x+count-1)*step+1>=w)<<22);
+       32'(y)<<16|32'(x)<<9|32'(count)<<0|32'(rows)<<4|32'(x==0)<<7|32'((x+count-1)*step+1>=w)<<8);
     start(0);
     wait_done(0);
     for (int pos = 0; pos < count; pos++) begin
@@ -202,11 +213,17 @@ module tb_cnn_stream;
     if (got !== 'hdeadbeef) $fatal(1, "CNN tail write");
     checks++;
   endtask
+  // Translate the regression oracle's old layout tuple into explicit MMIO fields.
+  task automatic matrix_config(input logic [31:0] f);
+    wr('h4000013c, {31'b0, f[4]});
+    wr('h40000140, f[3] ? (f[4] ? 2 : 1) : 4);
+    wr('h40000130, f <= 31 ? (f & 7) : f);
+  endtask
   initial begin
     repeat (5) @(negedge clk);
     rst_n = 1;
     repeat (8) @(negedge clk);
-    for (int sample = 0; sample < 196; sample ++) convolution(sample);
+    for (int sample = 0; sample < 198; sample ++) convolution(sample);
     // Packed FIFO input, circular window across four word boundaries.
     for (int w = 0; w < 4; w++) begin
       logic [31:0] word;
@@ -218,7 +235,7 @@ module tb_cnn_stream;
     wr('h40000614, 15);
     wr('h40000620, 2);
     wr('h40000624, 15);
-    wr('h40000628, 8 << 14 | 2 << 18 | 1 << 21 | 1 << 22);
+    wr('h40000628, 8 << 0 | 2 << 4 | 1 << 7 | 1 << 8);
     start(0);
     wait_done(0);
     for (int i = 0; i < 8; i++) begin
@@ -228,7 +245,7 @@ module tb_cnn_stream;
       checks++;
     end
     $display(
-        "CNN STREAM PASS cases=197 checks=%0d stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM",
+        "CNN STREAM PASS cases=199 checks=%0d stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM",
         checks);
     $finish;
   end

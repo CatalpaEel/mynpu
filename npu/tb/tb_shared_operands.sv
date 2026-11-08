@@ -74,7 +74,7 @@ module tb_shared_operands;
         wr('h40000624, 1);
         wr('h4000062c, 0);
         wr('h40000630, 0);
-        wr('h40000628, (1 << 14) | (2 << 18) | (1 << 21) | (1 << 22));
+        wr('h40000628, (1 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
       end
       1: begin
         wr(MATRIX_B, 32'(multiplier));
@@ -84,7 +84,7 @@ module tb_shared_operands;
         wr('h40000114, 1);
         wr('h40000118, 1);
         wr('h4000011c, 1);
-        wr('h40000130, 0);
+        matrix_config(0);
       end
       2: begin
         wr('h40000208, src);
@@ -165,7 +165,7 @@ module tb_shared_operands;
     wr('h40000114, 2);
     wr('h40000118, 3);
     wr('h4000011c, 7);
-    wr('h40000130, 32'(flags));
+    matrix_config(32'(flags));
     start(1);
     wait_done(1);
     for (int i = 0; i < 2; i++)
@@ -276,6 +276,12 @@ module tb_shared_operands;
       checks++;
     end
   endtask
+  // Translate the regression oracle's old layout tuple into explicit MMIO fields.
+  task automatic matrix_config(input logic [31:0] f);
+    wr('h4000013c, {31'b0, f[4]});
+    wr('h40000140, f[3] ? (f[4] ? 2 : 1) : 4);
+    wr('h40000130, f <= 31 ? (f & 7) : f);
+  endtask
   initial begin
     repeat (5) @(negedge clk);
     rst_n = 1;
@@ -317,7 +323,7 @@ module tb_shared_operands;
     wr('h40000114, 1);
     wr('h40000118, 1);
     wr('h4000011c, 16);
-    wr('h40000130, 0);
+    matrix_config(0);
     wr('h40000208, 'h80004080);
     wr('h4000020c, 'h80001800);
     wr('h40000210, 16);

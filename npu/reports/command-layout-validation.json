@@ -1,0 +1,339 @@
+{
+  "passed": true,
+  "stream_abi": "SD93",
+  "stream_abi_value": "0x53443933",
+  "task_fifo_bits": 32,
+  "window_shadow_bits": 32,
+  "kernel_address_bits": 15,
+  "kernel_address_shared": true,
+  "matrix_task_bits": 96,
+  "vector_task_bits": 99,
+  "vector_program_abi": "VPG3",
+  "matrix_strides_per_task": true,
+  "matrix_stream_order": "tile/K/A-rows/B-cols; one word per operand",
+  "cnn_queue_bits_removed_at_depth8": 88,
+  "cycles": {
+    "default": 30835,
+    "quant": 26067
+  },
+  "cycles_before": {
+    "default": 29297,
+    "quant": 26061
+  },
+  "c_check": "STREAM SOFTWARE CHECK PASS checks=633 shape, borders, aliases, overflow, command encoding",
+  "ppa_measured": false,
+  "firmware_reproduced": true,
+  "software_sha256": {
+    "mnist/firmware.py": "25ebe21f88f93381ed614b51e26e5b8009da0501c3fc829fe1d668bf1d69adf9",
+    "sw/npu.h": "074135c0a32ce4c0a8791b0aa5b27a8b5314782fe57d13f83a083f3064dfecd7",
+    "tests/stream_config.c": "9dae1ca354535d06094d6cb26bb3a306f78fef288f6379e7d6a6553132d2ceb7"
+  },
+  "suites": [
+    {
+      "result": "build/vcs-command_v3-cnnqueues/result.json",
+      "suite": "cnnqueues",
+      "macro": false,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "CNN QUEUE PASS depth=8 descriptor_bits=32 checks=99 shared immutable kernel, compact window tasks, order, overflow, reset, faults"
+      ],
+      "result_sha256": "15b52d7ef584f0a29c530905b71453ff6ef770e67e2013329336e7faa5e6ae4b"
+    },
+    {
+      "result": "build/vcs-command_v3-cnnstream-macro/result.json",
+      "suite": "cnnstream",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "CNN STREAM PASS cases=199 checks=1159 stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM"
+      ],
+      "result_sha256": "3c3bc8cdcf99f16cee05a8fe4a9cf426d498da7d56858cb3cfe859cfbce213da"
+    },
+    {
+      "result": "build/vcs-command_v3-vectorprogram/result.json",
+      "suite": "vectorprogram",
+      "macro": false,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "VECTOR PROGRAM PASS jobs=116 checks=3402 memory source, signed INT32, ties, saturation, byte masks, faults/retry"
+      ],
+      "result_sha256": "2e1127b32cf976e5e55a8f94971433ef3067ad8481ed564ad366d9a08075c20e"
+    },
+    {
+      "result": "build/vcs-command_v3-matrixtiles-macro/result.json",
+      "suite": "matrixtiles",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "MATRIX STREAM TILE CASE id=0 inputs=1 fifo_out=0 M/N/K=5/6/3 full_steps=3 PASS",
+        "MATRIX STREAM TILE CASE id=1 inputs=2 fifo_out=1 M/N/K=5/6/3 full_steps=3 PASS",
+        "MATRIX STREAM TILE CASE id=2 inputs=3 fifo_out=0 M/N/K=7/6/3 full_steps=3 PASS",
+        "MATRIX STREAM TILE CASE id=3 inputs=1 fifo_out=1 M/N/K=7/6/3 full_steps=3 PASS",
+        "MATRIX STREAM TILE CASE id=4 inputs=2 fifo_out=0 M/N/K=5/6/17 full_steps=17 PASS",
+        "MATRIX STREAM TILE CASE id=5 inputs=3 fifo_out=1 M/N/K=5/6/17 full_steps=17 PASS",
+        "MATRIX STREAM TILE CASE id=6 inputs=1 fifo_out=0 M/N/K=7/6/17 full_steps=17 PASS",
+        "MATRIX STREAM TILE CASE id=7 inputs=2 fifo_out=1 M/N/K=7/6/17 full_steps=17 PASS",
+        "MATRIX STREAM TILES PASS cases=8 checks=288 full_steps=80 mixed-SRAM/FIFO/tails/INT8/INT16/backpressure/tile-order"
+      ],
+      "result_sha256": "78be959174d58ac697f4454da700d7944d5881ef453ba8186743dee24a854a87"
+    },
+    {
+      "result": "build/vcs-command_v3-vectorsimd-macro/result.json",
+      "suite": "vectorsimd",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "VECTOR SIMD PASS checks=42594 direct/program/SRAM/RF/inplace/scalar/tail/fault"
+      ],
+      "result_sha256": "044c5b35c0fc0c52a944c1c7e0a54618743ecdc1b1c8df98d2d4fb3c4f07011b"
+    },
+    {
+      "result": "build/vcs-command_v3-unitroutes-macro/result.json",
+      "suite": "unitroutes",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "UNIT ROUTE producer=0 consumer=1 PASS",
+        "UNIT ROUTE producer=0 consumer=2 PASS",
+        "UNIT ROUTE producer=1 consumer=0 PASS",
+        "UNIT ROUTE producer=1 consumer=2 PASS",
+        "UNIT ROUTE producer=2 consumer=0 PASS",
+        "UNIT ROUTE producer=2 consumer=1 PASS",
+        "UNIT ROUTES PASS checks=24 six directed pairs, three-stage chain, 256-word GEMM, streamed DOT9 weights"
+      ],
+      "result_sha256": "c15a04bcdafc4b52982850eec383c781acf4a2d25085f18a9936de3c0d994054"
+    },
+    {
+      "result": "build/vcs-command_v3-sharedquant-macro/result.json",
+      "suite": "sharedquant",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "SHARED QUANT PASS checks=350 raw/quant32/quant8/concurrent/CNN-partial/Matrix-accumulate/signed-round/wrap/tail/RF/SRAM"
+      ],
+      "result_sha256": "3a878693a2e6fb41a256347ca2a679337a02afcac9c994492f928088f49bcd98"
+    },
+    {
+      "result": "build/vcs-command_v3-irqwake-macro/result.json",
+      "suite": "irqwake",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "IRQ WAKE CASE unit=0 irq=16 fault=0 PASS",
+        "IRQ WAKE CASE unit=0 irq=16 fault=1 PASS",
+        "IRQ WAKE CASE unit=1 irq=17 fault=0 PASS",
+        "IRQ WAKE CASE unit=1 irq=17 fault=1 PASS",
+        "IRQ WAKE CASE unit=2 irq=18 fault=0 PASS",
+        "IRQ WAKE CASE unit=2 irq=18 fault=1 PASS",
+        "IRQ MASK PASS unrelated-source-stays-asleep/two-pending-MIP/independent-ACK",
+        "IRQ WAKE PASS cases=7 real-CPU-WFI/three-distinct-sources/completion/runtime-fault/MIP/tickets"
+      ],
+      "result_sha256": "f53eb685d1b25dda6fa0606d1452617d11532674754779309983d08e0b3a2683"
+    },
+    {
+      "result": "build/vcs-command_v3-irqcontrol/result.json",
+      "suite": "irqcontrol",
+      "macro": false,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "IRQ CONTROL PASS checks=41 active-W1C/set-dominant/fault-wakeup/independent-levels/tickets"
+      ],
+      "result_sha256": "bb32115cfb93407a1ad0c933903b5db68e5546a04d9872ea61ff671385a34d15"
+    },
+    {
+      "result": "build/vcs-command_v3-enginefaults/result.json",
+      "suite": "enginefaults",
+      "macro": false,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "ENGINE FAULTS PASS failed_jobs=12 successful_retries=12 checks=584"
+      ],
+      "result_sha256": "a4a0ce9934a2820eadd6eea98b1f8e965ad15a0cb44726666a101489e5532dce"
+    },
+    {
+      "result": "build/vcs-command_v3_depth16-cnnqueues/result.json",
+      "suite": "cnnqueues",
+      "macro": false,
+      "cnn_queue_depth": 16,
+      "summaries": [
+        "CNN QUEUE PASS depth=16 descriptor_bits=32 checks=123 shared immutable kernel, compact window tasks, order, overflow, reset, faults"
+      ],
+      "result_sha256": "96ee400a557d98a4a9d5ddca1113f7cfcacdf3254a7f5d0b77c2e29a3e97a1a6"
+    },
+    {
+      "result": "build/vcs-command_v4-outergemm-macro/result.json",
+      "suite": "outergemm",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "OUTER GEMM PASS checks=30020 macs=383344 full_steps=22246 flags/strides/tails/tiles/SRAM/RF/K0"
+      ],
+      "result_sha256": "1fa860b426b951b28c26d70b44212c4519b5e1207ee6b3afb23d45ffeeb62769"
+    },
+    {
+      "result": "build/vcs-command_v5-queues/result.json",
+      "suite": "queues",
+      "macro": false,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "QUEUES PASS matrix_depth=8 vector_depth=8 checks=455 snapshots, wrap, overflow, concurrent engines, invalid descriptor, reset"
+      ],
+      "result_sha256": "3af4b18a71f7c38a090a830026aa421a777a8ca2096c44fb829759c608c09213"
+    },
+    {
+      "result": "build/vcs-command_v5_depth16-queues/result.json",
+      "suite": "queues",
+      "macro": false,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "QUEUES PASS matrix_depth=16 vector_depth=16 checks=791 snapshots, wrap, overflow, concurrent engines, invalid descriptor, reset"
+      ],
+      "result_sha256": "ff15e9ce89b8f02cdb5c36ade9d3e94c1d0e86867b3e644b943b5c939a4bf625"
+    },
+    {
+      "result": "build/vcs-command_v3_default-blocking-macro/result.json",
+      "suite": "blocking",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "BLOCKING PASS sample=0 cycles=30835",
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=31227 input_to_classification_us_at_50mhz=624.54 PASS",
+        "SINGLE sample=0 useful_macs=39330 kernel_cycles=23963 elapsed_cycles=30835 kernel_utilization_pct=18.24 system_utilization_pct=14.17 latency_us_at_50mhz=616.70 PASS",
+        "BLOCKING PASS sample=1 cycles=30835",
+        "SINGLE_INPUT sample=1 ingress_cycles=392 input_to_classification_cycles=31227 input_to_classification_us_at_50mhz=624.54 PASS",
+        "SINGLE sample=1 useful_macs=39330 kernel_cycles=23963 elapsed_cycles=30835 kernel_utilization_pct=18.24 system_utilization_pct=14.17 latency_us_at_50mhz=616.70 PASS",
+        "BLOCKING PASS sample=2 cycles=30835",
+        "SINGLE_INPUT sample=2 ingress_cycles=392 input_to_classification_cycles=31227 input_to_classification_us_at_50mhz=624.54 PASS",
+        "SINGLE sample=2 useful_macs=39330 kernel_cycles=23963 elapsed_cycles=30835 kernel_utilization_pct=18.24 system_utilization_pct=14.17 latency_us_at_50mhz=616.70 PASS",
+        "BLOCKING PASS sample=3 cycles=30835",
+        "SINGLE_INPUT sample=3 ingress_cycles=392 input_to_classification_cycles=31227 input_to_classification_us_at_50mhz=624.54 PASS",
+        "SINGLE sample=3 useful_macs=39330 kernel_cycles=23963 elapsed_cycles=30835 kernel_utilization_pct=18.24 system_utilization_pct=14.17 latency_us_at_50mhz=616.70 PASS",
+        "BLOCKING PASS sample=4 cycles=30835",
+        "SINGLE_INPUT sample=4 ingress_cycles=392 input_to_classification_cycles=31227 input_to_classification_us_at_50mhz=624.54 PASS",
+        "SINGLE sample=4 useful_macs=39330 kernel_cycles=23963 elapsed_cycles=30835 kernel_utilization_pct=18.24 system_utilization_pct=14.17 latency_us_at_50mhz=616.70 PASS",
+        "BLOCKING PASS sample=5 cycles=30835",
+        "SINGLE_INPUT sample=5 ingress_cycles=392 input_to_classification_cycles=31227 input_to_classification_us_at_50mhz=624.54 PASS",
+        "SINGLE sample=5 useful_macs=39330 kernel_cycles=23963 elapsed_cycles=30835 kernel_utilization_pct=18.24 system_utilization_pct=14.17 latency_us_at_50mhz=616.70 PASS",
+        "BLOCKING PASS sample=6 cycles=30835",
+        "SINGLE_INPUT sample=6 ingress_cycles=392 input_to_classification_cycles=31227 input_to_classification_us_at_50mhz=624.54 PASS",
+        "SINGLE sample=6 useful_macs=39330 kernel_cycles=23963 elapsed_cycles=30835 kernel_utilization_pct=18.24 system_utilization_pct=14.17 latency_us_at_50mhz=616.70 PASS",
+        "BLOCKING PASS sample=7 cycles=30835",
+        "SINGLE_INPUT sample=7 ingress_cycles=392 input_to_classification_cycles=31227 input_to_classification_us_at_50mhz=624.54 PASS",
+        "SINGLE sample=7 useful_macs=39330 kernel_cycles=23963 elapsed_cycles=30835 kernel_utilization_pct=18.24 system_utilization_pct=14.17 latency_us_at_50mhz=616.70 PASS",
+        "BLOCKING PASS sample=8 cycles=30835",
+        "SINGLE_INPUT sample=8 ingress_cycles=392 input_to_classification_cycles=31227 input_to_classification_us_at_50mhz=624.54 PASS",
+        "SINGLE sample=8 useful_macs=39330 kernel_cycles=23963 elapsed_cycles=30835 kernel_utilization_pct=18.24 system_utilization_pct=14.17 latency_us_at_50mhz=616.70 PASS",
+        "BLOCKING PASS sample=9 cycles=30835",
+        "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=31227 input_to_classification_us_at_50mhz=624.54 PASS",
+        "SINGLE sample=9 useful_macs=39330 kernel_cycles=23963 elapsed_cycles=30835 kernel_utilization_pct=18.24 system_utilization_pct=14.17 latency_us_at_50mhz=616.70 PASS",
+        "SINGLE PASS samples=10 checks=120"
+      ],
+      "result_sha256": "71fb089f920fe8dc473f1758dbef40bd6e13ff26066b5dbab1fa2557cfc81a45"
+    },
+    {
+      "result": "build/vcs-command_v3_default-quantlayers-macro/result.json",
+      "suite": "quantlayers",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
+      ],
+      "result_sha256": "e380f0412623abfb0668dd717bb722e83017acf3a355e3e889bb878d985cbbfe"
+    },
+    {
+      "result": "build/vcs-command_v3_default-jtag-macro/result.json",
+      "suite": "jtag",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "JTAG PASS checks=42"
+      ],
+      "result_sha256": "e1ea5b8f1f544e10a663e26513f8ca4f175a65324429deaf7ecb214210d00bdd"
+    },
+    {
+      "result": "build/vcs-command_v3_quant-blocking-macro/result.json",
+      "suite": "blocking",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "BLOCKING PASS sample=0 cycles=26067",
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=26459 input_to_classification_us_at_50mhz=529.18 PASS",
+        "SINGLE sample=0 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=26067 kernel_utilization_pct=22.87 system_utilization_pct=16.76 latency_us_at_50mhz=521.34 PASS",
+        "BLOCKING PASS sample=1 cycles=26067",
+        "SINGLE_INPUT sample=1 ingress_cycles=392 input_to_classification_cycles=26459 input_to_classification_us_at_50mhz=529.18 PASS",
+        "SINGLE sample=1 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=26067 kernel_utilization_pct=22.87 system_utilization_pct=16.76 latency_us_at_50mhz=521.34 PASS",
+        "BLOCKING PASS sample=2 cycles=26067",
+        "SINGLE_INPUT sample=2 ingress_cycles=392 input_to_classification_cycles=26459 input_to_classification_us_at_50mhz=529.18 PASS",
+        "SINGLE sample=2 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=26067 kernel_utilization_pct=22.87 system_utilization_pct=16.76 latency_us_at_50mhz=521.34 PASS",
+        "BLOCKING PASS sample=3 cycles=26067",
+        "SINGLE_INPUT sample=3 ingress_cycles=392 input_to_classification_cycles=26459 input_to_classification_us_at_50mhz=529.18 PASS",
+        "SINGLE sample=3 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=26067 kernel_utilization_pct=22.87 system_utilization_pct=16.76 latency_us_at_50mhz=521.34 PASS",
+        "BLOCKING PASS sample=4 cycles=26067",
+        "SINGLE_INPUT sample=4 ingress_cycles=392 input_to_classification_cycles=26459 input_to_classification_us_at_50mhz=529.18 PASS",
+        "SINGLE sample=4 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=26067 kernel_utilization_pct=22.87 system_utilization_pct=16.76 latency_us_at_50mhz=521.34 PASS",
+        "BLOCKING PASS sample=5 cycles=26067",
+        "SINGLE_INPUT sample=5 ingress_cycles=392 input_to_classification_cycles=26459 input_to_classification_us_at_50mhz=529.18 PASS",
+        "SINGLE sample=5 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=26067 kernel_utilization_pct=22.87 system_utilization_pct=16.76 latency_us_at_50mhz=521.34 PASS",
+        "BLOCKING PASS sample=6 cycles=26067",
+        "SINGLE_INPUT sample=6 ingress_cycles=392 input_to_classification_cycles=26459 input_to_classification_us_at_50mhz=529.18 PASS",
+        "SINGLE sample=6 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=26067 kernel_utilization_pct=22.87 system_utilization_pct=16.76 latency_us_at_50mhz=521.34 PASS",
+        "BLOCKING PASS sample=7 cycles=26067",
+        "SINGLE_INPUT sample=7 ingress_cycles=392 input_to_classification_cycles=26459 input_to_classification_us_at_50mhz=529.18 PASS",
+        "SINGLE sample=7 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=26067 kernel_utilization_pct=22.87 system_utilization_pct=16.76 latency_us_at_50mhz=521.34 PASS",
+        "BLOCKING PASS sample=8 cycles=26067",
+        "SINGLE_INPUT sample=8 ingress_cycles=392 input_to_classification_cycles=26459 input_to_classification_us_at_50mhz=529.18 PASS",
+        "SINGLE sample=8 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=26067 kernel_utilization_pct=22.87 system_utilization_pct=16.76 latency_us_at_50mhz=521.34 PASS",
+        "BLOCKING PASS sample=9 cycles=26067",
+        "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=26459 input_to_classification_us_at_50mhz=529.18 PASS",
+        "SINGLE sample=9 useful_macs=39330 kernel_cycles=19110 elapsed_cycles=26067 kernel_utilization_pct=22.87 system_utilization_pct=16.76 latency_us_at_50mhz=521.34 PASS",
+        "SINGLE PASS samples=10 checks=120"
+      ],
+      "result_sha256": "2319674330fec7ef6fdcf147cb4b3adc0e4f6d85e398ed8f9b191cccb926124c"
+    },
+    {
+      "result": "build/vcs-command_v3_quant-quantlayers-macro/result.json",
+      "suite": "quantlayers",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
+      ],
+      "result_sha256": "48d44b4b463e422e82020a8ff7687cb99eb403282b832e7ef5b0768b34cbb06e"
+    },
+    {
+      "result": "build/vcs-command_v3_quant-jtag-macro/result.json",
+      "suite": "jtag",
+      "macro": true,
+      "cnn_queue_depth": 8,
+      "summaries": [
+        "JTAG PASS checks=42"
+      ],
+      "result_sha256": "e49178fd6840917655b8271aaff45a13c06088892774f5c8593716e61c33af57"
+    }
+  ],
+  "rtl_sha256": {
+    "rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+    "rtl/cnn/npu_cnn_mac.sv": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+    "rtl/cnn/npu_stream.sv": "d72b6586071202ad0096e863492a7485ecad3d7c7c2a15c9310bc44686b9ab25",
+    "rtl/cnn/npu_stream_control.sv": "6635cfc431480df53bbd7927952b5c86cbea6e9323690377b7b5c31642b1ee93",
+    "rtl/cnn/npu_stream_engine.sv": "55da26b566f697d64d9a7ddab736e384ce6f88e3c3334f04d60b5a95b9b95ba3",
+    "rtl/cnn/npu_stream_pkg.sv": "cce59f8eefc74c69e0c4a9c0fe4b21cd15d43286765c9411b1c22c19d2632e9b",
+    "rtl/common/npu_addr_pkg.sv": "13ea5f2b45104bc37b7560ef2a11071007c87d39a81775d8862d038af0ac3624",
+    "rtl/common/npu_clock_gate.sv": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+    "rtl/common/npu_rr_select.sv": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+    "rtl/control/npu_mmio.sv": "7be6243b9cfee32d3b87881ef4f8e60d50caa9004a06848a38903849c0fea62a",
+    "rtl/debug/npu_debug_boot.sv": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+    "rtl/debug/npu_jtag_debug.sv": "d2324d487db499ca8b30226f438c1a527f73cba72e6c8762ba4d9237e880b69a",
+    "rtl/interconnect/npu_data_regfile.sv": "7fffbed85311f8e8be3028c058bb60f25962e4b2d9dfefeb97c1a8132c9be278",
+    "rtl/interconnect/npu_multi_read.sv": "d3899799b1d54c34115f3878339321c00082d51d627fc30337d02656566b4028",
+    "rtl/interconnect/xbar.sv": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
+    "rtl/interconnect/xbar_stream.sv": "027f3b83b5199bc010ed9a46b438be81ec715def09a90bdd4befb418eb43307f",
+    "rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+    "rtl/matrix/npu_matrix_stream.sv": "552f490bda007d361bb783808b6024dc5891dc1544e7842dd005b59cb095de17",
+    "rtl/quant/npu_shared_quant.sv": "22c890d9820763a15ab995344a27aa07a89663b55976f8188a04c2997d014ae7",
+    "rtl/top/npu_core.sv": "3432759fcada56a5276875a2c2287cddda3970580082403b13e2da0478002deb",
+    "rtl/top/npu_soc.sv": "397998f42b58b0fffab53adabc454945d198b78fa0dbccc685bda9fc20064a95",
+    "rtl/vector/npu_vector.sv": "392777c771a92b8a8dc812db019ff1896a3b92256512278f9d2c1dd78a230dcb",
+    "rtl/vector/npu_vector_stream.sv": "ea43db5911bfe65177d4dee754de4b6be09b4c1db1cde20e239fb60fdf4da732"
+  }
+}

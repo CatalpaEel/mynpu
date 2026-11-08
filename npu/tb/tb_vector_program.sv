@@ -1,17 +1,17 @@
 `timescale 1ns / 1ps
-// VPG2 32-bit instructions against an independent 64-bit oracle, memory stalls and
+// VPG3 32-bit instructions against an independent 64-bit oracle, memory stalls and
 // stream backpressure. No CNN assumptions or internal pipeline probes.
 module tb_vector_program;
   logic clk_i = 0, rst_ni = 0, start_i = 0;
   always #10 clk_i = ~clk_i;
   logic [31:0] a_i = 32'h80002000, b_i = 32'h80001000, d_i, scalar_i;
   logic [12:0] len_i;
-  logic [7:0] op_i;
+  logic [8:0] op_i;
   logic [31:0] program_cfg_i = 32'h20b;
   logic [15:0][31:0] program_i;
   function automatic logic [31:0] ins(input int op, rd, ra, rb = 0, imm = 0,
                                       input bit immediate = 0);
-    return 32'(op | (rd << 5) | (ra << 7) | (rb << 9) | (int'(immediate) << 11) | (imm << 12));
+    return 32'(op | (rd << 6) | (ra << 8) | (rb << 10) | (int'(immediate) << 5) | (imm << 12));
   endfunction
   wire busy_o, done_o, fault_o, req_o, we_o;
   wire [3:0] be_o;
@@ -80,7 +80,7 @@ module tb_vector_program;
     len_i = 13'(len);
     d_i = 32'h80000100 + 32'(offset);
     scalar_i = 32'(seed % 3 == 0 ? 0 : seed % 3 == 1 ? 128 : 255);
-    op_i = 8'ha0 | (stream ? 8'h40 : 0);
+    op_i = 9'h120 | (stream ? 9'h40 : 0);
     program_i = 0;
     program_i[0] = ins(27, 2, 1, 0, 4);
     program_i[1] = ins(27, 1, 1);
@@ -88,7 +88,7 @@ module tb_vector_program;
     program_i[3] = ins(20, 0, 0, 1);
     program_i[4] = ins(16, 3, 3, 2);
     program_i[5] = ins(23, 0, 0, 2);
-    program_i[6] = ins(22, 0, 3, 0) | (24 << 14);
+    program_i[6] = ins(22, 0, 3, 0) | (24 << 12);
     program_i[7] = ins(29, 3, 0);
     program_i[8] = ins(1, 0, 0, 3);
     program_i[9] = activation ? ins(5, 0, 0, 3) : ins(5, 0, 0, 0, 0, 1);
@@ -182,7 +182,7 @@ module tb_vector_program;
       program_i[2] = ins(20, 0, 0, 0, -3, 1);
       program_i[3] = ins(16, 2, 2, 1);
       program_i[4] = ins(23, 0, 0, 1);
-      program_i[5] = ins(22, 0, 2, 0) | (shift_count << 14);
+      program_i[5] = ins(22, 0, 2, 0) | (shift_count << 12);
       program_cfg_i = 6;
     end
     for (int i = 0; i < 17; i++) begin
@@ -240,7 +240,7 @@ module tb_vector_program;
     scalar_i = 0;
     program_cfg_i = 1;
     program_i = 0;
-    program_i[0] = ins(opcode, 0, 0, 0) | (amount << 14);
+    program_i[0] = ins(opcode, 0, 0, 0) | (amount << 12);
     input_reads = 0;
     parameter_reads = 0;
     byte_writes = 0;
@@ -256,7 +256,7 @@ module tb_vector_program;
       limit++;
     end
     if (!fault_o || done_o || byte_writes != 0 || limit == 100)
-      $fatal(1, "Unsupported VPG2 instruction did not fault op=%0d", opcode);
+      $fatal(1, "Unsupported VPG3 instruction did not fault op=%0d", opcode);
     checks++;
     jobs++;
     @(negedge clk_i);

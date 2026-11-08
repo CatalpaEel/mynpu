@@ -104,7 +104,7 @@ def prepare_fc_parameters():
     """Keep weights single-copy; append software-generated zero-point constants.
 
     Matrix consumes signed INT8 a=u-128. Its dot needs (128-iz)*sum(w)
-    added before scaling. VPG2 adds offset to the raw dot in INT32, then
+    added before scaling. VPG3 adds offset to the raw dot in INT32, then
     forms a software-owned product pair using only 32-bit instructions.
     """
     layer = meta["layers"][-1]
@@ -149,14 +149,14 @@ for i, fields in enumerate(layer_fields):
                     n = min(8, fields[9] - x)
                     left = int(x == 0)
                     right = int((x + n - 1) * fields[8] + 1 >= fields[4])
-                    assert y < 32 and x < 32
+                    assert y < 128 and x < 128
                     stream_commands.append(
-                        y << 4
+                        y << 16
                         | x << 9
-                        | n << 14
-                        | rows << 18
-                        | left << 21
-                        | right << 22
+                        | n
+                        | rows << 4
+                        | left << 7
+                        | right << 8
                         | ((y * fields[9] + x) << 23 if SHARED_QUANT else 0)
                     )
     task_ranges.append(dict(address=0x80000000 + start, per_channel=per_channel))
@@ -169,19 +169,19 @@ def write_task_table(image):
 
 
 def vector_instruction(op, rd, ra, rb=0, immediate=None):
-    """Generic VPG2 instruction: op5, rd2, ra2, rb2, immediate-select1, imm20."""
+    """VPG3 low-to-high: opcode5, immediate1, rd2, ra2, rb2, immediate20."""
     return (
         op
-        | rd << 5
-        | ra << 7
-        | rb << 9
-        | (0 if immediate is None else 1 << 11 | (immediate & 0xFFFFF) << 12)
+        | rd << 6
+        | ra << 8
+        | rb << 10
+        | (0 if immediate is None else 1 << 5 | (immediate & 0xFFFFF) << 12)
     )
 
 
 def vector_pair_shift(rd, low, high, amount=24, rounded=True):
     assert 0 <= amount <= 32
-    return vector_instruction(22 if rounded else 21, rd, low, high) | amount << 14
+    return vector_instruction(22 if rounded else 21, rd, low, high) | amount << 12
 
 
 def emit_vector_program(i):
@@ -399,6 +399,10 @@ def emit_outer_fc_raw(i, fields, stream=False):
     sw(8, 13, 52)
     li(8, 144)
     sw(8, 13, 56)
+    li(8, 0)  # precision INT8
+    sw(8, 13, 60)
+    li(8, 1)  # storage spacing: one byte per operand
+    sw(8, 13, 64)
     li(1, 3)
     label("outer_fc_block")
     li(3, 4)
@@ -411,7 +415,7 @@ def emit_outer_fc_raw(i, fields, stream=False):
     addi(9, 15, 0)
     addi(10, 18, 0)
     li(2, 9)
-    li(4, 10)
+    li(4, 2)
     label("outer_fc_tile")
     sw(9, 13, 8)
     sw(10, 13, 12)
@@ -424,7 +428,7 @@ def emit_outer_fc_raw(i, fields, stream=False):
     jump("outer_fc_space")
     label("outer_fc_submit")
     sw(31, 13, 0)
-    li(4, 14)
+    li(4, 6)
     addi(9, 9, 16)
     addi(10, 10, 16)
     addi(2, 2, -1)
@@ -466,7 +470,7 @@ def emit_quant_fc(i, fields, stream=False):
 
 
 def emit_cnn_rows(i, fields, previous, stream=False):
-    """Software prepares borders and kernel addresses; FIFO snapshots both shadows."""
+    """Software prepares window tasks; input and kernel stay shared until drain."""
     global setup_writes
     if SHARED_QUANT:
         return emit_quant_cnn(i, fields, stream)
@@ -522,7 +526,7 @@ def emit_cnn_rows(i, fields, previous, stream=False):
         li(8, count)
         sw(8, 14, 0x10)
     if previous is None:
-        li(8, 0xA0)
+        li(8, 0x120)
         sw(8, 14, 0x14)
     if previous is None or fields[12] != previous[12]:
         lw(8, 7, i * 56 + 48)
@@ -572,16 +576,11 @@ def emit_cnn_rows(i, fields, previous, stream=False):
     sw(31, 6, 0)
     addi(3, 3, 1)
     branch(3, 2, "row" + str(i))
-    li(8, count)
-    alu(17, 17, 8, 0)
-    addi(16, 16, 8)
-    addi(18, 18, fields[6] * 9)
-    addi(1, 1, -1)
-    branch(1, 0, "channel" + str(i))
+    # Kernel is shared: drain CNN before changing it for the next channel.
     lw(5, 6, 0x60)
-    label("cnn_drain" + str(i))
+    label("kernel_drain" + str(i))
     sw(4, 6, 0)
-    sw(4, 14, 0)  # acknowledge done only; errors still wake either source
+    sw(4, 14, 0)
     lw(8, 6, 4)
     andi(10, 8, 4)
     branch(10, 0, "fail")
@@ -589,12 +588,18 @@ def emit_cnn_rows(i, fields, previous, stream=False):
     andi(10, 8, 4)
     branch(10, 0, "fail")
     lw(8, 6, 0x5C)
-    branch(8, 5, "cnn_sleep" + str(i))
-    jump("cnn_drained" + str(i))
-    label("cnn_sleep" + str(i))
+    branch(8, 5, "kernel_sleep" + str(i))
+    jump("kernel_ready" + str(i))
+    label("kernel_sleep" + str(i))
     emit(0x10500073, "wfi")
-    jump("cnn_drain" + str(i))
-    label("cnn_drained" + str(i))
+    jump("kernel_drain" + str(i))
+    label("kernel_ready" + str(i))
+    li(8, count)
+    alu(17, 17, 8, 0)
+    addi(16, 16, 8)
+    addi(18, 18, fields[6] * 9)
+    addi(1, 1, -1)
+    branch(1, 0, "channel" + str(i))
     sw(4, 6, 0)  # clear the fully drained CNN source before waiting on Vector
     lw(5, 14, 0x2C)
     label("vector_drain" + str(i))
@@ -662,7 +667,7 @@ def emit_matrix_fc(i, fields, stream=False):
         sw(8, 14, 0x40 + slot * 4)
     li(8, 0x20C)
     sw(8, 14, 0x34)
-    li(8, 0xA0)  # generic program, memory input, packed U8 output
+    li(8, 0x120)  # generic program, memory input, packed U8 output
     sw(8, 14, 0x14)
     li(8, 1)
     sw(8, 14, 0x10)
@@ -710,16 +715,16 @@ def emit_platform_check():
     li(5, RF_BANK_WORDS)
     branch(8, 5, "fail")
     lw(8, 6, -0x5A8)
-    li(5, 0x56504732)
+    li(5, 0x56504733)
     branch(8, 5, "fail")
     lw(8, 6, -0x594)
-    li(5, 0x00030404)
+    li(5, 0x00040404)
     branch(8, 5, "fail")
     lw(8, 6, -0x590)
     li(5, 0x00070000)
     branch(8, 5, "fail")
     lw(8, 6, 0x54)
-    li(5, 0x53443932)
+    li(5, 0x53443933)
     branch(8, 5, "fail")
 
 
@@ -840,11 +845,17 @@ def generate_single():
     meta["rf_weight_stage_bytes"] = [
         rf_weight_stage_bytes(f) if not f[13] else 0 for f in layer_fields
     ]
-    meta["stream_abi"] = "SD92"
-    meta["stream_task_bits"] = 43
-    meta["cnn_kernel_address_per_task"] = True
+    meta["stream_abi"] = "SD93"
+    meta["stream_task_bits"] = 32
+    meta["cnn_kernel_address_per_task"] = False
     meta["stream_tasks"] = len(stream_commands)
     meta["task_table"] = task_ranges
+    meta["operator_abi"] = "2.1"
+    meta["vector_program_abi"] = "VPG3"
+    meta["matrix_precision"] = "INT8"
+    meta["matrix_element_bytes"] = 1
+    meta["matrix_strides_per_task"] = True
+    meta["matrix_stream_order"] = "tile/K/A-rows/B-cols; one FIFO word per operand"
     meta["matrix_execution"] = "4x4 outer product; 16 INT32 accumulators; FC output blocks4/4/2"
     meta["matrix_tasks"] = 37 if SHARED_QUANT else 27
     meta["descriptor_base"] = 0x80000000 + DESC_BASE
@@ -870,7 +881,7 @@ def generate_single():
         else "raw signed INT32 routed through xbar channel 0 FIFO to vector"
     )
     meta["postprocessing_unit"] = (
-        "shared optional quantizer QT01" if SHARED_QUANT else "generic vector program VPG2"
+        "shared optional quantizer QT01" if SHARED_QUANT else "generic vector program VPG3"
     )
     (OUT / "model.json").write_text(json.dumps(meta, indent=2))
 

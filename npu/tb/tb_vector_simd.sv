@@ -74,7 +74,7 @@ module tb_vector_simd;
         wr('h40000624, 1);
         wr('h4000062c, 0);
         wr('h40000630, 0);
-        wr('h40000628, (1 << 14) | (2 << 18) | (1 << 21) | (1 << 22));
+        wr('h40000628, (1 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
       end
       1: begin
         wr(MATRIX_B, 32'(multiplier));
@@ -84,7 +84,7 @@ module tb_vector_simd;
         wr('h40000114, 1);
         wr('h40000118, 1);
         wr('h4000011c, 1);
-        wr('h40000130, 0);
+        matrix_config(0);
       end
       2: begin
         wr('h40000208, src);
@@ -217,7 +217,7 @@ module tb_vector_simd;
     end
   endtask
   function automatic logic [31:0] ins(input int op, rd, ra, rb, input bit immediate, input int imm);
-    return 32'(op | rd << 5 | ra << 7 | rb << 9 | int'(immediate) << 11 | imm << 12);
+    return 32'(op | rd << 6 | ra << 8 | rb << 10 | int'(immediate) << 5 | imm << 12);
   endfunction
   task automatic program_case(input int len);
     logic [31:0] x, expected[8], got;
@@ -253,6 +253,12 @@ module tb_vector_simd;
     if (after_count !== before_count)
       $fatal(1, "Invalid SIMD descriptor accepted a=%h d=%h mode=%h", a, d, mode);
     checks++;
+  endtask
+  // Translate the regression oracle's old layout tuple into explicit MMIO fields.
+  task automatic matrix_config(input logic [31:0] f);
+    wr('h4000013c, {31'b0, f[4]});
+    wr('h40000140, f[3] ? (f[4] ? 2 : 1) : 4);
+    wr('h40000130, f <= 31 ? (f & 7) : f);
   endtask
   initial begin
     logic [31:0] got;

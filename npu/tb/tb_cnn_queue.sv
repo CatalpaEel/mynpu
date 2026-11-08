@@ -96,7 +96,7 @@ module tb_cnn_queue;
   endtask
   task automatic configure;
     wr('h08, 32'h80001400);
-    wr('h0c, 32'h80002000);
+    wr('h0c, 32'h800020a2);
     wr('h10, 32'h80001800);
     wr('h14, 1);
     wr('h18, RF_BASE + RF_BYTES - 32);
@@ -121,7 +121,7 @@ module tb_cnn_queue;
     #1;
     depth = int'(csr_rdata_o >> 16);
     configure();
-    expect_csr('h54, 32'h53443932);
+    expect_csr('h54, 32'h53443933);
     for (int n = 0; n <= 9; n += 9) begin
       wr('h28, encode_task(0, 0, n, 2, 1, 1, 0));
       wr(0, 1);
@@ -130,7 +130,6 @@ module tb_cnn_queue;
       wr(0, 2);
     end
     for (int i = 0; i <= depth; i++) begin
-      wr('h0c, 32'h80002000 + 32'(((i * 7 + 18) % 32) * 9));
       wr('h28, encode_task(i / 16, 0, 1, 2, 1, 1, i));
       wr(0, 1);
     end
@@ -140,7 +139,8 @@ module tb_cnn_queue;
     wr('h14, 2, 1);
     expect_csr('h14, 1);  // immutable live configuration
     wr('h28, 0);  // shadows cannot change any task already in the FIFO
-    wr('h0c, 32'h80002004);
+    wr('h0c, 32'h80002004, 1);
+    expect_csr('h0c, 32'h800020a2);
     pending_i = 1;
     allow_bus = 1;
     for (int t = 0; t < 20000 && busy_o; t++) @(negedge clk_i);
@@ -150,7 +150,7 @@ module tb_cnn_queue;
     for (int i = 0; i <= depth; i++) begin
       logic [31:0] got;
       for (int b = 0; b < 4; b++) got[b*8+:8] = mem['h1800+i*4+b];
-      if (got !== 32'((i / 16 + 2) * ((i * 7 + 18) % 32 + 1)))
+      if (got !== 32'((i / 16 + 2) * 19))
         $fatal(1, "Task snapshot/order failure i=%0d got=%0d", i, got);
       checks++;
     end
@@ -194,14 +194,14 @@ module tb_cnn_queue;
     expect_csr(4, 4);
     expect_csr('h60, 2);
     wr(0, 2);
-    wr('h0c, 32'h80002000);
-    wr('h28, encode_task(0, 0, 1, 2, 1, 1, 0) | 1);  // old co bits are reserved
+    wr('h0c, 32'h800020a2);
+    wr('h28, encode_task(0, 0, 1, 2, 1, 1, 0) | 15);  // count=15 is invalid
     wr(0, 1);
     expect_csr(4, 4);
     expect_csr('h60, 2);
-    if ($bits(dut.command) != 43) $fatal(1, "Task FIFO is not 43 bits");
+    if ($bits(dut.command) != 32) $fatal(1, "Task FIFO is not 32 bits");
     $display(
-        "CNN QUEUE PASS depth=%0d descriptor_bits=%0d checks=%0d per-task kernel snapshots, immutable geometry, order, overflow, reset, faults",
+        "CNN QUEUE PASS depth=%0d descriptor_bits=%0d checks=%0d shared immutable kernel, compact window tasks, order, overflow, reset, faults",
         depth, $bits(dut.command), checks);
     $finish;
   end

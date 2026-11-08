@@ -104,7 +104,7 @@ module tb_irq_wake;
       wr('h40000114, 1);
       wr('h40000118, fault_case ? 2 : 1);
       wr('h4000011c, 1);
-      wr('h40000130, 8);
+      matrix_config(8);
       if (fault_case) begin
         wr('h40000744, 1);
         wr('h40000748, 0);
@@ -144,9 +144,15 @@ module tb_irq_wake;
       wr('h40000620, 1);
       wr('h40000624, fault_case ? 4 : 1);
       wr('h4000062c, 0);
-      wr('h40000628, (1 << 14) | (2 << 18) | (1 << 21) | (1 << 22));
+      wr('h40000628, (1 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
       wr('h40000600, 1);
     end
+  endtask
+  // Translate the regression oracle's old layout tuple into explicit MMIO fields.
+  task automatic matrix_config(input logic [31:0] f);
+    wr('h4000013c, {31'b0, f[4]});
+    wr('h40000140, f[3] ? (f[4] ? 2 : 1) : 4);
+    wr('h40000130, f <= 31 ? (f & 7) : f);
   endtask
   initial begin
     logic [31:0] v, pending, status, count;
