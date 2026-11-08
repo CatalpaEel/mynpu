@@ -43,11 +43,13 @@ module tb_jtag;
   );
   `include "db_jtag_tasks.svh"
   int removed_page_errors = 0;
+`ifndef NPU_GATE_SIM
   always @(posedge clk) begin
     if (dut.i_core.rvalid[3] && dut.i_core.bus_error[3] &&
         dut.i_core.mmio_addr[11:8] >= 3 && dut.i_core.mmio_addr[11:8] <= 5)
       removed_page_errors++;
   end
+`endif
   int checks = 0, native_count = 0;
   bit stop_host = 0;
   task automatic eq(input logic [31:0] got, want, input string label);
@@ -118,6 +120,29 @@ module tb_jtag;
     if (!hv) @(negedge clk);
     if (!hv || he) $fatal(1, "host response");
   endtask
+`ifdef NPU_GATE_SIM
+  // SBA has no architectural bus-error input in this DM. Its unused internal
+  // error net may be optimized. Exercise the shared XBAR error through host IO.
+  task automatic host_bad_page(input logic [31:0] a);
+    int waited;
+    @(negedge clk);
+    hreq = 1;
+    hwe = 1;
+    ha = a;
+    hd = 1;
+    waited = 0;
+    do begin
+      @(posedge clk);
+      waited++;
+      if (waited > 16) $fatal(1, "host error probe starved");
+    end while (!hg);
+    @(negedge clk);
+    hreq = 0;
+    if (!hv) @(negedge clk);
+    if (!hv || !he) $fatal(1, "removed page did not return external error %h", a);
+    removed_page_errors++;
+  endtask
+`endif
   logic [40:0] scan;
   logic [31:0] v, pc, ds;
   bit discard;
@@ -208,7 +233,12 @@ module tb_jtag;
     for (int page = 3; page <= 5; page++) begin
       sba_write(32'h40000000 + (page << 8), 1);
     end
+`ifdef NPU_GATE_SIM
+    for (int page = 3; page <= 5; page++) host_bad_page(32'h40000000 + (page << 8));
+    eq(removed_page_errors, 3, "removed DMA pages return host errors");
+`else
     eq(removed_page_errors, 3, "removed DMA pages rejected by XBAR");
+`endif
     // Tiny CPU loop: addi x7,x7,1; jal x0,-4. Inspect and single-step it.
     sba_write(32'h80000080, 32'h00138393);
     sba_write(32'h80000084, 32'hffdff06f);

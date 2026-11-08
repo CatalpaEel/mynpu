@@ -110,39 +110,42 @@ module vector_task_fixture (
   logic [4:0] vector_compute_op;
   logic signed [31:0] vector_compute_a, vector_compute_b, vector_compute_c, vector_compute_data;
   logic vector_carry_in, vector_carry_out, vector_compute_simd;
+  logic vector_mul_simd;
   logic [31:0] vector_mul_a, vector_mul_b;
   npu_vector #(
     .PIPELINED_MUL(1)
   ) i_vector (
-    .mul_a_i(vector_mul_a),
-    .mul_b_i(vector_mul_b),
-    .simd_i (vector_compute_simd),
-    .op_i   (vector_compute_op),
-    .a_i    (vector_compute_a),
-    .b_i    (vector_compute_b),
-    .c_i    (vector_compute_c),
-    .carry_i(vector_carry_in),
-    .carry_o(vector_carry_out),
-    .data_o (vector_compute_data)
+    .mul_simd_i(vector_mul_simd),
+    .mul_a_i   (vector_mul_a),
+    .mul_b_i   (vector_mul_b),
+    .simd_i    (vector_compute_simd),
+    .op_i      (vector_compute_op),
+    .a_i       (vector_compute_a),
+    .b_i       (vector_compute_b),
+    .c_i       (vector_compute_c),
+    .carry_i   (vector_carry_in),
+    .carry_o   (vector_carry_out),
+    .data_o    (vector_compute_data)
   );
   npu_vector_stream i_issue (
-    .compute_mul_a_o(vector_mul_a),
-    .compute_mul_b_o(vector_mul_b),
-    .observe_o      (),
-    .compute_simd_o (vector_compute_simd),
-    .compute_op_o   (vector_compute_op),
-    .compute_a_o    (vector_compute_a),
-    .compute_b_o    (vector_compute_b),
-    .compute_c_o    (vector_compute_c),
-    .compute_carry_o(vector_carry_in),
-    .compute_carry_i(vector_carry_out),
-    .compute_data_i (vector_compute_data),
-    .gather_req_o   (),
-    .gather_addr_o  (),
-    .gather_gnt_i   (3'b0),
-    .gather_valid_i (3'b0),
-    .gather_error_i (3'b0),
-    .gather_data_i  (96'b0),
+    .compute_mul_simd_o(vector_mul_simd),
+    .compute_mul_a_o   (vector_mul_a),
+    .compute_mul_b_o   (vector_mul_b),
+    .observe_o         (),
+    .compute_simd_o    (vector_compute_simd),
+    .compute_op_o      (vector_compute_op),
+    .compute_a_o       (vector_compute_a),
+    .compute_b_o       (vector_compute_b),
+    .compute_c_o       (vector_compute_c),
+    .compute_carry_o   (vector_carry_in),
+    .compute_carry_i   (vector_carry_out),
+    .compute_data_i    (vector_compute_data),
+    .gather_req_o      (),
+    .gather_addr_o     (),
+    .gather_gnt_i      (3'b0),
+    .gather_valid_i    (3'b0),
+    .gather_error_i    (3'b0),
+    .gather_data_i     (96'b0),
     .*
   );
 endmodule

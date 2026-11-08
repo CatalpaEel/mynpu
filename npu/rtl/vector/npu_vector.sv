@@ -4,6 +4,7 @@
 module npu_vector #(
   parameter bit PIPELINED_MUL = 0
 ) (
+  input logic mul_simd_i,
   input logic [31:0] mul_a_i,
   mul_b_i,
   input logic [4:0] op_i,
@@ -16,6 +17,8 @@ module npu_vector #(
   output logic [31:0] data_o
 );
   logic [31:0] multiply_a, multiply_b;
+  logic multiply_simd;
+  assign multiply_simd = PIPELINED_MUL ? mul_simd_i : simd_i;
   assign multiply_a = PIPELINED_MUL ? mul_a_i : a_i;
   assign multiply_b = PIPELINED_MUL ? mul_b_i : b_i;
   logic [31:0] p00, p01, p10, p11, middle, product_low, product_high;
@@ -28,13 +31,13 @@ module npu_vector #(
   logic [31:0] pair_shifted, pair_mask;
   logic [5:0] pair_amount;
   // Reuse the existing four 16x16 partial multipliers as four 8x8 lanes.
-  assign p00 = (simd_i ? {8'b0, multiply_a[7:0]} : multiply_a[15:0]) * (simd_i ? {8'b0, multiply_b[7:0]} : multiply_b[15:0]);
-  assign p01 = (simd_i ? {8'b0, multiply_a[15:8]} : multiply_a[15:0]) * (simd_i ? {8'b0, multiply_b[15:8]} : multiply_b[31:16]);
-  assign p10=(simd_i ? {8'b0,multiply_a[23:16]}:multiply_a[31:16]) * (simd_i ? {8'b0,multiply_b[23:16]}:multiply_b[15:0]);
-  assign p11=(simd_i ? {8'b0,multiply_a[31:24]}:multiply_a[31:16]) * (simd_i ? {8'b0,multiply_b[31:24]}:multiply_b[31:16]);
+  assign p00 = (multiply_simd ? {8'b0, multiply_a[7:0]} : multiply_a[15:0]) * (multiply_simd ? {8'b0, multiply_b[7:0]} : multiply_b[15:0]);
+  assign p01 = (multiply_simd ? {8'b0, multiply_a[15:8]} : multiply_a[15:0]) * (multiply_simd ? {8'b0, multiply_b[15:8]} : multiply_b[31:16]);
+  assign p10=(multiply_simd ? {8'b0,multiply_a[23:16]}:multiply_a[31:16]) * (multiply_simd ? {8'b0,multiply_b[23:16]}:multiply_b[15:0]);
+  assign p11=(multiply_simd ? {8'b0,multiply_a[31:24]}:multiply_a[31:16]) * (multiply_simd ? {8'b0,multiply_b[31:24]}:multiply_b[31:16]);
   assign middle = {16'b0, p00[31:16]} + {16'b0, p01[15:0]} + {16'b0, p10[15:0]};
-  assign product_low=simd_i ? {p11[7:0],p10[7:0],p01[7:0],p00[7:0]} : {middle[15:0],p00[15:0]};
-  assign product_high=simd_i ? {p11[15:8],p10[15:8],p01[15:8],p00[15:8]} : p11+{16'b0,p01[31:16]}+{16'b0,p10[31:16]}+{16'b0,middle[31:16]};
+  assign product_low=multiply_simd ? {p11[7:0],p10[7:0],p01[7:0],p00[7:0]} : {middle[15:0],p00[15:0]};
+  assign product_high=multiply_simd ? {p11[15:8],p10[15:8],p01[15:8],p00[15:8]} : p11+{16'b0,p01[31:16]}+{16'b0,p10[31:16]}+{16'b0,middle[31:16]};
   function automatic logic [31:0] segmented_sub(input logic [31:0] x, y, input logic segmented);
     logic carry;
     logic [8:0] value;
@@ -52,12 +55,12 @@ module npu_vector #(
     correction_a = 0;
     correction_b = 0;
     for (int lane = 0; lane < 4; lane++) begin
-      correction_a[8*lane+:8]=simd_i ? (multiply_a[8*lane+7] ? multiply_b[8*lane+:8]:8'b0) : (multiply_a[31] ? multiply_b[8*lane+:8]:8'b0);
-      correction_b[8*lane+:8]=simd_i ? (multiply_b[8*lane+7] ? multiply_a[8*lane+:8]:8'b0) : (multiply_b[31] ? multiply_a[8*lane+:8]:8'b0);
+      correction_a[8*lane+:8]=multiply_simd ? (multiply_a[8*lane+7] ? multiply_b[8*lane+:8]:8'b0) : (multiply_a[31] ? multiply_b[8*lane+:8]:8'b0);
+      correction_b[8*lane+:8]=multiply_simd ? (multiply_b[8*lane+7] ? multiply_a[8*lane+:8]:8'b0) : (multiply_b[31] ? multiply_a[8*lane+:8]:8'b0);
     end
   end
   assign signed_high = segmented_sub(
-      segmented_sub(product_high, correction_a, simd_i), correction_b, simd_i
+      segmented_sub(product_high, correction_a, multiply_simd), correction_b, multiply_simd
   );
   // A single segmented adder covers all basic additive operations.
   always_comb begin

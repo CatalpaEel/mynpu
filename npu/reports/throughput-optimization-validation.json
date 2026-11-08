@@ -3,7 +3,7 @@
   "tests": [
     {
       "suite": "blocking",
-      "result": "build/vcs-opt_final_v3-blocking-macro/result.json",
+      "result": "build/vcs-opt_final_v4-blocking-macro/result.json",
       "summaries": [
         "BLOCKING PASS sample=0 cycles=20728",
         "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
@@ -41,7 +41,7 @@
     },
     {
       "suite": "quantlayers",
-      "result": "build/vcs-opt_final_v3-quantlayers-macro/result.json",
+      "result": "build/vcs-opt_final_v4-quantlayers-macro/result.json",
       "summaries": [
         "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
       ],
@@ -49,7 +49,7 @@
     },
     {
       "suite": "jtag",
-      "result": "build/vcs-opt_final_v3-jtag-macro/result.json",
+      "result": "build/vcs-opt_final_v4-jtag-macro/result.json",
       "summaries": [
         "JTAG PASS checks=42"
       ],
@@ -57,7 +57,7 @@
     },
     {
       "suite": "purecompute",
-      "result": "build/vcs-opt_final_v3-purecompute/result.json",
+      "result": "build/vcs-opt_final_v4-purecompute/result.json",
       "summaries": [
         "PURE COMPUTE PASS matrix_checks=12008 accepted=5750 stalls=4188 vector_checks=12000 INT32/SIMD8/mul-high/word-pair-shift/carry/backpressure/flush"
       ],
@@ -65,7 +65,7 @@
     },
     {
       "suite": "sharedquant",
-      "result": "build/vcs-opt_final_v3-sharedquant-macro/result.json",
+      "result": "build/vcs-opt_final_v4-sharedquant-macro/result.json",
       "summaries": [
         "SHARED QUANT PASS checks=437 raw/quant32/quant8/concurrent/CNN-partial/Matrix-accumulate/signed-round/wrap/tail/RF/SRAM"
       ],
@@ -73,7 +73,7 @@
     },
     {
       "suite": "quantsync",
-      "result": "build/vcs-opt_final_v3-quantsync/result.json",
+      "result": "build/vcs-opt_final_v4-quantsync/result.json",
       "summaries": [
         "QUANT SYNC PASS checks=27 elastic-II1/owners/stalls/parameter-sampling/ACK-counts/flush/cancel/wrap/reset"
       ],
@@ -81,7 +81,7 @@
     },
     {
       "suite": "readbatch",
-      "result": "build/vcs-opt_final_v3-readbatch/result.json",
+      "result": "build/vcs-opt_final_v4-readbatch/result.json",
       "summaries": [
         "READ BATCH PASS checks=35 delayed/partial grants, faults/drain, backpressure, reset"
       ],
@@ -89,7 +89,7 @@
     },
     {
       "suite": "storepack",
-      "result": "build/vcs-opt_final_v3-storepack/result.json",
+      "result": "build/vcs-opt_final_v4-storepack/result.json",
       "summaries": [
         "STORE PACK PASS checks=25 merge/tails/full-word/backpressure/address-change/config-change/flush/repeated-byte/reset"
       ],
@@ -97,7 +97,7 @@
     },
     {
       "suite": "softcfg",
-      "result": "build/vcs-opt_final_v3-softcfg-macro/result.json",
+      "result": "build/vcs-opt_final_v4-softcfg-macro/result.json",
       "summaries": [
         "SOFTWARE CONFIG CNN PASS active-old/queued-new/nonempty-FIFO/runtime-writes",
         "SOFTWARE CONFIG VECTOR PASS active-program-live/count-latched/queued-count-new",
@@ -110,7 +110,7 @@
     },
     {
       "suite": "vectorprogram",
-      "result": "build/vcs-opt_final_v3-vectorprogram/result.json",
+      "result": "build/vcs-opt_final_v4-vectorprogram/result.json",
       "summaries": [
         "VECTOR PROGRAM PASS jobs=116 checks=3402 memory source, signed INT32, ties, saturation, byte masks, faults/retry"
       ],
@@ -118,7 +118,7 @@
     },
     {
       "suite": "cnnstream",
-      "result": "build/vcs-opt_final_v3-cnnstream-macro/result.json",
+      "result": "build/vcs-opt_final_v4-cnnstream-macro/result.json",
       "summaries": [
         "CNN STREAM PASS cases=216 checks=1548 stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM"
       ],
@@ -126,7 +126,7 @@
     },
     {
       "suite": "unitroutes",
-      "result": "build/vcs-opt_final_v3-unitroutes-macro/result.json",
+      "result": "build/vcs-opt_final_v4-unitroutes-macro/result.json",
       "summaries": [
         "UNIT ROUTE producer=0 consumer=1 PASS",
         "UNIT ROUTE producer=0 consumer=2 PASS",
@@ -140,7 +140,7 @@
     },
     {
       "suite": "sharedoperands",
-      "result": "build/vcs-opt_final_v3-sharedoperands-macro/result.json",
+      "result": "build/vcs-opt_final_v4-sharedoperands-macro/result.json",
       "summaries": [
         "SHARED OPERANDS PASS checks=3409 matrix_terms=10848 matrix_parallel_reads=1190 vector_parallel_reads=312"
       ],
@@ -148,7 +148,7 @@
     },
     {
       "suite": "matrixtiles",
-      "result": "build/vcs-opt_final_v3-matrixtiles-macro/result.json",
+      "result": "build/vcs-opt_final_v4-matrixtiles-macro/result.json",
       "summaries": [
         "MATRIX STREAM TILE CASE id=0 inputs=1 fifo_out=0 M/N/K=5/6/3 full_steps=3 PASS",
         "MATRIX STREAM TILE CASE id=1 inputs=2 fifo_out=1 M/N/K=5/6/3 full_steps=3 PASS",
@@ -164,7 +164,7 @@
     },
     {
       "suite": "queues",
-      "result": "build/vcs-opt_final_v3-queues/result.json",
+      "result": "build/vcs-opt_final_v4-queues/result.json",
       "summaries": [
         "QUEUES PASS matrix_depth=8 vector_depth=8 checks=463 snapshots, wrap, overflow, concurrent engines, invalid descriptor, reset"
       ],
@@ -172,7 +172,7 @@
     },
     {
       "suite": "irqcontrol",
-      "result": "build/vcs-opt_final_v3-irqcontrol/result.json",
+      "result": "build/vcs-opt_final_v4-irqcontrol/result.json",
       "summaries": [
         "IRQ CONTROL PASS checks=46 active-W1C/set-dominant/fault-wakeup/independent-levels/tickets"
       ],
@@ -180,7 +180,7 @@
     },
     {
       "suite": "irqwake",
-      "result": "build/vcs-opt_final_v3-irqwake-macro/result.json",
+      "result": "build/vcs-opt_final_v4-irqwake-macro/result.json",
       "summaries": [
         "IRQ WAKE CASE unit=0 irq=16 fault=0 PASS",
         "IRQ WAKE CASE unit=0 irq=16 fault=1 PASS",
@@ -195,7 +195,7 @@
     },
     {
       "suite": "enginefaults",
-      "result": "build/vcs-opt_final_v3-enginefaults/result.json",
+      "result": "build/vcs-opt_final_v4-enginefaults/result.json",
       "summaries": [
         "ENGINE FAULTS PASS failed_jobs=12 successful_retries=12 checks=584"
       ],
@@ -203,7 +203,7 @@
     },
     {
       "suite": "cnnqueues",
-      "result": "build/vcs-opt_final_v3-cnnqueues/result.json",
+      "result": "build/vcs-opt_final_v4-cnnqueues/result.json",
       "summaries": [
         "CNN QUEUE PASS depth=8 descriptor_bits=32 checks=124 software-owned shared kernel, compact window tasks, order, overflow, reset, faults"
       ],
@@ -211,7 +211,7 @@
     },
     {
       "suite": "xbarstream",
-      "result": "build/vcs-opt_final_v3-xbarstream/result.json",
+      "result": "build/vcs-opt_final_v4-xbarstream/result.json",
       "summaries": [
         "XBAR STREAM PASS checks=4000 reads=6550 writes=6593 bypasses=322"
       ],
@@ -219,7 +219,7 @@
     },
     {
       "suite": "rfsink",
-      "result": "build/vcs-opt_final_v3-rfsink/result.json",
+      "result": "build/vcs-opt_final_v4-rfsink/result.json",
       "summaries": [
         "RF SINK PASS checks=868 sram_store_overlap=258 sink_grants=325 gather_grants=1204 ordinary_grants=343 ordering/fairness/invalid/reset"
       ],
@@ -227,7 +227,7 @@
     },
     {
       "suite": "regfile",
-      "result": "build/vcs-opt_final_v3-regfile/result.json",
+      "result": "build/vcs-opt_final_v4-regfile/result.json",
       "summaries": [
         "RF GATHER PASS lanes=3 bits=32 physical_banks=8 peak_bits_per_cycle=96 aggregate_bits_per_cycle=160 checks=473 conflicts, fairness, bytes, bounds, reset",
         "REGFILE PASS bank_words=32 checks=473 dual-bank, bytes, bounds, reset, fairness"
@@ -237,21 +237,21 @@
   ],
   "extra_tests": [
     {
-      "result": "build/vcs-opt_generic_vector_v3-quantlayers-macro/result.json",
+      "result": "build/vcs-opt_generic_vector_v4-quantlayers-macro/result.json",
       "summaries": [
         "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
       ],
       "stream_fifo_depth": 8
     },
     {
-      "result": "build/vcs-opt_units_v3-unitsmoke/result.json",
+      "result": "build/vcs-opt_units_v4-unitsmoke/result.json",
       "summaries": [
         "UNIT SMOKE PASS checks=25 INT32-multiply/high-signed/high-unsigned/SIMD8/tail/Matrix-pack/CNN-pack/real-ACK-counts"
       ],
       "stream_fifo_depth": 8
     },
     {
-      "result": "build/vcs-opt_queueirq_v3-blocking-macro/result.json",
+      "result": "build/vcs-opt_queueirq_v4-blocking-macro/result.json",
       "summaries": [
         "BLOCKING PASS sample=0 cycles=20744",
         "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=21136 input_to_classification_us_at_50mhz=422.72 PASS",
@@ -288,7 +288,7 @@
       "stream_fifo_depth": 8
     },
     {
-      "result": "build/vcs-opt_fifo4_routes_v3-unitroutes-macro/result.json",
+      "result": "build/vcs-opt_fifo4_routes_v4-unitroutes-macro/result.json",
       "summaries": [
         "UNIT ROUTE producer=0 consumer=1 PASS",
         "UNIT ROUTE producer=0 consumer=2 PASS",
@@ -302,6 +302,30 @@
     }
   ],
   "software_checks": "STREAM SOFTWARE CHECK PASS checks=665 shape, borders, aliases, overflow, command encoding",
+  "gate_checks": [
+    {
+      "result": "build/gate-opt_v4_latency/result.json",
+      "summaries": [
+        "GATE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "GATE PASS samples=1 checks=12"
+      ],
+      "stream_fifo_depth": null
+    },
+    {
+      "result": "build/gate-opt_v4_units/result.json",
+      "summaries": [
+        "GATE UNIT SMOKE PASS checks=25 INT32-multiply/high-signed/high-unsigned/SIMD8/tail/Matrix-pack/CNN-pack/real-ACK-counts"
+      ],
+      "stream_fifo_depth": null
+    },
+    {
+      "result": "build/gate-opt_v4_jtag/result.json",
+      "summaries": [
+        "GATE JTAG PASS checks=42"
+      ],
+      "stream_fifo_depth": null
+    }
+  ],
   "inference_cycles": [
     20728,
     20728,
@@ -1142,8 +1166,163 @@
       }
     }
   },
-  "ppa": null,
-  "baseline_ppa": null,
+  "profile_caveats": [
+    "STAGE_PROFILE.matrix_req_stall retains an old master index; use BUS_BLOCK_PROFILE.matrix_req_wait.",
+    "STAGE_PROFILE.vector_input_wait is not incremented; do not interpret its zero as no waiting.",
+    "CNN wait bins are mutually exclusive priority bins; bus events and CPU views overlap them."
+  ],
+  "ppa": {
+    "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261108-optimization-v4",
+    "critical_startpoint": "(R) i_core_i_matrix_stream/state_reg[1]/CP",
+    "critical_endpoint": "(R) i_core_i_quant/product_reg[63]/D",
+    "total_area_mm2": 2.5621204619999998,
+    "standard_cell_area_mm2": 1.75923328,
+    "modules": {
+      "XBAR": 0.30713921299999997,
+      "CPU": 0.2560152,
+      "Matrix": 0.35736758399999996,
+      "MMIO / task queues": 0.228979117,
+      "CNN": 0.2324168,
+      "Shared quantizer": 0.14947555799999998,
+      "Vector": 0.13811759399999998,
+      "JTAG / debug": 0.086229652,
+      "SRAM macros": 0.802887182,
+      "Top / core glue": 0.003492561999999918
+    },
+    "timing": {
+      "18": {
+        "cg_enable_group_jtag_clk": {
+          "slack_ns": 97.2748,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "cg_enable_group_sys_clk": {
+          "slack_ns": 0.0431,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "jtag_clk": {
+          "slack_ns": 47.9664,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "sys_clk": {
+          "slack_ns": 0.0072,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        }
+      },
+      "20": {
+        "cg_enable_group_jtag_clk": {
+          "slack_ns": 97.2748,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "cg_enable_group_sys_clk": {
+          "slack_ns": 2.0431,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "jtag_clk": {
+          "slack_ns": 47.9664,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "sys_clk": {
+          "slack_ns": 2.0072,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        }
+      }
+    },
+    "scope": "mapped cell area, two SRAM macros included, PADs and PNR overhead excluded",
+    "source_manifest_sha256": "2b64aa9eeec2192347304824c25bb9aa85da35229367d82628b7b9337e996f34",
+    "final_file_sha256": {
+      "optimized.v": "4c2a8e9f118011d23bc40eadcaffd3eedc031fef9eba67567c18b0f3c75abf2b",
+      "optimized.sdc": "70656df9535dd8e054e473cd8235346ddbdc795511ca1e360a11f21bbb28104b",
+      "inputs/npu_asic_top.sv": "4b37681ad995f8925db035765fe7113fd6762d9985c8355d7cfd831949bdeb1f",
+      "reports/area.rpt": "cb5624c41f5a50fb579a922984d522987307b0f1b46fe32a862c0b60dc5cc814",
+      "reports/qor.rpt": "0831ec4171b0683f723e99a76169d9e5bbe2bfd0aa28c2f89c8199aef4e7b547",
+      "reports/optimized_synth_clock_qor.rpt": "fe9101eda288ff9eab26c055260406d6238a8d3e9a26a78dccdd657984e8baee",
+      "reports/timing.rpt": "c5665199c3b48b0b077c8208bc2c9243210a7148c72899e845846c0000863c5b"
+    }
+  },
+  "baseline_ppa": {
+    "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261108-optimization-baseline-6697d58",
+    "critical_startpoint": "(R) i_core_i_vector_stream/pc_reg[3]/CP",
+    "critical_endpoint": "(F) i_core_i_vector_stream/regs_reg[3][28]/D",
+    "total_area_mm2": 2.606325204,
+    "standard_cell_area_mm2": 1.803438022,
+    "modules": {
+      "XBAR": 0.36344609299999997,
+      "CPU": 0.256726445,
+      "Matrix": 0.351179316,
+      "MMIO / task queues": 0.24422039,
+      "CNN": 0.223124518,
+      "Shared quantizer": 0.137511718,
+      "Vector": 0.137430496,
+      "JTAG / debug": 0.086304288,
+      "SRAM macros": 0.802887182,
+      "Top / core glue": 0.0034947579999999143
+    },
+    "timing": {
+      "18": {
+        "cg_enable_group_jtag_clk": {
+          "slack_ns": 97.2748,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "cg_enable_group_sys_clk": {
+          "slack_ns": 1.8544,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "jtag_clk": {
+          "slack_ns": 47.9664,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "sys_clk": {
+          "slack_ns": 0.001,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        }
+      },
+      "20": {
+        "cg_enable_group_jtag_clk": {
+          "slack_ns": 97.2748,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "cg_enable_group_sys_clk": {
+          "slack_ns": 3.8544,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "jtag_clk": {
+          "slack_ns": 47.9664,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        },
+        "sys_clk": {
+          "slack_ns": 2.001,
+          "tns_ns": 0.0,
+          "violating_paths": 0
+        }
+      }
+    },
+    "scope": "mapped cell area, two SRAM macros included, PADs and PNR overhead excluded",
+    "source_manifest_sha256": "eddf4d6e52d47bfc4f0aa6be40748a38659b4784bfecacbb5a58a5b0720f08a5",
+    "final_file_sha256": {
+      "optimized.v": "3e8014564ccdd83d6337db9451b75375e5bb17780ff388493f95bb33c2998d82",
+      "optimized.sdc": "8063be92b20136b457ccc2e27567048bf99ae7c77038195d7c2295c2f951f5df",
+      "inputs/npu_asic_top.sv": "4b37681ad995f8925db035765fe7113fd6762d9985c8355d7cfd831949bdeb1f",
+      "reports/area.rpt": "796dabb8267e0ea13bf34f2ea9668b56247695865384df7ad7329217fc5495f2",
+      "reports/qor.rpt": "833bbb610add91e83df83bab703e0e1e8da54b864d876a6ed5972905ecaea83b",
+      "reports/optimized_synth_clock_qor.rpt": "5e22218e6f21959c5a1754ffb9ba17dfbe7a8a91d271109bac829a8c370cae8f",
+      "reports/timing.rpt": "c048f1e058b665675cb666f8ab64468e13d335bf035c17496f07334edca68cae"
+    }
+  },
   "new_pnr_performed": false,
   "source_sha256": {
     "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
@@ -1166,13 +1345,15 @@
     "npu/rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
     "npu/rtl/matrix/npu_matrix_stream.sv": "68a4fbcc08a602a178274ae190459844df377be69d793601fd967ac69f5f6af5",
     "npu/rtl/quant/npu_shared_quant.sv": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
-    "npu/rtl/top/npu_core.sv": "d9aa5ce5c0b54ead89b3bd0cfc4a16f4e61bff983989d49a0251756f08283c7a",
+    "npu/rtl/top/npu_core.sv": "2a17a33e156aef09674321e06172d77f585006e549e27fec2c14d0a6beea89b3",
     "npu/rtl/top/npu_soc.sv": "397998f42b58b0fffab53adabc454945d198b78fa0dbccc685bda9fc20064a95",
-    "npu/rtl/vector/npu_vector.sv": "a7c4b12d09600d79042baddfe16debe5ccea72eb25d2e1827d4f4e4a44d93ae2",
-    "npu/rtl/vector/npu_vector_stream.sv": "e43d0c863a22801681489c9ce3963ee62046b788c8e9e11696ee839293670013",
+    "npu/rtl/vector/npu_vector.sv": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
+    "npu/rtl/vector/npu_vector_stream.sv": "9f70d360617a5ef8127134f95c023885abf2aea1bb6579863d5a09119b6eeeb4",
     "npu/rtl/files.f": "e48ec36e122f1b05e9a164cc1846096dbf1398b99d37ecadc2e23efcc5cdbef3",
     "npu/build_config.json": "6da2cb98f73bc4a35f2095e600187485220b2b4f354a693d78940aac534ffe13",
     "npu/mnist/firmware.py": "787b7c9484bab0bd26335e77bab0ff2754b1dfc98d6eb7250b44de4a65386b6d",
     "npu/sw/npu.h": "355c3459edbbeadb8fcae09072c46f5ee36ef3f0c2de23ee27b6125939b701fa"
-  }
+  },
+  "area_delta_mm2": -0.04420474200000024,
+  "area_delta_percent": -1.6960562685024105
 }

@@ -21,16 +21,17 @@ module tb_pure_compute;
   logic simd = 0;
   wire [31:0] value;
   npu_vector vector (
-    .mul_a_i(a),
-    .mul_b_i(b),
-    .op_i   (op),
-    .simd_i (simd),
-    .a_i    (a),
-    .b_i    (b),
-    .c_i    (c),
-    .carry_i(carry_in),
-    .carry_o(carry_out),
-    .data_o (value)
+    .mul_simd_i(simd),
+    .mul_a_i   (a),
+    .mul_b_i   (b),
+    .op_i      (op),
+    .simd_i    (simd),
+    .a_i       (a),
+    .b_i       (b),
+    .c_i       (c),
+    .carry_i   (carry_in),
+    .carry_o   (carry_out),
+    .data_o    (value)
   );
   function automatic logic [31:0] reference(input int operation, input logic [31:0] x, y, z,
                                             input bit ci);

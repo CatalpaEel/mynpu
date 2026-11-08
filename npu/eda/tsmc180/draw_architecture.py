@@ -125,7 +125,7 @@ box(
     660,
     310,
     "Vector Stream  ·  npu_vector_stream",
-    "8项 × 99bit任务；标量与打包独立\nVPG3程序表实时读；PC + 4×32bit寄存器\nLD32复用ALU；打包与结果共用缓冲\n经xbar读取RF / SRAM或流FIFO\n乘法统一锁存操作数，分两拍；SIMD8仍四路并行",
+    "8项 × 99bit任务；标量与打包独立\nVPG3程序表实时读；PC + 4×32bit寄存器\nLD32复用ALU；打包与结果共用缓冲\n经xbar读取RF / SRAM或流FIFO\n乘法锁存数据与模式，分两拍；SIMD8仍四路并行",
     col="#2dd4bf",
     size=26,
 )

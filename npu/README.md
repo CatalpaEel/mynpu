@@ -1,6 +1,6 @@
 # 当前架构入口
 
-本轮已实现 [FC K144、读口续发、弹性量化/字节写合并、Vector乘法切分和流FIFO精简](docs/throughput-optimization.md)。默认共享量化推理 **20,728周期/图**，比23,937减少13.41%；SYNC v2增加写合并取消计数，任务队列仍8/8/8、RF仍256B。综合面积时序见本轮验证报告。
+本轮已实现 [FC K144、读口续发、弹性量化/字节写合并、Vector乘法切分和流FIFO精简](docs/throughput-optimization.md)。默认共享量化推理 **20,728周期/图**，比23,937减少13.41%；SYNC v2增加写合并取消计数，任务队列仍8/8/8、RF仍256B。18ns门控综合 **2.562120mm²**（含SRAM、不含PAD），20ns setup **+2.0072ns**；见[审计报告](reports/throughput-optimization-validation.json)，尚未重跑本版PNR。
 
 ## 历史实现记录
 

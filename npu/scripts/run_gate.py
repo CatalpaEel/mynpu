@@ -70,6 +70,7 @@ for old, new in [
     ("JTAG PASS", "GATE JTAG PASS"),
 ]:
     text = text.replace(old, new)
+observer_aliases = {}
 (out / "tb_gate.sv").write_text(text)
 std = Path(
     "/home/almalinux/tsmc180/tcb018gbwp7t_290a/TSMCHOME/digital/Front_End/verilog/tcb018gbwp7t_270a/tcb018gbwp7t.v"
@@ -155,6 +156,8 @@ j = {
     "suite": a.suite,
     "samples": a.samples,
     "zero_delay": True,
+    "observer_signal_aliases": observer_aliases,
+    "removed_page_error_probe": "external host error response" if a.suite == "jtag" else None,
     "format_only_source_equivalence": format_equivalence,
     "sdf": False,
     "timing_checks_disabled": True,

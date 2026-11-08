@@ -43,7 +43,7 @@
 <text x="1545" y="577" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">VPG3程序表实时读；PC + 4×32bit寄存器</text>
 <text x="1545" y="615" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">LD32复用ALU；打包与结果共用缓冲</text>
 <text x="1545" y="653" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">经xbar读取RF / SRAM或流FIFO</text>
-<text x="1545" y="691" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">乘法统一锁存操作数，分两拍；SIMD8仍四路并行</text>
+<text x="1545" y="691" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">乘法锁存数据与模式，分两拍；SIMD8仍四路并行</text>
 <polyline points="385,425 385,450" fill="none" stroke="#c084fc" stroke-width="4"/>
 <polygon points="385,450 392.0,436.0 378.0,436.0" fill="#c084fc"/>
 <polyline points="1120,425 1120,450" fill="none" stroke="#c084fc" stroke-width="4"/>

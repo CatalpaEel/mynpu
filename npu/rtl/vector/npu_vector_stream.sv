@@ -13,6 +13,7 @@ module npu_vector_stream #(
   gather_error_i,
   input logic [2:0][31:0] gather_data_i,
 
+  output logic compute_mul_simd_o,
   output logic [31:0] compute_mul_a_o,
   compute_mul_b_o,
   output logic compute_simd_o,
@@ -173,6 +174,7 @@ module npu_vector_stream #(
   end
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
+      compute_mul_simd_o <= 0;
       compute_mul_a_o <= 0;
       compute_mul_b_o <= 0;
       mul_operation <= 0;
@@ -240,6 +242,11 @@ module npu_vector_stream #(
             else begin
               write_be <= tail_mask(remaining, simd_mode);
               if (staged_multiply) begin
+
+
+                compute_mul_simd_o <= simd_mode;
+
+
                 compute_mul_a_o <= operand_a;
                 compute_mul_b_o <= operand_b;
                 mul_operation <= operation;
@@ -258,6 +265,7 @@ module npu_vector_stream #(
             state <= LOAD_REQ;
           end else if((operation<=24 || operation==26 || operation==29) && (!program_mode || pc<slots) && (!(operation==21 || operation==22) || instruction[31:12]<=32) && (!simd_mode || operation<=15 || operation>=18 && operation<=20 || operation==24 || operation==26 || operation==29)) begin
             if (staged_multiply) begin
+              compute_mul_simd_o <= simd_mode;
               compute_mul_a_o <= operand_a;
               compute_mul_b_o <= operand_b;
               mul_operation <= operation;

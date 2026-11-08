@@ -10,6 +10,8 @@ import shutil
 import subprocess
 import tempfile
 
+from sim_sources import macro_wrapper
+
 NPU = Path(__file__).resolve().parents[1]
 ROOT = NPU.parent
 p = argparse.ArgumentParser(description=__doc__)
@@ -65,7 +67,7 @@ results = [
     dict(
         suite=suite,
         **audit_result(
-            NPU / f"build/vcs-opt_final_v3-{suite}{'-macro' if macro else ''}/result.json"
+            NPU / f"build/vcs-opt_final_v4-{suite}{'-macro' if macro else ''}/result.json"
         ),
     )
     for suite, macro in SUITES
@@ -73,13 +75,13 @@ results = [
 extras = [
     audit_result(NPU / f"build/{name}/result.json")
     for name in [
-        "vcs-opt_generic_vector_v3-quantlayers-macro",
-        "vcs-opt_units_v3-unitsmoke",
-        "vcs-opt_queueirq_v3-blocking-macro",
-        "vcs-opt_fifo4_routes_v3-unitroutes-macro",
+        "vcs-opt_generic_vector_v4-quantlayers-macro",
+        "vcs-opt_units_v4-unitsmoke",
+        "vcs-opt_queueirq_v4-blocking-macro",
+        "vcs-opt_fifo4_routes_v4-unitroutes-macro",
     ]
 ]
-log = (NPU / "build/vcs-opt_final_v3-blocking-macro/run.log").read_text()
+log = (NPU / "build/vcs-opt_final_v4-blocking-macro/run.log").read_text()
 cycles = [int(v) for v in re.findall(r"^SINGLE sample=\d+ .*?elapsed_cycles=(\d+)", log, re.M)]
 assert cycles == [20728] * 10, cycles
 profile = {}
@@ -154,12 +156,17 @@ def collect_ppa(run, current):
     if not current:
         assert manifest["git_commit"].startswith("6697d58"), run
     for filename, expected in manifest["source_sha256"].items():
-        assert sha(run / "inputs" / filename) == expected, (run, filename)
         if current:
-            assert sha(ROOT / filename) == expected, (run, filename)
+            blob = (ROOT / filename).read_bytes()
         else:
             blob = subprocess.check_output(["git", "show", "6697d58:" + filename], cwd=ROOT)
-            assert hashlib.sha256(blob).hexdigest() == expected, (run, filename)
+        assert hashlib.sha256(blob).hexdigest() == expected, (run, filename)
+        if filename == "npu/rtl/top/npu_soc.sv":
+            assert (run / "inputs/npu_asic_top.sv").read_text() == macro_wrapper(
+                blob.decode(), top="npu_asic_top"
+            )
+        else:
+            assert sha(run / "inputs" / filename) == expected, (run, filename)
     for filename, expected in json.loads((run / "library_manifest.json").read_text()).items():
         assert sha(Path(filename)) == expected, filename
     assert (
@@ -216,6 +223,7 @@ def collect_ppa(run, current):
                 "optimized.v",
                 "optimized.sdc",
                 "inputs/npu_asic_top.sv",
+                "inputs/npu_asic_top.sv",
                 "reports/area.rpt",
                 "reports/qor.rpt",
                 "reports/optimized_synth_clock_qor.rpt",
@@ -233,7 +241,7 @@ if ppa and baseline:
     )
 gates = []
 if ppa:
-    for name in ["gate-opt_v3_latency", "gate-opt_v3_units", "gate-opt_v3_jtag"]:
+    for name in ["gate-opt_v4_latency", "gate-opt_v4_units", "gate-opt_v4_jtag"]:
         path = NPU / "build" / name / "result.json"
         gate = audit_result(path)
         raw_gate = json.loads(path.read_text())
@@ -257,6 +265,11 @@ report = dict(
     unchanged_parameters_and_goldens=True,
     firmware_reproduced=True,
     profile=profile,
+    profile_caveats=[
+        "STAGE_PROFILE.matrix_req_stall retains an old master index; use BUS_BLOCK_PROFILE.matrix_req_wait.",
+        "STAGE_PROFILE.vector_input_wait is not incremented; do not interpret its zero as no waiting.",
+        "CNN wait bins are mutually exclusive priority bins; bus events and CPU views overlap them.",
+    ],
     ppa=ppa,
     baseline_ppa=baseline,
     new_pnr_performed=False,
