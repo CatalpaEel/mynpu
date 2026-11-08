@@ -1,4 +1,4 @@
-`define NPU_EXPECTED_MATRIX_JOBS 27
+`define NPU_EXPECTED_MATRIX_JOBS 37
 localparam int PROGRAM_BYTES=4864;
 localparam int STREAM_TASKS=296;
 localparam int PARAM_BYTES=4052;

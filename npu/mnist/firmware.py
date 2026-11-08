@@ -23,7 +23,8 @@ RF_BANK_WORDS = int(
 )
 RF_BANK_BYTES = RF_BANK_WORDS * 4
 setup_writes = 0
-SHARED_QUANT = os.environ.get("NPU_SHARED_QUANT", "0") == "1"
+# Production default: the shared QT01 path owns inference postprocessing.
+SHARED_QUANT = os.environ.get("NPU_SHARED_QUANT", "1") == "1"
 QUANT_IRQ_WAIT = SHARED_QUANT and os.environ.get("NPU_QUANT_IRQ_WAIT", "1") == "1"
 QUANT_QUEUE_IRQ_WAIT = QUANT_IRQ_WAIT and os.environ.get("NPU_QUANT_QUEUE_IRQ_WAIT", "0") == "1"
 

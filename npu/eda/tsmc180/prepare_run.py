@@ -143,7 +143,8 @@ lefs = [
             "vector_light_lanes": 0,
             "vector_alu_count": 1,
             "shared_quant_units": 1,
-            "shared_quant_default": "INT32 bypass",
+            "shared_quant_default": "INT32 bypass",  # hardware reset state
+            "firmware_default": "QT01 shared quantization",
             "shared_quant_direct_inputs": ["CNN", "Matrix"],
             "vector_simd8_lanes": 4,
             "vector_register_width_bits": 32,
