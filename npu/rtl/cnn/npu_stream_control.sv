@@ -26,7 +26,9 @@ module npu_stream_control #(
   import npu_addr_pkg::*;
   localparam int PW = QUEUE_DEPTH > 1 ? $clog2(QUEUE_DEPTH) : 1;
   stream_config_t cfg;
-  logic [31:0] command, queue[QUEUE_DEPTH];
+  logic [31:0] command;
+  logic [14:0] kernel;
+  stream_task_t queue[QUEUE_DEPTH];
   logic [PW-1:0] head, tail;
   logic [$clog2(QUEUE_DEPTH+1)-1:0] qcount;
   logic fault, push, known, writable, valid_write, valid_command;
@@ -40,7 +42,10 @@ module npu_stream_control #(
   assign irq_o = done_o || fault;
   assign start_o = qcount != 0 && !events_i.busy && !blocked_i && !fault;
   assign valid_command=command[17:14]>=1 && command[17:14]<=STREAM_PARTIAL_WORDS &&
-    cfg.ci!=0 && cfg.row_stride!=0 && cfg.plane_stride!=0;
+    cfg.ci!=0 && cfg.row_stride!=0 && cfg.plane_stride!=0 && command[3:0]==0 &&
+    data_range_ok(
+      {17'h10000, kernel}, 32'(cfg.ci) * 9
+  );
   assign push=csr_req_i && csr_we_i && csr_addr_i==0 && csr_wdata_i[0] && !csr_error_o && valid_command;
   always_comb begin
     csr_rdata_o = 0;
@@ -58,7 +63,7 @@ module npu_stream_control #(
         valid_write = data_range_ok(csr_wdata_i, 1) && csr_wdata_i[1:0] == 0;
       end
       'h0c: begin
-        csr_rdata_o = {17'h10000, cfg.weights};
+        csr_rdata_o = {17'h10000, kernel};
         valid_write = data_range_ok(csr_wdata_i, 1);
       end
       'h10: begin
@@ -104,7 +109,7 @@ module npu_stream_control #(
         writable = 0;
       end
       'h54: begin
-        csr_rdata_o = 32'h53443931;
+        csr_rdata_o = 32'h53443932;
         writable = 0;
       end
       'h58: begin
@@ -131,15 +136,16 @@ module npu_stream_control #(
     endcase
     csr_error_o=(csr_we_i && csr_addr_i=='h30 && csr_wdata_i!=0) || csr_addr_i[1:0]!=0 || !known || (csr_we_i &&
       (!writable || !valid_write ||
-       ((blocked_i || pending_i) && !busy_o) ||
-       (csr_addr_i!=0 && csr_addr_i!='h28 && busy_o) ||
+       ((blocked_i || pending_i) && !busy_o && csr_addr_i!='h0c && csr_addr_i!='h28) ||
+       (csr_addr_i!=0 && csr_addr_i!='h28 && csr_addr_i!='h0c && busy_o) ||
        (csr_addr_i==0 && csr_wdata_i[0] && (fault || (qcount==QUEUE_DEPTH && !start_o)))));
   end
-  always_ff @(posedge clk_i) if (push) queue[tail] <= command;
+  always_ff @(posedge clk_i) if (push) queue[tail] <= {kernel, command[31:4]};
   always_ff @(posedge clk_i or negedge rst_ni)
     if (!rst_ni) begin
       cfg <= '0;
       command <= 0;
+      kernel <= 0;
       head <= 0;
       tail <= 0;
       qcount <= 0;
@@ -179,7 +185,7 @@ module npu_stream_control #(
             end
           end
           'h08: cfg.src <= csr_wdata_i[14:0];
-          'h0c: cfg.weights <= csr_wdata_i[14:0];
+          'h0c: kernel <= csr_wdata_i[14:0];
           'h10: cfg.dst <= csr_wdata_i[14:0];
           'h14: cfg.row_stride <= csr_wdata_i[14:0];
           'h18: cfg.partial <= csr_wdata_i[14:0];

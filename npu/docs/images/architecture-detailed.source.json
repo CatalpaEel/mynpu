@@ -1,23 +1,24 @@
 {
   "scope": "Logical architecture, not physical placement; arrows show interface relationships",
   "source_sha256": {
-    "npu/rtl/top/npu_core.sv": "238717bd253216cb5214c3d39d0f0e4ebfaed12f838a94e46e69886d5048d0b6",
-    "npu/rtl/control/npu_mmio.sv": "7d1cf78dd57d9189e6fabf6e078a73aad1e5dcbcecf89536673f5a5ee374950e",
+    "npu/rtl/top/npu_core.sv": "eeccbce6b33cef4b295460f1279d6dec2ebc2f008ffd528149342bad6cac86e9",
+    "npu/rtl/control/npu_mmio.sv": "6c9d170437529da61a8bfcd54a70274200a63b9c200c1d26f1021d0feacedf12",
     "npu/rtl/interconnect/xbar.sv": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
     "npu/rtl/interconnect/xbar_stream.sv": "027f3b83b5199bc010ed9a46b438be81ec715def09a90bdd4befb418eb43307f",
     "npu/rtl/common/npu_addr_pkg.sv": "13ea5f2b45104bc37b7560ef2a11071007c87d39a81775d8862d038af0ac3624",
     "npu/rtl/interconnect/npu_data_regfile.sv": "7fffbed85311f8e8be3028c058bb60f25962e4b2d9dfefeb97c1a8132c9be278",
     "npu/rtl/common/npu_rr_select.sv": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
     "npu/rtl/interconnect/npu_multi_read.sv": "d3899799b1d54c34115f3878339321c00082d51d627fc30337d02656566b4028",
+    "npu/rtl/cnn/npu_stream_pkg.sv": "2f307164a733010e987028bc297c98c76b4ef4c6bca7a4be03143180e2ed0007",
     "npu/rtl/cnn/npu_stream.sv": "d72b6586071202ad0096e863492a7485ecad3d7c7c2a15c9310bc44686b9ab25",
-    "npu/rtl/cnn/npu_stream_control.sv": "386ffc45f8bb7104ee3fe2a159f9af1f2ab88fb0335e3e563198d2c6c6f3a615",
-    "npu/rtl/cnn/npu_stream_engine.sv": "e2133f72789358af121720d8707aa258d9b672c6ff916af451276db1d629f55f",
+    "npu/rtl/cnn/npu_stream_control.sv": "ed00b82792ecae03f9b5d92bab234515c37bbd5fe5d4422b497e5ae4857cdd31",
+    "npu/rtl/cnn/npu_stream_engine.sv": "0fb50ebfad518b4061caf97fb62eeed6c5d662b686161b87b55c73479a7db10e",
     "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
     "npu/rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
-    "npu/rtl/matrix/npu_matrix_stream.sv": "87b041181495303fa76d3c06f7e738e8b249346b2ccbb37bdbe6f1e825361fee",
+    "npu/rtl/matrix/npu_matrix_stream.sv": "576cf12a6b688e6e6304d48fc9ff1a8a343b492770b172defcc30d04ad849ddc",
     "npu/rtl/quant/npu_shared_quant.sv": "f36e046998f3d2ae54da8ea181a7c475370fd6b0a26441e629ba8f1055310da6",
     "npu/rtl/vector/npu_vector.sv": "392777c771a92b8a8dc812db019ff1896a3b92256512278f9d2c1dd78a230dcb",
-    "npu/rtl/vector/npu_vector_stream.sv": "3c55e8e4ceda628ff4eab208711cef500e502d59bdbc233160da929da49facfd",
+    "npu/rtl/vector/npu_vector_stream.sv": "38969ebc2c49d0f0f5c3879a5c8b8e060077ba51168b50c37801968950aa9fbe",
     "npu/build_config.json": "638f91112e3de5d36e324d71004e68341c2e811c3f6f1a83d2fa2fc8894ac845"
   }
 }

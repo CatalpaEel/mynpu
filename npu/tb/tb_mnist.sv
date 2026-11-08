@@ -214,7 +214,7 @@ module tb_mnist;
         for (int r = 0; r < 3; r++)
         if (y * stride + r - 1 >= 0 && y * stride + r - 1 < height) rows |= 1 << r;
         wr(MMIO + 'h628, npu_stream_pkg::encode_task(
-           0, y, x, n, rows, x == 0, (x + n - 1) * stride + 1 >= width, x));
+           y, x, n, rows, x == 0, (x + n - 1) * stride + 1 >= width, x));
         wr(MMIO + 'h600, 1);
       end
       wait_unit(MMIO + 'h604);
@@ -484,12 +484,12 @@ module tb_mnist;
     transfer(1, MMIO + 'h610, SRAM + 'h3d01, 4'hf, 1, ignored);
     for (int mode = 1; mode <= 3; mode += 2) transfer(1, MMIO + 'h630, 32'(mode), 4'hf, 1, ignored);
     for (int count = 0; count <= 9; count += 9) begin
-      wr(MMIO + 'h628, npu_stream_pkg::encode_task(0, 0, 0, count, 2, 1, 1, 0));
+      wr(MMIO + 'h628, npu_stream_pkg::encode_task(0, 0, count, 2, 1, 1, 0));
       wr(MMIO + 'h600, 1);
       expect_word(MMIO + 'h604, 4);
       wr(MMIO + 'h600, 2);
     end
-    expect_word(MMIO + 'h654, 32'h53443931);
+    expect_word(MMIO + 'h654, 32'h53443932);
     for (int seed = 0; seed < 36; seed++) row_case(seed);
     for (int placement = 1; placement <= 3; placement++)
       for (int seed = 0; seed < 8; seed++) row_case(seed, placement);

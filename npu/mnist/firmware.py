@@ -149,10 +149,9 @@ for i, fields in enumerate(layer_fields):
                     n = min(8, fields[9] - x)
                     left = int(x == 0)
                     right = int((x + n - 1) * fields[8] + 1 >= fields[4])
-                    assert co < 16 and y < 32 and x < 32
+                    assert y < 32 and x < 32
                     stream_commands.append(
-                        co
-                        | y << 4
+                        y << 4
                         | x << 9
                         | n << 14
                         | rows << 18
@@ -286,7 +285,7 @@ def quant_settings(fields, matrix=False):
 def emit_quant_cnn(i, fields, stream=False):
     # Layer-wide addressing is unchanged. Quant parameters are per channel;
     # finish that channel's queue before changing its immutable settings.
-    for field, offset in {0: 8, 1: 12, 4: 20, 6: 28, 8: 32, 11: 44}.items():
+    for field, offset in {0: 8, 4: 20, 6: 28, 8: 32, 11: 44}.items():
         lw(8, 7, i * 56 + field * 4)
         if stream and field == 0 and fields[field] == A:
             alu(8, 8, 20, 0)
@@ -312,8 +311,6 @@ def emit_quant_cnn(i, fields, stream=False):
         addi(10, 10, 4)
         addi(11, 11, -1)
         branch(11, 0, "weight_cache" + str(i))
-        li(8, RF_BASE)
-        sw(8, 6, 0x0C)
     li(31, 1)
     lw(1, 7, i * 56 + 28)
     lw(16, 7, i * 56 + 8)
@@ -322,7 +319,12 @@ def emit_quant_cnn(i, fields, stream=False):
         alu(17, 17, 20, 0)
     li(15, task_ranges[i]["address"])
     li(2, task_ranges[i]["per_channel"])
+    if stage_bytes:
+        li(18, RF_BASE)
+    else:
+        lw(18, 7, i * 56 + 4)  # software-owned kernel cursor
     label("qchannel" + str(i))
+    sw(18, 6, 12)
     quant_settings(fields)
     li(3, 0)
     label("qrow" + str(i))
@@ -356,6 +358,7 @@ def emit_quant_cnn(i, fields, stream=False):
     li(8, fields[9] * fields[10])
     alu(17, 17, 8, 0)
     addi(16, 16, 8)
+    addi(18, 18, fields[6] * 9)
     addi(1, 1, -1)
     branch(1, 0, "qchannel" + str(i))
     li(8, 0)
@@ -463,21 +466,14 @@ def emit_quant_fc(i, fields, stream=False):
 
 
 def emit_cnn_rows(i, fields, previous, stream=False):
-    """Software prepares all borders; hardware queues 32-bit transfer tasks."""
+    """Software prepares borders and kernel addresses; FIFO snapshots both shadows."""
     global setup_writes
     if SHARED_QUANT:
         return emit_quant_cnn(i, fields, stream)
     assert not fields[13]
-    mapping = {0: 8, 1: 0x0C, 4: 0x14, 6: 0x1C, 8: 0x20, 11: 0x2C}
+    mapping = {0: 8, 4: 0x14, 6: 0x1C, 8: 0x20, 11: 0x2C}
     for field, offset in mapping.items():
-        # Restore the SRAM base when a preceding layer used RF staging, even
-        # if a future model shares the same original weight tensor address.
-        cache_transition = (
-            field == 1
-            and previous is not None
-            and bool(rf_weight_stage_bytes(fields)) != bool(rf_weight_stage_bytes(previous))
-        )
-        if previous is None or fields[field] != previous[field] or cache_transition:
+        if previous is None or fields[field] != previous[field]:
             lw(5, 7, i * 56 + field * 4)
             if stream and field == 0 and fields[field] == A:
                 alu(5, 5, 20, 0)
@@ -509,11 +505,13 @@ def emit_cnn_rows(i, fields, previous, stream=False):
         addi(10, 10, 4)
         addi(11, 11, -1)
         branch(11, 0, "weight_cache" + str(i))
-        li(8, RF_BASE)
-        sw(8, 6, 0x0C)
     emit_vector_program(i)
     lw(1, 7, i * 56 + 28)
     li(2, task_ranges[i]["per_channel"])
+    if stage_bytes:
+        li(18, RF_BASE)
+    else:
+        lw(18, 7, i * 56 + 4)  # software-owned kernel cursor
     lw(17, 7, i * 56 + 12)
     if stream and fields[3] == A:
         alu(17, 17, 20, 0)
@@ -531,6 +529,7 @@ def emit_cnn_rows(i, fields, previous, stream=False):
         sw(8, 14, 0x30)
     li(4, 8)  # reuse the done-ACK constant across queue/drain checks
     label("channel" + str(i))
+    sw(18, 6, 12)
     sw(17, 14, 0x0C)
     sw(16, 14, 0x18)
     label("vector_space" + str(i))
@@ -576,6 +575,7 @@ def emit_cnn_rows(i, fields, previous, stream=False):
     li(8, count)
     alu(17, 17, 8, 0)
     addi(16, 16, 8)
+    addi(18, 18, fields[6] * 9)
     addi(1, 1, -1)
     branch(1, 0, "channel" + str(i))
     lw(5, 6, 0x60)
@@ -719,7 +719,7 @@ def emit_platform_check():
     li(5, 0x00070000)
     branch(8, 5, "fail")
     lw(8, 6, 0x54)
-    li(5, 0x53443931)
+    li(5, 0x53443932)
     branch(8, 5, "fail")
 
 
@@ -840,7 +840,9 @@ def generate_single():
     meta["rf_weight_stage_bytes"] = [
         rf_weight_stage_bytes(f) if not f[13] else 0 for f in layer_fields
     ]
-    meta["stream_abi"] = "SD91"
+    meta["stream_abi"] = "SD92"
+    meta["stream_task_bits"] = 43
+    meta["cnn_kernel_address_per_task"] = True
     meta["stream_tasks"] = len(stream_commands)
     meta["task_table"] = task_ranges
     meta["matrix_execution"] = "4x4 outer product; 16 INT32 accumulators; FC output blocks4/4/2"

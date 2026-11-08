@@ -15,7 +15,7 @@
 <rect x="1065" y="160" width="1120" height="190" rx="14" fill="#1e293b" stroke="#c084fc" stroke-width="2"/>
 <text x="1085" y="203" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#c084fc">控制与任务入口  ·  CPU经XBAR译码访问MMIO</text>
 <text x="1085" y="247" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">独立完成/错误IRQ；活动中W1C确认done；新事件优先于确认</text>
-<text x="1085" y="283" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">CNN Stream Control：公共配置、32bit tile命令FIFO、任务完成与错误</text>
+<text x="1085" y="283" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">CNN Stream Control：共享几何配置、卷积核地址随任务入FIFO、任务完成与错误</text>
 <text x="1085" y="319" font-family="Noto Sans CJK SC,sans-serif" font-size="24" fill="#e2e8f0">独立DMA及外部流接口已删除；保留测试host，9信号PAD的程序与输入统一经JTAG SBA装载</text>
 <polyline points="485,240 555,240" fill="none" stroke="#60a5fa" stroke-width="4"/>
 <polygon points="555,240 541.0,233.0 541.0,247.0" fill="#60a5fa"/>
@@ -25,7 +25,7 @@
 <text x="55" y="420" font-family="Noto Sans CJK SC,sans-serif" font-size="30" fill="#c084fc">任务执行层：管理地址、循环、预取、程序PC与访存握手</text>
 <rect x="55" y="450" width="660" height="310" rx="14" fill="#1e293b" stroke="#fb923c" stroke-width="2"/>
 <text x="75" y="493" font-family="Noto Sans CJK SC,sans-serif" font-size="28" fill="#fb923c">CNN Stream  ·  npu_stream / control / engine</text>
-<text x="75" y="539" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">8项 × 32bit命令FIFO；软件准备tile边界</text>
+<text x="75" y="539" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">8项 × 43bit任务FIFO；显式卷积核地址</text>
 <text x="75" y="577" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">3行 × 3words循环窗口 = 36B</text>
 <text x="75" y="615" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">48bit行窗口选择；双份9B权重；返回直通</text>
 <text x="75" y="653" font-family="Noto Sans CJK SC,sans-serif" font-size="26" fill="#e2e8f0">跨输入通道部分和存共享RF</text>
@@ -121,5 +121,5 @@
 <polyline points="1810,1565 1810,1630" fill="none" stroke="#fbbf24" stroke-width="4"/>
 <polygon points="1810,1630 1817.0,1616.0 1803.0,1616.0" fill="#fbbf24"/>
 <text x="55" y="1855" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#2dd4bf">并行边界：CNN / Matrix / Vector可并行，任意有向连接经xbar FIFO转发；CNN读请求、RF gather、计算与写回重叠，各主端口受bank冲突和FIFO反压约束。</text>
-<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">当前IRQ已独立，改动后未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。</text>
+<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">当前已独立IRQ并使用SD92卷积核地址任务；未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。</text>
 </svg>

@@ -159,7 +159,7 @@ module tb_cnn_stream;
     rows = 0;
     for (int r = 0; r < 3; r++) if (y * step + r - 1 >= 0 && y * step + r - 1 < h) rows |= 1 << r;
     wr('h40000608, a);
-    wr('h4000060c, b);
+    wr('h4000060c, b + 32'(co * ci * 9));
     wr('h40000610, d);
     wr('h40000614, 32'(w));
     wr('h40000618, 'h800040e0);
@@ -169,7 +169,7 @@ module tb_cnn_stream;
     wr('h4000062c, 32'(zero));
     wr('h40000630, 0);
     wr('h40000628,
-       32'(co)|32'(y)<<4|32'(x)<<9|32'(count)<<14|32'(rows)<<18|32'(x==0)<<21|32'((x+count-1)*step+1>=w)<<22);
+       32'(y)<<4|32'(x)<<9|32'(count)<<14|32'(rows)<<18|32'(x==0)<<21|32'((x+count-1)*step+1>=w)<<22);
     start(0);
     wait_done(0);
     for (int pos = 0; pos < count; pos++) begin

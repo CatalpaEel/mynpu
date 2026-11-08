@@ -90,7 +90,7 @@ box(
     1120,
     190,
     "控制与任务入口  ·  CPU经XBAR译码访问MMIO",
-    "独立完成/错误IRQ；活动中W1C确认done；新事件优先于确认\nCNN Stream Control：公共配置、32bit tile命令FIFO、任务完成与错误\n独立DMA及外部流接口已删除；保留测试host，9信号PAD的程序与输入统一经JTAG SBA装载",
+    "独立完成/错误IRQ；活动中W1C确认done；新事件优先于确认\nCNN Stream Control：共享几何配置、卷积核地址随任务入FIFO、任务完成与错误\n独立DMA及外部流接口已删除；保留测试host，9信号PAD的程序与输入统一经JTAG SBA装载",
     col="#c084fc",
     size=24,
 )
@@ -105,7 +105,7 @@ box(
     660,
     310,
     "CNN Stream  ·  npu_stream / control / engine",
-    "8项 × 32bit命令FIFO；软件准备tile边界\n3行 × 3words循环窗口 = 36B\n48bit行窗口选择；双份9B权重；返回直通\n跨输入通道部分和存共享RF\n末通道可直连共享QT01量化；或原始INT32写回",
+    "8项 × 43bit任务FIFO；显式卷积核地址\n3行 × 3words循环窗口 = 36B\n48bit行窗口选择；双份9B权重；返回直通\n跨输入通道部分和存共享RF\n末通道可直连共享QT01量化；或原始INT32写回",
     col="#fb923c",
     size=26,
 )
@@ -250,7 +250,7 @@ text(
 text(
     55,
     1885,
-    "当前IRQ已独立，改动后未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。",
+    "当前已独立IRQ并使用SD92卷积核地址任务；未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。",
     22,
     "#94a3b8",
 )
@@ -266,6 +266,7 @@ files = [
     "npu/rtl/interconnect/npu_data_regfile.sv",
     "npu/rtl/common/npu_rr_select.sv",
     "npu/rtl/interconnect/npu_multi_read.sv",
+    "npu/rtl/cnn/npu_stream_pkg.sv",
     "npu/rtl/cnn/npu_stream.sv",
     "npu/rtl/cnn/npu_stream_control.sv",
     "npu/rtl/cnn/npu_stream_engine.sv",

@@ -318,10 +318,12 @@ static inline int npu_vector_program_configure(const uint32_t *words, unsigned c
   npu_fence();
   return 0;
 }
-/* SD91 transfer ABI. CNN arithmetic is an independent ready/valid DOT9 unit.
- * Shared configuration is immutable until all queued transfer tasks drain. */
+/* SD92 transfer ABI. Geometry is immutable until the queue drains.
+ * Kernel/window shadows are mutable while busy and snapshotted together at START. */
 #define NPU_STREAM_ABI 0x654u
-#define NPU_STREAM_ABI_V1 0x53443931u
+#define NPU_STREAM_ABI_V2 0x53443932u
+#define NPU_CNN_KERNEL 0x60cu
+#define NPU_CNN_WINDOW 0x628u
 #define NPU_CNN_QUEUE 0x658u
 #define NPU_CNN_COMPLETED 0x65cu
 #define NPU_CNN_SUBMITTED 0x660u
@@ -330,7 +332,7 @@ static inline int npu_vector_program_configure(const uint32_t *words, unsigned c
 #define NPU_CNN_MAC_LANES 0x66cu
 #define NPU_STREAM_TASK_CAP 0x670u
 struct npu_stream_config {
-  uint32_t src, weights, dst, row_stride, partial, cin, stride, plane_stride, input_zero, mode;
+  uint32_t src, kernel, dst, row_stride, partial, cin, stride, plane_stride, input_zero, mode;
 };
 static inline int npu_data_span(uint32_t a, uint32_t n, uint32_t rf_bytes) {
   uint64_t end = (uint64_t)a + n;
@@ -343,10 +345,10 @@ static inline int npu_spans_overlap(uint32_t a, uint32_t n, uint32_t b, uint32_t
 }
 static inline int npu_stream_configure(const struct npu_stream_config *d) {
   uint32_t rf_bytes = npu_regfile_bank_bytes() * 2;
-  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V1 || (npu_read(0x604) & (NPU_BUSY | NPU_ERROR)))
+  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V2 || (npu_read(0x604) & (NPU_BUSY | NPU_ERROR)))
     return -1;
   if ((d->src & 3u) || !npu_data_span(d->src, 1, rf_bytes) ||
-      !npu_data_span(d->weights, 1, rf_bytes) ||
+      !npu_data_span(d->kernel, 1, rf_bytes) ||
       (!d->mode && ((d->dst & 3u) || !npu_data_span(d->dst, 4, rf_bytes))) ||
       d->partial < NPU_REGFILE_BASE || (d->partial & 3u) ||
       !npu_data_span(d->partial, 32, rf_bytes) || !d->row_stride || d->row_stride > 32767 ||
@@ -354,7 +356,7 @@ static inline int npu_stream_configure(const struct npu_stream_config *d) {
       (d->stride != 1 && d->stride != 2) || d->input_zero > 255 || d->mode != 0)
     return -1;
   npu_write(0x608, d->src);
-  npu_write(0x60c, d->weights);
+  npu_write(NPU_CNN_KERNEL, d->kernel);
   npu_write(0x610, d->dst);
   npu_write(0x614, d->row_stride);
   npu_write(0x618, d->partial);
@@ -366,18 +368,20 @@ static inline int npu_stream_configure(const struct npu_stream_config *d) {
   npu_fence();
   return 0;
 }
-static inline uint32_t npu_stream_task(unsigned co, unsigned y, unsigned x, unsigned count,
-                                       unsigned rows, int left, int right, unsigned dst_words) {
-  return (co & 15u) | ((y & 31u) << 4) | ((x & 31u) << 9) | ((count & 15u) << 14) |
-         ((rows & 7u) << 18) | ((left != 0) << 21) | ((right != 0) << 22) |
-         ((dst_words & 511u) << 23);
+static inline uint32_t npu_stream_task(unsigned y, unsigned x, unsigned count, unsigned rows,
+                                       int left, int right, unsigned dst_words) {
+  return ((y & 31u) << 4) | ((x & 31u) << 9) | ((count & 15u) << 14) | ((rows & 7u) << 18) |
+         ((left != 0) << 21) | ((right != 0) << 22) | ((dst_words & 511u) << 23);
 }
-static inline int npu_stream_submit(uint32_t task) {
+static inline int npu_stream_submit(uint32_t kernel, uint32_t task) {
   unsigned count = (task >> 14) & 15u;
-  if (!count || count > 8 || !npu_queue_has_space(NPU_CNN_QUEUE) || (npu_read(0x604) & NPU_ERROR))
+  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V2 || (task & 15u) || !count || count > 8 ||
+      !npu_data_span(kernel, npu_read(0x61c) * 9u, npu_regfile_bank_bytes() * 2u) ||
+      !npu_queue_has_space(NPU_CNN_QUEUE) || (npu_read(0x604) & NPU_ERROR))
     return -1;
   uint32_t before = npu_read(NPU_CNN_SUBMITTED);
-  npu_write(0x628, task);
+  npu_write(NPU_CNN_KERNEL, kernel); // Snapshotted with the window word when START is accepted.
+  npu_write(NPU_CNN_WINDOW, task);
   npu_fence();
   npu_write(0x600, 1);
   return npu_read(NPU_CNN_SUBMITTED) == before + 1u ? 0 : -1;
@@ -434,8 +438,8 @@ static inline int npu_cnn_start(const struct npu_cnn_descriptor *d) {
   }
   for (unsigned x = 0; x < d->output_width; x += 8) {
     unsigned n = d->output_width - x > 8 ? 8 : d->output_width - x;
-    if (npu_stream_submit(npu_stream_task(0, d->output_row, x, n, mask, x == 0,
-                                          (x + n - 1) * d->stride + 1 >= d->width, x)))
+    if (npu_stream_submit(d->weights, npu_stream_task(d->output_row, x, n, mask, x == 0,
+                                                      (x + n - 1) * d->stride + 1 >= d->width, x)))
       return -1;
   }
   return 0;
@@ -444,7 +448,8 @@ static inline int npu_cnn_start(const struct npu_cnn_descriptor *d) {
 static inline int npu_cnn_layer(struct npu_cnn_descriptor row, uint32_t channels, uint32_t rows,
                                 uint32_t timeout) {
   uint32_t rf_bytes = npu_regfile_bank_bytes() * 2;
-  if (!channels || channels > 16 || !rows || !npu_cnn_descriptor_valid(&row, rf_bytes) ||
+  if (!channels || !rows || !npu_cnn_descriptor_valid(&row, rf_bytes) ||
+      channels > NPU_SRAM_BYTES / (row.cin * 9u) ||
       rows > (row.height + row.stride - 1) / row.stride)
     return -1;
   uint32_t inputs = row.width * row.height * row.cin;

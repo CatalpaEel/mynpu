@@ -23,7 +23,7 @@ _start:
     bne x8, x5, fail
     lw x8, 84(x6)
     lui x5, 0x53444
-    addi x5, x5, -1743
+    addi x5, x5, -1742
     bne x8, x5, fail
     lui x7, 0x80001
     addi x7, x7, -768
@@ -31,8 +31,6 @@ _start:
     addi x12, x12, -256
     lw x5, 0(x7)
     sw x5, 8(x6)
-    lw x5, 4(x7)
-    sw x5, 12(x6)
     lw x5, 16(x7)
     sw x5, 20(x6)
     lw x5, 24(x7)
@@ -66,9 +64,6 @@ weight_cache0:
     addi x10, x10, 4
     addi x11, x11, -1
     bne x11, x0, weight_cache0
-    lui x8, 0x80004
-    addi x8, x8, 0
-    sw x8, 12(x6)
     lui x8, 0x5
     addi x8, x8, -1829
     sw x8, 64(x14)
@@ -99,6 +94,8 @@ weight_cache0:
     sw x8, 52(x14)
     lw x1, 28(x7)
     addi x2, x0, 28
+    lui x18, 0x80004
+    addi x18, x18, 0
     lw x17, 12(x7)
     lui x15, 0x80001
     addi x15, x15, -432
@@ -111,6 +108,7 @@ weight_cache0:
     sw x8, 48(x14)
     addi x4, x0, 8
 channel0:
+    sw x18, 12(x6)
     sw x17, 12(x14)
     sw x16, 24(x14)
 vector_space0:
@@ -155,6 +153,7 @@ submit0:
     addi x8, x0, 196
     alu
     addi x16, x16, 8
+    addi x18, x18, 9
     addi x1, x1, -1
     bne x1, x0, channel0
     lw x5, 96(x6)
@@ -201,8 +200,6 @@ ack0:
 acked0:
     lw x5, 56(x7)
     sw x5, 8(x6)
-    lw x5, 60(x7)
-    sw x5, 12(x6)
     lw x5, 72(x7)
     sw x5, 20(x6)
     lw x5, 80(x7)
@@ -224,17 +221,17 @@ weight_cache1:
     addi x10, x10, 4
     addi x11, x11, -1
     bne x11, x0, weight_cache1
-    lui x8, 0x80004
-    addi x8, x8, 0
-    sw x8, 12(x6)
     lw x1, 84(x7)
     addi x2, x0, 28
+    lui x18, 0x80004
+    addi x18, x18, 0
     lw x17, 68(x7)
     lui x15, 0x80001
     addi x15, x15, -208
     lw x16, 64(x7)
     addi x4, x0, 8
 channel1:
+    sw x18, 12(x6)
     sw x17, 12(x14)
     sw x16, 24(x14)
 vector_space1:
@@ -279,6 +276,7 @@ submit1:
     addi x8, x0, 196
     alu
     addi x16, x16, 8
+    addi x18, x18, 18
     addi x1, x1, -1
     bne x1, x0, channel1
     lw x5, 96(x6)
@@ -325,14 +323,13 @@ ack1:
 acked1:
     lw x5, 112(x7)
     sw x5, 8(x6)
-    lw x5, 116(x7)
-    sw x5, 12(x6)
     lw x5, 136(x7)
     sw x5, 28(x6)
     lw x5, 144(x7)
     sw x5, 32(x6)
     lw x1, 140(x7)
     addi x2, x0, 7
+    lw x18, 116(x7)
     lw x17, 124(x7)
     lui x15, 0x80001
     addi x15, x15, 240
@@ -341,6 +338,7 @@ acked1:
     sw x8, 16(x14)
     addi x4, x0, 8
 channel2:
+    sw x18, 12(x6)
     sw x17, 12(x14)
     sw x16, 24(x14)
 vector_space2:
@@ -385,6 +383,7 @@ submit2:
     addi x8, x0, 49
     alu
     addi x16, x16, 8
+    addi x18, x18, 36
     addi x1, x1, -1
     bne x1, x0, channel2
     lw x5, 96(x6)
@@ -431,8 +430,6 @@ ack2:
 acked2:
     lw x5, 168(x7)
     sw x5, 8(x6)
-    lw x5, 172(x7)
-    sw x5, 12(x6)
     lw x5, 184(x7)
     sw x5, 20(x6)
     lw x5, 192(x7)
@@ -441,6 +438,7 @@ acked2:
     sw x8, 36(x6)
     lw x1, 196(x7)
     addi x2, x0, 3
+    lw x18, 172(x7)
     lw x17, 180(x7)
     lui x15, 0x80001
     addi x15, x15, 464
@@ -449,6 +447,7 @@ acked2:
     sw x8, 16(x14)
     addi x4, x0, 8
 channel3:
+    sw x18, 12(x6)
     sw x17, 12(x14)
     sw x16, 24(x14)
 vector_space3:
@@ -493,6 +492,7 @@ submit3:
     addi x8, x0, 9
     alu
     addi x16, x16, 8
+    addi x18, x18, 72
     addi x1, x1, -1
     bne x1, x0, channel3
     lw x5, 96(x6)
@@ -539,8 +539,6 @@ ack3:
 acked3:
     lw x5, 224(x7)
     sw x5, 8(x6)
-    lw x5, 228(x7)
-    sw x5, 12(x6)
     lw x5, 240(x7)
     sw x5, 20(x6)
     lw x5, 256(x7)
@@ -549,12 +547,14 @@ acked3:
     sw x8, 36(x6)
     lw x1, 252(x7)
     addi x2, x0, 3
+    lw x18, 228(x7)
     lw x17, 236(x7)
     lui x15, 0x80001
     addi x15, x15, 560
     lw x16, 232(x7)
     addi x4, x0, 8
 channel4:
+    sw x18, 12(x6)
     sw x17, 12(x14)
     sw x16, 24(x14)
 vector_space4:
@@ -599,6 +599,7 @@ submit4:
     addi x8, x0, 9
     alu
     addi x16, x16, 8
+    addi x18, x18, 72
     addi x1, x1, -1
     bne x1, x0, channel4
     lw x5, 96(x6)

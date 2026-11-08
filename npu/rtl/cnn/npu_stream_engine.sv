@@ -273,7 +273,7 @@ module npu_stream_engine #(
     seed_selected = 0;
     request_seed_slot = 0;
     if (!is_rf_address(
-            {17'h10000, cfg.weights}
+            {17'h10000, cmd.kernel}
         ) && load_active && !weights_sent && !(state == RUN && !ready && !is_rf_address(
             {17'h10000, cfg.src}
         ) && |wanted))
@@ -306,8 +306,8 @@ module npu_stream_engine #(
     if (req_o) begin
       if (we_o && output_final && is_stream_address(output_address))
         addr_o = {output_address[31:8], 8'b0};
-      else if (!we_o && load_state == WREQ && is_stream_address({17'h10000, cfg.weights}))
-        addr_o = {17'h10000, cfg.weights};
+      else if (!we_o && load_state == WREQ && is_stream_address({17'h10000, cmd.kernel}))
+        addr_o = {17'h10000, cmd.kernel};
       else if (!we_o && load_state == AREQ && is_stream_address({17'h10000, cfg.src}))
         addr_o = {17'h10000, cfg.src};
     end
@@ -336,7 +336,7 @@ module npu_stream_engine #(
     // ordinary SRAM activation/partial-write port. At most one weight word
     // is issued per cycle; all RF replies arrive one cycle after their grant.
     if ((state == WAIT_INPUT || state == RUN) && is_rf_address(
-            {17'h10000, cfg.weights}
+            {17'h10000, cmd.kernel}
         ) && load_active && !weights_sent) begin
       logic picked;
       picked = 0;
@@ -551,9 +551,9 @@ module npu_stream_engine #(
           load_active <= 1;
           weights_sent <= 0;
           weights_ready <= 0;
-          weight_base <= cfg.weights + 15'(cmd.co) * 15'(cfg.ci) * 15'd9;
-          weight_start <= cfg.weights + 15'(cmd.co) * 15'(cfg.ci) * 15'd9;
-          weight_ptr <= (cfg.weights + 15'(cmd.co) * 15'(cfg.ci) * 15'd9) & 15'h7ffc;
+          weight_base <= cmd.kernel;
+          weight_start <= cmd.kernel;
+          weight_ptr <= (cmd.kernel) & 15'h7ffc;
           begin
             logic [14:0] anchor;
             anchor=cfg.src+15'(int'(cmd.y)<<cfg.step2)*cfg.row_stride+15'((int'(cmd.x)<<cfg.step2)-1);

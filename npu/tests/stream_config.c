@@ -35,7 +35,8 @@ int main(void) {
   d.dst = NPU_REGFILE_BASE;
   CHECK(!npu_cnn_descriptor_valid(&d, 256));
   d.dst = 0;
-  d.op = 2;
+  d.op = 0;
+  d.dst = 0x80003d00u;
   CHECK(npu_cnn_descriptor_valid(&d, 256));
   d.src = NPU_REGFILE_BASE + 184;
   CHECK(!npu_cnn_descriptor_valid(&d, 256));
@@ -50,7 +51,7 @@ int main(void) {
   CHECK(!npu_cnn_descriptor_valid(&d, 256));
   CHECK(!npu_data_span(0xfffffffcu, 8, 256));
   CHECK(!npu_data_span(NPU_REGFILE_BASE + 256, 1, 256));
-  CHECK(npu_stream_task(15, 31, 31, 8, 7, 1, 1, 511) == 0xfffe3fffu);
+  CHECK(npu_stream_task(31, 31, 8, 7, 1, 1, 511) == 0xfffe3ff0u);
   printf(
       "STREAM SOFTWARE CHECK PASS checks=%u shape, borders, aliases, overflow, command encoding\n",
       checks);
