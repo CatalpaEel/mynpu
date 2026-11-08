@@ -10,6 +10,8 @@ module npu_shared_quant (
   input logic [31:0] csr_wdata_i,
   output logic [31:0] csr_rdata_o,
   output logic csr_error_o,
+  input logic [1:0][1:0] written_i,
+  write_fault_i,
   input logic [1:0] flush_i,
   valid_i,
   output logic [1:0] ready_o,
@@ -26,6 +28,8 @@ module npu_shared_quant (
   // 00 control(enable,pack8),04 multiplier,08 scaled bias,0c shift(0..32),
   // 10 zero point,14 clamp min,18 clamp max,1c INT32 input correction,20 dest.
   logic [1:0][8:0][31:0] cfg;
+  // Monotonic modulo-2^32 observation only; ACK does not reset counters.
+  logic [1:0][31:0] accepted, issued, written, write_faults, flushed;
   logic [2:0] state;
   logic owner, last_owner, selected;
   logic signed [63:0] product, biased;
@@ -43,6 +47,16 @@ module npu_shared_quant (
     assign dst_o[p] = cfg[p][8];
   end
   always_comb begin
+    selected = valid_i[!last_owner] ? !last_owner : last_owner;
+    corrected = data_i[selected] + cfg[selected][7];  // intentional INT32 wrap
+    ready_o = 0;
+    valid_o = 0;
+    data_o = 0;
+    if (state == 2 && !flush_i[owner]) begin
+      valid_o[owner] = 1;
+      data_o[owner] = result;
+      ready_o[owner] = ready_i[owner];
+    end
     csr_rdata_o = 0;
     known = 1;
     writable = 1;
@@ -50,9 +64,37 @@ module npu_shared_quant (
     if (csr_addr_i == 'h80) begin
       csr_rdata_o = 'h51543031;
       writable = 0;
-    end else if (csr_addr_i[7] || word_index > 8 || csr_addr_i[1:0] != 0) known = 0;
+    end else if (csr_addr_i[7] || word_index > 14 || csr_addr_i[1:0] != 0) known = 0;
     else begin
-      csr_rdata_o = cfg[source][word_index];
+      if (word_index <= 8) csr_rdata_o = cfg[source][word_index];
+      else begin
+        writable = 0;
+        case (word_index)
+          9: csr_rdata_o = accepted[source];
+          10: csr_rdata_o = issued[source];
+          11: csr_rdata_o = written[source];
+          12: csr_rdata_o = write_faults[source];
+          13: csr_rdata_o = flushed[source];
+          14:
+          csr_rdata_o = {
+            17'b0,
+            (valid_o[source] && ready_i[source]),
+            (state == 0 && selected == source && valid_i[source] && !flush_i[source]),
+            (state != 0 && owner),
+            state,
+            (|write_fault_i[source]),
+            (|written_i[source]),
+            flush_i[source],
+            ready_i[source],
+            valid_o[source],
+            valid_i[source],
+            (state != 0 && owner == source),
+            pack_o[source],
+            enable_o[source]
+          };
+          default: ;
+        endcase
+      end
       case (word_index)
         0:
         valid_write=csr_wdata_i<=3 && (!csr_wdata_i[1] || csr_wdata_i[0]) &&
@@ -65,16 +107,7 @@ module npu_shared_quant (
       endcase
     end
     csr_error_o = !known || (csr_we_i && (!writable || !valid_write));
-    selected = valid_i[!last_owner] ? !last_owner : last_owner;
-    corrected = data_i[selected] + cfg[selected][7];  // intentional INT32 wrap
-    ready_o = 0;
-    valid_o = 0;
-    data_o = 0;
-    if (state == 2 && !flush_i[owner]) begin
-      valid_o[owner] = 1;
-      data_o[owner] = result;
-      ready_o[owner] = ready_i[owner];
-    end
+
   end
   always_comb begin
     logic signed [31:0] rounded;
@@ -91,6 +124,11 @@ module npu_shared_quant (
   end
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
+      accepted <= 0;
+      issued <= 0;
+      written <= 0;
+      write_faults <= 0;
+      flushed <= 0;
       cfg <= 0;
       state <= 0;
       owner <= 0;
@@ -103,6 +141,14 @@ module npu_shared_quant (
       upper <= 0;
       shift <= 0;
     end else begin
+      for (int p = 0; p < 2; p++) begin
+        written[p] <= written[p] + 32'(written_i[p]);
+        write_faults[p] <= write_faults[p] + 32'(write_fault_i[p]);
+        if (valid_o[p] && ready_i[p]) issued[p] <= issued[p] + 1;
+      end
+      if (state == 0 && valid_i[selected] && !flush_i[selected])
+        accepted[selected] <= accepted[selected] + 1;
+      if (state != 0 && flush_i[owner]) flushed[owner] <= flushed[owner] + 1;
       if (csr_req_i && csr_we_i && !csr_error_o) cfg[source][word_index] <= csr_wdata_i;
       if (state != 0 && flush_i[owner]) state <= 0;
       else

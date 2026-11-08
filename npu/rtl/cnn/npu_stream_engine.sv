@@ -16,6 +16,9 @@ module npu_stream_engine #(
   input logic quant_enable_i,
   quant_pack_i,
   input logic [31:0] quant_dst_i,
+  output logic [31:0] observe_o,
+  output logic [1:0] quant_written_o,
+  quant_write_fault_o,
   output logic quant_final_o,
   input logic clk_i,
   rst_ni,
@@ -109,6 +112,7 @@ module npu_stream_engine #(
   logic [1:0] pending_row, selected_row;
   logic [1:0] selected_slot;
   logic [15:0] partial_busy;
+  logic pending_quant, rf_pending_quant;
   logic pending_partial;
   logic [3:0] pending_output_position;
   logic [14:0] pending_addr;
@@ -117,6 +121,27 @@ module npu_stream_engine #(
   logic [3:0] rf_pending_position;
   logic partial_ack;
   logic [3:0] partial_ack_position;
+  // Tags belong to the granted write, independent of later live config writes.
+  assign quant_written_o = 2'(pending && pending_write && pending_quant && rvalid_i && !error_i) + 2'(rf_pending && rf_pending_quant && rf_sink_rvalid_i && !rf_sink_error_i);
+  assign quant_write_fault_o = 2'(pending && pending_write && pending_quant && rvalid_i && error_i) + 2'(rf_pending && rf_pending_quant && rf_sink_rvalid_i && rf_sink_error_i);
+  assign observe_o = {
+    state != IDLE,
+    req_o,
+    quant_pack_i,
+    quant_enable_i,
+    tap_valid,
+    result_pending_i,
+    mac_result_valid_i,
+    (|seed_inflight),
+    (|port_pending),
+    rf_pending,
+    pending,
+    output_final,
+    task_count,
+    cursor,
+    position,
+    state
+  };
   assign partial_ack=(pending && pending_write && pending_partial && rvalid_i && !error_i) || (rf_pending && rf_pending_partial && rf_sink_rvalid_i && !rf_sink_error_i);
   assign partial_ack_position=rf_pending && rf_pending_partial && rf_sink_rvalid_i ? rf_pending_position:pending_output_position;
   function automatic logic horizontal_valid(input int k);
@@ -409,6 +434,8 @@ module npu_stream_engine #(
       output_position <= 0;
       output_final <= 0;
       partial_busy <= 0;
+      pending_quant <= 0;
+      rf_pending_quant <= 0;
       pending_partial <= 0;
       pending_output_position <= 0;
       pending <= 0;
@@ -432,10 +459,12 @@ module npu_stream_engine #(
       pending <= accepted;
       rf_pending <= rf_sink_req_o && rf_sink_gnt_i;
       if (rf_sink_req_o && rf_sink_gnt_i) begin
+        rf_pending_quant <= output_final && quant_enable_i;
         rf_pending_partial <= !output_final;
         rf_pending_position <= output_position;
       end
       if (accepted) begin
+        pending_quant <= we_o && output_final && quant_enable_i;
         pending_write <= we_o;
         pending_type <= load_state;
         pending_partial <= we_o && !output_final;

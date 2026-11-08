@@ -18,6 +18,7 @@ p.add_argument(
         "readbatch",
         "irqwake",
         "softcfg",
+        "quantsync",
         "sharedoperands",
         "outergemm",
         "matrixtiles",
@@ -92,6 +93,7 @@ assert files, "Generated source list is empty"
 tops = {
     "irqcontrol": "tb_irq_control",
     "softcfg": "tb_software_config",
+    "quantsync": "tb_quant_sync",
     "irqwake": "tb_irq_wake",
     "addressranges": "tb_address_ranges",
     "sramuncached": "tb_sram_uncached",
@@ -200,6 +202,8 @@ if any(f.name in ["npu_matrix_stream.sv", "npu_vector_stream.sv"] for f in files
     operand_port = ROOT / "rtl/interconnect/npu_multi_read.sv"
     if operand_port not in files:
         files.append(operand_port)
+if a.suite == "quantsync":
+    files = [ROOT / "rtl/common/npu_addr_pkg.sv", ROOT / "rtl/quant/npu_shared_quant.sv"]
 if a.suite == "queues":
     files = [ROOT / "rtl/common/npu_addr_pkg.sv", ROOT / "rtl/control/npu_mmio.sv"]
 if any(f.name in ["npu_matrix_stream.sv", "npu_vector_stream.sv"] for f in files):
@@ -389,6 +393,7 @@ text = (out / "run.log").read_text()
 markers = {
     "irqcontrol": "IRQ CONTROL PASS",
     "softcfg": "SOFTWARE CONFIG PASS",
+    "quantsync": "QUANT SYNC PASS",
     "irqwake": "IRQ WAKE PASS",
     "addressranges": "ADDRESS RANGES PASS",
     "sramuncached": "SRAM UNCACHED PASS",

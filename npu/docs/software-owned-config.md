@@ -2,6 +2,8 @@
 
 CNN、Matrix、Vector 与共享 QT01 的配置允许在运行中或有排队任务时写入。取消的是配置一致性的 busy/排空写保护；没有新增双缓冲、配置版本、暂停派发 CSR 或自动屏障。FIFO 仍为 CNN/Matrix/Vector 各 8 项，条目分别为 32/96/99bit，RF 仍为 256B。
 
+新增只读启动、量化采样与写应答计数，详见 [软件可见同步与执行进度](software-sync-observation.md)。这些观测不增加配置保护。
+
 ## 写入与生效规则
 
 | 配置 | 何时读取 | 修改后的影响 |
@@ -40,7 +42,7 @@ Operator ABI 的 minor 版本为 **2.2**：`0x40000040` 返回 `0x00020002`。�
 
 SD95 数量编码、VPG3 指令编码、Matrix 4 格式和 QT01 算术 ABI 不变。默认共享量化 boot 二进制与提交 `65ea66f` 完全一致，仅模型元数据更新为 Operator ABI 2.2。
 
-## 验证
+## 本功能初次实现时的验证（edbb4ce，历史记录）
 
 运行 `python3.12 npu/scripts/collect_software_config_validation.py` 审核结果和依赖 SHA，生成 `npu/reports/software-config-validation.json`。
 

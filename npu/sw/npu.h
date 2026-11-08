@@ -43,6 +43,44 @@ static inline uint32_t npu_regfile_bank_bytes(void);
 #define NPU_VEC_SUBMITTED 0x22cu
 /* Operator ABI 2.2, project-defined integer kernels (not an ISA extension). */
 #define NPU_OPERATOR_ABI 0x040u
+/* Read-only observation ABI 1, capabilities bits0..5; no reservation/locking. */
+#define NPU_SYNC_CAP 0x084u
+#define NPU_SYNC_ABI_V1 0x0001003fu
+#define NPU_MAT_STARTED 0x144u
+#define NPU_MAT_STARTED_TICKET 0x148u
+#define NPU_MAT_FAULTS 0x14cu
+#define NPU_MAT_OBSERVE 0x150u
+#define NPU_MAT_SYNC_STATE 0x154u
+#define NPU_VEC_STARTED 0x238u
+#define NPU_VEC_STARTED_TICKET 0x23cu
+#define NPU_VEC_FAULTS 0x280u
+#define NPU_VEC_OBSERVE 0x284u
+#define NPU_VEC_SYNC_STATE 0x288u
+#define NPU_CNN_STARTED 0x634u
+#define NPU_CNN_STARTED_TICKET 0x638u
+#define NPU_CNN_FAULTS 0x63cu
+#define NPU_CNN_CANCELLED 0x648u
+#define NPU_CNN_OBSERVE 0x64cu
+#define NPU_CNN_SYNC_STATE 0x650u
+#define NPU_SYNC_BUSY (1u << 0)
+#define NPU_SYNC_LAUNCH (1u << 1)
+#define NPU_SYNC_QUEUED (1u << 2)
+#define NPU_SYNC_DONE_PULSE (1u << 3)
+#define NPU_SYNC_FAULT_PULSE (1u << 4)
+#define NPU_SYNC_BLOCKED (1u << 5)
+/* Relative to NPU_QUANT_SYNC_BASE(source). Counts wrap, reset only on reset. */
+#define NPU_QUANT_SYNC_BASE(source) (0x700u + ((uint32_t)(source) << 6))
+#define NPU_QUANT_ACCEPTED 0x24u
+#define NPU_QUANT_ISSUED 0x28u
+#define NPU_QUANT_WRITTEN 0x2cu
+#define NPU_QUANT_WRITE_ERRORS 0x30u
+#define NPU_QUANT_FLUSHED 0x34u
+#define NPU_QUANT_SYNC_STATE 0x38u
+/* Valid for less than 2^31 events between baseline and observation. Following
+ * a fault/cancellation, started/completed event counts are not submit tickets. */
+static inline int npu_counter_reached(uint32_t observed, uint32_t target) {
+  return observed - target < 0x80000000u;
+}
 #define NPU_RUNTIME_CONFIG_CAP 0x080u /* bits0..3: CNN, Matrix, Vector, quant */
 #define NPU_GEMM_CAP 0x044u
 #define NPU_VECTOR_CAP 0x048u

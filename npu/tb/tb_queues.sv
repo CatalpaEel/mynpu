@@ -23,7 +23,11 @@ module tb_queues;
   logic [31:0] test_result_o, cpu_boot_addr_o;
   logic cpu_release_o;
   int mat_jobs = 0, vec_jobs = 0, mtimer = 0, vtimer = 0, checks = 0, md, vd;
-  npu_mmio dut (.*);
+  npu_mmio dut (
+    .mat_observe_i(32'b0),
+    .vec_observe_i(32'b0),
+    .*
+  );
   assign mat_busy_i = mtimer != 0;
   assign vec_busy_i = !run_engines || vtimer != 0;
   assign mat_blocked_i = !run_engines;
@@ -134,7 +138,11 @@ module tb_queues;
       if (mat_jobs != (round + 1) * md || vec_jobs != (round + 1) * vd)
         $fatal(1, "Lost queued work");
       check_reg('h128, 32'(mat_jobs));
+      check_reg('h144, 32'(mat_jobs));
+      check_reg('h148, 32'(mat_jobs));
       check_reg('h228, 32'(vec_jobs));
+      check_reg('h238, 32'(vec_jobs));
+      check_reg('h23c, 32'(vec_jobs));
       check_reg('h104, 6);
       check_reg('h204, 6);
     end

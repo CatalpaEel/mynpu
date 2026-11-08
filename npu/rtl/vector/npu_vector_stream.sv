@@ -33,6 +33,7 @@ module npu_vector_stream #(
   input logic [8:0] op_i,
   input logic [31:0] program_cfg_i,
   input logic [15:0][31:0] program_i,
+  output logic [31:0] observe_o,
   output logic busy_o,
   done_o,
   fault_o,
@@ -83,6 +84,7 @@ module npu_vector_stream #(
   logic [31:0] output_value;
 
   logic simd_mode;
+  assign observe_o = {busy_o, simd_mode, we_o, req_o, mode, loop_pc, slots, pc, state};
   assign simd_mode = mode[6];
   assign compute_simd_o = simd_mode && operation != 27;
   npu_multi_read #(

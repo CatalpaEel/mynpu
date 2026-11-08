@@ -26,6 +26,9 @@ module npu_matrix_stream #(
   compute_result_valid_i,
   output logic compute_result_ready_o,
   input logic [31:0] compute_result_data_i,
+  output logic [31:0] observe_o,
+  output logic quant_written_o,
+  quant_write_fault_o,
   input logic quant_enable_i,
   quant_pack_i,
   input logic [31:0] quant_dst_i,
@@ -197,6 +200,12 @@ module npu_matrix_stream #(
   assign compute_index_o = {out_r, out_c};
   assign compute_addend_o = state == C_WAIT ? rdata_i : 0;
   assign compute_flush_o = state == CLEAR || response_error;
+  logic quant_write_pending;
+  assign quant_written_o = state == D_WAIT && rvalid_i && !error_i && quant_write_pending;
+  assign quant_write_fault_o = state == D_WAIT && rvalid_i && error_i && quant_write_pending;
+  assign observe_o = {
+    busy_o, req_o, d_stream, b_stream, a_stream, out_c, out_r, tile_col, tile_row, inner, state
+  };
   assign compute_result_ready_o = state == D_REQ && gnt_i;
   assign busy_o = state != IDLE;
   assign req_o=(state==WAIT_WORDS && batch_req) || state==C_REQ || (state==D_REQ && compute_result_valid_i);
@@ -206,6 +215,7 @@ module npu_matrix_stream #(
   assign be_o = state == D_REQ && quant_pack_i ? 4'b1 << output_address[1:0] : 4'hf;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
+      quant_write_pending <= 0;
       state <= IDLE;
       done_o <= 0;
       fault_o <= 0;
@@ -312,7 +322,11 @@ module npu_matrix_stream #(
           C_REQ: if (gnt_i) state <= C_WAIT;
           C_WAIT: if (rvalid_i && compute_ready_i) state <= D_REQ;
           EMIT: if (compute_ready_i) state <= D_REQ;
-          D_REQ: if (gnt_i) state <= D_WAIT;
+          D_REQ:
+          if (gnt_i) begin
+            quant_write_pending <= quant_enable_i;
+            state <= D_WAIT;
+          end
           D_WAIT:
           if (rvalid_i) begin
             if ({1'b0, out_c} + 3'd1 < cols) begin

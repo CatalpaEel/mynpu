@@ -17,6 +17,8 @@ module npu_stream #(
   input logic quant_enable_i,
   quant_pack_i,
   input logic [31:0] quant_dst_i,
+  output logic [1:0] quant_written_o,
+  quant_write_fault_o,
   output logic quant_final_o,
   input logic clk_i,
   rst_ni,
@@ -64,9 +66,11 @@ module npu_stream #(
   npu_stream_pkg::stream_task_t command;
   npu_stream_pkg::stream_events_t events;
   logic start;
+  logic [31:0] observe;
   npu_stream_control #(
     .QUEUE_DEPTH(QUEUE_DEPTH)
   ) i_control (
+    .observe_i(observe),
     .quant_pack_i,
     .events_i (events),
     .config_o (config_q),
@@ -77,6 +81,7 @@ module npu_stream #(
   npu_stream_engine #(
     .RF_SINK(RF_SINK)
   ) i_engine (
+    .observe_o(observe),
     .start_i  (start),
     .config_i (config_q),
     .command_i(command),

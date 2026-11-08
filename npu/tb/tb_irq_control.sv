@@ -9,6 +9,8 @@ module tb_irq_control;
   logic [1:0] busy = 0, done = 0, fault = 0;
   wire [1:0] irq;
   npu_mmio mmio (
+    .mat_observe_i (32'b0),
+    .vec_observe_i (32'b0),
     .clk_i         (clk),
     .rst_ni        (rst),
     .req_i         (req),
@@ -38,6 +40,7 @@ module tb_irq_control;
   npu_stream_control #(
     .QUEUE_DEPTH(8)
   ) cnn (
+    .observe_i   (32'b0),
     .clk_i       (clk),
     .rst_ni      (rst),
     .quant_pack_i(1'b0),
@@ -132,6 +135,7 @@ module tb_irq_control;
       check(base + 4, 4, 2'(1 << u));
       command(base, 2);
       check(base + 4, 0, 0);
+      check(u == 0 ? 'h14c : 'h280, 2, 0);
     end
     command('h100, 0, 3);
     check('h104, 2, 3);
@@ -156,9 +160,12 @@ module tb_irq_control;
     ccommand(2);
     ccheck(4, 0, 0);
     // Fault dominates simultaneous successful completion and acknowledgement.
+    events.busy = 1;
     ccommand(2, 1, 1);
+    events.busy = 0;
     ccheck(4, 4, 1);
     ccheck('h5c, 1, 1);
+    ccheck('h3c, 2, 1);
     ccommand(2);
     ccheck(4, 0, 0);
     $display(

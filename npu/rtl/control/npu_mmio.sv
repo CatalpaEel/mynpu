@@ -43,6 +43,8 @@ module npu_mmio #(
   output logic [4:0] mat_flags_o,
   output logic mat_precision_o,
   output logic [1:0] mat_element_log2_o,
+  input logic [31:0] mat_observe_i,
+  vec_observe_i,
   input logic mat_busy_i,
   mat_done_i,
   mat_fault_i,
@@ -59,6 +61,7 @@ module npu_mmio #(
   logic [31:0] ma_q, mb_q, md_q, mm_q, mn_q, mk_q, va_q, vb_q, vd_q, vl_q, vo_q, mf_q, vs_q;
   logic [31:0]
       mat_cycles_q, vec_cycles_q, mat_completed, vec_completed, mat_submitted, vec_submitted;
+  logic [31:0] mat_started, vec_started, mat_ticket, vec_ticket, mat_faults, vec_faults;
   logic mat_done_q, mat_error_q, vec_done_q, vec_error_q, mat_ok, vec_ok;
   logic mat_occupied, vec_occupied, writable, known, mpush, vpush, mpop, vpop;
   logic [31:0] mla_q, mlb_q, mp_q, me_q;
@@ -294,6 +297,52 @@ module npu_mmio #(
       12'h138: rdata_o = mlb_q;
       12'h13c: rdata_o = mp_q;
       12'h140: rdata_o = me_q;
+      12'h084: begin
+        rdata_o = 32'h0001003f;
+        writable = 0;
+      end
+      12'h144: begin
+        rdata_o = mat_started;
+        writable = 0;
+      end
+      12'h148: begin
+        rdata_o = mat_ticket;
+        writable = 0;
+      end
+      12'h14c: begin
+        rdata_o = mat_faults;
+        writable = 0;
+      end
+      12'h150: begin
+        rdata_o = mat_observe_i;
+        writable = 0;
+      end
+      12'h154: begin
+        rdata_o = {
+          26'b0, mat_blocked_i, mat_fault_i, mat_done_i, (mc != 0), mat_start_o, mat_busy_i
+        };
+        writable = 0;
+      end
+      12'h238: begin
+        rdata_o = vec_started;
+        writable = 0;
+      end
+      12'h23c: begin
+        rdata_o = vec_ticket;
+        writable = 0;
+      end
+      12'h280: begin
+        rdata_o = vec_faults;
+        writable = 0;
+      end
+      12'h284: begin
+        rdata_o = vec_observe_i;
+        writable = 0;
+      end
+      12'h288: begin
+        rdata_o = {27'b0, vec_fault_i, vec_done_i, (vc != 0), vec_start_o, vec_busy_i};
+        writable = 0;
+      end
       12'h080: begin
         rdata_o = 32'hf;  // Runtime config writes: CNN, Matrix, Vector program, quant.
         writable = 0;
@@ -433,6 +482,12 @@ module npu_mmio #(
       vec_done_q <= 0;
       mat_error_q <= 0;
       vec_error_q <= 0;
+      mat_started <= 0;
+      vec_started <= 0;
+      mat_ticket <= 0;
+      vec_ticket <= 0;
+      mat_faults <= 0;
+      vec_faults <= 0;
       mat_completed <= 0;
       vec_completed <= 0;
       mat_submitted <= 0;
@@ -447,6 +502,17 @@ module npu_mmio #(
       vec_start_o <= 0;
       if (mat_busy_i) mat_cycles_q <= mat_cycles_q + 1;
       if (vec_busy_i) vec_cycles_q <= vec_cycles_q + 1;
+      // Count the actual engine latch edge, one cycle after FIFO pop.
+      if (mat_start_o) begin
+        mat_started <= mat_started + 1;
+        mat_ticket <= mat_submitted - 32'(mc);
+      end
+      if (vec_start_o) begin
+        vec_started <= vec_started + 1;
+        vec_ticket <= vec_submitted - 32'(vc);
+      end
+      if (mat_fault_i) mat_faults <= mat_faults + 1;
+      if (vec_fault_i) vec_faults <= vec_faults + 1;
       if (mat_done_i && !mat_fault_i) mat_completed <= mat_completed + 1;
       if (vec_done_i && !vec_fault_i) vec_completed <= vec_completed + 1;
       case ({

@@ -4,6 +4,7 @@
 module npu_stream_control #(
   parameter int QUEUE_DEPTH = 16
 ) (
+  input logic [31:0] observe_i,
   input logic quant_pack_i,
   input logic clk_i,
   rst_ni,
@@ -31,6 +32,7 @@ module npu_stream_control #(
   logic [PW-1:0] head, tail;
   logic [$clog2(QUEUE_DEPTH+1)-1:0] qcount;
   logic fault, push, known, writable, valid_write, valid_command;
+  logic [31:0] started, started_ticket, faults, cancelled;
   logic [31:0] completed, submitted, total_cycles, total_macs;
   function automatic logic [PW-1:0] advance(input logic [PW-1:0] p);
     return p == QUEUE_DEPTH - 1 ? '0 : p + 1'b1;
@@ -103,6 +105,32 @@ module npu_stream_control #(
         csr_rdata_o = 0;
         valid_write = csr_wdata_i == 0 || csr_wdata_i == 2;
       end
+      'h34: begin
+        csr_rdata_o = started;
+        writable = 0;
+      end
+      'h38: begin
+        csr_rdata_o = started_ticket;
+        writable = 0;
+      end
+      'h3c: begin
+        csr_rdata_o = faults;
+        writable = 0;
+      end
+      'h48: begin
+        csr_rdata_o = cancelled;
+        writable = 0;
+      end
+      'h4c: begin
+        csr_rdata_o = observe_i;
+        writable = 0;
+      end
+      'h50: begin
+        csr_rdata_o = {
+          26'b0, blocked_i, events_i.fault, events_i.done, (qcount != 0), start_o, events_i.busy
+        };
+        writable = 0;
+      end
       'h40, 'h64: begin
         csr_rdata_o = total_cycles;
         writable = 0;
@@ -151,6 +179,10 @@ module npu_stream_control #(
       qcount <= 0;
       fault <= 0;
       done_o <= 0;
+      started <= 0;
+      started_ticket <= 0;
+      faults <= 0;
+      cancelled <= 0;
       completed <= 0;
       submitted <= 0;
       total_cycles <= 0;
@@ -163,7 +195,11 @@ module npu_stream_control #(
         tail <= advance(tail);
         submitted <= submitted + 1'b1;
       end
-      if (start_o) head <= advance(head);
+      if (start_o) begin
+        head <= advance(head);
+        started <= started + 1;
+        started_ticket <= submitted - 32'(qcount) + 1;
+      end
       case ({
         push, start_o
       })
@@ -199,6 +235,10 @@ module npu_stream_control #(
       // Set-dominant done acknowledgement: a new event must remain pending.
       if (events_i.done && !events_i.fault) done_o <= 1;
       if (events_i.fault) begin
+        // Pipelined error replies can remain high after the engine aborts.
+        // Count the active task failure once, not its trailing replies.
+        if (events_i.busy) faults <= faults + 1;
+        cancelled <= cancelled + 32'(qcount) + 32'(push) - 32'(start_o);
         fault <= 1;
         done_o <= 0;
         head <= 0;

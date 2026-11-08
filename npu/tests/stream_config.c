@@ -83,6 +83,12 @@ int main(void) {
   CHECK(npu_stream_task_checked(0, 128, 1, 0, 0, 0, 0, &packed) == -1);
   CHECK(npu_stream_task_checked(0, 0, 1, 8, 0, 0, 0, &packed) == -1);
   CHECK(npu_stream_task_checked(0, 0, 1, 0, 0, 0, 512, &packed) == -1);
+  CHECK(npu_counter_reached(7, 7));
+  CHECK(npu_counter_reached(8, 7));
+  CHECK(!npu_counter_reached(6, 7));
+  CHECK(npu_counter_reached(0, 0xffffffffu));
+  CHECK(!npu_counter_reached(0xffffffffu, 0));
+  CHECK(NPU_QUANT_SYNC_BASE(NPU_QUANT_MATRIX) + NPU_QUANT_WRITTEN == 0x76cu);
   printf(
       "STREAM SOFTWARE CHECK PASS checks=%u shape, borders, aliases, overflow, command encoding\n",
       checks);

@@ -33,18 +33,20 @@ module tb_cnn_queue;
   logic [7:0] mem[16384];
   assign gnt_i = allow_bus && req_o;
   npu_stream dut (
-    .rf_sink_be_o    (),
-    .quant_pack_i    (1'b0),
-    .quant_enable_i  (1'b0),
-    .quant_dst_i     (32'b0),
-    .quant_final_o   (),
-    .result_pending_i(1'b0),
-    .rf_sink_req_o   (),
-    .rf_sink_addr_o  (),
-    .rf_sink_wdata_o (),
-    .rf_sink_gnt_i   (1'b0),
-    .rf_sink_rvalid_i(1'b0),
-    .rf_sink_error_i (1'b0),
+    .quant_written_o    (),
+    .quant_write_fault_o(),
+    .rf_sink_be_o       (),
+    .quant_pack_i       (1'b0),
+    .quant_enable_i     (1'b0),
+    .quant_dst_i        (32'b0),
+    .quant_final_o      (),
+    .result_pending_i   (1'b0),
+    .rf_sink_req_o      (),
+    .rf_sink_addr_o     (),
+    .rf_sink_wdata_o    (),
+    .rf_sink_gnt_i      (1'b0),
+    .rf_sink_rvalid_i   (1'b0),
+    .rf_sink_error_i    (1'b0),
     .*
   );
   npu_cnn arithmetic (
@@ -151,6 +153,8 @@ module tb_cnn_queue;
     for (int t = 0; t < 20000 && busy_o; t++) @(negedge clk_i);
     if (busy_o) $fatal(1, "Stream queue failed to drain");
     expect_csr('h5c, 32'(depth + 1));
+    expect_csr('h34, 32'(depth + 1));
+    expect_csr('h38, 32'(depth + 1));
     expect_csr(4, 2);
     for (int i = 0; i <= depth; i++) begin
       logic [31:0] got;
@@ -188,6 +192,10 @@ module tb_cnn_queue;
     expect_csr(4, 4);
     wr(0, 1, 1);
     expect_csr('h60, 2);
+    expect_csr('h34, 1);
+    expect_csr('h38, 1);
+    expect_csr('h3c, 1);
+    expect_csr('h48, 1);
     error_i = 0;
     wr(0, 2);
     wr('h0c, 32'h12340000, 1);
@@ -211,6 +219,10 @@ module tb_cnn_queue;
     for (int t = 0; t < 20000 && busy_o; t++) @(negedge clk_i);
     if (busy_o) $fatal(1, "short workspace task failed to drain");
     expect_csr('h60, 3);
+    expect_csr('h34, 2);
+    expect_csr('h38, 3);  // Cancelled ticket 2 never started.
+    expect_csr('h3c, 1);
+    expect_csr('h48, 1);
     expect_csr('h5c, 1);
     expect_csr(4, 2);
     if ($bits(dut.command) != 32) $fatal(1, "Task FIFO is not 32 bits");

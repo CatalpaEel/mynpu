@@ -32,7 +32,8 @@ module npu_core #(
   input logic [1:0][31:0] sram_rdata_i
 );
   logic is_quant_mmio, quant_error, cnn_quant_final;
-  logic [31:0] quant_rdata;
+  logic [31:0] quant_rdata, matrix_observe, vector_observe;
+  logic [1:0][1:0] quant_written, quant_write_fault;
   logic [1:0] quant_enable, quant_pack, quant_valid, quant_ready, quant_out_valid, quant_out_ready;
   logic [1:0][31:0] quant_dst, quant_in_data, quant_out_data;
   logic cnn_filtered_valid, cnn_filtered_ready, matrix_filtered_valid, matrix_filtered_ready;
@@ -274,6 +275,8 @@ module npu_core #(
     .mmio_error_i    (mmio_error)
   );
   npu_mmio i_mmio (
+    .mat_observe_i     (matrix_observe),
+    .vec_observe_i     (vector_observe),
     .clk_i             (clk_i),
     .rst_ni            (system_rst_no),
     .req_i             (mmio_req && !removed_dma_page && !is_cnn_mmio && !is_quant_mmio),
@@ -345,6 +348,9 @@ module npu_core #(
   npu_matrix_stream #(
     .GATHER(PARALLEL_UNITS)
   ) i_matrix_stream (
+    .observe_o             (matrix_observe),
+    .quant_written_o       (quant_written[1][0]),
+    .quant_write_fault_o   (quant_write_fault[1][0]),
     .quant_enable_i        (quant_enable[1]),
     .quant_pack_i          (quant_pack[1]),
     .quant_dst_i           (quant_dst[1]),
@@ -430,38 +436,40 @@ module npu_core #(
   npu_stream #(
     .RF_SINK(1)
   ) i_stream (
-    .result_pending_i  (dot_result_valid),
-    .quant_enable_i    (quant_enable[0]),
-    .quant_pack_i      (quant_pack[0]),
-    .quant_dst_i       (quant_dst[0]),
-    .quant_final_o     (cnn_quant_final),
-    .rf_sink_be_o      (cnn_rf_sink_be),
-    .rf_sink_req_o     (cnn_rf_sink_req),
-    .rf_sink_addr_o    (cnn_rf_sink_addr),
-    .rf_sink_wdata_o   (cnn_rf_sink_wdata),
-    .rf_sink_gnt_i     (cnn_rf_sink_gnt),
-    .rf_sink_rvalid_i  (cnn_rf_sink_rvalid),
-    .rf_sink_error_i   (cnn_rf_sink_error),
-    .mac_valid_o       (dot_valid),
-    .mac_ready_i       (dot_ready),
-    .mac_flush_o       (dot_flush),
-    .mac_clear_o       (dot_clear),
-    .mac_load_o        (dot_load),
-    .mac_emit_o        (dot_emit),
-    .mac_a_o           (dot_a),
-    .mac_offset_o      (dot_offset),
-    .mac_w_o           (dot_w),
-    .mac_mask_o        (dot_mask),
-    .mac_seed_o        (dot_seed),
-    .mac_result_valid_i(cnn_filtered_valid),
-    .mac_result_ready_o(cnn_filtered_ready),
-    .mac_result_data_i (cnn_filtered_data),
-    .gather_req_o      (cnn_gather_req),
-    .gather_addr_o     (cnn_gather_addr),
-    .gather_gnt_i      (cnn_gather_gnt),
-    .gather_valid_i    (cnn_gather_valid),
-    .gather_error_i    (cnn_gather_error),
-    .gather_data_i     (cnn_gather_data),
+    .quant_written_o    (quant_written[0]),
+    .quant_write_fault_o(quant_write_fault[0]),
+    .result_pending_i   (dot_result_valid),
+    .quant_enable_i     (quant_enable[0]),
+    .quant_pack_i       (quant_pack[0]),
+    .quant_dst_i        (quant_dst[0]),
+    .quant_final_o      (cnn_quant_final),
+    .rf_sink_be_o       (cnn_rf_sink_be),
+    .rf_sink_req_o      (cnn_rf_sink_req),
+    .rf_sink_addr_o     (cnn_rf_sink_addr),
+    .rf_sink_wdata_o    (cnn_rf_sink_wdata),
+    .rf_sink_gnt_i      (cnn_rf_sink_gnt),
+    .rf_sink_rvalid_i   (cnn_rf_sink_rvalid),
+    .rf_sink_error_i    (cnn_rf_sink_error),
+    .mac_valid_o        (dot_valid),
+    .mac_ready_i        (dot_ready),
+    .mac_flush_o        (dot_flush),
+    .mac_clear_o        (dot_clear),
+    .mac_load_o         (dot_load),
+    .mac_emit_o         (dot_emit),
+    .mac_a_o            (dot_a),
+    .mac_offset_o       (dot_offset),
+    .mac_w_o            (dot_w),
+    .mac_mask_o         (dot_mask),
+    .mac_seed_o         (dot_seed),
+    .mac_result_valid_i (cnn_filtered_valid),
+    .mac_result_ready_o (cnn_filtered_ready),
+    .mac_result_data_i  (cnn_filtered_data),
+    .gather_req_o       (cnn_gather_req),
+    .gather_addr_o      (cnn_gather_addr),
+    .gather_gnt_i       (cnn_gather_gnt),
+    .gather_valid_i     (cnn_gather_valid),
+    .gather_error_i     (cnn_gather_error),
+    .gather_data_i      (cnn_gather_data),
 
 
 
@@ -498,25 +506,29 @@ module npu_core #(
   assign cnn_filtered_valid=quant_enable[0] && cnn_quant_final ? quant_out_valid[0]:dot_result_valid;
   assign cnn_filtered_data = quant_enable[0] && cnn_quant_final ? quant_out_data[0] : dot_result;
   assign dot_result_ready=quant_enable[0] && cnn_quant_final ? quant_ready[0]:cnn_filtered_ready;
+  assign quant_written[1][1] = 0;
+  assign quant_write_fault[1][1] = 0;
   npu_shared_quant i_quant (
+    .written_i    (quant_written),
+    .write_fault_i(quant_write_fault),
     .clk_i,
-    .rst_ni     (system_rst_no),
-    .csr_req_i  (mmio_req && is_quant_mmio),
-    .csr_we_i   (mmio_we),
-    .csr_addr_i (mmio_addr[7:0]),
-    .csr_wdata_i(mmio_wdata),
-    .csr_rdata_o(quant_rdata),
-    .csr_error_o(quant_error),
-    .flush_i    ({matrix_compute_flush, dot_flush}),
-    .valid_i    (quant_valid),
-    .ready_o    (quant_ready),
-    .valid_o    (quant_out_valid),
-    .ready_i    (quant_out_ready),
-    .data_i     (quant_in_data),
-    .data_o     (quant_out_data),
-    .enable_o   (quant_enable),
-    .pack_o     (quant_pack),
-    .dst_o      (quant_dst)
+    .rst_ni       (system_rst_no),
+    .csr_req_i    (mmio_req && is_quant_mmio),
+    .csr_we_i     (mmio_we),
+    .csr_addr_i   (mmio_addr[7:0]),
+    .csr_wdata_i  (mmio_wdata),
+    .csr_rdata_o  (quant_rdata),
+    .csr_error_o  (quant_error),
+    .flush_i      ({matrix_compute_flush, dot_flush}),
+    .valid_i      (quant_valid),
+    .ready_o      (quant_ready),
+    .valid_o      (quant_out_valid),
+    .ready_i      (quant_out_ready),
+    .data_i       (quant_in_data),
+    .data_o       (quant_out_data),
+    .enable_o     (quant_enable),
+    .pack_o       (quant_pack),
+    .dst_o        (quant_dst)
   );
   logic [4:0] vector_compute_op;
   logic signed [31:0] vector_compute_a, vector_compute_b, vector_compute_c, vector_compute_data;
@@ -534,6 +546,7 @@ module npu_core #(
   npu_vector_stream #(
     .GATHER(PARALLEL_UNITS)
   ) i_vector_stream (
+    .observe_o      (vector_observe),
     .compute_simd_o (vector_compute_simd),
     .gather_req_o   (all_gather_req[8:6]),
     .gather_addr_o  (all_gather_addr[8:6]),

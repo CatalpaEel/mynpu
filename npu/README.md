@@ -1,5 +1,7 @@
 # 当前架构入口
 
+新增 [SYNC v1 软件观测接口](docs/software-sync-observation.md)：暴露各单元启动次数/提交编号、执行位置、故障/取消，以及分来源量化采样、发出、成功/失败写应答和 flush 计数。配置修改仍由软件安排；没有新增锁或暂停机制。验证报告：[sync-observation-validation.json](reports/sync-observation-validation.json)。
+
 当前[配置时序由软件负责](docs/software-owned-config.md)：取消 CNN / Vector 程序 / QT01 的忙时与排空写保护，Matrix 保持任务快照；无双缓冲或新增暂停机制。Operator ABI 2.2，15 组回归通过，默认共享量化仍为 23,937 周期/图，当前 PPA 未重测。
 
 当前 CNN 使用 [SD95 count1～16](docs/count16.md)：[3:0] 为 count−1，没有配置选择位，保持单套配置和 32bit FIFO。默认共享 QT01 为 23,937 周期/图，CNN 任务 296→212；RF 仍为 256B，当前 PPA 未重测。
