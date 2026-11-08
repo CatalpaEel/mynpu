@@ -332,10 +332,10 @@ static inline int npu_vector_program_configure(const uint32_t *words, unsigned c
   npu_fence();
   return 0;
 }
-/* SD93: input, kernel and geometry are shared until the queue drains.
+/* SD94: input, kernel and geometry are shared until the queue drains.
  * Only the 32-bit window shadow is snapshotted at START. */
 #define NPU_STREAM_ABI 0x654u
-#define NPU_STREAM_ABI_V3 0x53443933u
+#define NPU_STREAM_ABI_V4 0x53443934u
 #define NPU_CNN_KERNEL 0x60cu
 #define NPU_CNN_WINDOW 0x628u
 #define NPU_CNN_QUEUE 0x658u
@@ -359,7 +359,7 @@ static inline int npu_spans_overlap(uint32_t a, uint32_t n, uint32_t b, uint32_t
 }
 static inline int npu_stream_configure(const struct npu_stream_config *d) {
   uint32_t rf_bytes = npu_regfile_bank_bytes() * 2;
-  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V3 || (npu_read(0x604) & (NPU_BUSY | NPU_ERROR)))
+  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V4 || (npu_read(0x604) & (NPU_BUSY | NPU_ERROR)))
     return -1;
   if ((d->src & 3u) || !npu_data_span(d->src, 1, rf_bytes) ||
       !npu_data_span(d->kernel, 1, rf_bytes) ||
@@ -384,12 +384,13 @@ static inline int npu_stream_configure(const struct npu_stream_config *d) {
 }
 static inline uint32_t npu_stream_task(unsigned y, unsigned x, unsigned count, unsigned rows,
                                        int left, int right, unsigned dst_words) {
-  return (count & 15u) | ((rows & 7u) << 4) | ((left != 0) << 7) | ((right != 0) << 8) |
+  if (!count || count > 8)
+    return 8u; /* Reserved bit marks an invalid software task. */
+  return ((count - 1u) & 7u) | ((rows & 7u) << 4) | ((left != 0) << 7) | ((right != 0) << 8) |
          ((x & 127u) << 9) | ((y & 127u) << 16) | ((dst_words & 511u) << 23);
 }
 static inline int npu_stream_submit(uint32_t task) {
-  unsigned count = task & 15u;
-  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V3 || !count || count > 8 ||
+  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V4 || (task & 8u) ||
       !npu_data_span(npu_read(NPU_CNN_KERNEL), npu_read(0x61c) * 9u,
                      npu_regfile_bank_bytes() * 2u) ||
       !npu_queue_has_space(NPU_CNN_QUEUE) || (npu_read(0x604) & NPU_ERROR))

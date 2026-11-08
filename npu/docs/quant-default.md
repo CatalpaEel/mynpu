@@ -1,5 +1,7 @@
 # 默认推理使用共享 QT01 量化
 
+默认共享量化保持不变；当前窗口已升级为 [SD94 count−1](count-minus-one.md)，默认镜像和最新验证以该文档为准。下述字节对照对应升级前的 SD93。
+
 当前 `npu/mnist/firmware.py` 在未设置环境变量时默认启用共享 QT01。生产 artifacts 已重生成：CNN/Matrix 原始结果进入共享量化流水线，软件配置每通道参数；完成等待使用独立 IRQ/WFI。硬件复位仍从 INT32 旁路状态开始，固件在加载有效量化参数后使能 QT01。
 
 默认镜像与此前已测试的 `npu/build/command-v1-quant-artifacts` 在 boot 汇编、二进制、hex、测试元数据及十组 SRAM 镜像上逐字节一致。当前默认周期为 26,067/图。

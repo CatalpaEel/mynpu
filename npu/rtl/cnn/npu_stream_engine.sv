@@ -73,6 +73,8 @@ module npu_stream_engine #(
   load_t load_state, pending_type;
   stream_config_t cfg;
   stream_task_t cmd;
+  logic [3:0] task_count;
+  assign task_count = {1'b0, cmd.count_m1} + 4'd1;
   logic [7:0] cursor;
   logic [2:0] position;
   logic [14:0] row_start[3], row_cursor[3], weight_base, weight_start, weight_ptr;
@@ -119,7 +121,7 @@ module npu_stream_engine #(
   assign partial_ack_position=rf_pending && rf_pending_partial && rf_sink_rvalid_i ? rf_pending_position:pending_output_position;
   function automatic logic horizontal_valid(input int k);
     return !(position==0 && cmd.left_pad && k==0) &&
-      !(position+1==cmd.count && cmd.right_pad && k==2);
+      !(position+1==task_count && cmd.right_pad && k==2);
   endfunction
   always_comb begin
     seed_ready = seed_valid[position[0]];
@@ -168,9 +170,9 @@ module npu_stream_engine #(
       head = window_head[r];
       high = ring_next(head);
       look = ring_next(high);
-      a = row_cursor[r] + 15'(cmd.right_pad && position + 1 == cmd.count ? 1 : 2);
+      a = row_cursor[r] + 15'(cmd.right_pad && position + 1 == task_count ? 1 : 2);
       // Only prefetch words containing a valid pixel in this tile.
-      last_address=row_start[r]+(15'(cmd.count-1'b1)<<cfg.step2)+15'(cmd.right_pad ? 1:2);
+      last_address=row_start[r]+(15'(task_count-1'b1)<<cfg.step2)+15'(cmd.right_pad ? 1:2);
       last_word = last_address[14:2];
       if (cmd.row_mask[r]) begin
         if (!window_ready(r, head)) begin
@@ -323,7 +325,7 @@ module npu_stream_engine #(
           logic [1:0] slot;
           target = int'(position) + ahead;
           slot = target[0];
-          if(target<int'(cmd.count) && (!partial_busy[target] || (partial_ack && partial_ack_position==3'(target))) && !seed_valid[slot] && !seed_inflight[slot])
+          if(target<int'(task_count) && (!partial_busy[target] || (partial_ack && partial_ack_position==3'(target))) && !seed_valid[slot] && !seed_inflight[slot])
             for (int p = 0; p < 3; p++)
             if (!seed_selected[slot] && !gather_req_o[p] && !port_pending[p]) begin
               gather_req_o[p] = 1;
@@ -508,7 +510,7 @@ module npu_stream_engine #(
         output_final <= cursor + 1 == cfg.ci;
         seed_valid[position[0]] <= 0;
         if (cursor + 1 < cfg.ci) partial_busy[position[2:0]] <= 1;
-        if (position + 1 == cmd.count) begin
+        if (position + 1 == task_count) begin
           if (cursor + 1 == cfg.ci) state <= DRAIN;
           else begin
             cursor <= cursor + 1'b1;

@@ -75,7 +75,7 @@ module tb_shared_quant;
         wr('h40000624, 1);
         wr('h4000062c, 0);
         wr('h40000630, 0);
-        wr('h40000628, (1 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
+        wr('h40000628, (0 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
       end
       1: begin
         wr(MATRIX_B, 32'(multiplier));
@@ -291,7 +291,7 @@ module tb_shared_quant;
     for (int w = 0; w < 12; w++) wr(INPUT_A + 4 * w, 'h06060606);
     configure(0, INPUT_A, 'h80001900, 3);
     for (int task_id = 0; task_id < 3; task_id++) begin
-      wr('h40000628, 32'(task_id * 8) << 9 | 8 << 0 | 2 << 4 | (task_id == 0 ? 1 << 7 : 0));
+      wr('h40000628, 32'(task_id * 8) << 9 | 7 << 0 | 2 << 4 | (task_id == 0 ? 1 << 7 : 0));
       start(0);
     end
     repeat (300) @(negedge clk);

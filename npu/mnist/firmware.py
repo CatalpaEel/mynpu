@@ -154,7 +154,7 @@ for i, fields in enumerate(layer_fields):
                     stream_commands.append(
                         y << 16
                         | x << 9
-                        | n
+                        | (n - 1)
                         | rows << 4
                         | left << 7
                         | right << 8
@@ -725,7 +725,7 @@ def emit_platform_check():
     li(5, 0x00070000)
     branch(8, 5, "fail")
     lw(8, 6, 0x54)
-    li(5, 0x53443933)
+    li(5, 0x53443934)
     branch(8, 5, "fail")
 
 
@@ -846,7 +846,7 @@ def generate_single():
     meta["rf_weight_stage_bytes"] = [
         rf_weight_stage_bytes(f) if not f[13] else 0 for f in layer_fields
     ]
-    meta["stream_abi"] = "SD93"
+    meta["stream_abi"] = "SD94"
     meta["stream_task_bits"] = 32
     meta["cnn_kernel_address_per_task"] = False
     meta["stream_tasks"] = len(stream_commands)

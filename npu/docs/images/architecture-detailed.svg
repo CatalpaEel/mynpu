@@ -121,5 +121,5 @@
 <polyline points="1810,1565 1810,1630" fill="none" stroke="#fbbf24" stroke-width="4"/>
 <polygon points="1810,1630 1817.0,1616.0 1803.0,1616.0" fill="#fbbf24"/>
 <text x="55" y="1855" font-family="Noto Sans CJK SC,sans-serif" font-size="25" fill="#2dd4bf">并行边界：CNN / Matrix / Vector可并行，任意有向连接经xbar FIFO转发；CNN读请求、RF gather、计算与写回重叠，各主端口受bank冲突和FIFO反压约束。</text>
-<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">当前SD93共享卷积核 / Matrix流4×4 / VPG3；未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。</text>
+<text x="55" y="1907" font-family="Noto Sans CJK SC,sans-serif" font-size="22" fill="#94a3b8">当前SD94共享卷积核 / Matrix流4×4 / VPG3；未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。</text>
 </svg>

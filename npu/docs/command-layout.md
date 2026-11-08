@@ -1,4 +1,6 @@
-# 当前命令格式：SD93 / Matrix 4 / VPG3
+# 当前命令格式：SD94 / Matrix 4 / VPG3
+
+数量字段的最新改动和验证见 [SD94 count−1](count-minus-one.md)。本文中 20 组标准化回归为改动数量编码前的历史证据；最新回归见该文档。
 
 当前生产固件已[默认使用共享 QT01](quant-default.md)，默认周期为 26,067/图。以下旧 Vector 默认路径的测量仅作历史对照。
 
@@ -28,7 +30,8 @@
 
 | 位段 | 字段 | 范围/含义 |
 |---|---|---|
-| [3:0] | count | 连续输出位置数，1～8 |
+| [2:0] | count_minus_one | 0～7 对应连续 1～8 个输出位置 |
+| [3] | 保留 | 必须为 0；尚未实现配置选择 |
 | [6:4] | row_mask | 三行输入有效掩码 |
 | [7] | left_pad | 左边界填充 |
 | [8] | right_pad | 右边界填充 |
@@ -113,7 +116,7 @@ VPG3 的一条程序指令仍为 **32bit**，低位到高位排列为“操作�
 
 ## 兼容性、验证与性能
 
-当前只读版本：Operator ABI `0x00020001`，Matrix outer capability `0x00040404`，CNN SD93 `0x53443933`，Vector VPG3 `0x56504733`。旧固件不能沿用；默认生产镜像已重新生成。共享量化实验镜像在 `npu/build/command-v1-quant-artifacts`。退休的 DMA 回归不在本次验证范围。
+当前只读版本：Operator ABI `0x00020001`，Matrix outer capability `0x00040404`，CNN SD94 `0x53443934`，Vector VPG3 `0x56504733`。旧固件不能沿用；默认生产镜像已重新生成。共享量化实验镜像在 `npu/build/command-v1-quant-artifacts`。退休的 DMA 回归不在本次验证范围。
 
 `python3.12 npu/scripts/collect_command_layout_validation.py` 审核 20 组 VCS 回归的依赖 SHA、运行期间源码稳定性、端口宽度警告、生产镜像一致性及 633 项 C 检查，结果为 `npu/reports/command-layout-validation.json`。
 

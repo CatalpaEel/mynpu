@@ -275,7 +275,7 @@
   "postprocessing_unit": "shared optional quantizer QT01",
   "fc_execution": "4x4 outer-product GEMM; FC 1x4/1x4/1x2 blocks, K16, B leading dimension144",
   "fc_raw_base": 2147500248,
-  "stream_abi": "SD93",
+  "stream_abi": "SD94",
   "stream_tasks": 296,
   "task_table": [
     {

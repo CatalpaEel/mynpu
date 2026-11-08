@@ -23,7 +23,7 @@ _start:
     bne x8, x5, fail
     lw x8, 84(x6)
     lui x5, 0x53444
-    addi x5, x5, -1741
+    addi x5, x5, -1740
     bne x8, x5, fail
     lui x7, 0x80001
     addi x7, x7, -768

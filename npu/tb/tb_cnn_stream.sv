@@ -74,7 +74,7 @@ module tb_cnn_stream;
         wr('h40000624, 1);
         wr('h4000062c, 0);
         wr('h40000630, 0);
-        wr('h40000628, (1 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
+        wr('h40000628, (0 << 0) | (2 << 4) | (1 << 7) | (1 << 8));
       end
       1: begin
         wr(MATRIX_B, 32'(multiplier));
@@ -139,6 +139,12 @@ module tb_cnn_stream;
       h = 1;
       w = 97;
     end
+    if (sample >= 198) begin
+      ci = 3;
+      h = 1;
+      w = sample - 197;
+      step = 1;
+    end
     oh = (h + step - 1) / step;
     ow = (w + step - 1) / step;
     count = ow < 8 ? ow : 8;
@@ -180,7 +186,7 @@ module tb_cnn_stream;
     wr('h4000062c, 32'(zero));
     wr('h40000630, 0);
     wr('h40000628,
-       32'(y)<<16|32'(x)<<9|32'(count)<<0|32'(rows)<<4|32'(x==0)<<7|32'((x+count-1)*step+1>=w)<<8);
+       32'(y)<<16|32'(x)<<9|32'(count-1)<<0|32'(rows)<<4|32'(x==0)<<7|32'((x+count-1)*step+1>=w)<<8);
     start(0);
     wait_done(0);
     for (int pos = 0; pos < count; pos++) begin
@@ -223,7 +229,7 @@ module tb_cnn_stream;
     repeat (5) @(negedge clk);
     rst_n = 1;
     repeat (8) @(negedge clk);
-    for (int sample = 0; sample < 198; sample ++) convolution(sample);
+    for (int sample = 0; sample < 206; sample ++) convolution(sample);
     // Packed FIFO input, circular window across four word boundaries.
     for (int w = 0; w < 4; w++) begin
       logic [31:0] word;
@@ -235,7 +241,7 @@ module tb_cnn_stream;
     wr('h40000614, 15);
     wr('h40000620, 2);
     wr('h40000624, 15);
-    wr('h40000628, 8 << 0 | 2 << 4 | 1 << 7 | 1 << 8);
+    wr('h40000628, 7 << 0 | 2 << 4 | 1 << 7 | 1 << 8);
     start(0);
     wait_done(0);
     for (int i = 0; i < 8; i++) begin
@@ -245,7 +251,7 @@ module tb_cnn_stream;
       checks++;
     end
     $display(
-        "CNN STREAM PASS cases=199 checks=%0d stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM",
+        "CNN STREAM PASS cases=207 checks=%0d stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM",
         checks);
     $finish;
   end

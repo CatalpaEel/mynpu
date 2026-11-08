@@ -40,7 +40,7 @@ module npu_stream_control #(
   assign busy_o = events_i.busy || qcount != 0;
   assign irq_o = done_o || fault;
   assign start_o = qcount != 0 && !events_i.busy && !blocked_i && !fault;
-  assign valid_command=command[3:0]>=1 && command[3:0]<=STREAM_PARTIAL_WORDS &&
+  assign valid_command=!command[3] &&
     cfg.ci!=0 && cfg.row_stride!=0 && cfg.plane_stride!=0 &&
     data_range_ok(
       {17'h10000, cfg.kernel}, 32'(cfg.ci) * 9
@@ -108,7 +108,7 @@ module npu_stream_control #(
         writable = 0;
       end
       'h54: begin
-        csr_rdata_o = 32'h53443933;
+        csr_rdata_o = 32'h53443934;
         writable = 0;
       end
       'h58: begin

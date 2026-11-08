@@ -121,7 +121,7 @@ module tb_cnn_queue;
     #1;
     depth = int'(csr_rdata_o >> 16);
     configure();
-    expect_csr('h54, 32'h53443933);
+    expect_csr('h54, 32'h53443934);
     for (int n = 0; n <= 9; n += 9) begin
       wr('h28, encode_task(0, 0, n, 2, 1, 1, 0));
       wr(0, 1);
@@ -195,7 +195,7 @@ module tb_cnn_queue;
     expect_csr('h60, 2);
     wr(0, 2);
     wr('h0c, 32'h800020a2);
-    wr('h28, encode_task(0, 0, 1, 2, 1, 1, 0) | 15);  // count=15 is invalid
+    wr('h28, encode_task(0, 0, 1, 2, 1, 1, 0) | 8);  // reserved context bit must remain zero
     wr(0, 1);
     expect_csr(4, 4);
     expect_csr('h60, 2);
