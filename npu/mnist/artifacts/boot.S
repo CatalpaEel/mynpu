@@ -23,7 +23,7 @@ _start:
     bne x8, x5, fail
     lw x8, 84(x6)
     lui x5, 0x53444
-    addi x5, x5, -1740
+    addi x5, x5, -1739
     bne x8, x5, fail
     lui x7, 0x80001
     addi x7, x7, -768
@@ -40,7 +40,7 @@ _start:
     lw x8, 44(x7)
     sw x8, 44(x6)
     lui x8, 0x80004
-    addi x8, x8, 224
+    addi x8, x8, 200
     sw x8, 24(x6)
     lui x8, 0x80006
     addi x8, x8, 0
@@ -66,7 +66,7 @@ weight_cache0:
     lw x17, 12(x7)
     lui x15, 0x80001
     addi x15, x15, -432
-    addi x2, x0, 28
+    addi x2, x0, 14
     lui x18, 0x80004
     addi x18, x18, 0
 qchannel0:
@@ -149,7 +149,7 @@ acked0:
     lw x8, 100(x7)
     sw x8, 44(x6)
     lui x8, 0x80004
-    addi x8, x8, 224
+    addi x8, x8, 200
     sw x8, 24(x6)
     lui x8, 0x80006
     addi x8, x8, 0
@@ -174,8 +174,8 @@ weight_cache1:
     lw x16, 64(x7)
     lw x17, 68(x7)
     lui x15, 0x80001
-    addi x15, x15, -208
-    addi x2, x0, 28
+    addi x15, x15, -320
+    addi x2, x0, 14
     lui x18, 0x80004
     addi x18, x18, 0
 qchannel1:
@@ -258,7 +258,7 @@ acked1:
     lw x8, 156(x7)
     sw x8, 44(x6)
     lui x8, 0x80004
-    addi x8, x8, 224
+    addi x8, x8, 228
     sw x8, 24(x6)
     lui x8, 0x80006
     addi x8, x8, 0
@@ -272,7 +272,7 @@ acked1:
     lw x16, 120(x7)
     lw x17, 124(x7)
     lui x15, 0x80001
-    addi x15, x15, 240
+    addi x15, x15, -96
     addi x2, x0, 7
     lw x18, 116(x7)
 qchannel2:
@@ -355,7 +355,7 @@ acked2:
     lw x8, 212(x7)
     sw x8, 44(x6)
     lui x8, 0x80004
-    addi x8, x8, 224
+    addi x8, x8, 244
     sw x8, 24(x6)
     lui x8, 0x80006
     addi x8, x8, 0
@@ -369,7 +369,7 @@ acked2:
     lw x16, 176(x7)
     lw x17, 180(x7)
     lui x15, 0x80001
-    addi x15, x15, 464
+    addi x15, x15, 128
     addi x2, x0, 3
     lw x18, 172(x7)
 qchannel3:
@@ -452,7 +452,7 @@ acked3:
     lw x8, 268(x7)
     sw x8, 44(x6)
     lui x8, 0x80004
-    addi x8, x8, 224
+    addi x8, x8, 244
     sw x8, 24(x6)
     lui x8, 0x80006
     addi x8, x8, 0
@@ -466,7 +466,7 @@ acked3:
     lw x16, 232(x7)
     lw x17, 236(x7)
     lui x15, 0x80001
-    addi x15, x15, 560
+    addi x15, x15, 224
     addi x2, x0, 3
     lw x18, 228(x7)
 qchannel4:

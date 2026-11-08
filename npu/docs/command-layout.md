@@ -1,4 +1,6 @@
-# 当前命令格式：SD94 / Matrix 4 / VPG3
+# 当前命令格式：SD95 / Matrix 4 / VPG3
+
+CNN 最新数量编码及验证见 [SD95 count1～16](count16.md)，默认共享量化为 23,937 周期/图。以下旧性能与回归计数为历史对照。
 
 数量字段的最新改动和验证见 [SD94 count−1](count-minus-one.md)。本文中 20 组标准化回归为改动数量编码前的历史证据；最新回归见该文档。
 
@@ -16,7 +18,7 @@
 | 0x60c | kernel 卷积核基址 | 共享，队列排空后才能修改 |
 | 0x610 | dst 原始输出基址 | 共享 |
 | 0x614 | row_stride，输入行跨度，字节 | 共享 |
-| 0x618 | partial，RF 内 8×32bit 部分和空间 | 共享 |
+| 0x618 | partial，RF 内最多 16×32bit 部分和空间，按任务数量校验 | 共享 |
 | 0x61c | cin，1～256 | 共享 |
 | 0x620 | stride，1 或 2 | 共享 |
 | 0x624 | plane_stride，输入通道跨度，字节 | 共享 |
@@ -30,8 +32,7 @@
 
 | 位段 | 字段 | 范围/含义 |
 |---|---|---|
-| [2:0] | count_minus_one | 0～7 对应连续 1～8 个输出位置 |
-| [3] | 保留 | 必须为 0；尚未实现配置选择 |
+| [3:0] | count_minus_one | 0～15 对应连续 1～16 个输出位置 |
 | [6:4] | row_mask | 三行输入有效掩码 |
 | [7] | left_pad | 左边界填充 |
 | [8] | right_pad | 右边界填充 |
@@ -43,7 +44,7 @@
 
 提交顺序：配置共享输入、卷积核和几何参数 → 写 window → 向 CONTROL `0x600` 写 1。C 接口为 `npu_stream_configure(&cfg)` 和 `npu_stream_submit(window)`，后者不再接收卷积核地址。
 
-FIFO 从 SD92 的 43bit 恢复为 **32bit**。x/y 各从 5bit 扩为 7bit；C 兼容描述符允许宽高到 128，但输入/输出张量仍需满足存储和别名检查，`npu_cnn_start` 仍要求整行窗口任务可被队列容纳。因此默认 8 项队列不能用这个整行适配器一次提交 128 个输出位置，需使用底层分批提交或更深队列。
+FIFO 从 SD92 的 43bit 恢复为 **32bit**。x/y 各从 5bit 扩为 7bit；C 兼容描述符允许宽高到 128，但输入/输出张量仍需满足存储和别名检查，`npu_cnn_start` 仍要求整行窗口任务可被队列容纳。当前按最多 16 个位置分块，默认 8 项队列可容纳 128 个输出位置的一行任务，仍需满足数据空间与所有权检查。
 
 ## Matrix：精度与布局独立，全部随任务快照
 
@@ -116,7 +117,7 @@ VPG3 的一条程序指令仍为 **32bit**，低位到高位排列为“操作�
 
 ## 兼容性、验证与性能
 
-当前只读版本：Operator ABI `0x00020001`，Matrix outer capability `0x00040404`，CNN SD94 `0x53443934`，Vector VPG3 `0x56504733`。旧固件不能沿用；默认生产镜像已重新生成。共享量化实验镜像在 `npu/build/command-v1-quant-artifacts`。退休的 DMA 回归不在本次验证范围。
+当前只读版本：Operator ABI `0x00020001`，Matrix outer capability `0x00040404`，CNN SD95 `0x53443935`，Vector VPG3 `0x56504733`。旧固件不能沿用；默认生产镜像已重新生成。共享量化实验镜像在 `npu/build/command-v1-quant-artifacts`。退休的 DMA 回归不在本次验证范围。
 
 `python3.12 npu/scripts/collect_command_layout_validation.py` 审核 20 组 VCS 回归的依赖 SHA、运行期间源码稳定性、端口宽度警告、生产镜像一致性及 633 项 C 检查，结果为 `npu/reports/command-layout-validation.json`。
 

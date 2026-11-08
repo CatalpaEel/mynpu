@@ -68,7 +68,7 @@ module tb_cnn_stream;
         wr('h4000060c, WEIGHTS);
         wr('h40000610, dst);
         wr('h40000614, 1);
-        wr('h40000618, 'h800040e0);
+        wr('h40000618, 'h800040c0);
         wr('h4000061c, 1);
         wr('h40000620, 1);
         wr('h40000624, 1);
@@ -145,9 +145,15 @@ module tb_cnn_stream;
       w = sample - 197;
       step = 1;
     end
+    if (sample == 214) begin
+      ci = 256;
+      h = 1;
+      w = 16;
+      step = 1;
+    end
     oh = (h + step - 1) / step;
     ow = (w + step - 1) / step;
-    count = ow < 8 ? ow : 8;
+    count = ow < 16 ? ow : 16;
     y = sample % 2 ? oh - 1 : 0;
     if (sample == 196) y = oh - 1;
     x = sample % 3 ? ow - count : 0;
@@ -156,8 +162,8 @@ module tb_cnn_stream;
     input_bytes = ci * h * w;
     weight_bytes = 2 * ci * 9;
     a = input_bytes <= 128 && sample[1] ? 'h80004000 : 'h80001000;
-    b = sample[2] && weight_bytes <= 96 ? 'h80004080 : 'h80002000;
-    d = 'h80001800;
+    b = sample[2] && weight_bytes <= 64 ? 'h80004080 : 'h80002000;
+    d = input_bytes > 2048 ? 'h80003800 : 'h80001800;
     for (int j = 0; j < input_bytes; j++) pixels[j] = 8'($urandom);
     for (int j = 0; j < weight_bytes; j++) weights[j] = int'($urandom_range(0, 255)) - 128;
     for (int j = 0; j < (input_bytes + 3) / 4; j++) begin
@@ -179,7 +185,7 @@ module tb_cnn_stream;
     wr('h4000060c, b + 32'(co * ci * 9));
     wr('h40000610, d);
     wr('h40000614, 32'(w));
-    wr('h40000618, 'h800040e0);
+    wr('h40000618, 'h800040c0);
     wr('h4000061c, 32'(ci));
     wr('h40000620, 32'(step));
     wr('h40000624, 32'(h * w));
@@ -229,29 +235,29 @@ module tb_cnn_stream;
     repeat (5) @(negedge clk);
     rst_n = 1;
     repeat (8) @(negedge clk);
-    for (int sample = 0; sample < 206; sample ++) convolution(sample);
+    for (int sample = 0; sample < 215; sample ++) convolution(sample);
     // Packed FIFO input, circular window across four word boundaries.
-    for (int w = 0; w < 4; w++) begin
+    for (int w = 0; w < 8; w++) begin
       logic [31:0] word;
       word = 0;
       for (int b = 0; b < 4; b++) word[8*b+:8] = 8'(4 * w + b);
       wr(CHANNEL, word);
     end
     configure(0, CHANNEL, 'h80001800, 1);
-    wr('h40000614, 15);
+    wr('h40000614, 31);
     wr('h40000620, 2);
-    wr('h40000624, 15);
-    wr('h40000628, 7 << 0 | 2 << 4 | 1 << 7 | 1 << 8);
+    wr('h40000624, 31);
+    wr('h40000628, 15 << 0 | 2 << 4 | 1 << 7 | 1 << 8);
     start(0);
     wait_done(0);
-    for (int i = 0; i < 8; i++) begin
+    for (int i = 0; i < 16; i++) begin
       logic [31:0] got;
       rd('h80001800 + 4 * i, got);
       if (got !== 32'(i * 2)) $fatal(1, "CNN FIFO/stride2 element=%0d got=%h", i, got);
       checks++;
     end
     $display(
-        "CNN STREAM PASS cases=207 checks=%0d stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM",
+        "CNN STREAM PASS cases=216 checks=%0d stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM",
         checks);
     $finish;
   end

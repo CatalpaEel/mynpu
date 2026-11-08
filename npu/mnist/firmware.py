@@ -58,10 +58,10 @@ def make_layer_fields(input_base, sram_scratch, output_base):
     cin = 1
     src = input_base
     input_bytes = 784
-    rf_end = RF_BASE + 2 * RF_BANK_BYTES - 32
     for i, L in enumerate(meta["layers"]):
         out = [14, 14, 7, 3, 3, 1][i]
         cout = L["shape"][0]
+        rf_end = RF_BASE + 2 * RF_BANK_BYTES - (min(out, 16) * 4 if i < 5 else 0)
         output_bytes = out * out * cout
         dst = None
         if i == 5:
@@ -141,13 +141,13 @@ stream_commands = []
 task_ranges = []
 for i, fields in enumerate(layer_fields):
     start = TASK_BASE + len(stream_commands) * 4
-    per_channel = fields[10] * ((fields[9] + 7) // 8) if i < 5 else 0
+    per_channel = fields[10] * ((fields[9] + 15) // 16) if i < 5 else 0
     if i < 5:
         for co in range(fields[7]):
             for y in range(fields[10]):
                 rows = sum((0 <= y * fields[8] + r - 1 < fields[5]) << r for r in range(3))
-                for x in range(0, fields[9], 8):
-                    n = min(8, fields[9] - x)
+                for x in range(0, fields[9], 16):
+                    n = min(16, fields[9] - x)
                     left = int(x == 0)
                     right = int((x + n - 1) * fields[8] + 1 >= fields[4])
                     assert y < 128 and x < 128
@@ -223,7 +223,7 @@ def rf_weight_stage_bytes(fields):
         size
         if RF_WEIGHT_CACHE
         and not tensors_in_rf
-        and size <= 2 * RF_BANK_BYTES - 32
+        and size <= 2 * RF_BANK_BYTES - min(fields[9], 16) * 4
         and fields[1] % 4 == 0
         else 0
     )
@@ -291,7 +291,7 @@ def emit_quant_cnn(i, fields, stream=False):
         if stream and field == 0 and fields[field] == A:
             alu(8, 8, 20, 0)
         sw(8, 6, offset)
-    li(8, RF_BASE + 2 * RF_BANK_BYTES - 32)
+    li(8, RF_BASE + 2 * RF_BANK_BYTES - min(fields[9], 16) * 4)
     sw(8, 6, 24)
     li(8, 0x80006000)
     sw(8, 6, 16)
@@ -487,7 +487,7 @@ def emit_cnn_rows(i, fields, previous, stream=False):
     if previous is None:
         li(14, 0x40000200)
         li(31, 1)
-        li(8, RF_BASE + 2 * RF_BANK_BYTES - 32)
+        li(8, RF_BASE + 2 * RF_BANK_BYTES - min(fields[9], 16) * 4)
         sw(8, 6, 0x18)
         li(8, 0x80006000)
         sw(8, 6, 0x10)  # xbar stream channel 0 destination
@@ -725,7 +725,7 @@ def emit_platform_check():
     li(5, 0x00070000)
     branch(8, 5, "fail")
     lw(8, 6, 0x54)
-    li(5, 0x53443934)
+    li(5, 0x53443935)
     branch(8, 5, "fail")
 
 
@@ -846,7 +846,7 @@ def generate_single():
     meta["rf_weight_stage_bytes"] = [
         rf_weight_stage_bytes(f) if not f[13] else 0 for f in layer_fields
     ]
-    meta["stream_abi"] = "SD94"
+    meta["stream_abi"] = "SD95"
     meta["stream_task_bits"] = 32
     meta["cnn_kernel_address_per_task"] = False
     meta["stream_tasks"] = len(stream_commands)

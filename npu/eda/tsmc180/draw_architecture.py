@@ -105,7 +105,7 @@ box(
     660,
     310,
     "CNN Stream  ·  npu_stream / control / engine",
-    "8项 × 32bit任务FIFO；输入与卷积核共享\n3行 × 3words循环窗口 = 36B\n48bit行窗口选择；双份9B权重；返回直通\n跨输入通道部分和存共享RF\n末通道可直连共享QT01量化；或原始INT32写回",
+    "8项 × 32bit任务；每任务1～16位置\n3行 × 3words循环窗口 = 36B\n48bit行窗口选择；双份9B权重；返回直通\n跨通道部分和复用RF，最多64B\n末通道可直连共享QT01量化；或原始INT32写回",
     col="#fb923c",
     size=26,
 )
@@ -250,7 +250,7 @@ text(
 text(
     55,
     1885,
-    "当前SD94共享卷积核 / Matrix流4×4 / VPG3；未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。",
+    "当前SD95共享卷积核 / Matrix流4×4 / VPG3；未重测综合/PNR；此前18ns门控2.515488mm²与50MHz setup +2.0040ns仅为历史版本。",
     22,
     "#94a3b8",
 )

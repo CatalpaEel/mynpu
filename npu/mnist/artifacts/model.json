@@ -275,31 +275,31 @@
   "postprocessing_unit": "shared optional quantizer QT01",
   "fc_execution": "4x4 outer-product GEMM; FC 1x4/1x4/1x2 blocks, K16, B leading dimension144",
   "fc_raw_base": 2147500248,
-  "stream_abi": "SD94",
-  "stream_tasks": 296,
+  "stream_abi": "SD95",
+  "stream_tasks": 212,
   "task_table": [
     {
       "address": 2147487312,
-      "per_channel": 28
+      "per_channel": 14
     },
     {
-      "address": 2147487536,
-      "per_channel": 28
+      "address": 2147487424,
+      "per_channel": 14
     },
     {
-      "address": 2147487984,
+      "address": 2147487648,
       "per_channel": 7
     },
     {
-      "address": 2147488208,
+      "address": 2147487872,
       "per_channel": 3
     },
     {
-      "address": 2147488304,
+      "address": 2147487968,
       "per_channel": 3
     },
     {
-      "address": 2147488496,
+      "address": 2147488160,
       "per_channel": 0
     }
   ],

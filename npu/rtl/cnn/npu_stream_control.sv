@@ -40,10 +40,14 @@ module npu_stream_control #(
   assign busy_o = events_i.busy || qcount != 0;
   assign irq_o = done_o || fault;
   assign start_o = qcount != 0 && !events_i.busy && !blocked_i && !fault;
-  assign valid_command=!command[3] &&
+  assign valid_command=
     cfg.ci!=0 && cfg.row_stride!=0 && cfg.plane_stride!=0 &&
     data_range_ok(
       {17'h10000, cfg.kernel}, 32'(cfg.ci) * 9
+  ) && is_rf_address(
+      {17'h10000, cfg.partial}
+  ) && data_range_ok(
+      {17'h10000, cfg.partial}, (32'(command[3:0]) + 1) * 4
   );
   assign push=csr_req_i && csr_we_i && csr_addr_i==0 && csr_wdata_i[0] && !csr_error_o && valid_command;
   always_comb begin
@@ -75,7 +79,7 @@ module npu_stream_control #(
       end
       'h18: begin
         csr_rdata_o = {17'h10000, cfg.partial};
-        valid_write = is_rf_address(csr_wdata_i) && data_range_ok(csr_wdata_i, 32) &&
+        valid_write = is_rf_address(csr_wdata_i) && data_range_ok(csr_wdata_i, 4) &&
             csr_wdata_i[1:0] == 0;
       end
       'h1c: begin
@@ -108,7 +112,7 @@ module npu_stream_control #(
         writable = 0;
       end
       'h54: begin
-        csr_rdata_o = 32'h53443934;
+        csr_rdata_o = 32'h53443935;
         writable = 0;
       end
       'h58: begin
@@ -128,7 +132,7 @@ module npu_stream_control #(
         writable = 0;
       end
       'h70: begin
-        csr_rdata_o = 32'h00080020;
+        csr_rdata_o = 32'h00100020;
         writable = 0;
       end
       default: known = 0;

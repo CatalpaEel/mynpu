@@ -69,7 +69,7 @@ module tb_shared_quant;
         wr('h4000060c, WEIGHTS);
         wr('h40000610, dst);
         wr('h40000614, 1);
-        wr('h40000618, 'h800040e0);
+        wr('h40000618, 'h800040c0);
         wr('h4000061c, 1);
         wr('h40000620, 1);
         wr('h40000624, 1);
@@ -286,12 +286,52 @@ module tb_shared_quant;
     wr('h40000740, 0);
     wr('h40000760, CHANNEL);
     bad_wr('h40000740, 3);
+    // Maximum tile: sixteen positions, three input channels, raw partials in RF.
+    for (int packed_mode = 0; packed_mode < 2; packed_mode++)
+    for (int rf_target = 0; rf_target < 2; rf_target++) begin
+      logic [31:0] target, word;
+      target=rf_target ? (packed_mode ? 'h80004081:'h80004080) : (packed_mode ? 'h80001a01:'h80001a00);
+      settings(0, packed_mode ? 3 : 1, 1, 0, 0, 0, 0, 255, target, 0);
+      configure(0, INPUT_A, 'h80001900, 1);
+      for (int w = 0; w < 12; w++) begin
+        word = 0;
+        for (int b = 0; b < 4; b++) word[8*b+:8] = 8'(((w * 4 + b) / 16) * 20 + (w * 4 + b) % 16);
+        wr(INPUT_A + 32'(w * 4), word);
+      end
+      for (int w = 0; w < 7; w++) begin
+        word = 0;
+        for (int b = 0; b < 4; b++) if ((w * 4 + b) % 9 == 4) word[8*b+:8] = 1;
+        wr(WEIGHTS + 32'(w * 4), word);
+      end
+      wr('h4000061c, 3);
+      wr('h40000614, 16);
+      wr('h40000624, 16);
+      wr('h40000628, npu_stream_pkg::encode_task(0, 0, 16, 2, 1, 1, 0));
+      start(0);
+      wait_done(0);
+      for (int p = 0; p < 16; p++) begin
+        if (packed_mode) begin
+          rd((target + 32'(p)) & 32'hfffffffc, got);
+          got = (got >> (((target + 32'(p)) & 3) * 8)) & 255;
+        end else rd(target + 32'(p * 4), got);
+        if (got !== 32'(60 + 3 * p))
+          $fatal(
+              1,
+              "CNN count16 final quant mode/rf/pos=%0d/%0d/%0d got=%h",
+              packed_mode,
+              rf_target,
+              p,
+              got
+          );
+        checks++;
+      end
+    end
     // Quant32 may stream. Fill its FIFO to exercise stable output backpressure.
     settings(0, 1, 1, 0, 0, 0, 0, 255, CHANNEL, 0);
-    for (int w = 0; w < 12; w++) wr(INPUT_A + 4 * w, 'h06060606);
+    for (int w = 0; w < 13; w++) wr(INPUT_A + 4 * w, 'h06060606);
     configure(0, INPUT_A, 'h80001900, 3);
     for (int task_id = 0; task_id < 3; task_id++) begin
-      wr('h40000628, 32'(task_id * 8) << 9 | 7 << 0 | 2 << 4 | (task_id == 0 ? 1 << 7 : 0));
+      wr('h40000628, 32'(task_id * 16) << 9 | 15 << 0 | 2 << 4 | (task_id == 0 ? 1 << 7 : 0));
       start(0);
     end
     repeat (300) @(negedge clk);
@@ -302,7 +342,7 @@ module tb_shared_quant;
       if (!dut.i_core.i_quant.valid_o[0] || dut.i_core.i_quant.data_o[0] !== 18)
         $fatal(1, "stalled quant result changed");
     end
-    for (int w = 0; w < 24; w++) begin
+    for (int w = 0; w < 48; w++) begin
       rd(CHANNEL, got);
       if (got !== 18) $fatal(1, "quant FIFO order/data %h", got);
       checks++;

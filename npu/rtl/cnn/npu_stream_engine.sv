@@ -73,10 +73,10 @@ module npu_stream_engine #(
   load_t load_state, pending_type;
   stream_config_t cfg;
   stream_task_t cmd;
-  logic [3:0] task_count;
-  assign task_count = {1'b0, cmd.count_m1} + 4'd1;
+  logic [4:0] task_count;
+  assign task_count = {1'b0, cmd.count_m1} + 5'd1;
   logic [7:0] cursor;
-  logic [2:0] position;
+  logic [3:0] position;
   logic [14:0] row_start[3], row_cursor[3], weight_base, weight_start, weight_ptr;
   logic [12:0] low_word[3];
   logic [31:0] window_data[3][3];
@@ -97,7 +97,7 @@ module npu_stream_engine #(
   logic [2:0] request_seed_slot, port_seed_slot;
   logic ready, tap_valid;
   logic [3:0] tap_count;
-  logic [2:0] output_position;
+  logic [3:0] output_position;
   logic output_final;
   logic [31:0] output_address;
   assign quant_final_o = output_final;
@@ -108,15 +108,15 @@ module npu_stream_engine #(
   logic [1:0] pending_slot;
   logic [1:0] pending_row, selected_row;
   logic [1:0] selected_slot;
-  logic [7:0] partial_busy;
+  logic [15:0] partial_busy;
   logic pending_partial;
-  logic [2:0] pending_output_position;
+  logic [3:0] pending_output_position;
   logic [14:0] pending_addr;
   logic accepted, write_selected, rf_write_selected, fault, drained;
   logic rf_pending, rf_pending_partial;
-  logic [2:0] rf_pending_position;
+  logic [3:0] rf_pending_position;
   logic partial_ack;
-  logic [2:0] partial_ack_position;
+  logic [3:0] partial_ack_position;
   assign partial_ack=(pending && pending_write && pending_partial && rvalid_i && !error_i) || (rf_pending && rf_pending_partial && rf_sink_rvalid_i && !rf_sink_error_i);
   assign partial_ack_position=rf_pending && rf_pending_partial && rf_sink_rvalid_i ? rf_pending_position:pending_output_position;
   function automatic logic horizontal_valid(input int k);
@@ -325,7 +325,7 @@ module npu_stream_engine #(
           logic [1:0] slot;
           target = int'(position) + ahead;
           slot = target[0];
-          if(target<int'(task_count) && (!partial_busy[target] || (partial_ack && partial_ack_position==3'(target))) && !seed_valid[slot] && !seed_inflight[slot])
+          if(target<int'(task_count) && (!partial_busy[target] || (partial_ack && partial_ack_position==4'(target))) && !seed_valid[slot] && !seed_inflight[slot])
             for (int p = 0; p < 3; p++)
             if (!seed_selected[slot] && !gather_req_o[p] && !port_pending[p]) begin
               gather_req_o[p] = 1;
@@ -506,10 +506,10 @@ module npu_stream_engine #(
         state <= START;
       end
       if (tap_valid) begin
-        output_position <= position[2:0];
+        output_position <= position[3:0];
         output_final <= cursor + 1 == cfg.ci;
         seed_valid[position[0]] <= 0;
-        if (cursor + 1 < cfg.ci) partial_busy[position[2:0]] <= 1;
+        if (cursor + 1 < cfg.ci) partial_busy[position[3:0]] <= 1;
         if (position + 1 == task_count) begin
           if (cursor + 1 == cfg.ci) state <= DRAIN;
           else begin

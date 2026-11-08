@@ -1,5 +1,7 @@
 # 当前架构入口
 
+当前 CNN 使用 [SD95 count1～16](docs/count16.md)：[3:0] 为 count−1，没有配置选择位，保持单套配置和 32bit FIFO。默认共享 QT01 为 23,937 周期/图，CNN 任务 296→212；RF 仍为 256B，当前 PPA 未重测。
+
 最新 CNN 使用 [SD94 count−1 编码](docs/count-minus-one.md)：数量占 [2:0]，bit3 保留为 0，FIFO 仍为 32bit。默认共享 QT01，旧固件需重生成。
 
 生产固件现已[默认共享 QT01 量化](docs/quant-default.md)，未设置环境变量即可生成共享量化镜像，当前 26,067 周期/图。下文 Vector 后处理的“默认”称呼属于此前版本；硬件配置排空保护目前仍保留。

@@ -70,12 +70,19 @@ int main(void) {
   CHECK(npu_cnn_descriptor_valid(&d, 256));
   d.output_row = 128;
   CHECK(!npu_cnn_descriptor_valid(&d, 256));
-  for (unsigned count = 1; count <= 8; count++) {
+  for (unsigned count = 1; count <= 16; count++) {
     uint32_t task = npu_stream_task(0, 0, count, 0, 0, 0, 0);
-    CHECK((task & 7u) == count - 1 && !(task & 8u));
+    CHECK((task & 15u) == count - 1);
   }
-  CHECK(npu_stream_task(0, 0, 0, 0, 0, 0, 0) == 8u);
-  CHECK(npu_stream_task(0, 0, 9, 0, 0, 0, 0) == 8u);
+  uint32_t packed = 0xdeadbeefu;
+  CHECK(npu_stream_task_checked(0, 0, 0, 0, 0, 0, 0, &packed) == -1 && packed == 0xdeadbeefu);
+  CHECK(npu_stream_task_checked(0, 0, 17, 0, 0, 0, 0, &packed) == -1 && packed == 0xdeadbeefu);
+  CHECK(npu_stream_task_checked(0, 0, 16, 0, 0, 0, 0, &packed) == 0 && packed == 15u);
+  CHECK(npu_stream_task(127, 127, 16, 7, 1, 1, 511) == 0xffffffffu);
+  CHECK(npu_stream_task_checked(128, 0, 1, 0, 0, 0, 0, &packed) == -1);
+  CHECK(npu_stream_task_checked(0, 128, 1, 0, 0, 0, 0, &packed) == -1);
+  CHECK(npu_stream_task_checked(0, 0, 1, 8, 0, 0, 0, &packed) == -1);
+  CHECK(npu_stream_task_checked(0, 0, 1, 0, 0, 0, 512, &packed) == -1);
   printf(
       "STREAM SOFTWARE CHECK PASS checks=%u shape, borders, aliases, overflow, command encoding\n",
       checks);

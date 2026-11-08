@@ -332,10 +332,10 @@ static inline int npu_vector_program_configure(const uint32_t *words, unsigned c
   npu_fence();
   return 0;
 }
-/* SD94: input, kernel and geometry are shared until the queue drains.
+/* SD95: input, kernel and geometry are shared until the queue drains.
  * Only the 32-bit window shadow is snapshotted at START. */
 #define NPU_STREAM_ABI 0x654u
-#define NPU_STREAM_ABI_V4 0x53443934u
+#define NPU_STREAM_ABI_V5 0x53443935u
 #define NPU_CNN_KERNEL 0x60cu
 #define NPU_CNN_WINDOW 0x628u
 #define NPU_CNN_QUEUE 0x658u
@@ -345,6 +345,8 @@ static inline int npu_vector_program_configure(const uint32_t *words, unsigned c
 #define NPU_CNN_TOTAL_MACS 0x668u
 #define NPU_CNN_MAC_LANES 0x66cu
 #define NPU_STREAM_TASK_CAP 0x670u
+#define NPU_CNN_MAX_POSITIONS 16u
+#define NPU_CNN_PARTIAL_BYTES (NPU_CNN_MAX_POSITIONS * 4u)
 struct npu_stream_config {
   uint32_t src, kernel, dst, row_stride, partial, cin, stride, plane_stride, input_zero, mode;
 };
@@ -359,13 +361,13 @@ static inline int npu_spans_overlap(uint32_t a, uint32_t n, uint32_t b, uint32_t
 }
 static inline int npu_stream_configure(const struct npu_stream_config *d) {
   uint32_t rf_bytes = npu_regfile_bank_bytes() * 2;
-  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V4 || (npu_read(0x604) & (NPU_BUSY | NPU_ERROR)))
+  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V5 || (npu_read(0x604) & (NPU_BUSY | NPU_ERROR)))
     return -1;
   if ((d->src & 3u) || !npu_data_span(d->src, 1, rf_bytes) ||
       !npu_data_span(d->kernel, 1, rf_bytes) ||
       (!d->mode && ((d->dst & 3u) || !npu_data_span(d->dst, 4, rf_bytes))) ||
       d->partial < NPU_REGFILE_BASE || (d->partial & 3u) ||
-      !npu_data_span(d->partial, 32, rf_bytes) || !d->row_stride || d->row_stride > 32767 ||
+      !npu_data_span(d->partial, 4, rf_bytes) || !d->row_stride || d->row_stride > 32767 ||
       !d->plane_stride || d->plane_stride > 32767 || !d->cin || d->cin > 256 ||
       (d->stride != 1 && d->stride != 2) || d->input_zero > 255 || d->mode != 0)
     return -1;
@@ -384,13 +386,21 @@ static inline int npu_stream_configure(const struct npu_stream_config *d) {
 }
 static inline uint32_t npu_stream_task(unsigned y, unsigned x, unsigned count, unsigned rows,
                                        int left, int right, unsigned dst_words) {
-  if (!count || count > 8)
-    return 8u; /* Reserved bit marks an invalid software task. */
-  return ((count - 1u) & 7u) | ((rows & 7u) << 4) | ((left != 0) << 7) | ((right != 0) << 8) |
+  /* Unchecked packer: callers supply count 1..16; use the checked form for validation. */
+  return ((count - 1u) & 15u) | ((rows & 7u) << 4) | ((left != 0) << 7) | ((right != 0) << 8) |
          ((x & 127u) << 9) | ((y & 127u) << 16) | ((dst_words & 511u) << 23);
 }
+static inline int npu_stream_task_checked(unsigned y, unsigned x, unsigned count, unsigned rows,
+                                          int left, int right, unsigned dst_words, uint32_t *task) {
+  if (!task || !count || count > NPU_CNN_MAX_POSITIONS || y > 127 || x > 127 || rows > 7 ||
+      dst_words > 511)
+    return -1;
+  *task = npu_stream_task(y, x, count, rows, left, right, dst_words);
+  return 0;
+}
 static inline int npu_stream_submit(uint32_t task) {
-  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V4 || (task & 8u) ||
+  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V5 ||
+      !npu_data_span(npu_read(0x618), ((task & 15u) + 1u) * 4u, npu_regfile_bank_bytes() * 2u) ||
       !npu_data_span(npu_read(NPU_CNN_KERNEL), npu_read(0x61c) * 9u,
                      npu_regfile_bank_bytes() * 2u) ||
       !npu_queue_has_space(NPU_CNN_QUEUE) || (npu_read(0x604) & NPU_ERROR))
@@ -408,7 +418,7 @@ struct npu_cnn_descriptor {
   uint32_t src, weights, dst, width, height, cin, stride, output_width, output_row, input_zero, op;
 };
 static inline int npu_cnn_descriptor_valid(const struct npu_cnn_descriptor *d, uint32_t rf_bytes) {
-  if (rf_bytes < 32 || d->op != 0 || !d->width || d->width > 128 || !d->height || d->height > 128 ||
+  if (rf_bytes < 4 || d->op != 0 || !d->width || d->width > 128 || !d->height || d->height > 128 ||
       !d->cin || d->cin > 256 || (d->stride != 1 && d->stride != 2) || d->input_zero > 255 ||
       (d->src & 3u))
     return 0;
@@ -417,27 +427,31 @@ static inline int npu_cnn_descriptor_valid(const struct npu_cnn_descriptor *d, u
     return 0;
   uint32_t inputs = d->width * d->height * d->cin, weights = d->cin * 9u,
            output = d->output_width * 4u;
-  uint32_t partial = NPU_REGFILE_BASE + rf_bytes - 32;
+  uint32_t partial_bytes = (d->output_width > 16 ? 16 : d->output_width) * 4u;
+  if (rf_bytes < partial_bytes)
+    return 0;
+  uint32_t partial = NPU_REGFILE_BASE + rf_bytes - partial_bytes;
   if (!npu_data_span(d->src, inputs, rf_bytes) || !npu_data_span(d->weights, weights, rf_bytes) ||
-      npu_spans_overlap(partial, 32, d->src, inputs) ||
-      npu_spans_overlap(partial, 32, d->weights, weights))
+      npu_spans_overlap(partial, partial_bytes, d->src, inputs) ||
+      npu_spans_overlap(partial, partial_bytes, d->weights, weights))
     return 0;
   return (!(d->dst & 3u) && npu_data_span(d->dst, output, rf_bytes) &&
           !npu_spans_overlap(d->dst, output, d->src, inputs) &&
           !npu_spans_overlap(d->dst, output, d->weights, weights) &&
-          !npu_spans_overlap(d->dst, output, partial, 32));
+          !npu_spans_overlap(d->dst, output, partial, partial_bytes));
 }
 static inline int npu_cnn_start(const struct npu_cnn_descriptor *d) {
   uint32_t bytes = npu_regfile_bank_bytes() * 2;
   /* Reserve every tile before submitting any part of this row. */
   if (!npu_cnn_descriptor_valid(d, bytes) ||
-      (npu_read(NPU_CNN_QUEUE) >> 16) < (d->output_width + 7) / 8)
+      (npu_read(NPU_CNN_QUEUE) >> 16) < (d->output_width + 15) / 16)
     return -1;
   struct npu_stream_config cfg = {d->src,
                                   d->weights,
                                   d->dst,
                                   d->width,
-                                  NPU_REGFILE_BASE + bytes - 32,
+                                  NPU_REGFILE_BASE + bytes -
+                                      (d->output_width > 16 ? 16 : d->output_width) * 4u,
                                   d->cin,
                                   d->stride,
                                   d->width * d->height,
@@ -451,10 +465,12 @@ static inline int npu_cnn_start(const struct npu_cnn_descriptor *d) {
     if (y >= 0 && y < (int)d->height)
       mask |= 1u << r;
   }
-  for (unsigned x = 0; x < d->output_width; x += 8) {
-    unsigned n = d->output_width - x > 8 ? 8 : d->output_width - x;
-    if (npu_stream_submit(npu_stream_task(d->output_row, x, n, mask, x == 0,
-                                          (x + n - 1) * d->stride + 1 >= d->width, x)))
+  for (unsigned x = 0; x < d->output_width; x += 16) {
+    unsigned n = d->output_width - x > 16 ? 16 : d->output_width - x;
+    uint32_t task;
+    if (npu_stream_task_checked(d->output_row, x, n, mask, x == 0,
+                                (x + n - 1) * d->stride + 1 >= d->width, x, &task) ||
+        npu_stream_submit(task))
       return -1;
   }
   return 0;
@@ -470,14 +486,15 @@ static inline int npu_cnn_layer(struct npu_cnn_descriptor row, uint32_t channels
   uint32_t inputs = row.width * row.height * row.cin;
   uint32_t weights = channels * row.cin * 9;
   uint32_t output = channels * rows * row.output_width * 4;
-  uint32_t partial = NPU_REGFILE_BASE + rf_bytes - 32;
+  uint32_t partial_bytes = (row.output_width > 16 ? 16 : row.output_width) * 4u;
+  uint32_t partial = NPU_REGFILE_BASE + rf_bytes - partial_bytes;
   /* Validate the entire layer before an early row can overwrite later inputs. */
   if (!npu_data_span(row.weights, weights, rf_bytes) ||
-      npu_spans_overlap(partial, 32, row.weights, weights) ||
+      npu_spans_overlap(partial, partial_bytes, row.weights, weights) ||
       (!row.op && (!npu_data_span(row.dst, output, rf_bytes) ||
                    npu_spans_overlap(row.dst, output, row.src, inputs) ||
                    npu_spans_overlap(row.dst, output, row.weights, weights) ||
-                   npu_spans_overlap(row.dst, output, partial, 32))))
+                   npu_spans_overlap(row.dst, output, partial, partial_bytes))))
     return -1;
   for (uint32_t c = 0; c < channels; c++) {
     for (uint32_t y = 0; y < rows; y++) {

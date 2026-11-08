@@ -99,7 +99,7 @@ module tb_cnn_queue;
     wr('h0c, 32'h800020a2);
     wr('h10, 32'h80001800);
     wr('h14, 1);
-    wr('h18, RF_BASE + RF_BYTES - 32);
+    wr('h18, RF_BASE + RF_BYTES - 64);
     wr('h1c, 1);
     wr('h20, 1);
     wr('h24, 2);
@@ -121,14 +121,17 @@ module tb_cnn_queue;
     #1;
     depth = int'(csr_rdata_o >> 16);
     configure();
-    expect_csr('h54, 32'h53443934);
-    for (int n = 0; n <= 9; n += 9) begin
+    expect_csr('h54, 32'h53443935);
+    expect_csr('h70, 32'h00100020);
+    wr('h0c, 32'h80003ffc);
+    for (int n = 1; n <= 16; n += 15) begin
       wr('h28, encode_task(0, 0, n, 2, 1, 1, 0));
       wr(0, 1);
       expect_csr(4, 4);
       expect_csr('h60, 0);
       wr(0, 2);
     end
+    wr('h0c, 32'h800020a2);
     for (int i = 0; i <= depth; i++) begin
       wr('h28, encode_task(i / 16, 0, 1, 2, 1, 1, i));
       wr(0, 1);
@@ -195,10 +198,22 @@ module tb_cnn_queue;
     expect_csr('h60, 2);
     wr(0, 2);
     wr('h0c, 32'h800020a2);
-    wr('h28, encode_task(0, 0, 1, 2, 1, 1, 0) | 8);  // reserved context bit must remain zero
+    // Check actual task span at START: a 32B workspace cannot hold 16 partials.
+    wr('h18, RF_BASE + RF_BYTES - 32);
+    expect_csr('h18, RF_BASE + RF_BYTES - 32);
+    wr('h28, encode_task(0, 0, 16, 2, 1, 1, 0));
     wr(0, 1);
     expect_csr(4, 4);
     expect_csr('h60, 2);
+    wr('h18, RF_BASE + RF_BYTES, 1);
+    wr(0, 2);
+    wr('h28, encode_task(0, 0, 8, 2, 1, 1, 0));
+    wr(0, 1);  // The same last-32B workspace is valid for a shorter task.
+    for (int t = 0; t < 20000 && busy_o; t++) @(negedge clk_i);
+    if (busy_o) $fatal(1, "short workspace task failed to drain");
+    expect_csr('h60, 3);
+    expect_csr('h5c, 1);
+    expect_csr(4, 2);
     if ($bits(dut.command) != 32) $fatal(1, "Task FIFO is not 32 bits");
     $display(
         "CNN QUEUE PASS depth=%0d descriptor_bits=%0d checks=%0d shared immutable kernel, compact window tasks, order, overflow, reset, faults",
