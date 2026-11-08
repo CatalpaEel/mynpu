@@ -89,6 +89,8 @@ int main(void) {
   CHECK(npu_counter_reached(0, 0xffffffffu));
   CHECK(!npu_counter_reached(0xffffffffu, 0));
   CHECK(NPU_QUANT_SYNC_BASE(NPU_QUANT_MATRIX) + NPU_QUANT_WRITTEN == 0x76cu);
+  CHECK(NPU_SYNC_ABI_V2 == 0x0002007fu);
+  CHECK(NPU_QUANT_SYNC_BASE(NPU_QUANT_MATRIX) + NPU_QUANT_WRITE_CANCELLED == 0x77cu);
   printf(
       "STREAM SOFTWARE CHECK PASS checks=%u shape, borders, aliases, overflow, command encoding\n",
       checks);

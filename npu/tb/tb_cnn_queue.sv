@@ -33,13 +33,16 @@ module tb_cnn_queue;
   logic [7:0] mem[16384];
   assign gnt_i = allow_bus && req_o;
   npu_stream dut (
+    .quant_cancelled_o  (),
     .quant_written_o    (),
     .quant_write_fault_o(),
     .rf_sink_be_o       (),
     .quant_pack_i       (1'b0),
     .quant_enable_i     (1'b0),
     .quant_dst_i        (32'b0),
+    .filtered_final_o   (),
     .quant_final_o      (),
+    .result_accept_i    (mac_result_valid_i && mac_result_ready_o),
     .result_pending_i   (1'b0),
     .rf_sink_req_o      (),
     .rf_sink_addr_o     (),

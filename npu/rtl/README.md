@@ -1,5 +1,9 @@
 # RTL文件导航
 
+本轮最新实现：[吞吐与时序优化](../docs/throughput-optimization.md)。FC使用K144；普通读支持应答同拍续发；共享量化为两级弹性流水，CNN有4项结果标签，CNN/Matrix各有一字节写合并寄存器；Vector INT32乘法分两拍。数据流FIFO深度为8，任务FIFO仍8/8/8。SYNC v2，默认20,728周期/图，验证见throughput-optimization-validation.json。下文较早周期和PPA数值为历史记录。
+
+## 较早实现记录
+
 当前[配置时序由软件负责](../docs/software-owned-config.md)：取消 CNN / Vector 程序 / QT01 的忙时与排空写保护，Matrix 保持任务快照；无双缓冲或新增暂停机制。Operator ABI 2.2，15 组回归通过，默认共享量化仍为 23,937 周期/图，当前 PPA 未重测。
 
 当前 CNN 使用 [SD95 count1～16](../docs/count16.md)：[3:0] 为 count−1，没有配置选择位，保持单套配置和 32bit FIFO。默认共享 QT01 为 23,937 周期/图，CNN 任务 296→212；RF 仍为 256B，当前 PPA 未重测。
@@ -38,7 +42,7 @@
 仲裁精简前的32位Vector版[综合面积](../docs/vector32-area.md)：总Cell Area **2.808663mm²**（含两块SRAM、不含PAD），Vector计算与供数 **0.207111mm²**；与宽Vector版相比总面积下降3.57%、Vector下降32.98%。
 当前Vector已改为[纯32位VPG2](../docs/vector32.md)：4×32位寄存器、通用高低半积/进位/双字移位，无64位数据通路和组合指令合并。9组回归通过，MNIST为 **29,817周期/张**；旧VPG1固件需重新生成，之前的面积报告为历史版本。
 此前并行版本MNIST宏模型实测 **22,219周期/张**（原25,930，降低14.31%），12组回归通过。已加入[Matrix/Vector并行供数与计算](../docs/shared-parallel-operands.md)：共享RF gather、Matrix打包点积并行、Vector第二轻量lane，以及空流FIFO直接转发。下方恢复版本的25,930周期记录作为历史基线保留。
-当前配置为Matrix / Vector / CNN任务队列8/8/8、256B共享RF、两块8KB SRAM以及4条16×32bit xbar流FIFO。单元通过流地址转发数据，无CNN到Vector专用连线；独立DMA与NoC已删除。
+当前配置为Matrix / Vector / CNN任务队列8/8/8、256B共享RF、两块8KB SRAM以及4条8×32bit xbar流FIFO。单元通过流地址转发数据，无CNN到Vector专用连线；独立DMA与NoC已删除。
 
 | 目录 | 文件与职责 |
 |---|---|

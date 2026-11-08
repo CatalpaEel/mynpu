@@ -73,7 +73,7 @@ module tb_software_config;
   endtask
   task automatic foreach_readonly;
     logic [31:0] ignored;
-    int offsets[31] = '{
+    int offsets[33] = '{
         'h084,
         'h144,
         'h148,
@@ -104,7 +104,9 @@ module tb_software_config;
         'h774,
         'h778,
         'h128,
-        'h228
+        'h228,
+        'h73c,
+        'h77c
     };
     foreach (offsets[i]) begin
       @(negedge clk);
@@ -186,7 +188,7 @@ module tb_software_config;
     logic [31:0] status;
     restart();
     expect_word(M + 'h080, 'hf);
-    expect_word(M + 'h084, 'h0001003f);
+    expect_word(M + 'h084, 'h0002007f);
     foreach_readonly();
     // Active CNN geometry is latched; queued geometry is intentionally late-bound.
     kernel('h80002000, 2);
@@ -290,7 +292,7 @@ module tb_software_config;
     // Arithmetic already in flight stays latched; destination remains live.
     quant_setup(1, 3, 0, 0, S3);
     wr('h80001400, 6);
-    for (int i = 0; i < 16; i++) wr(S3, 'hface0000 + 32'(i));
+    for (int i = 0; i < npu_addr_pkg::STREAM_FIFO_DEPTH; i++) wr(S3, 'hface0000 + 32'(i));
     matrix_one('h80001400);
     for (int i = 0; i < 1000; i++) begin
       @(negedge clk);
@@ -310,7 +312,7 @@ module tb_software_config;
     wr(M + 'h760, 'h80001a00);
     finish_unit('h100, 1);
     expect_word('h80001a00, 36);
-    for (int i = 0; i < 16; i++) expect_word(S3, 'hface0000 + 32'(i));
+    for (int i = 0; i < npu_addr_pkg::STREAM_FIFO_DEPTH; i++) expect_word(S3, 'hface0000 + 32'(i));
     matrix_one('h80001400);
     finish_unit('h100, 2);
     expect_word('h80001a00, 120);
@@ -373,6 +375,55 @@ module tb_software_config;
     expect_word(M + 'h728, 2);
     expect_word(M + 'h72c, 1);
     expect_word(M + 'h730, 1);
+    restart();
+    // Coalesced errors count result elements, not just physical write beats.
+    kernel('h80002000, 2);
+    wr('h80001400, 'h09080706);
+    wr('h80001404, 10);
+    wr('h800040fc, 'hdeadbeef);
+    wr(M + 'h704, 1);
+    wr(M + 'h718, 'h7fffffff);
+    wr(M + 'h720, 'h800040fd);
+    wr(M + 'h700, 3);
+    wr(M + 'h608, 'h80001400);
+    wr(M + 'h60c, 'h80002000);
+    wr(M + 'h610, 'h80001800);
+    wr(M + 'h614, 5);
+    wr(M + 'h618, 'h800040e0);
+    wr(M + 'h61c, 1);
+    wr(M + 'h620, 1);
+    wr(M + 'h624, 5);
+    wr(M + 'h628, npu_stream_pkg::encode_task(0, 0, 5, 2, 1, 1, 0));
+    wr(M + 'h600, 1);
+    fault_unit('h600);
+    expect_word('h800040fc, 'h100e0cef);
+    expect_word(M + 'h724, 5);
+    expect_word(M + 'h728, 5);
+    expect_word(M + 'h72c, 3);
+    expect_word(M + 'h730, 2);
+    expect_word(M + 'h73c, 0);
+    expect_word(M + 'h63c, 1);
+
+    restart();
+    quant_setup(3, 1, 0, 0, 'h800040fd);
+    wr('h800040fc, 'hdeadbeef);
+    wr('h80001400, 6);
+    for (int n = 0; n < 5; n++) wr('h80002000 + 32'(4 * n), 32'(n + 2));
+    wr(M + 'h108, 'h80001400);
+    wr(M + 'h10c, 'h80002000);
+    wr(M + 'h110, 'h80001900);
+    wr(M + 'h114, 1);
+    wr(M + 'h118, 5);
+    wr(M + 'h11c, 1);
+    wr(M + 'h100, 1);
+    fault_unit('h100);
+    expect_word('h800040fc, 'h18120cef);
+    expect_word(M + 'h764, 5);
+    expect_word(M + 'h768, 5);
+    expect_word(M + 'h76c, 3);
+    expect_word(M + 'h770, 2);
+    expect_word(M + 'h77c, 0);
+    expect_word(M + 'h14c, 1);
     $display(
         "SOFTWARE CONFIG SYNC PASS readonly/start-tickets/observe/quant-stalls/real-write-ACK/errors");
     $display(

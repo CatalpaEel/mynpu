@@ -105,7 +105,7 @@ box(
     660,
     310,
     "CNN Stream  ·  npu_stream / control / engine",
-    "8项 × 32bit任务；每任务1～16位置\n3行 × 3words循环窗口 = 36B\n48bit行窗口选择；双份9B权重；返回直通\n跨通道部分和复用RF，最多64B\n末通道可直连共享QT01量化；或原始INT32写回",
+    "8项 × 32bit任务；每任务1～16位置\n3行 × 3words循环窗口 = 36B\n48bit行窗口选择；双份9B权重；返回直通\n跨通道部分和复用RF；4项结果位置标签\n末通道经弹性QT01；连续INT8合并写，INT32可旁路",
     col="#fb923c",
     size=26,
 )
@@ -115,7 +115,7 @@ box(
     660,
     310,
     "Matrix Stream  ·  npu_matrix_stream",
-    "8项 × 96bit任务；含精度、间距、lda/ldb\nSRAM / RF / FIFO均支持4×4外积\n8×32bit操作数暂存；按需去重/复用\nRF并行读A/B；SRAM分周期读取\n结果可直连共享QT01；关闭时原始INT32",
+    "8项 × 96bit任务；含精度、间距、lda/ldb\nSRAM / RF / FIFO均支持4×4外积\n8×32bit操作数暂存；按需去重/复用\nRF并行读A/B；SRAM应答同拍续发\nK≤256；FC用K144；量化INT8可合并写回",
     col="#c084fc",
     size=26,
 )
@@ -125,7 +125,7 @@ box(
     660,
     310,
     "Vector Stream  ·  npu_vector_stream",
-    "8项 × 99bit任务；标量与打包独立\nVPG3程序表实时读；PC + 4×32bit寄存器\nLD32复用ALU；打包与结果共用缓冲\n经xbar读取RF / SRAM或流FIFO\n逐条执行；软件编排高低字运算",
+    "8项 × 99bit任务；标量与打包独立\nVPG3程序表实时读；PC + 4×32bit寄存器\nLD32复用ALU；打包与结果共用缓冲\n经xbar读取RF / SRAM或流FIFO\n乘法统一锁存操作数，分两拍；SIMD8仍四路并行",
     col="#2dd4bf",
     size=26,
 )
@@ -193,7 +193,7 @@ box(
     1310,
     245,
     "XBAR：地址路由 / 流FIFO / 存储仲裁",
-    "4条流FIFO：每条16×32bit，地址0x80006000 + channel×0x100\n两块SRAM直接访问；无tag / 填充 / 失效或命中路径\n写流地址即发送，读同一地址即接收；满/空时反压，无RF中转\nMMIO分发到控制寄存器 / CNN / Debug / Boot",
+    "4条流FIFO：每条8×32bit，地址0x80006000 + channel×0x100\n两块SRAM直接访问；无tag / 填充 / 失效或命中路径\n写流地址即发送，读同一地址即接收；满/空时反压，无RF中转\nMMIO分发到控制寄存器 / CNN / Debug / Boot",
     col="#60a5fa",
     size=27,
 )
@@ -250,7 +250,7 @@ text(
 text(
     55,
     1885,
-    "当前配置时序由软件负责；SD95 / Matrix流4×4 / VPG3；未重测综合/PNR；此前edbb4ce的18ns门控2.547215mm²、setup +0.0017ns仅为历史版本。",
+    "当前：20,728周期/图 · SYNC v2 / SD95 / VPG3 · 新版综合见throughput-optimization验证报告；本轮未重跑完整PNR。",
     22,
     "#94a3b8",
 )
@@ -265,6 +265,7 @@ files = [
     "npu/rtl/common/npu_addr_pkg.sv",
     "npu/rtl/interconnect/npu_data_regfile.sv",
     "npu/rtl/common/npu_rr_select.sv",
+    "npu/rtl/common/npu_store_pack.sv",
     "npu/rtl/interconnect/npu_multi_read.sv",
     "npu/rtl/cnn/npu_stream_pkg.sv",
     "npu/rtl/cnn/npu_stream.sv",

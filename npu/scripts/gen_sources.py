@@ -59,6 +59,8 @@ atomic_write(
     + str(json.loads((root / "build_config.json").read_text())["vector_queue_depth"])
     + " NPU_CNN_QUEUE_DEPTH="
     + str(json.loads((root / "build_config.json").read_text())["cnn_queue_depth"])
+    + " NPU_STREAM_FIFO_DEPTH="
+    + str(json.loads((root / "build_config.json").read_text())["stream_fifo_depth"])
     + "}\nset npu_sources {\n"
     + "".join("  {" + str(p) + "}\n" for p in files)
     + "}\n",

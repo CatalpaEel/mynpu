@@ -98,7 +98,7 @@ module tb_xbar_stream;
       for (int c = 0; c < 4; c++) begin
         if (pops[c] > 1 || pushes[c] > 1) $fatal(1, "nonexclusive channel arbitration");
         count[c] += pushes[c] - pops[c];
-        if (count[c] < 0 || count[c] > 16) $fatal(1, "FIFO overflow/underflow");
+        if (count[c] < 0 || count[c] > STREAM_FIFO_DEPTH) $fatal(1, "FIFO overflow/underflow");
       end
       @(posedge clk_i);
       #1;

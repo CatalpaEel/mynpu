@@ -3,7 +3,11 @@
 `ifndef NPU_RF_BANK_WORDS
 `define NPU_RF_BANK_WORDS 256
 `endif
+`ifndef NPU_STREAM_FIFO_DEPTH
+`define NPU_STREAM_FIFO_DEPTH 8
+`endif
 package npu_addr_pkg;
+  localparam int STREAM_FIFO_DEPTH = `NPU_STREAM_FIFO_DEPTH;
   // Independent local interrupt sources; boot/debug wake retains IRQ31.
   localparam int IRQ_MATRIX = 16, IRQ_VECTOR = 17, IRQ_CNN = 18;
   localparam logic [31:0] IRQ_MASK = 32'h00070000;

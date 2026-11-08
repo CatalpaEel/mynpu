@@ -69,14 +69,8 @@ weight_cache0:
     addi x2, x0, 14
     lui x18, 0x80004
     addi x18, x18, 0
-qchannel0:
-    sw x18, 12(x6)
     lui x30, 0x40000
     addi x30, x30, 1792
-    lw x8, 0(x16)
-    sw x8, 4(x30)
-    lw x8, 4(x16)
-    sw x8, 8(x30)
     addi x8, x0, 24
     sw x8, 12(x30)
     addi x8, x0, 0
@@ -85,8 +79,13 @@ qchannel0:
     sw x8, 20(x30)
     addi x8, x0, 255
     sw x8, 24(x30)
-    addi x8, x0, 0
-    sw x8, 28(x30)
+    sw x0, 28(x30)
+qchannel0:
+    sw x18, 12(x6)
+    lw x8, 0(x16)
+    sw x8, 4(x30)
+    lw x8, 4(x16)
+    sw x8, 8(x30)
     sw x17, 32(x30)
     addi x8, x0, 3
     sw x8, 0(x30)
@@ -178,14 +177,8 @@ weight_cache1:
     addi x2, x0, 14
     lui x18, 0x80004
     addi x18, x18, 0
-qchannel1:
-    sw x18, 12(x6)
     lui x30, 0x40000
     addi x30, x30, 1792
-    lw x8, 0(x16)
-    sw x8, 4(x30)
-    lw x8, 4(x16)
-    sw x8, 8(x30)
     addi x8, x0, 24
     sw x8, 12(x30)
     addi x8, x0, 0
@@ -194,8 +187,13 @@ qchannel1:
     sw x8, 20(x30)
     addi x8, x0, 255
     sw x8, 24(x30)
-    addi x8, x0, 0
-    sw x8, 28(x30)
+    sw x0, 28(x30)
+qchannel1:
+    sw x18, 12(x6)
+    lw x8, 0(x16)
+    sw x8, 4(x30)
+    lw x8, 4(x16)
+    sw x8, 8(x30)
     sw x17, 32(x30)
     addi x8, x0, 3
     sw x8, 0(x30)
@@ -275,14 +273,8 @@ acked1:
     addi x15, x15, -96
     addi x2, x0, 7
     lw x18, 116(x7)
-qchannel2:
-    sw x18, 12(x6)
     lui x30, 0x40000
     addi x30, x30, 1792
-    lw x8, 0(x16)
-    sw x8, 4(x30)
-    lw x8, 4(x16)
-    sw x8, 8(x30)
     addi x8, x0, 24
     sw x8, 12(x30)
     addi x8, x0, 0
@@ -291,8 +283,13 @@ qchannel2:
     sw x8, 20(x30)
     addi x8, x0, 255
     sw x8, 24(x30)
-    addi x8, x0, 0
-    sw x8, 28(x30)
+    sw x0, 28(x30)
+qchannel2:
+    sw x18, 12(x6)
+    lw x8, 0(x16)
+    sw x8, 4(x30)
+    lw x8, 4(x16)
+    sw x8, 8(x30)
     sw x17, 32(x30)
     addi x8, x0, 3
     sw x8, 0(x30)
@@ -372,14 +369,8 @@ acked2:
     addi x15, x15, 128
     addi x2, x0, 3
     lw x18, 172(x7)
-qchannel3:
-    sw x18, 12(x6)
     lui x30, 0x40000
     addi x30, x30, 1792
-    lw x8, 0(x16)
-    sw x8, 4(x30)
-    lw x8, 4(x16)
-    sw x8, 8(x30)
     addi x8, x0, 24
     sw x8, 12(x30)
     addi x8, x0, 0
@@ -388,8 +379,13 @@ qchannel3:
     sw x8, 20(x30)
     addi x8, x0, 255
     sw x8, 24(x30)
-    addi x8, x0, 0
-    sw x8, 28(x30)
+    sw x0, 28(x30)
+qchannel3:
+    sw x18, 12(x6)
+    lw x8, 0(x16)
+    sw x8, 4(x30)
+    lw x8, 4(x16)
+    sw x8, 8(x30)
     sw x17, 32(x30)
     addi x8, x0, 3
     sw x8, 0(x30)
@@ -469,14 +465,8 @@ acked3:
     addi x15, x15, 224
     addi x2, x0, 3
     lw x18, 228(x7)
-qchannel4:
-    sw x18, 12(x6)
     lui x30, 0x40000
     addi x30, x30, 1792
-    lw x8, 0(x16)
-    sw x8, 4(x30)
-    lw x8, 4(x16)
-    sw x8, 8(x30)
     addi x8, x0, 24
     sw x8, 12(x30)
     addi x8, x0, 0
@@ -485,8 +475,13 @@ qchannel4:
     sw x8, 20(x30)
     addi x8, x0, 255
     sw x8, 24(x30)
-    addi x8, x0, 0
-    sw x8, 28(x30)
+    sw x0, 28(x30)
+qchannel4:
+    sw x18, 12(x6)
+    lw x8, 0(x16)
+    sw x8, 4(x30)
+    lw x8, 4(x16)
+    sw x8, 8(x30)
     sw x17, 32(x30)
     addi x8, x0, 3
     sw x8, 0(x30)
@@ -562,7 +557,7 @@ outer_fc_recenter:
     bne x11, x0, outer_fc_recenter
     addi x8, x0, 1
     sw x8, 20(x13)
-    addi x8, x0, 16
+    addi x8, x0, 144
     sw x8, 28(x13)
     addi x8, x0, 0
     sw x8, 52(x13)
@@ -583,7 +578,6 @@ outer_fc_full:
     sw x29, 16(x13)
     addi x9, x15, 0
     addi x10, x18, 0
-    addi x2, x0, 9
     addi x4, x0, 2
 outer_fc_tile:
     sw x9, 8(x13)
@@ -597,11 +591,6 @@ outer_fc_space:
     jal x0, outer_fc_space
 outer_fc_submit:
     sw x31, 0(x13)
-    addi x4, x0, 6
-    addi x9, x9, 16
-    addi x10, x10, 16
-    addi x2, x2, -1
-    bne x2, x0, outer_fc_tile
     addi x18, x18, 576
     addi x29, x29, 16
     addi x1, x1, -1
@@ -634,13 +623,8 @@ outer_fc_raw_drain_done:
     addi x8, x0, 4
     sw x8, 48(x13)
     addi x1, x0, 10
-outer_fc_quant_channel:
     lui x30, 0x40000
     addi x30, x30, 1856
-    lw x8, 0(x16)
-    sw x8, 4(x30)
-    lw x8, 4(x16)
-    sw x8, 8(x30)
     addi x8, x0, 24
     sw x8, 12(x30)
     addi x8, x0, 75
@@ -649,6 +633,11 @@ outer_fc_quant_channel:
     sw x8, 20(x30)
     addi x8, x0, 255
     sw x8, 24(x30)
+outer_fc_quant_channel:
+    lw x8, 0(x16)
+    sw x8, 4(x30)
+    lw x8, 4(x16)
+    sw x8, 8(x30)
     lw x8, 8(x16)
     sw x8, 28(x30)
     sw x17, 32(x30)

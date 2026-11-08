@@ -1,6 +1,6 @@
 // Two direct result inputs, one shared multiplier/round/clamp pipeline.
-// The producer holds its result until the filtered output is consumed. This
-// preserves the existing stream's result metadata and propagates backpressure.
+// Two elastic arithmetic stages. Input ready acknowledges parameter sampling;
+// each producer retains matching output metadata until filtered consumption.
 module npu_shared_quant (
   input logic clk_i,
   rst_ni,
@@ -10,7 +10,8 @@ module npu_shared_quant (
   input logic [31:0] csr_wdata_i,
   output logic [31:0] csr_rdata_o,
   output logic csr_error_o,
-  input logic [1:0][1:0] written_i,
+  input logic [1:0][3:0] cancelled_i,
+  input logic [1:0][3:0] written_i,
   write_fault_i,
   input logic [1:0] flush_i,
   valid_i,
@@ -29,9 +30,11 @@ module npu_shared_quant (
   // 10 zero point,14 clamp min,18 clamp max,1c INT32 input correction,20 dest.
   logic [1:0][8:0][31:0] cfg;
   // Monotonic modulo-2^32 observation only; ACK does not reset counters.
-  logic [1:0][31:0] accepted, issued, written, write_faults, flushed;
+  logic [1:0][31:0] accepted, issued, written, write_faults, flushed, write_cancelled;
   logic [2:0] state;
-  logic owner, last_owner, selected;
+  logic owner, last_owner, selected, owner0, valid0, valid1, advance0, advance1, sample;
+  logic [5:0] shift0;
+  logic signed [31:0] zero0, lower0, upper0;
   logic signed [63:0] product, biased;
   logic signed [31:0] bias, zero, lower, upper;
   logic [5:0] shift;
@@ -47,15 +50,19 @@ module npu_shared_quant (
     assign dst_o[p] = cfg[p][8];
   end
   always_comb begin
-    selected = valid_i[!last_owner] ? !last_owner : last_owner;
-    corrected = data_i[selected] + cfg[selected][7];  // intentional INT32 wrap
+    selected = (valid_i[!last_owner] && !flush_i[!last_owner]) ? !last_owner : last_owner;
+    corrected = data_i[selected] + cfg[selected][7];
+    state = valid1 ? 3'd2 : valid0 ? 3'd1 : 3'd0;
+    advance1 = !valid1 || ready_i[owner] || flush_i[owner];
+    advance0 = !valid0 || advance1 || flush_i[owner0];
     ready_o = 0;
+    if (advance0 && !flush_i[selected]) ready_o[selected] = 1;
+    sample = valid_i[selected] && ready_o[selected];
     valid_o = 0;
     data_o = 0;
-    if (state == 2 && !flush_i[owner]) begin
+    if (valid1 && !flush_i[owner]) begin
       valid_o[owner] = 1;
       data_o[owner] = result;
-      ready_o[owner] = ready_i[owner];
     end
     csr_rdata_o = 0;
     known = 1;
@@ -64,7 +71,7 @@ module npu_shared_quant (
     if (csr_addr_i == 'h80) begin
       csr_rdata_o = 'h51543031;
       writable = 0;
-    end else if (csr_addr_i[7] || word_index > 14 || csr_addr_i[1:0] != 0) known = 0;
+    end else if (csr_addr_i[7] || csr_addr_i[1:0] != 0) known = 0;
     else begin
       if (word_index <= 8) csr_rdata_o = cfg[source][word_index];
       else begin
@@ -79,7 +86,7 @@ module npu_shared_quant (
           csr_rdata_o = {
             17'b0,
             (valid_o[source] && ready_i[source]),
-            (state == 0 && selected == source && valid_i[source] && !flush_i[source]),
+            (sample && selected == source),
             (state != 0 && owner),
             state,
             (|write_fault_i[source]),
@@ -88,10 +95,11 @@ module npu_shared_quant (
             ready_i[source],
             valid_o[source],
             valid_i[source],
-            (state != 0 && owner == source),
+            ((valid0 && owner0 == source) || (valid1 && owner == source)),
             pack_o[source],
             enable_o[source]
           };
+          15: csr_rdata_o = write_cancelled[source];
           default: ;
         endcase
       end
@@ -124,13 +132,20 @@ module npu_shared_quant (
   end
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
+      write_cancelled <= 0;
       accepted <= 0;
       issued <= 0;
       written <= 0;
       write_faults <= 0;
       flushed <= 0;
       cfg <= 0;
-      state <= 0;
+      valid0 <= 0;
+      valid1 <= 0;
+      owner0 <= 0;
+      shift0 <= 0;
+      zero0 <= 0;
+      lower0 <= 0;
+      upper0 <= 0;
       owner <= 0;
       last_owner <= 1;
       product <= 0;
@@ -142,39 +157,41 @@ module npu_shared_quant (
       shift <= 0;
     end else begin
       for (int p = 0; p < 2; p++) begin
+        write_cancelled[p] <= write_cancelled[p] + 32'(cancelled_i[p]);
         written[p] <= written[p] + 32'(written_i[p]);
         write_faults[p] <= write_faults[p] + 32'(write_fault_i[p]);
         if (valid_o[p] && ready_i[p]) issued[p] <= issued[p] + 1;
       end
-      if (state == 0 && valid_i[selected] && !flush_i[selected])
-        accepted[selected] <= accepted[selected] + 1;
-      if (state != 0 && flush_i[owner]) flushed[owner] <= flushed[owner] + 1;
+      if (sample) accepted[selected] <= accepted[selected] + 1;
+      for (int p = 0; p < 2; p++) begin
+        if (flush_i[p])
+          flushed[p] <= flushed[p] + 32'(valid0 && owner0 == 1'(p)) + 32'(valid1 && owner == 1'(p));
+      end
       if (csr_req_i && csr_we_i && !csr_error_o) cfg[source][word_index] <= csr_wdata_i;
-      if (state != 0 && flush_i[owner]) state <= 0;
-      else
-        case (state)
-          0:
-          if (valid_i[selected] && !flush_i[selected]) begin
-            owner <= selected;
-            product <= $signed(corrected) * $signed(cfg[selected][1]);
-            bias <= cfg[selected][2];
-            shift <= cfg[selected][3][5:0];
-            zero <= cfg[selected][4];
-            lower <= cfg[selected][5];
-            upper <= cfg[selected][6];
-            state <= 1;
-          end
-          1: begin
-            biased <= product + {{32{bias[31]}}, bias};
-            state <= 2;
-          end
-          2:
-          if (ready_i[owner]) begin
-            state <= 0;
-            last_owner <= owner;
-          end
-          default: state <= 0;
-        endcase
+      if (advance1) begin
+        valid1 <= valid0 && !flush_i[owner0];
+        if (valid0 && !flush_i[owner0]) begin
+          biased <= product + {{32{bias[31]}}, bias};
+          owner <= owner0;
+          shift <= shift0;
+          zero <= zero0;
+          lower <= lower0;
+          upper <= upper0;
+        end
+      end
+      if (advance0) begin
+        valid0 <= sample;
+        if (sample) begin
+          owner0 <= selected;
+          last_owner <= selected;
+          product <= $signed(corrected) * $signed(cfg[selected][1]);
+          bias <= cfg[selected][2];
+          shift0 <= cfg[selected][3][5:0];
+          zero0 <= cfg[selected][4];
+          lower0 <= cfg[selected][5];
+          upper0 <= cfg[selected][6];
+        end
+      end
     end
   end
 endmodule

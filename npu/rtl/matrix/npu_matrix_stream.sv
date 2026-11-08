@@ -27,7 +27,8 @@ module npu_matrix_stream #(
   output logic compute_result_ready_o,
   input logic [31:0] compute_result_data_i,
   output logic [31:0] observe_o,
-  output logic quant_written_o,
+  output logic [3:0] quant_cancelled_o,
+  output logic [3:0] quant_written_o,
   quant_write_fault_o,
   input logic quant_enable_i,
   quant_pack_i,
@@ -69,7 +70,9 @@ module npu_matrix_stream #(
     C_WAIT,
     EMIT,
     D_REQ,
-    D_WAIT
+    D_WAIT,
+    DRAIN,
+    PACK_STEP
   } state_t;
   state_t state;
   // Parent MMIO validates complete input/raw-D spans in the 0x80000000
@@ -96,6 +99,33 @@ module npu_matrix_stream #(
   logic [2:0][7:0] targets, reply_targets;
   logic batch_ready, batch_valid, batch_req, all_available, response_error;
   logic [31:0] batch_addr, d_address, output_address;
+  logic pack_mode, pack_ready, pack_busy, pack_req, pack_pending;
+  logic ordinary_req, ordinary_gnt, ordinary_valid;
+  logic [31:0] pack_address, pack_data;
+  logic [3:0] pack_be;
+  logic [2:0] pack_count, pack_pending_count, quant_write_pending;
+  assign ordinary_gnt = gnt_i && !pack_req;
+  assign ordinary_valid = rvalid_i && !pack_pending;
+  assign pack_mode = quant_enable_i && quant_pack_i && !is_stream_address(output_address);
+  npu_store_pack i_write_pack (
+    .clk_i,
+    .rst_ni,
+    .flush_i(response_error || start_i),
+    .enable_i(quant_enable_i && quant_pack_i),
+    .valid_i(state == D_REQ && compute_result_valid_i && pack_mode),
+    .ready_o(pack_ready),
+    .addr_i(output_address),
+    .data_i(compute_result_data_i[7:0]),
+    .last_i(tile_row + 5'(rows) == m && tile_col + 5'(cols) == n && {1'b0,out_r}+3'd1 == rows && {1'b0,out_c}+3'd1 == cols),
+    .busy_o(pack_busy),
+    .req_o(pack_req),
+    .addr_o(pack_address),
+    .data_o(pack_data),
+    .be_o(pack_be),
+    .count_o(pack_count),
+    .cancelled_o(quant_cancelled_o),
+    .gnt_i(gnt_i && pack_req)
+  );
   function automatic logic [14:0] advance_input(input logic [14:0] ptr, step, input logic stream);
     return stream ? {ptr[14:8], 8'b0} : ptr + step;
   endfunction
@@ -187,34 +217,36 @@ module npu_matrix_stream #(
     .gather_data_i,
     .req_o   (batch_req),
     .addr_o  (batch_addr),
-    .gnt_i   (gnt_i && state == WAIT_WORDS),
-    .rvalid_i(rvalid_i && state == WAIT_WORDS),
+    .gnt_i   (ordinary_gnt && state == WAIT_WORDS),
+    .rvalid_i(ordinary_valid && state == WAIT_WORDS),
     .error_i,
     .rdata_i
   );
   assign response_error=(state==WAIT_WORDS && batch_valid && |batch_error) ||
-    (rvalid_i && error_i && (state==C_WAIT || state==D_WAIT));
-  assign compute_valid_o=(state==FETCH && all_available) || state==EMIT || (state==C_WAIT && rvalid_i && !error_i);
+    (ordinary_valid && error_i && (state==C_WAIT || state==D_WAIT)) || (pack_pending && rvalid_i && error_i);
+  assign compute_valid_o=(state==FETCH && all_available) || state==EMIT || (state==C_WAIT && ordinary_valid && !error_i);
   assign compute_multiply_o = state == FETCH;
   assign compute_emit_o = state == EMIT || state == C_WAIT;
   assign compute_index_o = {out_r, out_c};
   assign compute_addend_o = state == C_WAIT ? rdata_i : 0;
   assign compute_flush_o = state == CLEAR || response_error;
-  logic quant_write_pending;
-  assign quant_written_o = state == D_WAIT && rvalid_i && !error_i && quant_write_pending;
-  assign quant_write_fault_o = state == D_WAIT && rvalid_i && error_i && quant_write_pending;
+  assign quant_written_o = rvalid_i && !error_i ? (pack_pending ? 4'(pack_pending_count) : state == D_WAIT ? 4'(quant_write_pending) : 4'b0) : 4'b0;
+  assign quant_write_fault_o = rvalid_i && error_i ? (pack_pending ? 4'(pack_pending_count) : state == D_WAIT ? 4'(quant_write_pending) : 4'b0) : 4'b0;
   assign observe_o = {
     busy_o, req_o, d_stream, b_stream, a_stream, out_c, out_r, tile_col, tile_row, inner, state
   };
-  assign compute_result_ready_o = state == D_REQ && gnt_i;
+  assign compute_result_ready_o = state == D_REQ && (pack_mode ? pack_ready : !pack_busy && ordinary_gnt);
   assign busy_o = state != IDLE;
-  assign req_o=(state==WAIT_WORDS && batch_req) || state==C_REQ || (state==D_REQ && compute_result_valid_i);
-  assign we_o = state == D_REQ;
-  assign addr_o=state==WAIT_WORDS ? batch_addr : state==D_REQ ? (quant_pack_i ? {output_address[31:2],2'b0}:output_address):d_address;
-  assign wdata_o=quant_pack_i ? {24'b0,compute_result_data_i[7:0]}<<{output_address[1:0],3'b0}:compute_result_data_i;
-  assign be_o = state == D_REQ && quant_pack_i ? 4'b1 << output_address[1:0] : 4'hf;
+  assign ordinary_req = (state == WAIT_WORDS && batch_req) || state == C_REQ || (state == D_REQ && compute_result_valid_i && !pack_mode && !pack_busy);
+  assign req_o = pack_req || ordinary_req;
+  assign we_o = pack_req || state == D_REQ;
+  assign addr_o = pack_req ? pack_address : state == WAIT_WORDS ? batch_addr : state == D_REQ ? output_address : d_address;
+  assign wdata_o = pack_req ? pack_data : compute_result_data_i;
+  assign be_o = pack_req ? pack_be : 4'hf;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
+      pack_pending <= 0;
+      pack_pending_count <= 0;
       quant_write_pending <= 0;
       state <= IDLE;
       done_o <= 0;
@@ -249,6 +281,8 @@ module npu_matrix_stream #(
       word_tag <= 0;
       reply_targets <= 0;
     end else begin
+      pack_pending <= pack_req && gnt_i;
+      if (pack_req && gnt_i) pack_pending_count <= pack_count;
       done_o <= 0;
       fault_o <= 0;
       if (response_error) begin
@@ -319,16 +353,19 @@ module npu_matrix_stream #(
             end
             state <= FETCH;
           end
-          C_REQ: if (gnt_i) state <= C_WAIT;
-          C_WAIT: if (rvalid_i && compute_ready_i) state <= D_REQ;
+          C_REQ: if (ordinary_gnt) state <= C_WAIT;
+          C_WAIT: if (ordinary_valid && compute_ready_i) state <= D_REQ;
           EMIT: if (compute_ready_i) state <= D_REQ;
-          D_REQ:
-          if (gnt_i) begin
-            quant_write_pending <= quant_enable_i;
-            state <= D_WAIT;
+          D_REQ: begin
+            if (pack_mode) begin
+              if (compute_result_valid_i && pack_ready) state <= PACK_STEP;
+            end else if (ordinary_gnt) begin
+              quant_write_pending <= 3'(quant_enable_i);
+              state <= D_WAIT;
+            end
           end
-          D_WAIT:
-          if (rvalid_i) begin
+          D_WAIT, PACK_STEP:
+          if (state == PACK_STEP || ordinary_valid) begin
             if ({1'b0, out_c} + 3'd1 < cols) begin
               out_c <= out_c + 1;
               linear_index <= linear_index + 1;
@@ -352,9 +389,17 @@ module npu_matrix_stream #(
               tile_col <= 0;
               state <= CLEAR;
             end else begin
-              state <= IDLE;
-              done_o <= 1;
+              if (pack_busy || pack_pending) state <= DRAIN;
+              else begin
+                state <= IDLE;
+                done_o <= 1;
+              end
             end
+          end
+          DRAIN:
+          if (!pack_busy && !pack_pending) begin
+            state <= IDLE;
+            done_o <= 1;
           end
           default: state <= IDLE;
         endcase

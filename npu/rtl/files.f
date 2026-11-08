@@ -23,3 +23,5 @@ interconnect/xbar_stream.sv
 interconnect/npu_multi_read.sv
 
 quant/npu_shared_quant.sv
+
+common/npu_store_pack.sv

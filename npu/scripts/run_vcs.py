@@ -19,6 +19,8 @@ p.add_argument(
         "irqwake",
         "softcfg",
         "quantsync",
+        "storepack",
+        "unitsmoke",
         "sharedoperands",
         "outergemm",
         "matrixtiles",
@@ -72,6 +74,12 @@ p.add_argument(
     default=json.loads((ROOT / "build_config.json").read_text())["cnn_queue_depth"],
 )
 p.add_argument(
+    "--stream-fifo-depth",
+    type=int,
+    choices=[4, 8, 16],
+    default=json.loads((ROOT / "build_config.json").read_text())["stream_fifo_depth"],
+)
+p.add_argument(
     "--rf-bank-words",
     type=int,
     choices=[32, 64, 128, 256],
@@ -94,6 +102,8 @@ tops = {
     "irqcontrol": "tb_irq_control",
     "softcfg": "tb_software_config",
     "quantsync": "tb_quant_sync",
+    "storepack": "tb_store_pack",
+    "unitsmoke": "tb_netlist_units",
     "irqwake": "tb_irq_wake",
     "addressranges": "tb_address_ranges",
     "sramuncached": "tb_sram_uncached",
@@ -198,10 +208,16 @@ if a.suite == "enginefaults":
         ROOT / "rtl/vector/npu_vector_stream.sv",
         ROOT / "tb/compute_task_fixtures.sv",
     ]
+if any(f.name in ["npu_matrix_stream.sv", "npu_stream_engine.sv"] for f in files):
+    packer = ROOT / "rtl/common/npu_store_pack.sv"
+    if packer not in files:
+        files.append(packer)
 if any(f.name in ["npu_matrix_stream.sv", "npu_vector_stream.sv"] for f in files):
     operand_port = ROOT / "rtl/interconnect/npu_multi_read.sv"
     if operand_port not in files:
         files.append(operand_port)
+if a.suite == "storepack":
+    files = [ROOT / "rtl/common/npu_store_pack.sv"]
 if a.suite == "quantsync":
     files = [ROOT / "rtl/common/npu_addr_pkg.sv", ROOT / "rtl/quant/npu_shared_quant.sv"]
 if a.suite == "queues":
@@ -350,6 +366,7 @@ hashes = {str(f): hashlib.sha256(f.read_bytes()).hexdigest() for f in tracked if
 cmd = [
     "vcs",
     "+define+NPU_PARALLEL_UNITS=" + str(a.parallel_units),
+    "+define+NPU_STREAM_FIFO_DEPTH=" + str(a.stream_fifo_depth),
     "+define+NPU_RF_BANK_WORDS=" + str(a.rf_bank_words),
     "+define+NPU_CNN_QUEUE_DEPTH=" + str(a.cnn_queue_depth),
     "+define+NPU_MATRIX_QUEUE_DEPTH=" + str(a.matrix_queue_depth),
@@ -394,6 +411,8 @@ markers = {
     "irqcontrol": "IRQ CONTROL PASS",
     "softcfg": "SOFTWARE CONFIG PASS",
     "quantsync": "QUANT SYNC PASS",
+    "storepack": "STORE PACK PASS",
+    "unitsmoke": "UNIT SMOKE PASS",
     "irqwake": "IRQ WAKE PASS",
     "addressranges": "ADDRESS RANGES PASS",
     "sramuncached": "SRAM UNCACHED PASS",
@@ -449,6 +468,7 @@ result = {
     "cnn_loop_order": "row",
     "cnn_macs": 9,
     "rf_bank_words": a.rf_bank_words,
+    "stream_fifo_depth": a.stream_fifo_depth,
     "cnn_queue_depth": a.cnn_queue_depth,
     "matrix_queue_depth": a.matrix_queue_depth,
     "vector_queue_depth": a.vector_queue_depth,

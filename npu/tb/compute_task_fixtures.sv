@@ -46,6 +46,7 @@ module matrix_task_fixture (
     .data_o    (matrix_result_data)
   );
   npu_matrix_stream i_stream (
+    .quant_cancelled_o     (),
     .observe_o             (),
     .quant_written_o       (),
     .quant_write_fault_o   (),
@@ -109,7 +110,12 @@ module vector_task_fixture (
   logic [4:0] vector_compute_op;
   logic signed [31:0] vector_compute_a, vector_compute_b, vector_compute_c, vector_compute_data;
   logic vector_carry_in, vector_carry_out, vector_compute_simd;
-  npu_vector i_vector (
+  logic [31:0] vector_mul_a, vector_mul_b;
+  npu_vector #(
+    .PIPELINED_MUL(1)
+  ) i_vector (
+    .mul_a_i(vector_mul_a),
+    .mul_b_i(vector_mul_b),
     .simd_i (vector_compute_simd),
     .op_i   (vector_compute_op),
     .a_i    (vector_compute_a),
@@ -120,6 +126,8 @@ module vector_task_fixture (
     .data_o (vector_compute_data)
   );
   npu_vector_stream i_issue (
+    .compute_mul_a_o(vector_mul_a),
+    .compute_mul_b_o(vector_mul_b),
     .observe_o      (),
     .compute_simd_o (vector_compute_simd),
     .compute_op_o   (vector_compute_op),

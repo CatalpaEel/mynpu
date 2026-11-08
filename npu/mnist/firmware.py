@@ -123,7 +123,7 @@ def prepare_fc_parameters():
         blob.extend(struct.pack("<iii", multiplier, bias, offset))
     meta["parameter_bytes"] = len(blob)
     meta["fc_execution"] = (
-        "4x4 outer-product GEMM; FC 1x4/1x4/1x2 blocks, K16, B leading dimension144"
+        "4x4 outer-product GEMM; FC 1x4/1x4/1x2 blocks, K144, B leading dimension144"
     )
     (OUT / "params.hex").write_text("".join(f"{v:02x}\n" for v in blob))
 
@@ -258,13 +258,9 @@ def quant_wait(base, submitted, completed, tag):
     sw(8, base, 0)
 
 
-def quant_settings(fields, matrix=False):
-    # x16 parameter pair/triple, x17 destination; all previous work has drained.
+def quant_shared(fields, matrix=False):
+    """Layer-wide settings are constant across output channels."""
     li(30, 0x40000740 if matrix else 0x40000700)
-    lw(8, 16, 0)
-    sw(8, 30, 4)
-    lw(8, 16, 4)
-    sw(8, 30, 8)
     li(8, 24)
     sw(8, 30, 12)
     li(8, fields[12])
@@ -273,11 +269,19 @@ def quant_settings(fields, matrix=False):
     sw(8, 30, 20)
     li(8, 255)
     sw(8, 30, 24)
+    if not matrix:
+        sw(0, 30, 28)
+
+
+def quant_settings(fields, matrix=False):
+    # Per-channel values only; previous channel has drained before this point.
+    lw(8, 16, 0)
+    sw(8, 30, 4)
+    lw(8, 16, 4)
+    sw(8, 30, 8)
     if matrix:
         lw(8, 16, 8)
-    else:
-        li(8, 0)
-    sw(8, 30, 28)
+        sw(8, 30, 28)
     sw(17, 30, 32)
     li(8, 3)
     sw(8, 30, 0)
@@ -324,6 +328,7 @@ def emit_quant_cnn(i, fields, stream=False):
         li(18, RF_BASE)
     else:
         lw(18, 7, i * 56 + 4)  # software-owned kernel cursor
+    quant_shared(fields)
     label("qchannel" + str(i))
     sw(18, 6, 12)
     quant_settings(fields)
@@ -369,8 +374,8 @@ def emit_quant_cnn(i, fields, stream=False):
 def emit_outer_fc_raw(i, fields, stream=False):
     """Reuse each activation across 4 output channels; weights remain single-copy.
 
-    B is transposed with leading dimension144, so nine K16 tasks update
-    1x4/1x4/1x2 blocks. Shared strides are immutable until the queue drains.
+    B is transposed with leading dimension144. Each 1x4/1x4/1x2
+    block uses one K144 task; strides are captured by the task FIFO.
     """
     li(13, 0x40000100)
     li(14, 0x40000200)
@@ -394,7 +399,7 @@ def emit_outer_fc_raw(i, fields, stream=False):
     branch(11, 0, "outer_fc_recenter")
     li(8, 1)
     sw(8, 13, 20)
-    li(8, 16)
+    li(8, 144)
     sw(8, 13, 28)
     li(8, 0)
     sw(8, 13, 52)
@@ -415,7 +420,6 @@ def emit_outer_fc_raw(i, fields, stream=False):
     sw(29, 13, 16)
     addi(9, 15, 0)
     addi(10, 18, 0)
-    li(2, 9)
     li(4, 2)
     label("outer_fc_tile")
     sw(9, 13, 8)
@@ -429,11 +433,6 @@ def emit_outer_fc_raw(i, fields, stream=False):
     jump("outer_fc_space")
     label("outer_fc_submit")
     sw(31, 13, 0)
-    li(4, 6)
-    addi(9, 9, 16)
-    addi(10, 10, 16)
-    addi(2, 2, -1)
-    branch(2, 0, "outer_fc_tile")
     addi(18, 18, 576)
     addi(29, 29, 16)
     addi(1, 1, -1)
@@ -456,6 +455,7 @@ def emit_quant_fc(i, fields, stream=False):
     li(8, 4)
     sw(8, 13, 48)
     li(1, 10)
+    quant_shared(fields, True)
     label("outer_fc_quant_channel")
     quant_settings(fields, True)
     sw(29, 13, 16)
@@ -484,11 +484,14 @@ def emit_cnn_rows(i, fields, previous, stream=False):
                 alu(5, 5, 20, 0)
             sw(5, 6, offset)
             setup_writes += 1
+    # Resize the shared partial workspace with the current window width.
+    # Keeping the first layer's 56B reservation would overlap Conv5 output.
+    if previous is None or min(fields[9], 16) != min(previous[9], 16):
+        li(8, RF_BASE + 2 * RF_BANK_BYTES - min(fields[9], 16) * 4)
+        sw(8, 6, 0x18)
     if previous is None:
         li(14, 0x40000200)
         li(31, 1)
-        li(8, RF_BASE + 2 * RF_BANK_BYTES - min(fields[9], 16) * 4)
-        sw(8, 6, 0x18)
         li(8, 0x80006000)
         sw(8, 6, 0x10)  # xbar stream channel 0 destination
         sw(8, 14, 8)  # same endpoint, configured once for all convolution layers
@@ -637,8 +640,7 @@ def fc_raw_base(fields):
 def emit_matrix_fc(i, fields, stream=False):
     """FC uses 4/4/2 outer-GEMM blocks, then QT01 or general Vector math.
 
-    Each output block receives nine K16 updates, with ACCUMULATE after the
-    first tile. Recenter the dead final input in place and keep weights
+    Each output block receives one K144 update. Recenter the dead final input in place and keep weights
     single-copy. x19..x28 preserve continuous-input ownership state.
     """
     if SHARED_QUANT:
@@ -823,7 +825,7 @@ def generate_single():
     (OUT / "boot.S").write_text("\n".join(listing))
     (OUT / "model.json").write_text(json.dumps(meta, indent=2))
     (OUT / "test_meta.svh").write_text(
-        f"`define NPU_EXPECTED_MATRIX_JOBS {37 if SHARED_QUANT else 27}\nlocalparam int PROGRAM_BYTES={PROGRAM_BYTES};\nlocalparam int STREAM_TASKS={len(stream_commands)};\n"
+        f"`define NPU_EXPECTED_MATRIX_JOBS {13 if SHARED_QUANT else 3}\nlocalparam int PROGRAM_BYTES={PROGRAM_BYTES};\nlocalparam int STREAM_TASKS={len(stream_commands)};\n"
         + "localparam int PARAM_BYTES="
         + str(meta["parameter_bytes"])
         + ";\n"
@@ -858,7 +860,7 @@ def generate_single():
     meta["matrix_strides_per_task"] = True
     meta["matrix_stream_order"] = "tile/K/A-rows/B-cols; one FIFO word per operand"
     meta["matrix_execution"] = "4x4 outer product; 16 INT32 accumulators; FC output blocks4/4/2"
-    meta["matrix_tasks"] = 37 if SHARED_QUANT else 27
+    meta["matrix_tasks"] = 13 if SHARED_QUANT else 3
     meta["descriptor_base"] = 0x80000000 + DESC_BASE
     meta["irq_ids"] = {"matrix": 16, "vector": 17, "cnn": 18}
     meta["shared_quant"] = SHARED_QUANT

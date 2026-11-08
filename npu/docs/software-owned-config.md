@@ -4,6 +4,8 @@ CNN、Matrix、Vector 与共享 QT01 的配置允许在运行中或有排队任�
 
 新增只读启动、量化采样与写应答计数，详见 [软件可见同步与执行进度](software-sync-observation.md)。这些观测不增加配置保护。
 
+当前量化消费与写合并的边界见 [SYNC v2](throughput-optimization.md)：dst/pack/enable在ISSUED之前实时读取，ISSUED之后的已缓冲写地址固定，WRITTEN仍等待真实应答。
+
 ## 写入与生效规则
 
 | 配置 | 何时读取 | 修改后的影响 |

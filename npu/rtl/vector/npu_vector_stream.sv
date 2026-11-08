@@ -13,6 +13,8 @@ module npu_vector_stream #(
   gather_error_i,
   input logic [2:0][31:0] gather_data_i,
 
+  output logic [31:0] compute_mul_a_o,
+  compute_mul_b_o,
   output logic compute_simd_o,
   output logic [4:0] compute_op_o,
   output logic signed [31:0] compute_a_o,
@@ -62,7 +64,8 @@ module npu_vector_stream #(
     LOAD_WAIT,
     OUTPUT,
     D_REQ,
-    D_WAIT
+    D_WAIT,
+    MUL_EXEC
   } state_t;
   state_t state;
   logic [31:0] a_ptr, d_ptr, scalar, write_data, load_addr;
@@ -83,10 +86,13 @@ module npu_vector_stream #(
   logic signed [31:0] folded;
   logic [31:0] output_value;
 
-  logic simd_mode;
+  logic simd_mode, staged_multiply;
+  logic [4:0] mul_operation;
+  logic [1:0] mul_dst;
+  assign staged_multiply = operation == 19 || operation == 20 || operation == 24;
   assign observe_o = {busy_o, simd_mode, we_o, req_o, mode, loop_pc, slots, pc, state};
   assign simd_mode = mode[6];
-  assign compute_simd_o = simd_mode && operation != 27;
+  assign compute_simd_o = simd_mode && (state == MUL_EXEC || operation != 27);
   npu_multi_read #(
     .GATHER(GATHER)
   ) i_operand_read (
@@ -144,7 +150,7 @@ module npu_vector_stream #(
   ) : batch_data[1]);
   assign operand_c = operation == 29 ? (simd_mode ? {4{scalar[7:0]}} : scalar) : {26'b0,instruction[17:12]};
   assign compute_carry_o = carry;
-  assign compute_op_o = operation == 27 ? 5'd1 : operation;
+  assign compute_op_o = state == MUL_EXEC ? mul_operation : operation == 27 ? 5'd1 : operation;
   assign compute_a_o = operand_a;
   assign compute_b_o = operand_b;
   assign compute_c_o = operand_c;
@@ -167,6 +173,10 @@ module npu_vector_stream #(
   end
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
+      compute_mul_a_o <= 0;
+      compute_mul_b_o <= 0;
+      mul_operation <= 0;
+      mul_dst <= 0;
       state <= IDLE;
       carry <= 0;
       done_o <= 0;
@@ -228,9 +238,16 @@ module npu_vector_stream #(
             pc <= loop_pc;
             if (program_mode) state <= EXEC;
             else begin
-              write_data <= result[31:0];
               write_be <= tail_mask(remaining, simd_mode);
-              state <= D_REQ;
+              if (staged_multiply) begin
+                compute_mul_a_o <= operand_a;
+                compute_mul_b_o <= operand_b;
+                mul_operation <= operation;
+                state <= MUL_EXEC;
+              end else begin
+                write_data <= result;
+                state <= D_REQ;
+              end
             end
           end
           EXEC:
@@ -240,16 +257,37 @@ module npu_vector_stream #(
             load_dst <= dst;
             state <= LOAD_REQ;
           end else if((operation<=24 || operation==26 || operation==29) && (!program_mode || pc<slots) && (!(operation==21 || operation==22) || instruction[31:12]<=32) && (!simd_mode || operation<=15 || operation>=18 && operation<=20 || operation==24 || operation==26 || operation==29)) begin
-            if (operation == 16 || operation == 17 || operation == 23) carry <= compute_carry_i;
-            regs[dst] <= folded;
-            if (!program_mode || last_pc) state <= OUTPUT;
-            else begin
-              pc <= pc + issued;
-              state <= pc + issued == loop_pc ? A_REQ : EXEC;
+            if (staged_multiply) begin
+              compute_mul_a_o <= operand_a;
+              compute_mul_b_o <= operand_b;
+              mul_operation <= operation;
+              mul_dst <= dst;
+              state <= MUL_EXEC;
+            end else begin
+              if (operation == 16 || operation == 17 || operation == 23) carry <= compute_carry_i;
+              regs[dst] <= folded;
+              if (!program_mode || last_pc) state <= OUTPUT;
+              else begin
+                pc <= pc + issued;
+                state <= pc + issued == loop_pc ? A_REQ : EXEC;
+              end
             end
           end else begin
             state <= IDLE;
             fault_o <= 1;
+          end
+          MUL_EXEC: begin
+            if (program_mode) begin
+              regs[mul_dst] <= compute_data_i;
+              if (last_pc) state <= OUTPUT;
+              else begin
+                pc <= pc + 1;
+                state <= pc + 1 == loop_pc ? A_REQ : EXEC;
+              end
+            end else begin
+              write_data <= compute_data_i;
+              state <= D_REQ;
+            end
           end
           LOAD_REQ: if (gnt_i) state <= LOAD_WAIT;
           LOAD_WAIT:

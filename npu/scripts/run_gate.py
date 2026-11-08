@@ -9,7 +9,7 @@ sys.path.insert(0, str(ROOT.parent / "tools"))
 from format_code import tool
 
 p = argparse.ArgumentParser()
-p.add_argument("--suite", choices=["latency", "jtag", "ops", "burst"], default="latency")
+p.add_argument("--suite", choices=["latency", "jtag", "ops", "burst", "units"], default="latency")
 p.add_argument("--run", required=True, type=Path)
 p.add_argument("--tag", required=True)
 p.add_argument("--netlist", type=Path, help="Use an explicitly selected routed netlist")
@@ -53,6 +53,7 @@ out = ROOT / "build" / ("gate-" + a.tag)
 out.mkdir(parents=True, exist_ok=False)
 testbench = {
     "latency": "tb_mnist_latency",
+    "units": "tb_netlist_units",
     "jtag": "tb_jtag",
     "ops": "tb_ops",
     "burst": "tb_queue_burst",
@@ -62,6 +63,7 @@ text, count = re.subn(r"\bnpu_soc\s+dut\b", "npu_asic_top dut", text)
 assert count == 1, "Expected one SoC DUT"
 for old, new in [
     ("SINGLE PASS", "GATE PASS"),
+    ("UNIT SMOKE PASS", "GATE UNIT SMOKE PASS"),
     ("SINGLE_INPUT", "GATE_INPUT"),
     ("OPERATORS PASS", "GATE OPERATORS PASS"),
     ("BURST PASS", "GATE BURST PASS"),
@@ -93,9 +95,13 @@ cmd = [
     "+incdir+" + str(ROOT / "tb"),
     *map(str, files),
     "-top",
-    {"jtag": "tb_jtag", "ops": "tb_ops", "latency": "tb_mnist_latency", "burst": "tb_queue_burst"}[
-        a.suite
-    ],
+    {
+        "jtag": "tb_jtag",
+        "ops": "tb_ops",
+        "latency": "tb_mnist_latency",
+        "burst": "tb_queue_burst",
+        "units": "tb_netlist_units",
+    }[a.suite],
     "-o",
     str(out / "simv"),
     "-Mdir=" + str(out / "csrc"),
@@ -136,6 +142,7 @@ marker = {
     "ops": "GATE OPERATORS PASS",
     "burst": "GATE BURST PASS",
     "latency": f"GATE PASS samples={a.samples}",
+    "units": "GATE UNIT SMOKE PASS",
 }[a.suite]
 passed = (
     r.returncode == 0

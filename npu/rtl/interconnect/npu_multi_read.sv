@@ -48,7 +48,7 @@ module npu_multi_read #(
       selected = 2'(p);
       found = 1;
     end
-    req_o = active && !valid_o && !failed && !pending && found;
+    req_o = active && !valid_o && !failed && (!pending || rvalid_i) && !response_fault && found;
     addr_o = addresses[selected];
   end
   always_ff @(posedge clk_i or negedge rst_ni)
@@ -92,16 +92,17 @@ module npu_multi_read #(
           error_o[p] <= gather_error_i[p];
         end
       end
-      if (req_o && gnt_i) begin
-        sent[selected] <= 1;
-        owner <= selected;
-        pending <= 1;
-      end
       if (pending && rvalid_i) begin
         pending <= 0;
         received[owner] <= 1;
         data_o[owner] <= rdata_i;
         error_o[owner] <= error_i;
+      end
+      // The old response uses old owner; a new grant replaces the pending tag.
+      if (req_o && gnt_i) begin
+        sent[selected] <= 1;
+        owner <= selected;
+        pending <= 1;
       end
     end
 endmodule

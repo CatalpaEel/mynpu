@@ -36,6 +36,12 @@ p.add_argument(
     default=json.loads((ROOT / "build_config.json").read_text())["cnn_queue_depth"],
 )
 p.add_argument(
+    "--stream-fifo-depth",
+    type=int,
+    choices=[4, 8, 16],
+    default=json.loads((ROOT / "build_config.json").read_text())["stream_fifo_depth"],
+)
+p.add_argument(
     "--rf-bank-words",
     type=int,
     choices=[32, 64, 128, 256],
@@ -112,6 +118,7 @@ lefs = [
             "unit_boundaries_preserved": a.preserve_unit_boundaries,
             "sram_banks": 2,
             "rf_bank_words": a.rf_bank_words,
+            "stream_fifo_depth": a.stream_fifo_depth,
             "cache_words_per_bank": 0,
             "execution_units": ["cnn", "matrix", "vector"],
             "cnn_loop_order": "row",
@@ -151,14 +158,19 @@ lefs = [
             "shared_quant_direct_inputs": ["CNN", "Matrix"],
             "vector_simd8_lanes": 4,
             "vector_register_width_bits": 32,
-            "vector_program_abi": "VPG2",
             "vector_folded_stages": 0,
             "stream_empty_forwarding": True,
             "arbiter_implementation": "masked-first-set-onehot",
             "rf_decode": "once-per-port",
             "cnn_rf_sink": True,
             "cnn_rf_weight_gather": True,
-            "stream_partial_words_in_shared_rf": 8,
+            "stream_partial_words_in_shared_rf": 16,
+            "sync_observation_abi": "0x0002007f",
+            "shared_quant_elastic_stages": 2,
+            "shared_quant_initiation_interval": 1,
+            "cnn_result_tag_depth": 4,
+            "quant_byte_write_coalescing": True,
+            "vector_int32_multiply_cycles": 2,
             "matrix_queue_depth": a.matrix_queue_depth,
             "vector_queue_depth": a.vector_queue_depth,
             "scope": "Independent CNN GEMM vector units, uncached XBAR CPU JTAG (six ordinary masters + 4x16-word stream channels, no independent DMA) plus two 8KB SRAM macros; excludes PAD/PHY/DDR",
@@ -206,7 +218,7 @@ set_db design_process_node 180
 set_db init_hdl_search_path {{{r / "inputs" / inc}}}
 read_libs {listing(libs)}
 read_physical -lef {listing(lefs)}
-read_hdl -sv -define {{SYNTHESIS NPU_RF_BANK_WORDS={a.rf_bank_words} NPU_CNN_QUEUE_DEPTH={a.cnn_queue_depth} NPU_MATRIX_QUEUE_DEPTH={a.matrix_queue_depth} NPU_VECTOR_QUEUE_DEPTH={a.vector_queue_depth}}} {listing([r / "inputs" / f.relative_to(ROOT.parent) for f in files] + [r / "inputs/npu_asic_top.sv"])}
+read_hdl -sv -define {{SYNTHESIS NPU_STREAM_FIFO_DEPTH={a.stream_fifo_depth} NPU_RF_BANK_WORDS={a.rf_bank_words} NPU_CNN_QUEUE_DEPTH={a.cnn_queue_depth} NPU_MATRIX_QUEUE_DEPTH={a.matrix_queue_depth} NPU_VECTOR_QUEUE_DEPTH={a.vector_queue_depth}}} {listing([r / "inputs" / f.relative_to(ROOT.parent) for f in files] + [r / "inputs/npu_asic_top.sv"])}
 {("set_db lp_insert_clock_gating true" + chr(10)) if a.clock_gating else ""}elaborate npu_asic_top
 check_design > {r / "reports/elaborated_check.rpt"}
 check_design -unresolved > {r / "reports/elaborated_unresolved.rpt"}

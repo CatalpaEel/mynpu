@@ -21,6 +21,8 @@ module tb_pure_compute;
   logic simd = 0;
   wire [31:0] value;
   npu_vector vector (
+    .mul_a_i(a),
+    .mul_b_i(b),
     .op_i   (op),
     .simd_i (simd),
     .a_i    (a),

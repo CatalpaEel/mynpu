@@ -12,13 +12,16 @@ module npu_stream_engine #(
   rf_sink_rvalid_i,
   rf_sink_error_i,
 
+  input logic result_accept_i,
   input logic result_pending_i,
   input logic quant_enable_i,
   quant_pack_i,
   input logic [31:0] quant_dst_i,
   output logic [31:0] observe_o,
-  output logic [1:0] quant_written_o,
+  output logic [3:0] quant_cancelled_o,
+  output logic [3:0] quant_written_o,
   quant_write_fault_o,
+  output logic filtered_final_o,
   output logic quant_final_o,
   input logic clk_i,
   rst_ni,
@@ -103,27 +106,66 @@ module npu_stream_engine #(
   logic [3:0] output_position;
   logic output_final;
   logic [31:0] output_address;
-  assign quant_final_o = output_final;
-  assign output_address=output_final && quant_enable_i ?
+  logic [31:0] logical_address, pack_address, pack_data, write_data;
+  logic [3:0] pack_be, write_be;
+  logic [2:0] pack_count;
+  logic pack_mode, pack_ready, pack_busy, pack_req, pack_gnt, write_final;
+  logic accepted, write_selected, rf_write_selected, fault, drained;
+  localparam int RESULT_DEPTH = 4;
+  logic [RESULT_DEPTH-1:0][4:0] result_tags;
+  logic [1:0] result_head, result_tail, raw_head;
+  logic [2:0] result_count;
+  logic result_pop;
+  assign result_pop = mac_result_valid_i && mac_result_ready_o;
+  assign {output_final, output_position} = result_tags[result_head];
+  assign quant_final_o = result_tags[raw_head][4];
+  assign filtered_final_o = output_final;
+  assign logical_address=output_final && quant_enable_i ?
     quant_dst_i + (quant_pack_i ? 32'(cmd.dst_words)+32'(output_position) : 4*(32'(cmd.dst_words)+32'(output_position))) :
     {17'h10000,15'((output_final ? cfg.dst+{cmd.dst_words,2'b0}:cfg.partial)+{output_position,2'b0})};
+  assign pack_mode = output_final && quant_enable_i && quant_pack_i && !is_stream_address(
+      logical_address
+  );
+  npu_store_pack i_write_pack (
+    .clk_i,
+    .rst_ni,
+    .flush_i    (fault || start_i),
+    .enable_i   (quant_enable_i && quant_pack_i),
+    .valid_i    (mac_result_valid_i && pack_mode),
+    .ready_o    (pack_ready),
+    .addr_i     (logical_address),
+    .data_i     (mac_result_data_i[7:0]),
+    .last_i     (output_position + 5'd1 == task_count),
+    .busy_o     (pack_busy),
+    .req_o      (pack_req),
+    .addr_o     (pack_address),
+    .data_o     (pack_data),
+    .be_o       (pack_be),
+    .count_o    (pack_count),
+    .cancelled_o(quant_cancelled_o),
+    .gnt_i      (pack_gnt)
+  );
+  assign output_address = pack_req ? pack_address : logical_address;
+  assign write_final = pack_req || output_final;
+  assign write_data = pack_req ? pack_data : mac_result_data_i;
+  assign write_be = pack_req ? pack_be : 4'hf;
+  assign pack_gnt = pack_req && (rf_write_selected ? rf_sink_gnt_i : accepted && we_o);
   logic pending, pending_write, pending_last;
   logic [1:0] pending_slot;
   logic [1:0] pending_row, selected_row;
   logic [1:0] selected_slot;
   logic [15:0] partial_busy;
-  logic pending_quant, rf_pending_quant;
+  logic [2:0] pending_quant, rf_pending_quant;
   logic pending_partial;
   logic [3:0] pending_output_position;
   logic [14:0] pending_addr;
-  logic accepted, write_selected, rf_write_selected, fault, drained;
   logic rf_pending, rf_pending_partial;
   logic [3:0] rf_pending_position;
   logic partial_ack;
   logic [3:0] partial_ack_position;
   // Tags belong to the granted write, independent of later live config writes.
-  assign quant_written_o = 2'(pending && pending_write && pending_quant && rvalid_i && !error_i) + 2'(rf_pending && rf_pending_quant && rf_sink_rvalid_i && !rf_sink_error_i);
-  assign quant_write_fault_o = 2'(pending && pending_write && pending_quant && rvalid_i && error_i) + 2'(rf_pending && rf_pending_quant && rf_sink_rvalid_i && rf_sink_error_i);
+  assign quant_written_o = (pending && pending_write && rvalid_i && !error_i ? 4'(pending_quant) : 4'b0) + (rf_pending && rf_sink_rvalid_i && !rf_sink_error_i ? 4'(rf_pending_quant) : 4'b0);
+  assign quant_write_fault_o = (pending && pending_write && rvalid_i && error_i ? 4'(pending_quant) : 4'b0) + (rf_pending && rf_sink_rvalid_i && rf_sink_error_i ? 4'(rf_pending_quant) : 4'b0);
   assign observe_o = {
     state != IDLE,
     req_o,
@@ -254,7 +296,7 @@ module npu_stream_engine #(
       end
     end
   end
-  assign mac_valid_o = state == RUN && ready;
+  assign mac_valid_o = state == RUN && ready && (result_count < RESULT_DEPTH || result_pop);
   assign tap_valid = mac_valid_o && mac_ready_i;
   assign mac_flush_o = state == START || fault;
   assign mac_clear_o = cursor == 0;
@@ -262,16 +304,16 @@ module npu_stream_engine #(
   assign mac_emit_o = 1;
   assign mac_seed_o = current_seed;
   assign mac_offset_o = $signed({1'b0, cfg.offset});
-  assign write_selected = mac_result_valid_i;
-  assign rf_write_selected = RF_SINK && write_selected && (!output_final || is_rf_address(
+  assign write_selected = pack_req || (mac_result_valid_i && !pack_mode && !pack_busy);
+  assign rf_write_selected = RF_SINK && write_selected && (!write_final || is_rf_address(
       output_address
   ));
   assign rf_sink_req_o = rf_write_selected;
   assign rf_sink_addr_o = {output_address[31:2], 2'b0};
-  assign rf_sink_be_o = output_final && quant_pack_i ? 4'b1 << output_address[1:0] : 4'hf;
-  assign rf_sink_wdata_o = output_final && quant_pack_i ? {24'b0,mac_result_data_i[7:0]}<<{output_address[1:0],3'b0}:mac_result_data_i;
+  assign rf_sink_be_o = write_be;
+  assign rf_sink_wdata_o = write_data;
   assign accepted = req_o && gnt_i;
-  assign drained=!mac_result_valid_i && !result_pending_i && !pending && !rf_pending && port_pending==0 && row_inflight==0 && seed_inflight==0;
+  assign drained=!pack_busy && result_count == 0 && !mac_result_valid_i && !result_pending_i && !pending && !rf_pending && port_pending==0 && row_inflight==0 && seed_inflight==0;
   assign fault=(rf_pending && rf_sink_rvalid_i && rf_sink_error_i) || (pending && rvalid_i && error_i) || (|(port_pending & gather_valid_i & gather_error_i));
   assign events_o.busy = state != IDLE;
   assign events_o.start = state == START;
@@ -288,9 +330,9 @@ module npu_stream_engine #(
     logic [1:0] seed_selected;
     req_o = 0;
     we_o = 0;
-    be_o = 15;
+    be_o = write_be;
     addr_o = 0;
-    wdata_o = mac_result_data_i;
+    wdata_o = write_data;
     selected_row = 0;
     selected_slot = 0;
     load_state = BIDLE;
@@ -313,11 +355,6 @@ module npu_stream_engine #(
       req_o = 1;
       we_o = 1;
       addr_o = output_address;
-      if (output_final && quant_pack_i) begin
-        be_o = 4'b1 << output_address[1:0];
-        wdata_o = {24'b0, mac_result_data_i[7:0]} << {output_address[1:0], 3'b0};
-        addr_o = {output_address[31:2], 2'b0};
-      end
     end else if (load_state == WREQ) begin
       req_o = 1;
       addr_o = {17'h10000, weight_ptr};
@@ -331,7 +368,7 @@ module npu_stream_engine #(
       end
     end
     if (req_o) begin
-      if (we_o && output_final && is_stream_address(output_address))
+      if (we_o && write_final && is_stream_address(output_address))
         addr_o = {output_address[31:8], 8'b0};
       else if (!we_o && load_state == WREQ && is_stream_address({17'h10000, cfg.kernel}))
         addr_o = {17'h10000, cfg.kernel};
@@ -376,7 +413,7 @@ module npu_stream_engine #(
       end
     end
 
-    mac_result_ready_o = rf_write_selected ? rf_sink_gnt_i : accepted && we_o;
+    mac_result_ready_o = pack_mode ? pack_ready : !pack_busy && (rf_write_selected ? rf_sink_gnt_i : accepted && we_o);
   end
   always_ff @(posedge clk_i) begin
     if (rst_ni && pending && rvalid_i && !error_i && !pending_write) begin
@@ -431,8 +468,10 @@ module npu_stream_engine #(
       seed_valid <= 0;
       seed_inflight <= 0;
       port_seed_slot <= 0;
-      output_position <= 0;
-      output_final <= 0;
+      result_head <= 0;
+      result_tail <= 0;
+      raw_head <= 0;
+      result_count <= 0;
       partial_busy <= 0;
       pending_quant <= 0;
       rf_pending_quant <= 0;
@@ -459,15 +498,15 @@ module npu_stream_engine #(
       pending <= accepted;
       rf_pending <= rf_sink_req_o && rf_sink_gnt_i;
       if (rf_sink_req_o && rf_sink_gnt_i) begin
-        rf_pending_quant <= output_final && quant_enable_i;
-        rf_pending_partial <= !output_final;
+        rf_pending_quant <= pack_req ? pack_count : 3'(write_final && quant_enable_i);
+        rf_pending_partial <= !write_final;
         rf_pending_position <= output_position;
       end
       if (accepted) begin
-        pending_quant <= we_o && output_final && quant_enable_i;
+        pending_quant <= pack_req ? pack_count : 3'(we_o && write_final && quant_enable_i);
         pending_write <= we_o;
         pending_type <= load_state;
-        pending_partial <= we_o && !output_final;
+        pending_partial <= we_o && !write_final;
         pending_output_position <= output_position;
         pending_row <= selected_row;
         pending_slot <= selected_slot;
@@ -534,9 +573,18 @@ module npu_stream_engine #(
         cmd <= command_i;
         state <= START;
       end
+      if (result_accept_i) raw_head <= raw_head + 1'b1;
+      if (result_pop) result_head <= result_head + 1'b1;
+      case ({
+        tap_valid, result_pop
+      })
+        2'b10: result_count <= result_count + 1'b1;
+        2'b01: result_count <= result_count - 1'b1;
+        default: ;
+      endcase
       if (tap_valid) begin
-        output_position <= position[3:0];
-        output_final <= cursor + 1 == cfg.ci;
+        result_tags[result_tail] <= {cursor + 1 == cfg.ci, position[3:0]};
+        result_tail <= result_tail + 1'b1;
         seed_valid[position[0]] <= 0;
         if (cursor + 1 < cfg.ci) partial_busy[position[3:0]] <= 1;
         if (position + 1 == task_count) begin
@@ -618,6 +666,10 @@ module npu_stream_engine #(
         weights_sent <= 0;
       end
       if (fault) begin
+        result_head <= 0;
+        result_tail <= 0;
+        raw_head <= 0;
+        result_count <= 0;
         state <= IDLE;
         port_pending <= 0;
         row_inflight <= 0;

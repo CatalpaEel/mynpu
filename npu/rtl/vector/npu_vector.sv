@@ -1,7 +1,11 @@
 // One configurable INT32 / four-lane INT8 ALU. Byte carry boundaries are
 // disabled in SIMD mode. Add/sub/neg/abs, comparisons, shifts and partial
 // multipliers are shared; there is no separate light ALU.
-module npu_vector (
+module npu_vector #(
+  parameter bit PIPELINED_MUL = 0
+) (
+  input logic [31:0] mul_a_i,
+  mul_b_i,
   input logic [4:0] op_i,
   input logic simd_i,
   input logic [31:0] a_i,
@@ -11,6 +15,9 @@ module npu_vector (
   output logic carry_o,
   output logic [31:0] data_o
 );
+  logic [31:0] multiply_a, multiply_b;
+  assign multiply_a = PIPELINED_MUL ? mul_a_i : a_i;
+  assign multiply_b = PIPELINED_MUL ? mul_b_i : b_i;
   logic [31:0] p00, p01, p10, p11, middle, product_low, product_high;
   logic [31:0] lhs, rhs, sum, high_base, correction_a, correction_b, signed_high;
   logic subtract;
@@ -21,10 +28,10 @@ module npu_vector (
   logic [31:0] pair_shifted, pair_mask;
   logic [5:0] pair_amount;
   // Reuse the existing four 16x16 partial multipliers as four 8x8 lanes.
-  assign p00 = (simd_i ? {8'b0, a_i[7:0]} : a_i[15:0]) * (simd_i ? {8'b0, b_i[7:0]} : b_i[15:0]);
-  assign p01 = (simd_i ? {8'b0, a_i[15:8]} : a_i[15:0]) * (simd_i ? {8'b0, b_i[15:8]} : b_i[31:16]);
-  assign p10=(simd_i ? {8'b0,a_i[23:16]}:a_i[31:16]) * (simd_i ? {8'b0,b_i[23:16]}:b_i[15:0]);
-  assign p11=(simd_i ? {8'b0,a_i[31:24]}:a_i[31:16]) * (simd_i ? {8'b0,b_i[31:24]}:b_i[31:16]);
+  assign p00 = (simd_i ? {8'b0, multiply_a[7:0]} : multiply_a[15:0]) * (simd_i ? {8'b0, multiply_b[7:0]} : multiply_b[15:0]);
+  assign p01 = (simd_i ? {8'b0, multiply_a[15:8]} : multiply_a[15:0]) * (simd_i ? {8'b0, multiply_b[15:8]} : multiply_b[31:16]);
+  assign p10=(simd_i ? {8'b0,multiply_a[23:16]}:multiply_a[31:16]) * (simd_i ? {8'b0,multiply_b[23:16]}:multiply_b[15:0]);
+  assign p11=(simd_i ? {8'b0,multiply_a[31:24]}:multiply_a[31:16]) * (simd_i ? {8'b0,multiply_b[31:24]}:multiply_b[31:16]);
   assign middle = {16'b0, p00[31:16]} + {16'b0, p01[15:0]} + {16'b0, p10[15:0]};
   assign product_low=simd_i ? {p11[7:0],p10[7:0],p01[7:0],p00[7:0]} : {middle[15:0],p00[15:0]};
   assign product_high=simd_i ? {p11[15:8],p10[15:8],p01[15:8],p00[15:8]} : p11+{16'b0,p01[31:16]}+{16'b0,p10[31:16]}+{16'b0,middle[31:16]};
@@ -45,8 +52,8 @@ module npu_vector (
     correction_a = 0;
     correction_b = 0;
     for (int lane = 0; lane < 4; lane++) begin
-      correction_a[8*lane+:8]=simd_i ? (a_i[8*lane+7] ? b_i[8*lane+:8]:8'b0) : (a_i[31] ? b_i[8*lane+:8]:8'b0);
-      correction_b[8*lane+:8]=simd_i ? (b_i[8*lane+7] ? a_i[8*lane+:8]:8'b0) : (b_i[31] ? a_i[8*lane+:8]:8'b0);
+      correction_a[8*lane+:8]=simd_i ? (multiply_a[8*lane+7] ? multiply_b[8*lane+:8]:8'b0) : (multiply_a[31] ? multiply_b[8*lane+:8]:8'b0);
+      correction_b[8*lane+:8]=simd_i ? (multiply_b[8*lane+7] ? multiply_a[8*lane+:8]:8'b0) : (multiply_b[31] ? multiply_a[8*lane+:8]:8'b0);
     end
   end
   assign signed_high = segmented_sub(
@@ -87,16 +94,17 @@ module npu_vector (
     for (genvar bit_index = 0; bit_index < 32; bit_index++) begin : g_bit
       localparam int L = bit_index / 8, STEP = 1 << stage;
       logic left_bit, right_bit, fill_bit, enable;
+      logic left_source, right_source;
+      if (bit_index >= STEP) begin : g_left
+        assign left_source = shift_stage[stage][bit_index-STEP];
+      end else assign left_source = 0;
+      if (bit_index + STEP < 32) begin : g_right
+        assign right_source = shift_stage[stage][bit_index+STEP];
+      end else assign right_source = 0;
       always_comb begin
         fill_bit = (op_i == 11 || op_i == 26) && (simd_i ? a_i[8*L+7] : a_i[31]);
-        left_bit = 0;
-        right_bit = fill_bit;
-        if (bit_index >= STEP)
-          left_bit = shift_stage[stage][bit_index-STEP] && (!simd_i || (bit_index - STEP) / 8 == L);
-        if (bit_index + STEP < 32) begin
-          if (!simd_i || (bit_index + STEP) / 8 == L)
-            right_bit = shift_stage[stage][bit_index+STEP];
-        end
+        left_bit = left_source && (!simd_i || (bit_index - STEP) / 8 == L);
+        right_bit = bit_index + STEP < 32 && (!simd_i || (bit_index + STEP) / 8 == L) ? right_source : fill_bit;
         enable = simd_i ? b_i[8*L+stage] : b_i[stage];
         shift_stage[stage+1][bit_index]=enable ? (op_i==9 ? left_bit:right_bit):shift_stage[stage][bit_index];
       end

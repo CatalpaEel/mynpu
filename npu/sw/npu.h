@@ -43,9 +43,10 @@ static inline uint32_t npu_regfile_bank_bytes(void);
 #define NPU_VEC_SUBMITTED 0x22cu
 /* Operator ABI 2.2, project-defined integer kernels (not an ISA extension). */
 #define NPU_OPERATOR_ABI 0x040u
-/* Read-only observation ABI 1, capabilities bits0..5; no reservation/locking. */
+/* Read-only observation ABI 2; bits0..6 include packed-write cancellations. */
 #define NPU_SYNC_CAP 0x084u
 #define NPU_SYNC_ABI_V1 0x0001003fu
+#define NPU_SYNC_ABI_V2 0x0002007fu
 #define NPU_MAT_STARTED 0x144u
 #define NPU_MAT_STARTED_TICKET 0x148u
 #define NPU_MAT_FAULTS 0x14cu
@@ -76,6 +77,7 @@ static inline uint32_t npu_regfile_bank_bytes(void);
 #define NPU_QUANT_WRITE_ERRORS 0x30u
 #define NPU_QUANT_FLUSHED 0x34u
 #define NPU_QUANT_SYNC_STATE 0x38u
+#define NPU_QUANT_WRITE_CANCELLED 0x3cu
 /* Valid for less than 2^31 events between baseline and observation. Following
  * a fault/cancellation, started/completed event counts are not submit tickets. */
 static inline int npu_counter_reached(uint32_t observed, uint32_t target) {

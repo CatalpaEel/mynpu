@@ -31,9 +31,9 @@ module npu_core #(
   output logic [1:0][31:0] sram_wdata_o,
   input logic [1:0][31:0] sram_rdata_i
 );
-  logic is_quant_mmio, quant_error, cnn_quant_final;
+  logic is_quant_mmio, quant_error, cnn_quant_final, cnn_filtered_final;
   logic [31:0] quant_rdata, matrix_observe, vector_observe;
-  logic [1:0][1:0] quant_written, quant_write_fault;
+  logic [1:0][3:0] quant_written, quant_write_fault, quant_cancelled;
   logic [1:0] quant_enable, quant_pack, quant_valid, quant_ready, quant_out_valid, quant_out_ready;
   logic [1:0][31:0] quant_dst, quant_in_data, quant_out_data;
   logic cnn_filtered_valid, cnn_filtered_ready, matrix_filtered_valid, matrix_filtered_ready;
@@ -348,9 +348,10 @@ module npu_core #(
   npu_matrix_stream #(
     .GATHER(PARALLEL_UNITS)
   ) i_matrix_stream (
+    .quant_cancelled_o     (quant_cancelled[1]),
     .observe_o             (matrix_observe),
-    .quant_written_o       (quant_written[1][0]),
-    .quant_write_fault_o   (quant_write_fault[1][0]),
+    .quant_written_o       (quant_written[1]),
+    .quant_write_fault_o   (quant_write_fault[1]),
     .quant_enable_i        (quant_enable[1]),
     .quant_pack_i          (quant_pack[1]),
     .quant_dst_i           (quant_dst[1]),
@@ -436,12 +437,15 @@ module npu_core #(
   npu_stream #(
     .RF_SINK(1)
   ) i_stream (
+    .quant_cancelled_o  (quant_cancelled[0]),
     .quant_written_o    (quant_written[0]),
     .quant_write_fault_o(quant_write_fault[0]),
+    .result_accept_i    (dot_result_valid && dot_result_ready),
     .result_pending_i   (dot_result_valid),
     .quant_enable_i     (quant_enable[0]),
     .quant_pack_i       (quant_pack[0]),
     .quant_dst_i        (quant_dst[0]),
+    .filtered_final_o   (cnn_filtered_final),
     .quant_final_o      (cnn_quant_final),
     .rf_sink_be_o       (cnn_rf_sink_be),
     .rf_sink_req_o      (cnn_rf_sink_req),
@@ -503,12 +507,11 @@ module npu_core #(
   assign matrix_filtered_valid = quant_enable[1] ? quant_out_valid[1] : matrix_result_valid;
   assign matrix_filtered_data = quant_enable[1] ? quant_out_data[1] : matrix_result_data;
   assign matrix_result_ready = quant_enable[1] ? quant_ready[1] : matrix_filtered_ready;
-  assign cnn_filtered_valid=quant_enable[0] && cnn_quant_final ? quant_out_valid[0]:dot_result_valid;
-  assign cnn_filtered_data = quant_enable[0] && cnn_quant_final ? quant_out_data[0] : dot_result;
+  assign cnn_filtered_valid=quant_enable[0] && cnn_filtered_final ? quant_out_valid[0]:dot_result_valid;
+  assign cnn_filtered_data = quant_enable[0] && cnn_filtered_final ? quant_out_data[0] : dot_result;
   assign dot_result_ready=quant_enable[0] && cnn_quant_final ? quant_ready[0]:cnn_filtered_ready;
-  assign quant_written[1][1] = 0;
-  assign quant_write_fault[1][1] = 0;
   npu_shared_quant i_quant (
+    .cancelled_i  (quant_cancelled),
     .written_i    (quant_written),
     .write_fault_i(quant_write_fault),
     .clk_i,
@@ -533,7 +536,12 @@ module npu_core #(
   logic [4:0] vector_compute_op;
   logic signed [31:0] vector_compute_a, vector_compute_b, vector_compute_c, vector_compute_data;
   logic vector_carry_in, vector_carry_out, vector_compute_simd;
-  npu_vector i_vector (
+  logic [31:0] vector_mul_a, vector_mul_b;
+  npu_vector #(
+    .PIPELINED_MUL(1)
+  ) i_vector (
+    .mul_a_i(vector_mul_a),
+    .mul_b_i(vector_mul_b),
     .simd_i (vector_compute_simd),
     .op_i   (vector_compute_op),
     .a_i    (vector_compute_a),
@@ -546,6 +554,8 @@ module npu_core #(
   npu_vector_stream #(
     .GATHER(PARALLEL_UNITS)
   ) i_vector_stream (
+    .compute_mul_a_o(vector_mul_a),
+    .compute_mul_b_o(vector_mul_b),
     .observe_o      (vector_observe),
     .compute_simd_o (vector_compute_simd),
     .gather_req_o   (all_gather_req[8:6]),

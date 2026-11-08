@@ -4,7 +4,7 @@
 module xbar_stream #(
   parameter int MASTERS = 8,
   CHANNELS = 4,
-  DEPTH = 16,
+  DEPTH = npu_addr_pkg::STREAM_FIFO_DEPTH,
   ID_W = $clog2(MASTERS),
   PW = $clog2(DEPTH)
 ) (

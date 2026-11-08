@@ -64,9 +64,12 @@ module npu_mmio #(
   logic [31:0] mat_started, vec_started, mat_ticket, vec_ticket, mat_faults, vec_faults;
   logic mat_done_q, mat_error_q, vec_done_q, vec_error_q, mat_ok, vec_ok;
   logic mat_occupied, vec_occupied, writable, known, mpush, vpush, mpop, vpop;
-  logic [31:0] mla_q, mlb_q, mp_q, me_q;
+  logic [12:0] mla_q, mlb_q;
+  logic [31:0] mp_q, me_q;
   logic [1:0] element_log2;
-  logic [31:0] a_words, b_words, d_words, lda, ldb, a_span, b_span;
+  logic [31:0] a_words, b_words, d_words;
+  logic [12:0] lda, ldb;
+  logic [20:0] a_span, b_span;
   logic vec_direct_ok, vec_program_ok;
   logic [31:0] vec_words;
   assign vec_words = vo_q[6] ? (vl_q + 3) >> 2 : vl_q;
@@ -114,13 +117,13 @@ module npu_mmio #(
     return {1'b0,a[14:0]} < ({1'b0,b[14:0]} + {1'b0,bw[12:0],2'b0})
       && {1'b0,b[14:0]} < ({1'b0,a[14:0]} + {1'b0,aw[12:0],2'b0});
   endfunction
-  assign lda = mla_q != 0 ? mla_q : mf_q[0] ? {27'b0, mm_q[4:0]} : {23'b0, mk_q[8:0]};
-  assign ldb = mlb_q != 0 ? mlb_q : mf_q[1] ? {23'b0, mk_q[8:0]} : {27'b0, mn_q[4:0]};
-  assign a_span=32'(8'((mf_q[0] ? mk_q[8:0]:mm_q[4:0])-1))*lda+(mf_q[0] ? {27'b0,mm_q[4:0]}:{23'b0,mk_q[8:0]});
-  assign b_span=32'(8'((mf_q[1] ? mn_q[4:0]:mk_q[8:0])-1))*ldb+(mf_q[1] ? {23'b0,mk_q[8:0]}:{27'b0,mn_q[4:0]});
+  assign lda = mla_q != 0 ? mla_q : mf_q[0] ? {8'b0, mm_q[4:0]} : {4'b0, mk_q[8:0]};
+  assign ldb = mlb_q != 0 ? mlb_q : mf_q[1] ? {4'b0, mk_q[8:0]} : {8'b0, mn_q[4:0]};
+  assign a_span=21'(8'((mf_q[0] ? mk_q[8:0]:mm_q[4:0])-1))*21'(lda)+21'(mf_q[0] ? mm_q[4:0] : mk_q[8:0]);
+  assign b_span=21'(8'((mf_q[1] ? mn_q[4:0]:mk_q[8:0])-1))*21'(ldb)+21'(mf_q[1] ? mk_q[8:0] : mn_q[4:0]);
   assign element_log2 = me_q == 1 ? 0 : me_q == 2 ? 1 : 2;
-  assign a_words = ((a_span << element_log2) + 3) >> 2;
-  assign b_words = ((b_span << element_log2) + 3) >> 2;
+  assign a_words = ((32'(a_span) << element_log2) + 3) >> 2;
+  assign b_words = ((32'(b_span) << element_log2) + 3) >> 2;
   assign d_words = {27'b0, mm_q[4:0]} * {27'b0, mn_q[4:0]};
   assign mat_ok=mm_q>=1 && mm_q<=16 && mn_q>=1 && mn_q<=16 && mf_q<=7 && mp_q<=1 &&
     (me_q==1 || me_q==2 || me_q==4) && (!mp_q || me_q>=2) &&
@@ -262,7 +265,7 @@ module npu_mmio #(
         writable = 0;
       end
       12'h060: begin
-        rdata_o = {16'd4, 16'd16};
+        rdata_o = {16'd4, 16'(STREAM_FIFO_DEPTH)};
         writable = 0;
       end
       12'h064: begin
@@ -293,12 +296,12 @@ module npu_mmio #(
         writable = 0;
       end
       12'h130: rdata_o = mf_q;
-      12'h134: rdata_o = mla_q;
-      12'h138: rdata_o = mlb_q;
+      12'h134: rdata_o = {19'b0, mla_q};
+      12'h138: rdata_o = {19'b0, mlb_q};
       12'h13c: rdata_o = mp_q;
       12'h140: rdata_o = me_q;
       12'h084: begin
-        rdata_o = 32'h0001003f;
+        rdata_o = 32'h0002007f;
         writable = 0;
       end
       12'h144: begin
@@ -617,10 +620,10 @@ module npu_mmio #(
             12'h214: vo_q <= wdata_i;
             12'h218: vb_q <= wdata_i;
             12'h130: mf_q <= wdata_i;
-            12'h134: mla_q <= wdata_i;
+            12'h134: mla_q <= wdata_i[12:0];
             12'h13c: mp_q <= wdata_i;
             12'h140: me_q <= wdata_i;
-            12'h138: mlb_q <= wdata_i;
+            12'h138: mlb_q <= wdata_i[12:0];
             12'h230: vs_q <= wdata_i;
             12'h234: vec_program_cfg_o <= wdata_i;
             default:
