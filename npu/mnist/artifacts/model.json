@@ -324,7 +324,7 @@
   "completion_wait": "independent IRQ18 CNN / IRQ16 Matrix, WFI with active done acknowledgement",
   "stream_task_bits": 32,
   "cnn_kernel_address_per_task": false,
-  "operator_abi": "2.1",
+  "operator_abi": "2.2",
   "vector_program_abi": "VPG3",
   "matrix_precision": "INT8",
   "matrix_element_bytes": 1,

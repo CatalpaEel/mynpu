@@ -148,8 +148,8 @@ module npu_mmio #(
   ) && (vb_q == vd_q || !overlaps(
       vb_q, vec_words, vd_q, vec_words
   ))));
-  // Program instructions are global and immutable until the active job and
-  // queue drain. Scalar/program scratch values are private to the active job.
+  // Program words are live shared state. Software owns update timing; each
+  // job snapshots count/loop at start, and reads program words during execution.
   assign vec_program_ok = (vo_q==32'h20 || vo_q==32'h120 || vo_q==32'h60)
     && vl_q>=1 && vl_q<=4096 && vec_program_cfg_o[4:0]>=1 && vec_program_cfg_o[4:0]<=16
     && vec_program_cfg_o[12:8]<vec_program_cfg_o[4:0]
@@ -227,7 +227,7 @@ module npu_mmio #(
         writable = 0;
       end
       12'h040: begin
-        rdata_o = 32'h00020001;
+        rdata_o = 32'h00020002;
         writable = 0;
       end
       12'h044: begin
@@ -294,6 +294,10 @@ module npu_mmio #(
       12'h138: rdata_o = mlb_q;
       12'h13c: rdata_o = mp_q;
       12'h140: rdata_o = me_q;
+      12'h080: begin
+        rdata_o = 32'hf;  // Runtime config writes: CNN, Matrix, Vector program, quant.
+        writable = 0;
+      end
       12'h074: begin
         rdata_o = {16'd256, 8'd16, 8'd16};  // K, N, M
         writable = 0;
@@ -356,7 +360,7 @@ module npu_mmio #(
         end
       end
     endcase
-    error_o=(we_i && (addr_i==12'h134 || addr_i==12'h138) && (wdata_i>4096)) || (we_i && vec_occupied && (addr_i==12'h234 || (addr_i>=12'h240 && addr_i<=12'h27c))) || !known || (we_i&&!writable) || (we_i && addr_i==12'h00c &&
+    error_o=(we_i && (addr_i==12'h134 || addr_i==12'h138) && (wdata_i>4096)) || !known || (we_i&&!writable) || (we_i && addr_i==12'h00c &&
       (cpu_release_o || wdata_i[31:14]!=18'h20000 || wdata_i[1:0]!=0)) ||
       (we_i && addr_i==12'h100 && wdata_i[0] && mc==MATRIX_QUEUE_DEPTH && !mpop) ||
       (we_i && addr_i==12'h200 && wdata_i[0] && vc==VECTOR_QUEUE_DEPTH && !vpop);

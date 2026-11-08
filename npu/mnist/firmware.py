@@ -851,7 +851,7 @@ def generate_single():
     meta["cnn_kernel_address_per_task"] = False
     meta["stream_tasks"] = len(stream_commands)
     meta["task_table"] = task_ranges
-    meta["operator_abi"] = "2.1"
+    meta["operator_abi"] = "2.2"
     meta["vector_program_abi"] = "VPG3"
     meta["matrix_precision"] = "INT8"
     meta["matrix_element_bytes"] = 1

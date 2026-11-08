@@ -1,4 +1,5 @@
-// Configuration changes require an empty queue and idle transfer engine.
+// Shared configuration is software-owned: writes are legal while work is pending.
+// The engine snapshots it at dispatch; queued windows read the latest version.
 // FIFO payload is never reset; qcount invalidates stale entries.
 module npu_stream_control #(
   parameter int QUEUE_DEPTH = 16
@@ -9,7 +10,6 @@ module npu_stream_control #(
   csr_req_i,
   csr_we_i,
   blocked_i,
-  pending_i,
   input logic [7:0] csr_addr_i,
   input logic [31:0] csr_wdata_i,
   input npu_stream_pkg::stream_events_t events_i,
@@ -139,8 +139,6 @@ module npu_stream_control #(
     endcase
     csr_error_o=(csr_we_i && csr_addr_i=='h30 && csr_wdata_i!=0) || csr_addr_i[1:0]!=0 || !known || (csr_we_i &&
       (!writable || !valid_write ||
-       ((blocked_i || pending_i) && !busy_o && csr_addr_i!='h28) ||
-       (csr_addr_i!=0 && csr_addr_i!='h28 && busy_o) ||
        (csr_addr_i==0 && csr_wdata_i[0] && (fault || (qcount==QUEUE_DEPTH && !start_o)))));
   end
   always_ff @(posedge clk_i) if (push) queue[tail] <= stream_task_t'(command);

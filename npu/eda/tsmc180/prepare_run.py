@@ -107,6 +107,8 @@ lefs = [
             "local_irq_ids": {"matrix": 16, "vector": 17, "cnn": 18},
             "irq_done_ack_while_active": True,
             "irq_errors_wake_cpu": True,
+            "configuration_timing_owner": "software",
+            "configuration_busy_write_guard": False,
             "unit_boundaries_preserved": a.preserve_unit_boundaries,
             "sram_banks": 2,
             "rf_bank_words": a.rf_bank_words,

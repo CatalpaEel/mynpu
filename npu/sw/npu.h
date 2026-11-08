@@ -41,8 +41,9 @@ static inline uint32_t npu_regfile_bank_bytes(void);
 #define NPU_VEC_QUEUE 0x224u
 #define NPU_VEC_COMPLETED 0x228u
 #define NPU_VEC_SUBMITTED 0x22cu
-/* Operator ABI 2.1, project-defined integer kernels (not an ISA extension). */
+/* Operator ABI 2.2, project-defined integer kernels (not an ISA extension). */
 #define NPU_OPERATOR_ABI 0x040u
+#define NPU_RUNTIME_CONFIG_CAP 0x080u /* bits0..3: CNN, Matrix, Vector, quant */
 #define NPU_GEMM_CAP 0x044u
 #define NPU_VECTOR_CAP 0x048u
 #define NPU_CNN_CAP 0x04cu
@@ -244,8 +245,9 @@ static inline int npu_gemm_start(const struct npu_gemm_descriptor *d) {
   npu_write(0x100, 1);
   return npu_read(NPU_MAT_SUBMITTED) == before + 1u ? 0 : -1;
 }
-/* Optional direct CNN/Matrix result quantizer. Configure only after that
- * source's active and queued jobs drain. A zero control preserves raw INT32.
+/* Optional direct CNN/Matrix result quantizer. Software owns update timing.
+ * Arithmetic parameters are sampled per result; enable/pack/dst are live.
+ * A zero control preserves raw INT32.
  * Destination describes the final output; Matrix D still names raw partials.
  */
 #define NPU_QUANT_CNN 0u
@@ -259,8 +261,7 @@ static inline int npu_quant_configure(uint32_t source, const struct npu_quant_co
   if (source > 1u || !q || npu_read(NPU_QUANT_CAP) != NPU_QUANT_ABI || q->control > 3u ||
       q->control == 2u || q->shift > 32u || (int32_t)q->lower > (int32_t)q->upper ||
       (q->control == 1u && (q->dst & 3u)) ||
-      (q->control == 3u && q->dst >= 0x80006000u && q->dst < 0x80006400u) ||
-      (npu_read(source ? NPU_MAT_STATUS : 0x604u) & NPU_BUSY))
+      (q->control == 3u && q->dst >= 0x80006000u && q->dst < 0x80006400u))
     return -1;
   uint32_t base = 0x700u + source * 64u;
   if (q->control && !((q->dst - NPU_SRAM_BASE < NPU_SRAM_BYTES) ||
@@ -304,8 +305,8 @@ static inline int npu_elementwise_start(const struct npu_vector_descriptor *d) {
 }
 #define NPU_CPU_CONTROL 0x008u
 #define NPU_CPU_BOOT_ADDR 0x00cu
-/* Generic program configuration is writable only after the entire vector
- * queue drains. Instructions remain stable for all queued jobs. Each job has
+/* Program words can be written while running. Software owns consistency.
+ * Count/loop are latched per job; instruction words are read live. Each job has
  * four 32-bit temporaries: r0=input/result, initial r1=B, r2=0, r3=scalar.
  * Slots [0,loop) run once, [loop,count) repeat for each input element.
  * Packed U8 output stores the low byte; software must explicitly clamp.
@@ -323,8 +324,7 @@ static inline uint32_t npu_vector_shift_pair(unsigned op, unsigned rd, unsigned 
 static inline int npu_vector_program_configure(const uint32_t *words, unsigned count,
                                                unsigned loop) {
   if (count == 0 || count > 16 || loop >= count ||
-      npu_read(NPU_VECTOR_PROGRAM_ABI) != NPU_VECTOR_PROGRAM_ABI_V3 ||
-      (npu_read(NPU_VEC_STATUS) & NPU_BUSY))
+      npu_read(NPU_VECTOR_PROGRAM_ABI) != NPU_VECTOR_PROGRAM_ABI_V3)
     return -1;
   for (unsigned i = 0; i < count; i++)
     npu_write(NPU_VEC_PROGRAM_WORDS + 4 * i, words[i]);
@@ -332,8 +332,8 @@ static inline int npu_vector_program_configure(const uint32_t *words, unsigned c
   npu_fence();
   return 0;
 }
-/* SD95: input, kernel and geometry are shared until the queue drains.
- * Only the 32-bit window shadow is snapshotted at START. */
+/* SD95: shared input/kernel/geometry may be changed while running.
+ * The engine latches them at dispatch, not when the window is queued. */
 #define NPU_STREAM_ABI 0x654u
 #define NPU_STREAM_ABI_V5 0x53443935u
 #define NPU_CNN_KERNEL 0x60cu
@@ -361,7 +361,7 @@ static inline int npu_spans_overlap(uint32_t a, uint32_t n, uint32_t b, uint32_t
 }
 static inline int npu_stream_configure(const struct npu_stream_config *d) {
   uint32_t rf_bytes = npu_regfile_bank_bytes() * 2;
-  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V5 || (npu_read(0x604) & (NPU_BUSY | NPU_ERROR)))
+  if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V5)
     return -1;
   if ((d->src & 3u) || !npu_data_span(d->src, 1, rf_bytes) ||
       !npu_data_span(d->kernel, 1, rf_bytes) ||

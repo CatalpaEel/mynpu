@@ -23,7 +23,6 @@ module npu_stream #(
   csr_req_i,
   csr_we_i,
   blocked_i,
-  pending_i,
   input logic [7:0] csr_addr_i,
   input logic [31:0] csr_wdata_i,
   output logic [31:0] csr_rdata_o,

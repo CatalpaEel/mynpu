@@ -145,7 +145,7 @@ module tb_queues;
     write_reg('h100, 1);
     check_reg('h104, 4);
     check_reg('h12c, 32'(2 * md));
-    // Global program configuration cannot mutate active or queued jobs.
+    // Program configuration is software-owned and remains writable while busy.
     check_reg('h03c, 32'h00020000);  // Two SRAM banks, zero cached words
     check_reg('h058, 32'h56504733);
     write_reg('h234, 32'h208);
@@ -153,10 +153,10 @@ module tb_queues;
     check_reg('h234, 32'h208);
     check_reg('h240, 32'h40db);
     run_engines = 0;
-    write_reg('h234, 1, 1);
-    write_reg('h240, 0, 1);
-    check_reg('h234, 32'h208);
-    check_reg('h240, 32'h40db);
+    write_reg('h234, 1);
+    write_reg('h240, 0);
+    check_reg('h234, 1);
+    check_reg('h240, 0);
     run_engines = 1;
     // Retired fused opcode must never silently run a different operation.
     write_reg('h208, 32'h80001000);

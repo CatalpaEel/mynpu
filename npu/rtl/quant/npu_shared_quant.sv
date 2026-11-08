@@ -10,8 +10,7 @@ module npu_shared_quant (
   input logic [31:0] csr_wdata_i,
   output logic [31:0] csr_rdata_o,
   output logic csr_error_o,
-  input logic [1:0] blocked_i,
-  flush_i,
+  input logic [1:0] flush_i,
   valid_i,
   output logic [1:0] ready_o,
   valid_o,
@@ -22,7 +21,8 @@ module npu_shared_quant (
   pack_o,
   output logic [1:0][31:0] dst_o
 );
-  // Per-source settings are immutable while that source owns queued/active work.
+  // Per-source settings are software-owned and may change while queued/active.
+  // Arithmetic is sampled per accepted result; enable/pack/dst remain live.
   // 00 control(enable,pack8),04 multiplier,08 scaled bias,0c shift(0..32),
   // 10 zero point,14 clamp min,18 clamp max,1c INT32 input correction,20 dest.
   logic [1:0][8:0][31:0] cfg;
@@ -64,7 +64,7 @@ module npu_shared_quant (
         default: ;
       endcase
     end
-    csr_error_o = !known || (csr_we_i && (!writable || !valid_write || blocked_i[source]));
+    csr_error_o = !known || (csr_we_i && (!writable || !valid_write));
     selected = valid_i[!last_owner] ? !last_owner : last_owner;
     corrected = data_i[selected] + cfg[selected][7];  // intentional INT32 wrap
     ready_o = 0;

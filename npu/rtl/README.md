@@ -1,5 +1,7 @@
 # RTL文件导航
 
+当前[配置时序由软件负责](../docs/software-owned-config.md)：取消 CNN / Vector 程序 / QT01 的忙时与排空写保护，Matrix 保持任务快照；无双缓冲或新增暂停机制。Operator ABI 2.2，15 组回归通过，默认共享量化仍为 23,937 周期/图，当前 PPA 未重测。
+
 当前 CNN 使用 [SD95 count1～16](../docs/count16.md)：[3:0] 为 count−1，没有配置选择位，保持单套配置和 32bit FIFO。默认共享 QT01 为 23,937 周期/图，CNN 任务 296→212；RF 仍为 256B，当前 PPA 未重测。
 
 最新 CNN 使用 [SD94 count−1 编码](../docs/count-minus-one.md)：数量占 [2:0]，bit3 保留为 0，FIFO 仍为 32bit。默认共享 QT01，旧固件需重生成。

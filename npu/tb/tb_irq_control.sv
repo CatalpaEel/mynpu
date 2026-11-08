@@ -44,7 +44,6 @@ module tb_irq_control;
     .csr_req_i   (creq),
     .csr_we_i    (cwe),
     .blocked_i   (1'b0),
-    .pending_i   (1'b0),
     .csr_addr_i  (ca),
     .csr_wdata_i (cd),
     .events_i    (events),
@@ -103,6 +102,8 @@ module tb_irq_control;
     repeat (4) @(negedge clk);
     rst = 1;
     check('h070, 'h70000, 0);
+    check('h080, 'hf, 0);
+    check('h040, 'h00020002, 0);
     check('h074, 'h01001010, 0);
     check('h078, 4096, 0);
     check('h07c, 256, 0);

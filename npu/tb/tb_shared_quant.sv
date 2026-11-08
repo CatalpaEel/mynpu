@@ -269,14 +269,15 @@ module tb_shared_quant;
     rd('h80001800, got);
     if (got !== 'h3ca532a5) $fatal(1, "Matrix raw accumulation/quant destination %h", got);
     checks++;
-    // Matrix waiting on an empty stream owns immutable quant settings.
+    // Software may update quant settings while Matrix waits for input.
     settings(1, 3, 2, 0, 0, 0, 0, 255, 'h80001800, 0);
     configure(1, CHANNEL, 'h80001904, 3);
     matrix_config(0);
     start(1);
-    bad_wr('h40000744, 99);
+    wr('h40000744, 99);
     rd('h40000744, got);
-    if (got !== 2) $fatal(1, "active quant settings changed");
+    if (got !== 99) $fatal(1, "runtime quant setting write rejected");
+    wr('h40000744, 2);  // Restore before producing the result that uses it.
     wr(CHANNEL, 6);
     wait_done(1);
     rd('h80001800, got);

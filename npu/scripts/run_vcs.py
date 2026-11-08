@@ -17,6 +17,7 @@ p.add_argument(
         "rfequivalence",
         "readbatch",
         "irqwake",
+        "softcfg",
         "sharedoperands",
         "outergemm",
         "matrixtiles",
@@ -90,6 +91,7 @@ files = [Path(s) for s in (ROOT / "build/sources.f").read_text().splitlines()]
 assert files, "Generated source list is empty"
 tops = {
     "irqcontrol": "tb_irq_control",
+    "softcfg": "tb_software_config",
     "irqwake": "tb_irq_wake",
     "addressranges": "tb_address_ranges",
     "sramuncached": "tb_sram_uncached",
@@ -212,6 +214,7 @@ if any(f.name in ["npu_data_regfile.sv", "xbar_stream.sv", "xbar.sv"] for f in f
 if a.macro:
     if a.suite not in [
         "irqwake",
+        "softcfg",
         "sharedoperands",
         "outergemm",
         "matrixtiles",
@@ -385,6 +388,7 @@ with (out / "run-launcher.log").open("w") as f:
 text = (out / "run.log").read_text()
 markers = {
     "irqcontrol": "IRQ CONTROL PASS",
+    "softcfg": "SOFTWARE CONFIG PASS",
     "irqwake": "IRQ WAKE PASS",
     "addressranges": "ADDRESS RANGES PASS",
     "sramuncached": "SRAM UNCACHED PASS",

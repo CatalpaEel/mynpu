@@ -1,9 +1,9 @@
 `timescale 1ns / 1ps
-// Compact stream tasks retain immutable shared configuration and backpressure.
+// Compact stream tasks use software-owned shared configuration and backpressure.
 module tb_cnn_queue;
   import npu_stream_pkg::*;
   import npu_addr_pkg::*;
-  logic clk_i = 0, rst_ni = 0, csr_req_i = 0, csr_we_i = 0, blocked_i = 0, pending_i = 0;
+  logic clk_i = 0, rst_ni = 0, csr_req_i = 0, csr_we_i = 0, blocked_i = 0;
   always #10 clk_i = ~clk_i;
   logic [7:0] csr_addr_i = 0;
   logic [31:0] csr_wdata_i = 0, csr_rdata_o;
@@ -139,12 +139,14 @@ module tb_cnn_queue;
     expect_csr('h58, 32'(depth << 16 | depth));
     expect_csr('h60, 32'(depth + 1));
     wr(0, 1, 1);  // overflow cannot replace a queued task
-    wr('h14, 2, 1);
-    expect_csr('h14, 1);  // immutable live configuration
+    wr('h14, 2);
+    expect_csr('h14, 2);  // legal while busy; queued work uses software's final value
+    wr('h14, 1);
     wr('h28, 0);  // shadows cannot change any task already in the FIFO
-    wr('h0c, 32'h80002004, 1);
+    wr('h0c, 32'h80002004);
+    expect_csr('h0c, 32'h80002004);
+    wr('h0c, 32'h800020a2);
     expect_csr('h0c, 32'h800020a2);
-    pending_i = 1;
     allow_bus = 1;
     for (int t = 0; t < 20000 && busy_o; t++) @(negedge clk_i);
     if (busy_o) $fatal(1, "Stream queue failed to drain");
@@ -158,7 +160,6 @@ module tb_cnn_queue;
       checks++;
     end
     if (mem['h17ff] !== 8'ha5 || mem['h1800+(depth+1)*4] !== 8'ha5) $fatal(1, "Output bounds");
-    pending_i = 0;
     allow_bus = 0;
     wr('h28, encode_task(0, 0, 1, 2, 1, 1, 0));
     wr(0, 1);
@@ -171,11 +172,9 @@ module tb_cnn_queue;
     expect_csr('h5c, 0);
     expect_csr(4, 0);
     blocked_i = 1;
-    wr(0, 1, 1);
+    wr('h14, 3);
+    expect_csr('h14, 3);  // Dispatch backpressure does not lock configuration.
     blocked_i = 0;
-    pending_i = 1;
-    wr(0, 1, 1);
-    pending_i = 0;
     configure();
     wr('h28, encode_task(0, 0, 1, 2, 1, 1, 0));
     wr(0, 1);
@@ -216,7 +215,7 @@ module tb_cnn_queue;
     expect_csr(4, 2);
     if ($bits(dut.command) != 32) $fatal(1, "Task FIFO is not 32 bits");
     $display(
-        "CNN QUEUE PASS depth=%0d descriptor_bits=%0d checks=%0d shared immutable kernel, compact window tasks, order, overflow, reset, faults",
+        "CNN QUEUE PASS depth=%0d descriptor_bits=%0d checks=%0d software-owned shared kernel, compact window tasks, order, overflow, reset, faults",
         depth, $bits(dut.command), checks);
     $finish;
   end
