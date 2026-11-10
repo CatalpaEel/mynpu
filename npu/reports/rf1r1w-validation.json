@@ -1,0 +1,659 @@
+{
+  "passed": true,
+  "scope": "RF 1R1W implementation; RTL and zero-delay mapped tests plus synthesis, no new PNR/signoff.",
+  "changed_rtl": [
+    "npu/rtl/interconnect/npu_data_regfile.sv"
+  ],
+  "unchanged_cpu_clock_gate_latches": [
+    [
+      "LNQD1BWP7T",
+      "core_i_sleep_unit_i_core_clock_gate_i_enable_latched_reg"
+    ]
+  ],
+  "rf_data_latches": 0,
+  "tests": [
+    {
+      "result": "build/vcs-rf1r1w-first-regfile/result.json",
+      "summaries": [
+        "RF GATHER PASS lanes=3 bits=32 physical_banks=8 peak_bits_per_cycle=96 aggregate_bits_per_cycle=160 checks=473 conflicts, fairness, bytes, bounds, reset",
+        "REGFILE PASS bank_words=32 checks=473 dual-bank, bytes, bounds, reset, fairness"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-final-rfequivalence/result.json",
+      "summaries": [
+        "RF EQUIVALENCE PASS 1R1W functional scoreboard and sustained R/W benchmark"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-large-rfequivalence/result.json",
+      "summaries": [
+        "RF EQUIVALENCE PASS 1R1W functional scoreboard and sustained R/W benchmark"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-workloads-workloads-macro/result.json",
+      "summaries": [
+        "GENERAL WORKLOADS PASS checks=1302 commands=5024 cycles=21466 overlap_cycles=113"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-events-layoutevents-macro/result.json",
+      "summaries": [
+        "LAYOUT EVENTS PASS checks=34 snapshots, zero/negative strides, final-only, keep-r2, packed stores, three-unit events, fault"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-routes-unitroutes-macro/result.json",
+      "summaries": [
+        "UNIT ROUTE producer=0 consumer=1 PASS",
+        "UNIT ROUTE producer=0 consumer=2 PASS",
+        "UNIT ROUTE producer=1 consumer=0 PASS",
+        "UNIT ROUTE producer=1 consumer=2 PASS",
+        "UNIT ROUTE producer=2 consumer=0 PASS",
+        "UNIT ROUTE producer=2 consumer=1 PASS",
+        "UNIT ROUTES PASS checks=24 six directed pairs, three-stage chain, 256-word GEMM, streamed DOT9 weights"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-blocking-blocking-macro/result.json",
+      "summaries": [
+        "BLOCKING PASS sample=0 cycles=21008",
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=0 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "BLOCKING PASS sample=1 cycles=21008",
+        "SINGLE_INPUT sample=1 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=1 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "BLOCKING PASS sample=2 cycles=21008",
+        "SINGLE_INPUT sample=2 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=2 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "BLOCKING PASS sample=3 cycles=21008",
+        "SINGLE_INPUT sample=3 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=3 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "BLOCKING PASS sample=4 cycles=21008",
+        "SINGLE_INPUT sample=4 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=4 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "BLOCKING PASS sample=5 cycles=21008",
+        "SINGLE_INPUT sample=5 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=5 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "BLOCKING PASS sample=6 cycles=21008",
+        "SINGLE_INPUT sample=6 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=6 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "BLOCKING PASS sample=7 cycles=21008",
+        "SINGLE_INPUT sample=7 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=7 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "BLOCKING PASS sample=8 cycles=21008",
+        "SINGLE_INPUT sample=8 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=8 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "BLOCKING PASS sample=9 cycles=21008",
+        "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=9 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE PASS samples=10 checks=120"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-xbar-xbarconcurrent/result.json",
+      "summaries": [
+        "XBAR CONCURRENT PASS checks=5069 grants=5070 MMIO_pending_dual_bank=51 triple_grants=793 same_owner_blocks=123 mixed SRAM/MMIO/DM/boot/errors byte writes direct SRAM and reset"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-sink-rfsink/result.json",
+      "summaries": [
+        "RF SINK PASS checks=868 sram_store_overlap=800 sink_grants=867 gather_grants=1431 ordinary_grants=592 ordering/fairness/invalid/reset"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-cpu-workloadcpu-macro/result.json",
+      "summaries": [
+        "GENERAL CPU PASS words=485 cycles=741"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-cpu-cnn-workloadcpu-macro/result.json",
+      "summaries": [
+        "GENERAL CPU PASS words=473 cycles=726"
+      ]
+    },
+    {
+      "result": "build/vcs-rf1r1w-jtag-jtag-macro/result.json",
+      "summaries": [
+        "JTAG PASS checks=42"
+      ]
+    }
+  ],
+  "gate_tests": [
+    {
+      "result": "build/gate-rf1r1w-latency/result.json",
+      "summaries": [
+        "GATE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "GATE PASS samples=1 checks=12"
+      ]
+    },
+    {
+      "result": "build/gate-rf1r1w-units/result.json",
+      "summaries": [
+        "GATE UNIT SMOKE PASS checks=25 INT32-multiply/high-signed/high-unsigned/SIMD8/tail/Matrix-pack/CNN-pack/real-ACK-counts"
+      ]
+    },
+    {
+      "result": "build/gate-rf1r1w-layout/result.json",
+      "summaries": [
+        "GATE LAYOUT EVENTS PASS checks=34 snapshots, zero/negative strides, final-only, keep-r2, packed stores, three-unit events, fault"
+      ]
+    },
+    {
+      "result": "build/gate-rf1r1w-jtag/result.json",
+      "summaries": [
+        "GATE JTAG PASS checks=42"
+      ]
+    }
+  ],
+  "mnist_cycles": [
+    21008,
+    21008,
+    21008,
+    21008,
+    21008,
+    21008,
+    21008,
+    21008,
+    21008,
+    21008
+  ],
+  "same_bank_bandwidth": {
+    "0": {
+      "writes": 256,
+      "reads": 256,
+      "cycles": 256
+    },
+    "1": {
+      "writes": 256,
+      "reads": 256,
+      "cycles": 512
+    }
+  },
+  "standalone_rf": {
+    "old": {
+      "area_mm2": 0.18914941,
+      "area_report_sha256": "8f61eafdd5bae41127f3696ea05b227eeb3ad9f50a424309481457ceeaf3aae0",
+      "timing_report_sha256": "d1027110d56d9195334898cec8ddf1f5ead53addbd96a67d55c1d4e3a4bde83d"
+    },
+    "new": {
+      "area_mm2": 0.19146095600000002,
+      "area_report_sha256": "0c8e8ee8f2800e159e025f4a4b231f0f0d1c3a94918c0ca45449f3ce93e6c20d",
+      "timing_report_sha256": "b4a86050961e5fcd1565c34d290c6de0440611cb1933891d5af04f5deb101fb2"
+    }
+  },
+  "ppa": {
+    "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w",
+    "total_area_mm2": 2.569285594,
+    "standard_cell_area_mm2": 1.766398412,
+    "buckets": {
+      "XBAR": {
+        "area_um2": 309165.382,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_xbar",
+            "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6",
+            "cells": 13210,
+            "area_um2": 309165.382
+          }
+        ],
+        "area_mm2": 0.309165382,
+        "percent_total": 12.033126357069357
+      },
+      "CPU": {
+        "area_um2": 256166.669,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_cpu",
+            "module": "cv32e40p_top_COREV_PULP0_COREV_CLUSTER0_FPU0_NUM_M",
+            "cells": 9727,
+            "area_um2": 256166.669
+          }
+        ],
+        "area_mm2": 0.256166669,
+        "percent_total": 9.970346216015097
+      },
+      "Matrix": {
+        "area_um2": 363391.213,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_matmul",
+            "module": "npu_matmul",
+            "cells": 9953,
+            "area_um2": 252226.285
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_matrix_stream",
+            "module": "npu_matrix_stream_GATHER1",
+            "cells": 4437,
+            "area_um2": 111164.928
+          }
+        ],
+        "area_mm2": 0.363391213,
+        "percent_total": 14.143667556795556
+      },
+      "MMIO / task queues": {
+        "area_um2": 224560.179,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_mmio",
+            "module": "npu_mmio",
+            "cells": 7503,
+            "area_um2": 224560.179
+          }
+        ],
+        "area_mm2": 0.224560179,
+        "percent_total": 8.74017974196449
+      },
+      "CNN": {
+        "area_um2": 230258.91799999998,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_stream",
+            "module": "npu_stream_RF_SINK1",
+            "cells": 7465,
+            "area_um2": 182179.648
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_cnn",
+            "module": "npu_cnn",
+            "cells": 1973,
+            "area_um2": 48079.27
+          }
+        ],
+        "area_mm2": 0.23025891799999998,
+        "percent_total": 8.961982215512316
+      },
+      "Shared quantizer": {
+        "area_um2": 149567.757,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_quant",
+            "module": "npu_shared_quant",
+            "cells": 5194,
+            "area_um2": 149567.757
+          }
+        ],
+        "area_mm2": 0.14956775700000002,
+        "percent_total": 5.821375301729108
+      },
+      "Vector": {
+        "area_um2": 143557.299,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_vector",
+            "module": "npu_vector_PIPELINED_MUL1",
+            "cells": 4282,
+            "area_um2": 85173.76
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_vector_stream",
+            "module": "npu_vector_stream_GATHER1",
+            "cells": 2317,
+            "area_um2": 58383.539
+          }
+        ],
+        "area_mm2": 0.143557299,
+        "percent_total": 5.587440311627731
+      },
+      "JTAG / debug": {
+        "area_um2": 86216.48,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_debug",
+            "module": "npu_jtag_debug",
+            "cells": 3565,
+            "area_um2": 85759.878
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_boot",
+            "module": "npu_debug_boot",
+            "cells": 42,
+            "area_um2": 456.602
+          }
+        ],
+        "area_mm2": 0.08621648,
+        "percent_total": 3.3556596511240153
+      },
+      "SRAM macros": {
+        "area_um2": 802887.182,
+        "count": 2,
+        "area_mm2": 0.802887182,
+        "percent_total": 31.24943306711274
+      },
+      "Top / core glue": {
+        "area_um2": 3514.5150000001304,
+        "area_mm2": 0.0035145150000001303,
+        "percent_total": 0.13678958104959235
+      }
+    },
+    "synth_clock_groups": {
+      "cg_enable_group_jtag_clk": {
+        "slack_ns": 97.2748,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "cg_enable_group_sys_clk": {
+        "slack_ns": 0.7897000000000001,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "jtag_clk": {
+        "slack_ns": 47.9664,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "sys_clk": {
+        "slack_ns": 0.0006,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      }
+    },
+    "report_clock_groups": {
+      "cg_enable_group_jtag_clk": {
+        "slack_ns": 97.2748,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "cg_enable_group_sys_clk": {
+        "slack_ns": 2.7897,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "jtag_clk": {
+        "slack_ns": 47.9664,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "sys_clk": {
+        "slack_ns": 2.0006,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      }
+    },
+    "critical_path": {
+      "Startpoint": "(R) i_core_i_xbar/aux_owner_reg[0]/CP",
+      "Endpoint": "(R) i_core_i_quant/product_reg[63]/D"
+    },
+    "settings": {
+      "effort": "high",
+      "synth_period_ns": 18.0,
+      "report_period_ns": 20.0,
+      "clock_gating": true,
+      "unit_boundaries_preserved": true,
+      "sram_banks": 2,
+      "rf_bank_words": 32,
+      "stream_fifo_depth": 8,
+      "matrix_queue_depth": 4,
+      "vector_queue_depth": 4,
+      "cnn_queue_depth": 4
+    },
+    "files_sha256": {
+      "optimized.v": "1615d592f4d6f4bc7715b7573d785a3d9dc86046a2f8f34e1f6554d88e5627b3",
+      "synth.sdc": "d90e9e5ab10344eb2e134128eb048b1c024bf01f186abf1677aece3dd31b0424",
+      "report.sdc": "619ca2d7b5d81b6e3d44f51415ba2eb813e40b672e5ce388e9e74d1ebd6da892",
+      "source_manifest.json": "436e2766795f7d0c468f0187a0fd8c4f68f488ab017ac45f8db24b129c7bee23",
+      "reports/area.rpt": "f1de66cf4b6790daef2d85643a0a78ab6342a69b351399ed814e030a62c6bff1",
+      "reports/optimized_synth_clock_qor.rpt": "462362b8b882fa7cca644df48a3feda7e180ea414154c1d0c13afdbdf55d56f6",
+      "reports/qor.rpt": "26f9165d93631494c9eaf1a68fcff31ad1911b64f37a8a9a139a5ebd31135977"
+    },
+    "scope": "mapped cell area including two SRAM macros; no PAD, CTS, routing or SDF"
+  },
+  "baseline_ppa": {
+    "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261108-area26-all4",
+    "total_area_mm2": 2.569744391,
+    "standard_cell_area_mm2": 1.7668572089999999,
+    "buckets": {
+      "XBAR": {
+        "area_um2": 308798.784,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_xbar",
+            "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6",
+            "cells": 13267,
+            "area_um2": 308798.784
+          }
+        ],
+        "area_mm2": 0.308798784,
+        "percent_total": 12.016712054378019
+      },
+      "CPU": {
+        "area_um2": 256686.931,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_cpu",
+            "module": "cv32e40p_top_COREV_PULP0_COREV_CLUSTER0_FPU0_NUM_M",
+            "cells": 9737,
+            "area_um2": 256686.931
+          }
+        ],
+        "area_mm2": 0.256686931,
+        "percent_total": 9.98881180163261
+      },
+      "Matrix": {
+        "area_um2": 363544.877,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_matmul",
+            "module": "npu_matmul",
+            "cells": 9973,
+            "area_um2": 252476.538
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_matrix_stream",
+            "module": "npu_matrix_stream_GATHER1",
+            "cells": 4412,
+            "area_um2": 111068.339
+          }
+        ],
+        "area_mm2": 0.363544877,
+        "percent_total": 14.147122113516076
+      },
+      "MMIO / task queues": {
+        "area_um2": 224661.158,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_mmio",
+            "module": "npu_mmio",
+            "cells": 7502,
+            "area_um2": 224661.158
+          }
+        ],
+        "area_mm2": 0.224661158,
+        "percent_total": 8.74254882263113
+      },
+      "CNN": {
+        "area_um2": 230315.994,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_stream",
+            "module": "npu_stream_RF_SINK1",
+            "cells": 7438,
+            "area_um2": 182197.21
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_cnn",
+            "module": "npu_cnn",
+            "cells": 1980,
+            "area_um2": 48118.784
+          }
+        ],
+        "area_mm2": 0.230315994,
+        "percent_total": 8.96260323815218
+      },
+      "Shared quantizer": {
+        "area_um2": 149407.507,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_quant",
+            "module": "npu_shared_quant",
+            "cells": 5180,
+            "area_um2": 149407.507
+          }
+        ],
+        "area_mm2": 0.14940750700000002,
+        "percent_total": 5.814099936292069
+      },
+      "Vector": {
+        "area_um2": 143647.30299999999,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_vector",
+            "module": "npu_vector_PIPELINED_MUL1",
+            "cells": 4291,
+            "area_um2": 85169.37
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_vector_stream",
+            "module": "npu_vector_stream_GATHER1",
+            "cells": 2325,
+            "area_um2": 58477.933
+          }
+        ],
+        "area_mm2": 0.14364730299999998,
+        "percent_total": 5.589945190778315
+      },
+      "JTAG / debug": {
+        "area_um2": 86258.189,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_debug",
+            "module": "npu_jtag_debug",
+            "cells": 3566,
+            "area_um2": 85801.587
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_boot",
+            "module": "npu_debug_boot",
+            "cells": 42,
+            "area_um2": 456.602
+          }
+        ],
+        "area_mm2": 0.086258189,
+        "percent_total": 3.356683618110094
+      },
+      "SRAM macros": {
+        "area_um2": 802887.182,
+        "count": 2,
+        "area_mm2": 0.802887182,
+        "percent_total": 31.243853856124638
+      },
+      "Top / core glue": {
+        "area_um2": 3536.465999999782,
+        "area_mm2": 0.003536465999999782,
+        "percent_total": 0.13761936838486838
+      }
+    },
+    "synth_clock_groups": {
+      "cg_enable_group_jtag_clk": {
+        "slack_ns": 97.2748,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "cg_enable_group_sys_clk": {
+        "slack_ns": 0.2395,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "jtag_clk": {
+        "slack_ns": 47.9664,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "sys_clk": {
+        "slack_ns": 0.0044,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      }
+    },
+    "report_clock_groups": {
+      "cg_enable_group_jtag_clk": {
+        "slack_ns": 97.2748,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "cg_enable_group_sys_clk": {
+        "slack_ns": 2.2395,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "jtag_clk": {
+        "slack_ns": 47.9664,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "sys_clk": {
+        "slack_ns": 2.0044,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      }
+    },
+    "critical_path": {
+      "Startpoint": "(R) i_core_i_xbar/aux_owner_reg[0]/CP",
+      "Endpoint": "(R) i_core_i_quant/product_reg[63]/D"
+    },
+    "settings": {
+      "effort": "high",
+      "synth_period_ns": 18.0,
+      "report_period_ns": 20.0,
+      "clock_gating": true,
+      "unit_boundaries_preserved": true,
+      "sram_banks": 2,
+      "rf_bank_words": 32,
+      "stream_fifo_depth": 8,
+      "matrix_queue_depth": 4,
+      "vector_queue_depth": 4,
+      "cnn_queue_depth": 4
+    },
+    "files_sha256": {
+      "optimized.v": "b4954d374119cfd16080ea2f3440d0ec79e517fb39302d0acbc10138ab71f5ea",
+      "synth.sdc": "d90e9e5ab10344eb2e134128eb048b1c024bf01f186abf1677aece3dd31b0424",
+      "report.sdc": "619ca2d7b5d81b6e3d44f51415ba2eb813e40b672e5ce388e9e74d1ebd6da892",
+      "source_manifest.json": "66e3fe8dc38b374bff0a677a8519e1a27ff80ae0121a8ffa82ff1913fddea532",
+      "reports/area.rpt": "c5f1a250756a4772dce3911212a02dc1dc1af4655cfd8bd994934165d11869d5",
+      "reports/optimized_synth_clock_qor.rpt": "165edf884879c26e6bbd20cf39f7086c59e287f91e7398332a421efa89cd551b",
+      "reports/qor.rpt": "10e5d5656ee6826e16127b03968e372c93c924ae9c11b725db1250fe662e2032"
+    },
+    "scope": "mapped cell area including two SRAM macros; no PAD, CTS, routing or SDF"
+  },
+  "area_delta_mm2": -0.00045879699999984425,
+  "area_delta_percent": -0.017853799062916842,
+  "semantics": "One physical read and one independent write per bank; same-edge read gets old data; byte enables preserved; ordinary access limited to one read+one write per logical half.",
+  "source_sha256": {
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/interconnect/npu_data_regfile.sv": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c"
+  },
+  "limitations": [
+    "No extra read ports; same-bank different-address reads still arbitrate.",
+    "Current MNIST and general workload suite have unchanged total cycles.",
+    "1950um PNR and Lab5 reports belong to the preceding 1RW RTL.",
+    "Whole-design mapping changes may affect other modules; isolated RF comparison is separate.",
+    "Standalone attempts marked invalid_units are discarded and are not used."
+  ]
+}

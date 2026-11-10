@@ -1,0 +1,22 @@
+{
+  "scope": "Actual read-only Virtuoso GUI capture of final postDummy GDS at 2000dbu/um",
+  "library": "mynpu_lab5_final",
+  "cell": "mynpu_asic_top_postDummy",
+  "command": [
+    "virtuoso",
+    "-nocdsinit",
+    "-restore",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/scripts/capture_high.il",
+    "-log",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/logs/capture_high.log"
+  ],
+  "returncode": -9,
+  "terminated_own_readonly_gui_after_capture": true,
+  "sha256": {
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/rf1r1w-die1950-r3-postdummy.png": "62ec51027685260ca3ea7aeebd42d64ead3b88bbdd2695402ca8c3ff436076f7",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/outputs/mynpu_asic_top_postDummy.gds": "e9c89d17ac2102a441ed8cb3bb26fb66a1a4c1bb943864b83550f5ea36caff7c",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/scripts/capture_high.il": "29dbd8a6c974c9df92274c26df3ce0892b304294ea360ccae8d0d5a09e119cdf",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/logs/capture_high.log": "a906c6619637b5de8c97396f83c3a4e97cdb3a66b7d192178eb390fcd6181733",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/outputs/gui_capture_completed.txt": "8a2775abf5bd4aec6f9b1da70cf79560f089910b43ee331f521e2a092ce63789"
+  }
+}

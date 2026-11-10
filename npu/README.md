@@ -1,5 +1,7 @@
 # 当前架构入口
 
+> 2026-11-10：[RF 1R1W完整后端已完成](docs/rf1r1w-die1950-signoff.md)。1950µm Die、1980µm Seal Ring，PNR核心非filler 2.632349mm²，50MHz setup/hold +0.468/+0.018ns；课程DRC排除后0、605条属性教学容差LVS CORRECT、天线/WB 0，ERC原库/外圈残项待评审。此前1RW结果保留为历史记录。
+
 ## 当前版本：独立计算单元与软件任务调度（2026-11-10）
 
 CPU/JTAG SBA、两块8KB SRAM、软件管理的256B RF和XBAR连接独立的Matrix 4×4外积、CNN 3×3 DOT9及Vector INT32/4路INT8 SIMD计算单元。Matrix/Vector/CNN任务队列各4项，4条流FIFO各8 words；无独立外部DMA、无透明SRAM缓存。默认配置见[build_config.json](build_config.json)。

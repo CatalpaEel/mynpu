@@ -1,5 +1,7 @@
 > 2026-11-09 [Lab5 后续流程实跑](../../docs/lab5-all4.md)：V2LVS、Seal Ring、Dummy、LVS/ERC、天线和WB已执行。教学容差LVS为CORRECT，天线/WB为0；仍有270处M1间距违规、ERC残项和尺寸超限，未完成验收。
 
+> 最新RF 1R1W最终r3后端见[完整报告](../../docs/rf1r1w-die1950-signoff.md)：1950µm、2.632349mm²核心非filler，50MHz setup/hold +0.468/+0.018ns；Calibre驱动修复M2/WB间距，完整课程检查及原始残项均保留。
+
 > 最新1950µm布局布线及Lab 5完整检查见[报告](../../docs/die1950-signoff.md)：Seal Ring外框1980µm，50MHz setup/hold +0.592/+0.019ns；课程DRC排除后0、教学容差LVS CORRECT、天线/WB 0，ERC残项待评审。以下2000µm及更早运行保留为历史记录。
 
 > 2026-11-08 当前 4/4/4 队列的[完整含 PAD 后端结果](../../docs/area26-all4-pnr.md)：2×2mm²，布线后核心非 filler 2.638167mm²，50MHz setup +0.529ns、hold +0.020ns；两条原生 IO 电源轨提示保留。以下更早结果属于历史快照。
