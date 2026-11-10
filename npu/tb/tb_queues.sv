@@ -24,6 +24,11 @@ module tb_queues;
   logic cpu_release_o;
   int mat_jobs = 0, vec_jobs = 0, mtimer = 0, vtimer = 0, checks = 0, md, vd;
   npu_mmio dut (
+    .vec_stride_o (),
+    .vec_layout_o (),
+    .mat_ldc_o    (),
+    .event_bits_o (),
+    .cnn_signal_i (8'b0),
     .mat_observe_i(32'b0),
     .vec_observe_i(32'b0),
     .*
@@ -220,7 +225,7 @@ module tb_queues;
     write_reg('h200, 1);
     check_reg('h204, 4);
     check_reg('h22c, 0);
-    if ($bits(dut.mq[0]) != 96 || $bits(dut.vq[0]) != 99) $fatal(1, "queue descriptor widths");
+    if ($bits(dut.mq[0]) != 125 || $bits(dut.vq[0]) != 166) $fatal(1, "queue descriptor widths");
     $display(
         "QUEUES PASS matrix_depth=%0d vector_depth=%0d checks=%0d snapshots, wrap, overflow, concurrent engines, invalid descriptor, reset",
         md, vd, checks);

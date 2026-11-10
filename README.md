@@ -1,5 +1,15 @@
 # mynpu：独立 CNN／matrix／通用 vector
 
+## 当前版本：独立计算单元与软件任务调度（2026-11-10）
+
+CPU/JTAG SBA、两块8KB SRAM、软件管理的256B RF和XBAR连接独立的Matrix 4×4外积、CNN 3×3 DOT9及Vector INT32/4路INT8 SIMD计算单元。Matrix/Vector/CNN任务队列各4项，4条流FIFO各8 words；无独立外部DMA、无透明SRAM缓存。默认配置见[npu/build_config.json](npu/build_config.json)。
+
+- [通用软件任务层](npu/docs/general-workloads.md)与[LY01布局 / EV01依赖事件](npu/docs/layout-events.md)：GEMM、步长/广播、归约、卷积组合，运行时配置由软件负责。
+- [4/4/4版本验证](npu/docs/area26-all4.md)：综合cell面积2.569744mm²，包含两块SRAM，不含PAD/CTS/布线。
+- [1950µm完整后端与Lab 5报告](npu/docs/die1950-signoff.md)：Die 1950×1950µm、Seal Ring外框1980×1980µm；PNR核心非filler面积2.633317mm²，50MHz setup/hold裕量+0.592/+0.019ns。Innovus DRC 0，最终Calibre DRC课程四类排除后0，LVS在3.48% PR教学容差下CORRECT，天线/WB均0；ERC原库/外圈残项及严格PR参数差异保留待评审，不表示正式投片签核通过。
+
+以下为历史迭代记录，其中的“当前”、面积、周期、位宽和队列配置只适用于相应历史版本；最新配置以上述入口和源码为准。
+
 当前已[删除透明SRAM读缓存](npu/docs/no-sram-cache.md)，由软件显式管理RF暂存。11组回归通过，10张MNIST仍为29,817周期；SRAM缓存能力报告为零。最新综合总面积 **2.438904mm²**（含两块SRAM、不含PAD），比带缓存版减少4.11%；XBAR **0.417720mm²**。
 删除SRAM缓存前的[XBAR仲裁精简](npu/docs/arbitration.md)：总Cell Area **2.543393mm²**（含两块SRAM、不含PAD），XBAR **0.522962mm²**；相对上一32位Vector版总面积减少9.44%、XBAR减少33.10%。13组回归通过，MNIST仍为29,817周期。
 仲裁精简前的32位Vector版[综合面积](npu/docs/vector32-area.md)：总Cell Area **2.808663mm²**（含两块SRAM、不含PAD），Vector计算与供数 **0.207111mm²**；与宽Vector版相比总面积下降3.57%、Vector下降32.98%。

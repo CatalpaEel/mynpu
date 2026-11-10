@@ -274,7 +274,16 @@ module npu_core #(
     .mmio_rdata_i    (mmio_rdata),
     .mmio_error_i    (mmio_error)
   );
+  logic [2:0][15:0] vector_stride;
+  logic [2:0] vector_layout;
+  logic [15:0] matrix_ldc;
+  logic [7:0] event_bits, cnn_event_signal;
   npu_mmio i_mmio (
+    .vec_stride_o      (vector_stride),
+    .vec_layout_o      (vector_layout),
+    .mat_ldc_o         (matrix_ldc),
+    .event_bits_o      (event_bits),
+    .cnn_signal_i      (cnn_event_signal),
     .mat_observe_i     (matrix_observe),
     .vec_observe_i     (vector_observe),
     .clk_i             (clk_i),
@@ -361,6 +370,7 @@ module npu_core #(
     .compute_index_o       (matrix_index),
     .lda_i                 (matrix_lda),
     .ldb_i                 (matrix_ldb),
+    .ldc_i                 (matrix_ldc),
     .gather_req_o          (all_gather_req[5:3]),
     .gather_addr_o         (all_gather_addr[5:3]),
     .gather_gnt_i          (all_gather_gnt[5:3]),
@@ -437,6 +447,8 @@ module npu_core #(
   npu_stream #(
     .RF_SINK(1)
   ) i_stream (
+    .event_bits_i       (event_bits),
+    .event_signal_o     (cnn_event_signal),
     .quant_cancelled_o  (quant_cancelled[0]),
     .quant_written_o    (quant_written[0]),
     .quant_write_fault_o(quant_write_fault[0]),
@@ -556,6 +568,8 @@ module npu_core #(
   npu_vector_stream #(
     .GATHER(PARALLEL_UNITS)
   ) i_vector_stream (
+    .stride_i          (vector_stride),
+    .layout_i          (vector_layout),
     .compute_mul_simd_o(vector_mul_simd),
     .compute_mul_a_o   (vector_mul_a),
     .compute_mul_b_o   (vector_mul_b),

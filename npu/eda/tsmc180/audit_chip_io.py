@@ -9,7 +9,9 @@ from pathlib import Path
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument("--def", dest="design", type=Path, required=True)
 p.add_argument("--out", type=Path, required=True)
+p.add_argument("--die-size", type=float, default=2000.0)
 a = p.parse_args()
+assert a.die_size > 230
 lefs = [
     Path(
         "/home/almalinux/tsmc180/tpd018nv_280a/TSMCHOME/digital/Back_End/lef/tpd018nv_280a/mt_2/6lm/lef/tpd018nv_6lm.lef"
@@ -67,7 +69,7 @@ assert len([row for row in native if row["name"].startswith("i_pad_")]) == 37
 assert len(bonds) == 37
 for row in native + bonds:
     x0, y0, x1, y1 = row["box"]
-    assert x0 >= -0.001 and y0 >= -0.001 and x1 <= 2000.001 and y1 <= 2000.001, row
+    assert x0 >= -0.001 and y0 >= -0.001 and x1 <= a.die_size + 0.001 and y1 <= a.die_size + 0.001, row
 parents = {row["name"]: row for row in native}
 for row in bonds:
     assert intersection(row["box"], parents[row["name"].removeprefix("bond_")]["box"]) > 0, row
@@ -78,11 +80,11 @@ for row in native:
     x0, y0, x1, y1 = row["box"]
     if abs(y0) < 0.001:
         side, lo, hi = "bottom", x0, x1
-    elif abs(y1 - 2000) < 0.001:
+    elif abs(y1 - a.die_size) < 0.001:
         side, lo, hi = "top", x0, x1
     elif abs(x0) < 0.001:
         side, lo, hi = "left", y0, y1
-    elif abs(x1 - 2000) < 0.001:
+    elif abs(x1 - a.die_size) < 0.001:
         side, lo, hi = "right", y0, y1
     else:
         raise AssertionError(row)
@@ -93,7 +95,7 @@ for side, rows in sides.items():
     for lo, hi, name in rows:
         assert abs(lo - last) <= 0.001, (side, name, lo, last)
         last = hi
-    assert abs(last - 1885) <= 0.001, (side, last)
+    assert abs(last - (a.die_size - 115)) <= 0.001, (side, last)
 area = (
     sum((row["box"][2] - row["box"][0]) * (row["box"][3] - row["box"][1]) for row in native) / 1e6
 )
@@ -138,12 +140,12 @@ for row in native:
     x0, y0, x1, y1 = row["box"]
     if abs(y0) < 0.001:
         terminal = [x0 + 2.5, 0, x1 - 2.5, 5.6]
-    elif abs(y1 - 2000) < 0.001:
-        terminal = [x0 + 2.5, 1994.4, x1 - 2.5, 2000]
+    elif abs(y1 - a.die_size) < 0.001:
+        terminal = [x0 + 2.5, a.die_size - 5.6, x1 - 2.5, a.die_size]
     elif abs(x0) < 0.001:
         terminal = [0, y0 + 2.5, 5.6, y1 - 2.5]
     else:
-        terminal = [1994.4, y0 + 2.5, 2000, y1 - 2.5]
+        terminal = [a.die_size - 5.6, y0 + 2.5, a.die_size, y1 - 2.5]
     assert all(
         [
             box[0] >= terminal[0] - 0.001,
@@ -156,6 +158,7 @@ for row in native:
 assert len(pin_landings) == 9
 j = {
     "passed": True,
+    "die_um": [a.die_size, a.die_size],
     "native_overlap_count": 0,
     "signal_pin_landings": pin_landings,
     "audit_source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),

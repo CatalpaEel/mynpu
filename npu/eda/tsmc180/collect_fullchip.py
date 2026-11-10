@@ -151,13 +151,44 @@ final_timing = {
 report["physical_closure"] = {
     "passed": any(key.startswith("reports/final_setup/") for key in final_timing)
     and any(key.startswith("reports/final_hold/") for key in final_timing)
-    and all(row.get("wns_ns", -1) >= 0 for row in final_timing.values())
+    and all(
+        row.get("wns_ns", -1) >= 0 and row.get("tns_ns") == 0 and row.get("violating_paths") == 0
+        for row in final_timing.values()
+    )
     and placement.get("13_final", {}).get("passed") is True
     and checks.get("13_final_drc", {}).get("violations") == 0
     and checks.get("13_final_signal", {}).get("reported_issues") == 0
     and checks.get("13_final_pg", {}).get("reported_issues") == 0,
     "scope": "Conservative check of available final reports, separate from stage command completion. Native IO rail warnings remain explicit; this is not foundry signoff.",
 }
+# Preserve the conservative whole-chip result above, even when the only
+# connectivity notices concern abutting native IO supply rails.
+signal_text = (out / "reports/13_final_signal.rpt").read_text()
+native_rails_only = (
+    checks["13_final_signal"].get("reported_issues") == 2
+    and set(re.findall(r"^Net (\S+): no routing$", signal_text, re.M)) == {"VDDPST", "VSSPST"}
+    and report["io_packing_audit"] is not None
+    and report["io_packing_audit"].get("passed") is True
+)
+report["native_io_rail_notices_only"] = native_rails_only
+report["core_physical_closure"] = {
+    "passed": bool(final_timing)
+    and any(key.startswith("reports/final_setup/") for key in final_timing)
+    and any(key.startswith("reports/final_hold/") for key in final_timing)
+    and all(
+        row.get("wns_ns", -1) >= 0 and row.get("tns_ns") == 0 and row.get("violating_paths") == 0
+        for row in final_timing.values()
+    )
+    and placement.get("13_final", {}).get("passed") is True
+    and checks.get("13_final_drc", {}).get("violations") == 0
+    and checks.get("13_final_pg", {}).get("reported_issues") == 0
+    and (checks.get("13_final_signal", {}).get("reported_issues") == 0 or native_rails_only)
+    and "No Violations Found" in (out / "reports/13_final_antenna.rpt").read_text(),
+    "scope": "Core reports only; native IO notices and whole-chip closure remain separate. Not foundry signoff.",
+}
+report["core_nonfiller_area_mm2"] = (
+    footprint["standard_area_um2"] + footprint["sram_area_um2"]
+) / 1e6
 a.out.parent.mkdir(parents=True, exist_ok=True)
 a.out.write_text(json.dumps(report, indent=2) + "\n")
 print(

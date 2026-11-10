@@ -42,6 +42,7 @@ module npu_matrix_stream #(
   d_i,
   input logic [15:0] lda_i,
   ldb_i,
+  ldc_i,
   input logic [4:0] m_i,
   n_i,
   flags_i,
@@ -79,6 +80,9 @@ module npu_matrix_stream #(
   // aperture before dispatch. Fifteen-bit byte offsets therefore preserve all
   // active addresses; FIFO cursors retain their independent low-byte wrap.
   logic [14:0] a_tile, b_tile, b_origin, d_base;
+  logic [14:0] d_cursor, d_tile_cursor, d_row_cursor, d_row_step;
+  logic [14:0] ldc_bytes;
+  assign ldc_bytes = (ldc_i != 0 ? 15'(ldc_i) : 15'(n_i)) << 2;
   logic [14:0] a_row_step, a_k_step, b_col_step, b_k_step;
   logic [7:0][14:0] operand_ptr, initial_ptr;
   logic a_stream, b_stream, d_stream;
@@ -145,7 +149,7 @@ module npu_matrix_stream #(
   // Streaming operands cannot be reread: producers repeat them for each tile.
   assign rows = m - tile_row >= 5'd4 ? 3'd4 : 3'(m - tile_row);
   assign cols = n - tile_col >= 5'd4 ? 3'd4 : 3'(n - tile_col);
-  assign d_address = {17'h10000, advance_input(d_base, {5'b0, linear_index, 2'b0}, d_stream)};
+  assign d_address = {17'h10000, advance_input(d_base, d_cursor, d_stream)};
   // Quant destinations retain full address carry/fault semantics. Only the
   // already-validated operand and raw-D apertures use bounded offsets.
   assign output_address = quant_enable_i ? data_advance(
@@ -263,6 +267,10 @@ module npu_matrix_stream #(
       b_stream <= 0;
       d_stream <= 0;
       operand_ptr <= 0;
+      d_cursor <= 0;
+      d_tile_cursor <= 0;
+      d_row_cursor <= 0;
+      d_row_step <= 0;
       row_index <= 0;
       tile_index <= 0;
       linear_index <= 0;
@@ -296,6 +304,10 @@ module npu_matrix_stream #(
             b_tile <= b_i[14:0];
             b_origin <= b_i[14:0];
             d_base <= d_i[14:0];
+            d_cursor <= 0;
+            d_tile_cursor <= 0;
+            d_row_cursor <= 0;
+            d_row_step <= ldc_bytes;
             a_stream <= is_stream_address(a_i);
             b_stream <= is_stream_address(b_i);
             d_stream <= is_stream_address(d_i);
@@ -318,6 +330,7 @@ module npu_matrix_stream #(
             word_valid <= 0;
             operand_ptr <= initial_ptr;
             linear_index <= tile_index;
+            d_cursor <= d_tile_cursor;
             inner <= 0;
             out_r <= 0;
             out_c <= 0;
@@ -369,21 +382,26 @@ module npu_matrix_stream #(
             if ({1'b0, out_c} + 3'd1 < cols) begin
               out_c <= out_c + 1;
               linear_index <= linear_index + 1;
+              d_cursor <= d_cursor + 4;
               state <= flags[2] ? C_REQ : EMIT;
             end else if ({1'b0, out_r} + 3'd1 < rows) begin
               out_r <= out_r + 1;
               linear_index <= linear_index + 8'(n) - 8'(cols) + 1;
+              d_cursor <= d_cursor + d_row_step - (15'(cols) << 2) + 4;
               out_c <= 0;
               state <= flags[2] ? C_REQ : EMIT;
             end else if (tile_col + 5'(cols) < n) begin
               tile_col <= tile_col + 5'(cols);
               b_tile <= advance_input(b_tile, b_col_step << 2, b_stream);
               tile_index <= tile_index + 8'(cols);
+              d_tile_cursor <= d_tile_cursor + (15'(cols) << 2);
               state <= CLEAR;
             end else if (tile_row + 5'(rows) < m) begin
               tile_row <= tile_row + 5'(rows);
               a_tile <= advance_input(a_tile, a_row_step << 2, a_stream);
               b_tile <= b_origin;
+              d_row_cursor <= d_row_cursor + (d_row_step << 2);
+              d_tile_cursor <= d_row_cursor + (d_row_step << 2);
               row_index <= row_index + row_index_step;
               tile_index <= row_index + row_index_step;
               tile_col <= 0;

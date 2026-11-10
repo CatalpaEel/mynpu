@@ -105,7 +105,7 @@ manifest = {
     "preserve_original_core_mapping": not a.remap_core,
     "core_manifest_sha256": sha(core / "source_manifest.json"),
     "core_source_manifest": m,
-    "scope": f"2mm x 2mm die with native IO/power/corner/filler/bond pads, nine signal pads. Host and external stream pins not bonded; JTAG SBA retained. RF{m['rf_bank_words']} words/bank, M{m['matrix_queue_depth']}/V{m['vector_queue_depth']}/C{m['cnn_queue_depth']}. Generic vector VPG1.",
+    "scope": f"2mm x 2mm die with native IO/power/corner/filler/bond pads, nine signal pads. Host and external stream pins not bonded; JTAG SBA retained. RF{m['rf_bank_words']} words/bank, M{m['matrix_queue_depth']}/V{m['vector_queue_depth']}/C{m['cnn_queue_depth']}. Generic vector VPG3, LY01 layouts and EV01 task events.",
     "inputs_sha256": {
         str(f.relative_to(run)): sha(f) for f in (run / "inputs").rglob("*") if f.is_file()
     },

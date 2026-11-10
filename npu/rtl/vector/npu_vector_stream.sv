@@ -32,6 +32,8 @@ module npu_vector_stream #(
   b_i,
   d_i,
   scalar_i,
+  input logic [2:0][15:0] stride_i,
+  input logic [2:0] layout_i,
   input logic [12:0] len_i,
   input logic [8:0] op_i,
   input logic [31:0] program_cfg_i,
@@ -66,13 +68,20 @@ module npu_vector_stream #(
     OUTPUT,
     D_REQ,
     D_WAIT,
-    MUL_EXEC
+    MUL_EXEC,
+    NEXT
   } state_t;
   state_t state;
   logic [31:0] a_ptr, d_ptr, scalar, write_data, load_addr;
   logic [3:0] write_be, pack_be;
   logic [12:0] remaining;
   logic [8:0] mode;
+  logic [2:0][15:0] steps;
+  logic final_only;
+  logic [31:0] a_step, b_step, d_step;
+  assign a_step = {{16{steps[0][15]}}, steps[0]};
+  assign b_step = {{16{steps[1][15]}}, steps[1]};
+  assign d_step = {{16{steps[2][15]}}, steps[2]};
   logic [4:0] pc, slots, loop_pc;
   logic [1:0] load_dst;
   logic signed [31:0] regs[4];
@@ -187,6 +196,8 @@ module npu_vector_stream #(
       d_ptr <= 0;
       scalar <= 0;
       remaining <= 0;
+      steps <= {16'd4, 16'd4, 16'd4};
+      final_only <= 0;
       mode <= 0;
       pc <= 0;
       slots <= 0;
@@ -218,13 +229,15 @@ module npu_vector_stream #(
             d_ptr <= d_i;
             scalar <= scalar_i;
             remaining <= len_i;
+            steps <= layout_i[2] ? stride_i : {((op_i[5] && op_i[8]) ? 16'd1 : 16'd4),16'd4,16'd4};
+            final_only <= layout_i[0];
             mode <= op_i;
             pc <= 0;
             slots <= program_cfg_i[4:0];
             loop_pc <= program_cfg_i[12:8];
             regs[0] <= 0;
             regs[1] <= sx32(b_i);
-            regs[2] <= 0;
+            if (!layout_i[1]) regs[2] <= 0;
             regs[3] <= op_i[6] ? {4{scalar_i[7:0]}} : scalar_i;
             pack_be <= 0;
             write_data <= 0;
@@ -253,7 +266,7 @@ module npu_vector_stream #(
                 state <= MUL_EXEC;
               end else begin
                 write_data <= result;
-                state <= D_REQ;
+                state <= final_only && remaining > (simd_mode ? 4 : 1) ? NEXT : D_REQ;
               end
             end
           end
@@ -294,7 +307,7 @@ module npu_vector_stream #(
               end
             end else begin
               write_data <= compute_data_i;
-              state <= D_REQ;
+              state <= final_only && remaining > (simd_mode ? 4 : 1) ? NEXT : D_REQ;
             end
           end
           LOAD_REQ: if (gnt_i) state <= LOAD_WAIT;
@@ -305,16 +318,17 @@ module npu_vector_stream #(
             state <= pc + 1 == slots ? OUTPUT : pc + 1 == loop_pc ? A_REQ : EXEC;
           end
           OUTPUT: begin
-            if (packed_mode) begin
+            if (final_only && remaining > (simd_mode ? 4 : 1)) state <= NEXT;
+            else if (packed_mode) begin
               write_data <= assembled;
               pack_be <= assembled_be;
-              if (d_ptr[1:0] == 3 || remaining == 1) begin
+              if (d_ptr[1:0] == 3 || remaining == 1 || d_step != 1) begin
                 write_be <= assembled_be;
                 state <= D_REQ;
               end else begin
                 remaining <= remaining - 1;
-                a_ptr <= data_advance(a_ptr, 4);
-                d_ptr <= data_advance(d_ptr, 1);
+                a_ptr <= data_advance(a_ptr, a_step);
+                d_ptr <= data_advance(d_ptr, d_step);
                 state <= A_REQ;
               end
             end else begin
@@ -322,6 +336,12 @@ module npu_vector_stream #(
               write_be <= tail_mask(remaining, simd_mode);
               state <= D_REQ;
             end
+          end
+          NEXT: begin
+            remaining <= remaining - (simd_mode ? 4 : 1);
+            a_ptr <= data_advance(a_ptr, a_step);
+            if (!program_mode) regs[1] <= data_advance(regs[1], b_step);
+            state <= A_REQ;
           end
           D_REQ: if (gnt_i) state <= D_WAIT;
           D_WAIT:
@@ -333,9 +353,9 @@ module npu_vector_stream #(
               done_o <= 1;
             end else begin
               remaining <= remaining - (simd_mode ? 4 : 1);
-              a_ptr <= data_advance(a_ptr, 4);
-              if (!program_mode) regs[1] <= data_advance(regs[1], 4);
-              d_ptr <= data_advance(d_ptr, packed_mode ? 1 : 4);
+              a_ptr <= data_advance(a_ptr, a_step);
+              if (!program_mode) regs[1] <= data_advance(regs[1], b_step);
+              d_ptr <= data_advance(d_ptr, d_step);
               state <= A_REQ;
             end
           end

@@ -91,6 +91,16 @@ int main(void) {
   CHECK(NPU_QUANT_SYNC_BASE(NPU_QUANT_MATRIX) + NPU_QUANT_WRITTEN == 0x76cu);
   CHECK(NPU_SYNC_ABI_V2 == 0x0002007fu);
   CHECK(NPU_QUANT_SYNC_BASE(NPU_QUANT_MATRIX) + NPU_QUANT_WRITE_CANCELLED == 0x77cu);
+  struct npu_vector_layout layout = {0, -4, 0, NPU_VEC_STRIDES, npu_task_events(3, 4)};
+  CHECK(npu_vector_layout_valid(&layout, 0));
+  CHECK(layout.events == 0x0403u);
+  layout.d_stride = -3;
+  CHECK(!npu_vector_layout_valid(&layout, 0));
+  CHECK(npu_vector_layout_valid(&layout, 1));
+  layout.a_stride = 32768;
+  CHECK(!npu_vector_layout_valid(&layout, 1));
+  layout.a_stride = -32768;
+  CHECK(npu_vector_layout_valid(&layout, 1));
   printf(
       "STREAM SOFTWARE CHECK PASS checks=%u shape, borders, aliases, overflow, command encoding\n",
       checks);

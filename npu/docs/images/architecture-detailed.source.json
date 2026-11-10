@@ -1,8 +1,8 @@
 {
   "scope": "Logical architecture, not physical placement; arrows show interface relationships",
   "source_sha256": {
-    "npu/rtl/top/npu_core.sv": "2a17a33e156aef09674321e06172d77f585006e549e27fec2c14d0a6beea89b3",
-    "npu/rtl/control/npu_mmio.sv": "9cb9d77d4036e626bbe8d3c80ecffd32485a0c2b7139ae2781a7d4cdc8e1d1ec",
+    "npu/rtl/top/npu_core.sv": "178e6b23f8a0e1f73bb006269404a88bf2b3dabd4fad814a4b8536757ffbae9c",
+    "npu/rtl/control/npu_mmio.sv": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
     "npu/rtl/interconnect/xbar.sv": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
     "npu/rtl/interconnect/xbar_stream.sv": "0a5d25fa9aec9378e5d66fb8840cf41ffd42e837d941220bfdd301bbd2b01a0c",
     "npu/rtl/common/npu_addr_pkg.sv": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
@@ -11,15 +11,15 @@
     "npu/rtl/common/npu_store_pack.sv": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
     "npu/rtl/interconnect/npu_multi_read.sv": "a6827b272c5169e6b836683a52d76b1239ba41f2b2b37dd865df11cd944b325b",
     "npu/rtl/cnn/npu_stream_pkg.sv": "d4c1b89c87098ac9adce72ab60ea9a1d4401d074ffe835fc109ab0f82d8e8d72",
-    "npu/rtl/cnn/npu_stream.sv": "795bc90435c0c7e2451ef1a5d636bfa02b854ff09679fcf754dc8c258e57e871",
-    "npu/rtl/cnn/npu_stream_control.sv": "04589033da337677dbd7fcb1d9d6bf27823264e4909bdcedb52b71b51aa78fbc",
+    "npu/rtl/cnn/npu_stream.sv": "292658bd3818c0af4ab0f48bd7168032bd39c7b03d9870a73917713228b4d787",
+    "npu/rtl/cnn/npu_stream_control.sv": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
     "npu/rtl/cnn/npu_stream_engine.sv": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
     "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
     "npu/rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
-    "npu/rtl/matrix/npu_matrix_stream.sv": "68a4fbcc08a602a178274ae190459844df377be69d793601fd967ac69f5f6af5",
+    "npu/rtl/matrix/npu_matrix_stream.sv": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
     "npu/rtl/quant/npu_shared_quant.sv": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
     "npu/rtl/vector/npu_vector.sv": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
-    "npu/rtl/vector/npu_vector_stream.sv": "9f70d360617a5ef8127134f95c023885abf2aea1bb6579863d5a09119b6eeeb4",
-    "npu/build_config.json": "6da2cb98f73bc4a35f2095e600187485220b2b4f354a693d78940aac534ffe13"
+    "npu/rtl/vector/npu_vector_stream.sv": "808debe76f7d6ca9373867aa61f1ca94357bac3adeee2ba75d6cf66d5435b77a",
+    "npu/build_config.json": "0580d097b6ec39b5c63c94dcb298a35d4b1942b3e6a70767d3b91800818c2bc1"
   }
 }

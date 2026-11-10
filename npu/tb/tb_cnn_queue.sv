@@ -33,6 +33,8 @@ module tb_cnn_queue;
   logic [7:0] mem[16384];
   assign gnt_i = allow_bus && req_o;
   npu_stream dut (
+    .event_bits_i       (8'b0),
+    .event_signal_o     (),
     .quant_cancelled_o  (),
     .quant_written_o    (),
     .quant_write_fault_o(),
@@ -228,9 +230,10 @@ module tb_cnn_queue;
     expect_csr('h48, 1);
     expect_csr('h5c, 1);
     expect_csr(4, 2);
-    if ($bits(dut.command) != 32) $fatal(1, "Task FIFO is not 32 bits");
+    if ($bits(dut.command) != 32 || $bits(dut.i_control.event_queue[0]) != 16)
+      $fatal(1, "CNN command/event payload width");
     $display(
-        "CNN QUEUE PASS depth=%0d descriptor_bits=%0d checks=%0d software-owned shared kernel, compact window tasks, order, overflow, reset, faults",
+        "CNN QUEUE PASS depth=%0d command_bits=%0d event_bits=16 total_bits=48 checks=%0d software-owned shared kernel, compact window tasks, order, overflow, reset, faults",
         depth, $bits(dut.command), checks);
     $finish;
   end

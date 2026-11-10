@@ -1,10 +1,28 @@
 """Draw the current NPU architecture as editable SVG and PNG."""
 
 from pathlib import Path
+import argparse
 import html, subprocess, json, hashlib
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[3]
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument(
+    "--report", type=Path, help="Validated PPA/performance report for the current configuration"
+)
+args = parser.parse_args()
+config = json.loads((ROOT / "npu/build_config.json").read_text())
+md, vd, cd = (config[k] for k in ("matrix_queue_depth", "vector_queue_depth", "cnn_queue_depth"))
+footnote = "当前：LY01 / EV01 / SD95 / VPG3；面积与时序见对应配置的验证报告。"
+if args.report:
+    report = json.loads(args.report.read_text())
+    assert report["passed"] and report["config"] == config
+    period = report["ppa"]["settings"]["synth_period_ns"]
+    slack = report["ppa"]["synth_clock_groups"]["sys_clk"]["slack_ns"]
+    footnote = (
+        f"当前：{report['mnist_cycles'][0]:,}周期/图 · LY01 / EV01 / SD95 / VPG3 · "
+        f"综合{report['ppa']['total_area_mm2']:.4f}mm²，不含PAD / PNR；{period:g}ns WNS {slack:+.4f}ns。"
+    )
 OUT = ROOT / "npu/docs/images"
 W, H = 2240, 1940
 im = Image.new("RGB", (W, H), "#0f172a")
@@ -26,7 +44,12 @@ def text(x, y, t, size=25, col="#e2e8f0"):
 
 
 def box(x, y, w, h, title, body="", col="#60a5fa", size=25):
-    d.rounded_rectangle((x, y, x + w, y + h), radius=14, fill="#1e293b", outline=col, width=2)
+    if hasattr(d, "rounded_rectangle"):
+        d.rounded_rectangle((x, y, x + w, y + h), radius=14, fill="#1e293b", outline=col, width=2)
+    else:
+        # The server's system Pillow 5 supports square boxes; the SVG retains
+        # rounded corners and remains the editable canonical illustration.
+        d.rectangle((x, y, x + w, y + h), fill="#1e293b", outline=col)
     svg.append(
         f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="14" fill="#1e293b" stroke="{col}" stroke-width="2"/>'
     )
@@ -62,7 +85,7 @@ text(55, 28, "mynpu 详细架构｜独立计算核 + 软件任务调度 + 共享
 text(
     55,
     90,
-    "当前配置：CNN FIFO 8 / Matrix FIFO 8 / Vector FIFO 8 · RF 256B · SRAM 16KB · 50MHz目标",
+    f"当前配置：CNN FIFO {cd} / Matrix FIFO {md} / Vector FIFO {vd} · RF 256B · SRAM 16KB · 50MHz目标",
     25,
     "#94a3b8",
 )
@@ -90,7 +113,7 @@ box(
     1120,
     190,
     "控制与任务入口  ·  CPU经XBAR译码访问MMIO",
-    "独立完成/错误IRQ；只读启动编号、执行位置、量化采样/写应答计数\nCNN / Vector / QT01配置可运行中改写，时机由软件负责\n独立DMA及外部流接口已删除；保留测试host，9信号PAD的程序与输入统一经JTAG SBA装载",
+    "独立IRQ与完成票据；8bit EV01：队头WAIT / 完成SIGNAL\n共享程序 / 几何 / 量化可运行中改写；配置时机由软件负责\nJTAG SBA装载程序/输入；保留测试host；9信号PAD接口",
     col="#c084fc",
     size=24,
 )
@@ -105,7 +128,7 @@ box(
     660,
     310,
     "CNN Stream  ·  npu_stream / control / engine",
-    "8项 × 32bit任务；每任务1～16位置\n3行 × 3words循环窗口 = 36B\n48bit行窗口选择；双份9B权重；返回直通\n跨通道部分和复用RF；4项结果位置标签\n末通道经弹性QT01；连续INT8合并写，INT32可旁路",
+    f"{cd}项 × 48bit：32bit命令＋16bit事件\n3行 × 3words循环窗口 = 36B\n48bit行窗口选择；双份9B权重；返回直通\n跨通道部分和复用RF；4项结果位置标签\n末通道经弹性QT01；连续INT8合并写，INT32可旁路",
     col="#fb923c",
     size=26,
 )
@@ -115,7 +138,7 @@ box(
     660,
     310,
     "Matrix Stream  ·  npu_matrix_stream",
-    "8项 × 96bit任务；含精度、间距、lda/ldb\nSRAM / RF / FIFO均支持4×4外积\n8×32bit操作数暂存；按需去重/复用\nRF并行读A/B；SRAM应答同拍续发\nK≤256；FC用K144；量化INT8可合并写回",
+    f"{md}项 × 125bit：精度、间距、ld与事件\n4×4外积；ldc直接写原始INT32输出\n8×32bit操作数暂存；紧凑INT8/16\nRF并行读A/B；SRAM应答同拍续发\nK≤256；量化INT8可合并写回",
     col="#c084fc",
     size=26,
 )
@@ -125,7 +148,7 @@ box(
     660,
     310,
     "Vector Stream  ·  npu_vector_stream",
-    "8项 × 99bit任务；标量与打包独立\nVPG3程序表实时读；PC + 4×32bit寄存器\nLD32复用ALU；打包与结果共用缓冲\n经xbar读取RF / SRAM或流FIFO\n乘法锁存数据与模式，分两拍；SIMD8仍四路并行",
+    f"{vd}项 × 166bit：带步长和任务事件\nPC＋4×32bit寄存器；VPG3程序实时读\n有符号A/B/D步长；支持0与负数\nFINAL_ONLY末项写回；KEEP_R2保留\nINT32 / SIMD8共享ALU；乘法两拍",
     col="#2dd4bf",
     size=26,
 )
@@ -250,7 +273,7 @@ text(
 text(
     55,
     1885,
-    "当前：20,728周期/图 · SYNC v2 / SD95 / VPG3 · 新版综合见throughput-optimization验证报告；本轮未重跑完整PNR。",
+    footnote,
     22,
     "#94a3b8",
 )

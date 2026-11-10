@@ -9,6 +9,11 @@ module tb_irq_control;
   logic [1:0] busy = 0, done = 0, fault = 0;
   wire [1:0] irq;
   npu_mmio mmio (
+    .vec_stride_o  (),
+    .vec_layout_o  (),
+    .mat_ldc_o     (),
+    .event_bits_o  (),
+    .cnn_signal_i  (8'b0),
     .mat_observe_i (32'b0),
     .vec_observe_i (32'b0),
     .clk_i         (clk),
@@ -40,19 +45,21 @@ module tb_irq_control;
   npu_stream_control #(
     .QUEUE_DEPTH(8)
   ) cnn (
-    .observe_i   (32'b0),
-    .clk_i       (clk),
-    .rst_ni      (rst),
-    .quant_pack_i(1'b0),
-    .csr_req_i   (creq),
-    .csr_we_i    (cwe),
-    .blocked_i   (1'b0),
-    .csr_addr_i  (ca),
-    .csr_wdata_i (cd),
-    .events_i    (events),
-    .csr_rdata_o (cr),
-    .csr_error_o (ce),
-    .irq_o       (ci)
+    .event_bits_i  (8'b0),
+    .event_signal_o(),
+    .observe_i     (32'b0),
+    .clk_i         (clk),
+    .rst_ni        (rst),
+    .quant_pack_i  (1'b0),
+    .csr_req_i     (creq),
+    .csr_we_i      (cwe),
+    .blocked_i     (1'b0),
+    .csr_addr_i    (ca),
+    .csr_wdata_i   (cd),
+    .events_i      (events),
+    .csr_rdata_o   (cr),
+    .csr_error_o   (ce),
+    .irq_o         (ci)
   );
   int checks = 0;
   task automatic command(input int a, d, input logic [1:0] dm = 0, fm = 0);
@@ -168,6 +175,23 @@ module tb_irq_control;
     ccheck('h3c, 2, 1);
     ccommand(2);
     ccheck(4, 0, 0);
+    // Event W1C loses to a simultaneous successful physical completion.
+    command('h108, 'h80001000);
+    command('h10c, 'h80002000);
+    command('h110, 'h80003000);
+    command('h114, 1);
+    command('h118, 1);
+    command('h11c, 1);
+    command('h15c, 'h0100);
+    command('h100, 1);
+    repeat (4) @(negedge clk);
+    command('h090, 1, 1, 0);
+    check('h08c, 1, 1);
+    command('h090, 1);
+    check('h08c, 0, 1);
+    // A simultaneous failure/completion never signals a success event.
+    command('h090, 1, 1, 1);
+    check('h08c, 0, 1);
     $display(
         "IRQ CONTROL PASS checks=%0d active-W1C/set-dominant/fault-wakeup/independent-levels/tickets",
         checks);

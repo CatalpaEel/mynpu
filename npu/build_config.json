@@ -1,7 +1,7 @@
 {
   "rf_bank_words": 32,
-  "matrix_queue_depth": 8,
-  "vector_queue_depth": 8,
-  "cnn_queue_depth": 8,
+  "matrix_queue_depth": 4,
+  "vector_queue_depth": 4,
+  "cnn_queue_depth": 4,
   "stream_fifo_depth": 8
 }

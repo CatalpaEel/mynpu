@@ -1,0 +1,1795 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "suite": "quantlayers",
+      "result": "build/vcs-layout-final-v1-quantlayers-macro/result.json",
+      "summaries": [
+        "QUANT LAYERS PASS samples=10 layers=60 bytes=17940"
+      ]
+    },
+    {
+      "suite": "jtag",
+      "result": "build/vcs-layout-final-v1-jtag-macro/result.json",
+      "summaries": [
+        "JTAG PASS checks=42"
+      ]
+    },
+    {
+      "suite": "purecompute",
+      "result": "build/vcs-layout-final-v1-purecompute/result.json",
+      "summaries": [
+        "PURE COMPUTE PASS matrix_checks=12008 accepted=5750 stalls=4188 vector_checks=12000 INT32/SIMD8/mul-high/word-pair-shift/carry/backpressure/flush"
+      ]
+    },
+    {
+      "suite": "vectorprogram",
+      "result": "build/vcs-layout-final-v1-vectorprogram/result.json",
+      "summaries": [
+        "VECTOR PROGRAM PASS jobs=116 checks=3402 memory source, signed INT32, ties, saturation, byte masks, faults/retry"
+      ]
+    },
+    {
+      "suite": "sharedquant",
+      "result": "build/vcs-layout-final-v1-sharedquant-macro/result.json",
+      "summaries": [
+        "SHARED QUANT PASS checks=437 raw/quant32/quant8/concurrent/CNN-partial/Matrix-accumulate/signed-round/wrap/tail/RF/SRAM"
+      ]
+    },
+    {
+      "suite": "quantsync",
+      "result": "build/vcs-layout-final-v1-quantsync/result.json",
+      "summaries": [
+        "QUANT SYNC PASS checks=27 elastic-II1/owners/stalls/parameter-sampling/ACK-counts/flush/cancel/wrap/reset"
+      ]
+    },
+    {
+      "suite": "readbatch",
+      "result": "build/vcs-layout-final-v1-readbatch/result.json",
+      "summaries": [
+        "READ BATCH PASS checks=35 delayed/partial grants, faults/drain, backpressure, reset"
+      ]
+    },
+    {
+      "suite": "storepack",
+      "result": "build/vcs-layout-final-v1-storepack/result.json",
+      "summaries": [
+        "STORE PACK PASS checks=25 merge/tails/full-word/backpressure/address-change/config-change/flush/repeated-byte/reset"
+      ]
+    },
+    {
+      "suite": "softcfg",
+      "result": "build/vcs-layout-final-v1-softcfg-macro/result.json",
+      "summaries": [
+        "SOFTWARE CONFIG CNN PASS active-old/queued-new/nonempty-FIFO/runtime-writes",
+        "SOFTWARE CONFIG VECTOR PASS active-program-live/count-latched/queued-count-new",
+        "SOFTWARE CONFIG QUANT PASS active-source/pre-accept-parameters/new-destination",
+        "SOFTWARE CONFIG QUANT INFLIGHT PASS arithmetic-latched/destination-live/FIFO-unchanged/next-result-new",
+        "SOFTWARE CONFIG SYNC PASS readonly/start-tickets/observe/quant-stalls/real-write-ACK/errors",
+        "SOFTWARE CONFIG PASS checks=118 CNN/Matrix/Vector/quant runtime ownership and sampling boundaries"
+      ]
+    },
+    {
+      "suite": "cnnstream",
+      "result": "build/vcs-layout-final-v1-cnnstream-macro/result.json",
+      "summaries": [
+        "CNN STREAM PASS cases=216 checks=1548 stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM"
+      ]
+    },
+    {
+      "suite": "unitroutes",
+      "result": "build/vcs-layout-final-v1-unitroutes-macro/result.json",
+      "summaries": [
+        "UNIT ROUTE producer=0 consumer=1 PASS",
+        "UNIT ROUTE producer=0 consumer=2 PASS",
+        "UNIT ROUTE producer=1 consumer=0 PASS",
+        "UNIT ROUTE producer=1 consumer=2 PASS",
+        "UNIT ROUTE producer=2 consumer=0 PASS",
+        "UNIT ROUTE producer=2 consumer=1 PASS",
+        "UNIT ROUTES PASS checks=24 six directed pairs, three-stage chain, 256-word GEMM, streamed DOT9 weights"
+      ]
+    },
+    {
+      "suite": "sharedoperands",
+      "result": "build/vcs-layout-final-v1-sharedoperands-macro/result.json",
+      "summaries": [
+        "SHARED OPERANDS PASS checks=3409 matrix_terms=10848 matrix_parallel_reads=1190 vector_parallel_reads=312"
+      ]
+    },
+    {
+      "suite": "matrixtiles",
+      "result": "build/vcs-layout-final-v1-matrixtiles-macro/result.json",
+      "summaries": [
+        "MATRIX STREAM TILE CASE id=0 inputs=1 fifo_out=0 M/N/K=5/6/3 full_steps=3 PASS",
+        "MATRIX STREAM TILE CASE id=1 inputs=2 fifo_out=1 M/N/K=5/6/3 full_steps=3 PASS",
+        "MATRIX STREAM TILE CASE id=2 inputs=3 fifo_out=0 M/N/K=7/6/3 full_steps=3 PASS",
+        "MATRIX STREAM TILE CASE id=3 inputs=1 fifo_out=1 M/N/K=7/6/3 full_steps=3 PASS",
+        "MATRIX STREAM TILE CASE id=4 inputs=2 fifo_out=0 M/N/K=5/6/17 full_steps=17 PASS",
+        "MATRIX STREAM TILE CASE id=5 inputs=3 fifo_out=1 M/N/K=5/6/17 full_steps=17 PASS",
+        "MATRIX STREAM TILE CASE id=6 inputs=1 fifo_out=0 M/N/K=7/6/17 full_steps=17 PASS",
+        "MATRIX STREAM TILE CASE id=7 inputs=2 fifo_out=1 M/N/K=7/6/17 full_steps=17 PASS",
+        "MATRIX STREAM TILES PASS cases=8 checks=288 full_steps=80 mixed-SRAM/FIFO/tails/INT8/INT16/backpressure/tile-order"
+      ]
+    },
+    {
+      "suite": "queues",
+      "result": "build/vcs-layout-final-v1-queues/result.json",
+      "summaries": [
+        "QUEUES PASS matrix_depth=8 vector_depth=8 checks=463 snapshots, wrap, overflow, concurrent engines, invalid descriptor, reset"
+      ]
+    },
+    {
+      "suite": "irqcontrol",
+      "result": "build/vcs-layout-final-v1-irqcontrol/result.json",
+      "summaries": [
+        "IRQ CONTROL PASS checks=49 active-W1C/set-dominant/fault-wakeup/independent-levels/tickets"
+      ]
+    },
+    {
+      "suite": "irqwake",
+      "result": "build/vcs-layout-final-v1-irqwake-macro/result.json",
+      "summaries": [
+        "IRQ WAKE CASE unit=0 irq=16 fault=0 PASS",
+        "IRQ WAKE CASE unit=0 irq=16 fault=1 PASS",
+        "IRQ WAKE CASE unit=1 irq=17 fault=0 PASS",
+        "IRQ WAKE CASE unit=1 irq=17 fault=1 PASS",
+        "IRQ WAKE CASE unit=2 irq=18 fault=0 PASS",
+        "IRQ WAKE CASE unit=2 irq=18 fault=1 PASS",
+        "IRQ MASK PASS unrelated-source-stays-asleep/two-pending-MIP/independent-ACK",
+        "IRQ WAKE PASS cases=7 real-CPU-WFI/three-distinct-sources/completion/runtime-fault/MIP/tickets"
+      ]
+    },
+    {
+      "suite": "enginefaults",
+      "result": "build/vcs-layout-final-v1-enginefaults/result.json",
+      "summaries": [
+        "ENGINE FAULTS PASS failed_jobs=12 successful_retries=12 checks=584"
+      ]
+    },
+    {
+      "suite": "xbarstream",
+      "result": "build/vcs-layout-final-v1-xbarstream/result.json",
+      "summaries": [
+        "XBAR STREAM PASS checks=4000 reads=6550 writes=6593 bypasses=322"
+      ]
+    },
+    {
+      "suite": "rfsink",
+      "result": "build/vcs-layout-final-v1-rfsink/result.json",
+      "summaries": [
+        "RF SINK PASS checks=868 sram_store_overlap=258 sink_grants=325 gather_grants=1204 ordinary_grants=343 ordering/fairness/invalid/reset"
+      ]
+    },
+    {
+      "suite": "regfile",
+      "result": "build/vcs-layout-final-v1-regfile/result.json",
+      "summaries": [
+        "RF GATHER PASS lanes=3 bits=32 physical_banks=8 peak_bits_per_cycle=96 aggregate_bits_per_cycle=160 checks=473 conflicts, fairness, bytes, bounds, reset",
+        "REGFILE PASS bank_words=32 checks=473 dual-bank, bytes, bounds, reset, fairness"
+      ]
+    },
+    {
+      "suite": "unitsmoke",
+      "result": "build/vcs-layout-final-v1-unitsmoke/result.json",
+      "summaries": [
+        "UNIT SMOKE PASS checks=25 INT32-multiply/high-signed/high-unsigned/SIMD8/tail/Matrix-pack/CNN-pack/real-ACK-counts"
+      ]
+    },
+    {
+      "suite": "vectorsimd",
+      "result": "build/vcs-layout-final-v1-vectorsimd-macro/result.json",
+      "summaries": [
+        "VECTOR SIMD PASS checks=42594 direct/program/SRAM/RF/inplace/scalar/tail/fault"
+      ]
+    },
+    {
+      "suite": "outergemm",
+      "result": "build/vcs-layout-final-v1-outergemm-macro/result.json",
+      "summaries": [
+        "OUTER GEMM PASS checks=30020 macs=383344 full_steps=22246 flags/strides/tails/tiles/SRAM/RF/K0"
+      ]
+    },
+    {
+      "suite": "layoutevents",
+      "result": "build/vcs-layout-final-v1-layoutevents-macro/result.json",
+      "summaries": [
+        "LAYOUT EVENTS PASS checks=34 snapshots, zero/negative strides, final-only, keep-r2, packed stores, three-unit events, fault"
+      ]
+    },
+    {
+      "suite": "cnnqueues",
+      "result": "build/vcs-layout-final-v3-cnnqueues/result.json",
+      "summaries": [
+        "CNN QUEUE PASS depth=8 command_bits=32 event_bits=16 total_bits=48 checks=124 software-owned shared kernel, compact window tasks, order, overflow, reset, faults"
+      ]
+    }
+  ],
+  "extra_tests": [
+    {
+      "result": "build/vcs-layout-final-v5-workloads-macro/result.json",
+      "summaries": [
+        "GENERAL WORKLOADS PASS checks=1173 commands=4822 cycles=20833 overlap_cycles=113"
+      ]
+    },
+    {
+      "result": "build/vcs-layout-final-v5-workloadlegacy-macro/result.json",
+      "summaries": [
+        "GENERAL WORKLOADS PASS checks=411 commands=3828 cycles=15055 overlap_cycles=112"
+      ]
+    },
+    {
+      "result": "build/vcs-layout-final-v5-workloadcpu-macro/result.json",
+      "summaries": [
+        "GENERAL CPU PASS words=485 cycles=741"
+      ]
+    },
+    {
+      "result": "build/vcs-layout-cpu-legacy-v5-workloadcpu-macro/result.json",
+      "summaries": [
+        "GENERAL CPU PASS words=673 cycles=1138"
+      ]
+    },
+    {
+      "result": "build/vcs-layout-serial-v5-workloads-macro/result.json",
+      "summaries": [
+        "GENERAL WORKLOADS PASS checks=1173 commands=4822 cycles=20839 overlap_cycles=113"
+      ]
+    },
+    {
+      "result": "build/vcs-layout-depth1-v5-workloads-macro/result.json",
+      "summaries": [
+        "GENERAL WORKLOADS PASS checks=1173 commands=4822 cycles=20833 overlap_cycles=113"
+      ]
+    },
+    {
+      "result": "build/vcs-layout-preppa-blocking-macro/result.json",
+      "summaries": [
+        "BLOCKING PASS sample=0 cycles=20728",
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "SINGLE sample=0 useful_macs=39330 kernel_cycles=14900 elapsed_cycles=20728 kernel_utilization_pct=29.33 system_utilization_pct=21.08 latency_us_at_50mhz=414.56 PASS",
+        "BLOCKING PASS sample=1 cycles=20728",
+        "SINGLE_INPUT sample=1 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "SINGLE sample=1 useful_macs=39330 kernel_cycles=14900 elapsed_cycles=20728 kernel_utilization_pct=29.33 system_utilization_pct=21.08 latency_us_at_50mhz=414.56 PASS",
+        "BLOCKING PASS sample=2 cycles=20728",
+        "SINGLE_INPUT sample=2 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "SINGLE sample=2 useful_macs=39330 kernel_cycles=14900 elapsed_cycles=20728 kernel_utilization_pct=29.33 system_utilization_pct=21.08 latency_us_at_50mhz=414.56 PASS",
+        "BLOCKING PASS sample=3 cycles=20728",
+        "SINGLE_INPUT sample=3 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "SINGLE sample=3 useful_macs=39330 kernel_cycles=14900 elapsed_cycles=20728 kernel_utilization_pct=29.33 system_utilization_pct=21.08 latency_us_at_50mhz=414.56 PASS",
+        "BLOCKING PASS sample=4 cycles=20728",
+        "SINGLE_INPUT sample=4 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "SINGLE sample=4 useful_macs=39330 kernel_cycles=14900 elapsed_cycles=20728 kernel_utilization_pct=29.33 system_utilization_pct=21.08 latency_us_at_50mhz=414.56 PASS",
+        "BLOCKING PASS sample=5 cycles=20728",
+        "SINGLE_INPUT sample=5 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "SINGLE sample=5 useful_macs=39330 kernel_cycles=14900 elapsed_cycles=20728 kernel_utilization_pct=29.33 system_utilization_pct=21.08 latency_us_at_50mhz=414.56 PASS",
+        "BLOCKING PASS sample=6 cycles=20728",
+        "SINGLE_INPUT sample=6 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "SINGLE sample=6 useful_macs=39330 kernel_cycles=14900 elapsed_cycles=20728 kernel_utilization_pct=29.33 system_utilization_pct=21.08 latency_us_at_50mhz=414.56 PASS",
+        "BLOCKING PASS sample=7 cycles=20728",
+        "SINGLE_INPUT sample=7 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "SINGLE sample=7 useful_macs=39330 kernel_cycles=14900 elapsed_cycles=20728 kernel_utilization_pct=29.33 system_utilization_pct=21.08 latency_us_at_50mhz=414.56 PASS",
+        "BLOCKING PASS sample=8 cycles=20728",
+        "SINGLE_INPUT sample=8 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "SINGLE sample=8 useful_macs=39330 kernel_cycles=14900 elapsed_cycles=20728 kernel_utilization_pct=29.33 system_utilization_pct=21.08 latency_us_at_50mhz=414.56 PASS",
+        "BLOCKING PASS sample=9 cycles=20728",
+        "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "SINGLE sample=9 useful_macs=39330 kernel_cycles=14900 elapsed_cycles=20728 kernel_utilization_pct=29.33 system_utilization_pct=21.08 latency_us_at_50mhz=414.56 PASS",
+        "SINGLE PASS samples=10 checks=120"
+      ]
+    },
+    {
+      "result": "build/vcs-layout-cpu-layout-v5-workloadcpu-macro/result.json",
+      "summaries": [
+        "GENERAL CPU PASS words=718 cycles=1066"
+      ]
+    },
+    {
+      "result": "build/vcs-layout-cpu-packed-v5-workloadcpu-macro/result.json",
+      "summaries": [
+        "GENERAL CPU PASS words=457 cycles=801"
+      ]
+    },
+    {
+      "result": "build/vcs-layout-cpu-cnn-v5-workloadcpu-macro/result.json",
+      "summaries": [
+        "GENERAL CPU PASS words=473 cycles=726"
+      ]
+    }
+  ],
+  "software_checks": {
+    "python_contract": {
+      "passed": true,
+      "output": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.001s\n\nOK"
+    },
+    "c_layout_compile": {
+      "passed": true,
+      "output": ""
+    },
+    "c_layout": {
+      "passed": true,
+      "output": "STREAM SOFTWARE CHECK PASS checks=671 shape, borders, aliases, overflow, command encoding"
+    },
+    "c_executor_compile": {
+      "passed": true,
+      "output": ""
+    },
+    "c_executor": {
+      "passed": true,
+      "output": "PLAN EXECUTOR PASS completion-wrap, faults, idle, timeout, validation"
+    },
+    "generated_c": {
+      "passed": true,
+      "output": ""
+    },
+    "format": {
+      "passed": true,
+      "output": "Would format 0 / 161 files"
+    }
+  },
+  "gate_tests": [
+    {
+      "result": "build/gate-layout_v1_latency/result.json",
+      "summaries": [
+        "GATE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=21120 input_to_classification_us_at_50mhz=422.40 PASS",
+        "GATE PASS samples=1 checks=12"
+      ]
+    },
+    {
+      "result": "build/gate-layout_v1_units/result.json",
+      "summaries": [
+        "GATE UNIT SMOKE PASS checks=25 INT32-multiply/high-signed/high-unsigned/SIMD8/tail/Matrix-pack/CNN-pack/real-ACK-counts"
+      ]
+    },
+    {
+      "result": "build/gate-layout_v1_layout/result.json",
+      "summaries": [
+        "GATE LAYOUT EVENTS PASS checks=34 snapshots, zero/negative strides, final-only, keep-r2, packed stores, three-unit events, fault"
+      ]
+    },
+    {
+      "result": "build/gate-layout_v1_jtag/result.json",
+      "summaries": [
+        "GATE JTAG PASS checks=42"
+      ]
+    }
+  ],
+  "task_fifo_bits": {
+    "matrix": 125,
+    "vector": 166,
+    "cnn": 48,
+    "cnn_command": 32,
+    "cnn_event_sidecar": 16
+  },
+  "config": {
+    "rf_bank_words": 32,
+    "matrix_queue_depth": 8,
+    "vector_queue_depth": 8,
+    "cnn_queue_depth": 8,
+    "stream_fifo_depth": 8
+  },
+  "hardware_events": {
+    "bits": 8,
+    "wait_consumes": false,
+    "signal_after_write_ack": true,
+    "signal_on_fault": false
+  },
+  "workload_comparison": {
+    "gemm-19x5x7-ta0-tb0-i8": {
+      "legacy": {
+        "cycles": 3040,
+        "checks": 133,
+        "matrix_busy": 1331,
+        "vector_busy": 570,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 1506,
+        "queue_wait": 126,
+        "config_writes": 158,
+        "data_writes": 334
+      },
+      "native": {
+        "cycles": 2326,
+        "checks": 133,
+        "matrix_busy": 1331,
+        "vector_busy": 0,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 1320,
+        "queue_wait": 12,
+        "config_writes": 20,
+        "data_writes": 334
+      },
+      "cycle_reduction_percent": 23.486842105263158
+    },
+    "gemm-3x17x5-ta1-tb1-i16": {
+      "legacy": {
+        "cycles": 1574,
+        "checks": 57,
+        "matrix_busy": 553,
+        "vector_busy": 306,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 822,
+        "queue_wait": 48,
+        "config_writes": 66,
+        "data_writes": 196
+      },
+      "native": {
+        "cycles": 1103,
+        "checks": 57,
+        "matrix_busy": 553,
+        "vector_busy": 0,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 540,
+        "queue_wait": 12,
+        "config_writes": 15,
+        "data_writes": 196
+      },
+      "cycle_reduction_percent": 29.923761118170265
+    },
+    "gemm-1x2x257-ta0-tb0-i8": {
+      "legacy": {
+        "cycles": 4499,
+        "checks": 4,
+        "matrix_busy": 1815,
+        "vector_busy": 12,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 1800,
+        "queue_wait": 18,
+        "config_writes": 31,
+        "data_writes": 1290
+      },
+      "native": {
+        "cycles": 4454,
+        "checks": 4,
+        "matrix_busy": 1815,
+        "vector_busy": 0,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 1800,
+        "queue_wait": 12,
+        "config_writes": 18,
+        "data_writes": 1290
+      },
+      "cycle_reduction_percent": 1.0002222716159146
+    },
+    "int16-gemm-wraparound": {
+      "legacy": {
+        "cycles": 135,
+        "checks": 1,
+        "matrix_busy": 28,
+        "vector_busy": 6,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 48,
+        "queue_wait": 12,
+        "config_writes": 19,
+        "data_writes": 8
+      },
+      "native": {
+        "cycles": 93,
+        "checks": 1,
+        "matrix_busy": 28,
+        "vector_busy": 0,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 36,
+        "queue_wait": 6,
+        "config_writes": 11,
+        "data_writes": 8
+      },
+      "cycle_reduction_percent": 31.11111111111111
+    },
+    "outer-product-4x4": {
+      "legacy": {
+        "cycles": 300,
+        "checks": 16,
+        "matrix_busy": 67,
+        "vector_busy": 96,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 102,
+        "queue_wait": 30,
+        "config_writes": 40,
+        "data_writes": 8
+      },
+      "native": {
+        "cycles": 153,
+        "checks": 16,
+        "matrix_busy": 67,
+        "vector_busy": 0,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 72,
+        "queue_wait": 6,
+        "config_writes": 9,
+        "data_writes": 8
+      },
+      "cycle_reduction_percent": 49.0
+    },
+    "broadcast-residual-reverse-stride": {
+      "legacy": {
+        "cycles": 806,
+        "checks": 26,
+        "matrix_busy": 0,
+        "vector_busy": 169,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 24,
+        "queue_wait": 156,
+        "config_writes": 182,
+        "data_writes": 14
+      },
+      "native": {
+        "cycles": 332,
+        "checks": 26,
+        "matrix_busy": 0,
+        "vector_busy": 169,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 180,
+        "queue_wait": 12,
+        "config_writes": 20,
+        "data_writes": 14
+      },
+      "cycle_reduction_percent": 58.80893300248139
+    },
+    "reduce-sum-int32": {
+      "legacy": {
+        "cycles": 102,
+        "checks": 1,
+        "matrix_busy": 0,
+        "vector_busy": 42,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 24,
+        "queue_wait": 12,
+        "config_writes": 18,
+        "data_writes": 5
+      },
+      "native": {
+        "cycles": 90,
+        "checks": 1,
+        "matrix_busy": 0,
+        "vector_busy": 32,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 36,
+        "queue_wait": 6,
+        "config_writes": 12,
+        "data_writes": 5
+      },
+      "cycle_reduction_percent": 11.76470588235294
+    },
+    "reduce-max-int32": {
+      "legacy": {
+        "cycles": 102,
+        "checks": 1,
+        "matrix_busy": 0,
+        "vector_busy": 42,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 24,
+        "queue_wait": 12,
+        "config_writes": 18,
+        "data_writes": 5
+      },
+      "native": {
+        "cycles": 75,
+        "checks": 1,
+        "matrix_busy": 0,
+        "vector_busy": 32,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 36,
+        "queue_wait": 6,
+        "config_writes": 7,
+        "data_writes": 5
+      },
+      "cycle_reduction_percent": 26.47058823529412
+    },
+    "reduce-min-int32": {
+      "legacy": {
+        "cycles": 102,
+        "checks": 1,
+        "matrix_busy": 0,
+        "vector_busy": 42,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 24,
+        "queue_wait": 12,
+        "config_writes": 18,
+        "data_writes": 5
+      },
+      "native": {
+        "cycles": 75,
+        "checks": 1,
+        "matrix_busy": 0,
+        "vector_busy": 32,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 36,
+        "queue_wait": 6,
+        "config_writes": 7,
+        "data_writes": 5
+      },
+      "cycle_reduction_percent": 26.47058823529412
+    },
+    "transpose-3x5": {
+      "legacy": {
+        "cycles": 477,
+        "checks": 15,
+        "matrix_busy": 0,
+        "vector_busy": 90,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 12,
+        "queue_wait": 90,
+        "config_writes": 105,
+        "data_writes": 15
+      },
+      "native": {
+        "cycles": 192,
+        "checks": 15,
+        "matrix_busy": 0,
+        "vector_busy": 90,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 66,
+        "queue_wait": 18,
+        "config_writes": 16,
+        "data_writes": 15
+      },
+      "cycle_reduction_percent": 59.74842767295597
+    },
+    "branch-join-ticket-events": {
+      "legacy": {
+        "cycles": 235,
+        "checks": 7,
+        "matrix_busy": 0,
+        "vector_busy": 140,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 126,
+        "queue_wait": 18,
+        "config_writes": 21,
+        "data_writes": 7
+      },
+      "native": {
+        "cycles": 211,
+        "checks": 7,
+        "matrix_busy": 0,
+        "vector_busy": 140,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 102,
+        "queue_wait": 18,
+        "config_writes": 21,
+        "data_writes": 7
+      },
+      "cycle_reduction_percent": 10.212765957446807
+    },
+    "simd8-tail-residual": {
+      "legacy": {
+        "cycles": 69,
+        "checks": 3,
+        "matrix_busy": 0,
+        "vector_busy": 18,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 24,
+        "queue_wait": 6,
+        "config_writes": 7,
+        "data_writes": 6
+      },
+      "native": {
+        "cycles": 72,
+        "checks": 3,
+        "matrix_busy": 0,
+        "vector_busy": 18,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 24,
+        "queue_wait": 6,
+        "config_writes": 8,
+        "data_writes": 6
+      },
+      "cycle_reduction_percent": -4.3478260869565215
+    },
+    "rf-gemv-activation": {
+      "legacy": {
+        "cycles": 178,
+        "checks": 2,
+        "matrix_busy": 29,
+        "vector_busy": 24,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 54,
+        "queue_wait": 18,
+        "config_writes": 26,
+        "data_writes": 12
+      },
+      "native": {
+        "cycles": 145,
+        "checks": 2,
+        "matrix_busy": 29,
+        "vector_busy": 12,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 54,
+        "queue_wait": 12,
+        "config_writes": 17,
+        "data_writes": 12
+      },
+      "cycle_reduction_percent": 18.53932584269663
+    },
+    "cnn3x3-s1-two-channel-vector-post": {
+      "legacy": {
+        "cycles": 1074,
+        "checks": 80,
+        "matrix_busy": 0,
+        "vector_busy": 240,
+        "cnn_busy": 230,
+        "overlap": 0,
+        "completion_wait": 510,
+        "queue_wait": 54,
+        "config_writes": 104,
+        "data_writes": 19
+      },
+      "native": {
+        "cycles": 903,
+        "checks": 80,
+        "matrix_busy": 0,
+        "vector_busy": 240,
+        "cnn_busy": 230,
+        "overlap": 0,
+        "completion_wait": 510,
+        "queue_wait": 54,
+        "config_writes": 47,
+        "data_writes": 19
+      },
+      "cycle_reduction_percent": 15.921787709497206
+    },
+    "cnn3x3-s2-two-channel-vector-post": {
+      "legacy": {
+        "cycles": 467,
+        "checks": 24,
+        "matrix_busy": 0,
+        "vector_busy": 72,
+        "cnn_busy": 100,
+        "overlap": 0,
+        "completion_wait": 186,
+        "queue_wait": 30,
+        "config_writes": 55,
+        "data_writes": 19
+      },
+      "native": {
+        "cycles": 368,
+        "checks": 24,
+        "matrix_busy": 0,
+        "vector_busy": 72,
+        "cnn_busy": 100,
+        "overlap": 0,
+        "completion_wait": 186,
+        "queue_wait": 30,
+        "config_writes": 22,
+        "data_writes": 19
+      },
+      "cycle_reduction_percent": 21.199143468950748
+    },
+    "batched-gemm-broadcast-weights": {
+      "legacy": {
+        "cycles": 492,
+        "checks": 12,
+        "matrix_busy": 105,
+        "vector_busy": 72,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 144,
+        "queue_wait": 54,
+        "config_writes": 78,
+        "data_writes": 18
+      },
+      "native": {
+        "cycles": 201,
+        "checks": 12,
+        "matrix_busy": 105,
+        "vector_busy": 0,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 78,
+        "queue_wait": 18,
+        "config_writes": 15,
+        "data_writes": 18
+      },
+      "cycle_reduction_percent": 59.14634146341463
+    },
+    "attention-qkt-row-max-subgraph": {
+      "legacy": {
+        "cycles": 380,
+        "checks": 8,
+        "matrix_busy": 67,
+        "vector_busy": 92,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 108,
+        "queue_wait": 42,
+        "config_writes": 58,
+        "data_writes": 20
+      },
+      "native": {
+        "cycles": 254,
+        "checks": 8,
+        "matrix_busy": 67,
+        "vector_busy": 40,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 102,
+        "queue_wait": 18,
+        "config_writes": 26,
+        "data_writes": 20
+      },
+      "cycle_reduction_percent": 33.1578947368421
+    },
+    "maxpool2x2-software-gather-reduce": {
+      "legacy": {
+        "cycles": 490,
+        "checks": 4,
+        "matrix_busy": 0,
+        "vector_busy": 236,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 18,
+        "queue_wait": 96,
+        "config_writes": 112,
+        "data_writes": 16
+      },
+      "native": {
+        "cycles": 409,
+        "checks": 4,
+        "matrix_busy": 0,
+        "vector_busy": 200,
+        "cnn_busy": 0,
+        "overlap": 0,
+        "completion_wait": 30,
+        "queue_wait": 72,
+        "config_writes": 89,
+        "data_writes": 16
+      },
+      "cycle_reduction_percent": 16.53061224489796
+    },
+    "cnn-vector-independent-overlap-join": {
+      "legacy": {
+        "cycles": 524,
+        "checks": 16,
+        "matrix_busy": 0,
+        "vector_busy": 224,
+        "cnn_busy": 159,
+        "overlap": 112,
+        "completion_wait": 264,
+        "queue_wait": 18,
+        "config_writes": 26,
+        "data_writes": 66
+      },
+      "native": {
+        "cycles": 488,
+        "checks": 16,
+        "matrix_busy": 0,
+        "vector_busy": 225,
+        "cnn_busy": 162,
+        "overlap": 113,
+        "completion_wait": 228,
+        "queue_wait": 18,
+        "config_writes": 26,
+        "data_writes": 66
+      },
+      "cycle_reduction_percent": 6.870229007633588
+    }
+  },
+  "native_cases": {
+    "gemm-19x5x7-ta0-tb0-i8": {
+      "cycles": 2326,
+      "checks": 133,
+      "matrix_busy": 1331,
+      "vector_busy": 0,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 1320,
+      "queue_wait": 12,
+      "config_writes": 20,
+      "data_writes": 334
+    },
+    "gemm-3x17x5-ta1-tb1-i16": {
+      "cycles": 1103,
+      "checks": 57,
+      "matrix_busy": 553,
+      "vector_busy": 0,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 540,
+      "queue_wait": 12,
+      "config_writes": 15,
+      "data_writes": 196
+    },
+    "gemm-1x2x257-ta0-tb0-i8": {
+      "cycles": 4454,
+      "checks": 4,
+      "matrix_busy": 1815,
+      "vector_busy": 0,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 1800,
+      "queue_wait": 12,
+      "config_writes": 18,
+      "data_writes": 1290
+    },
+    "int16-gemm-wraparound": {
+      "cycles": 93,
+      "checks": 1,
+      "matrix_busy": 28,
+      "vector_busy": 0,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 36,
+      "queue_wait": 6,
+      "config_writes": 11,
+      "data_writes": 8
+    },
+    "outer-product-4x4": {
+      "cycles": 153,
+      "checks": 16,
+      "matrix_busy": 67,
+      "vector_busy": 0,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 72,
+      "queue_wait": 6,
+      "config_writes": 9,
+      "data_writes": 8
+    },
+    "broadcast-residual-reverse-stride": {
+      "cycles": 332,
+      "checks": 26,
+      "matrix_busy": 0,
+      "vector_busy": 169,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 180,
+      "queue_wait": 12,
+      "config_writes": 20,
+      "data_writes": 14
+    },
+    "reduce-sum-int32": {
+      "cycles": 90,
+      "checks": 1,
+      "matrix_busy": 0,
+      "vector_busy": 32,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 36,
+      "queue_wait": 6,
+      "config_writes": 12,
+      "data_writes": 5
+    },
+    "reduce-max-int32": {
+      "cycles": 75,
+      "checks": 1,
+      "matrix_busy": 0,
+      "vector_busy": 32,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 36,
+      "queue_wait": 6,
+      "config_writes": 7,
+      "data_writes": 5
+    },
+    "reduce-min-int32": {
+      "cycles": 75,
+      "checks": 1,
+      "matrix_busy": 0,
+      "vector_busy": 32,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 36,
+      "queue_wait": 6,
+      "config_writes": 7,
+      "data_writes": 5
+    },
+    "transpose-3x5": {
+      "cycles": 192,
+      "checks": 15,
+      "matrix_busy": 0,
+      "vector_busy": 90,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 66,
+      "queue_wait": 18,
+      "config_writes": 16,
+      "data_writes": 15
+    },
+    "branch-join-ticket-events": {
+      "cycles": 211,
+      "checks": 7,
+      "matrix_busy": 0,
+      "vector_busy": 140,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 102,
+      "queue_wait": 18,
+      "config_writes": 21,
+      "data_writes": 7
+    },
+    "simd8-tail-residual": {
+      "cycles": 72,
+      "checks": 3,
+      "matrix_busy": 0,
+      "vector_busy": 18,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 24,
+      "queue_wait": 6,
+      "config_writes": 8,
+      "data_writes": 6
+    },
+    "rf-gemv-activation": {
+      "cycles": 145,
+      "checks": 2,
+      "matrix_busy": 29,
+      "vector_busy": 12,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 54,
+      "queue_wait": 12,
+      "config_writes": 17,
+      "data_writes": 12
+    },
+    "cnn3x3-s1-two-channel-vector-post": {
+      "cycles": 903,
+      "checks": 80,
+      "matrix_busy": 0,
+      "vector_busy": 240,
+      "cnn_busy": 230,
+      "overlap": 0,
+      "completion_wait": 510,
+      "queue_wait": 54,
+      "config_writes": 47,
+      "data_writes": 19
+    },
+    "cnn3x3-s2-two-channel-vector-post": {
+      "cycles": 368,
+      "checks": 24,
+      "matrix_busy": 0,
+      "vector_busy": 72,
+      "cnn_busy": 100,
+      "overlap": 0,
+      "completion_wait": 186,
+      "queue_wait": 30,
+      "config_writes": 22,
+      "data_writes": 19
+    },
+    "batched-gemm-broadcast-weights": {
+      "cycles": 201,
+      "checks": 12,
+      "matrix_busy": 105,
+      "vector_busy": 0,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 78,
+      "queue_wait": 18,
+      "config_writes": 15,
+      "data_writes": 18
+    },
+    "attention-qkt-row-max-subgraph": {
+      "cycles": 254,
+      "checks": 8,
+      "matrix_busy": 67,
+      "vector_busy": 40,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 102,
+      "queue_wait": 18,
+      "config_writes": 26,
+      "data_writes": 20
+    },
+    "maxpool2x2-software-gather-reduce": {
+      "cycles": 409,
+      "checks": 4,
+      "matrix_busy": 0,
+      "vector_busy": 200,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 30,
+      "queue_wait": 72,
+      "config_writes": 89,
+      "data_writes": 16
+    },
+    "cnn-vector-independent-overlap-join": {
+      "cycles": 488,
+      "checks": 16,
+      "matrix_busy": 0,
+      "vector_busy": 225,
+      "cnn_busy": 162,
+      "overlap": 113,
+      "completion_wait": 228,
+      "queue_wait": 18,
+      "config_writes": 26,
+      "data_writes": 66
+    },
+    "packed-gemm-i8-tails": {
+      "cycles": 4000,
+      "checks": 380,
+      "matrix_busy": 2268,
+      "vector_busy": 0,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 2214,
+      "queue_wait": 24,
+      "config_writes": 26,
+      "data_writes": 462
+    },
+    "packed-gemm-i16-tails": {
+      "cycles": 4793,
+      "checks": 380,
+      "matrix_busy": 2935,
+      "vector_busy": 0,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 2880,
+      "queue_wait": 24,
+      "config_writes": 29,
+      "data_writes": 521
+    },
+    "native-zero-output-stride": {
+      "cycles": 87,
+      "checks": 2,
+      "matrix_busy": 0,
+      "vector_busy": 30,
+      "cnn_busy": 0,
+      "overlap": 0,
+      "completion_wait": 36,
+      "queue_wait": 6,
+      "config_writes": 9,
+      "data_writes": 7
+    }
+  },
+  "native_common_host_cycles": 11944,
+  "legacy_common_host_cycles": 15046,
+  "real_cpu": {
+    "native": {
+      "words": 485,
+      "cycles": 741,
+      "profile": {
+        "cycles": 741,
+        "reset_boot": 0,
+        "wfi": 3,
+        "lsu_sram": 0,
+        "lsu_mmio": 55,
+        "lsu_rf": 0,
+        "lsu_fifo": 0,
+        "lsu_other": 0,
+        "fetch": 1,
+        "load_hazard": 15,
+        "jump_hazard": 0,
+        "pipeline": 0,
+        "other_awake": 667,
+        "instructions": 453,
+        "fetch_grant_wait": 4,
+        "data_grant_wait": 0
+      }
+    },
+    "legacy": {
+      "words": 673,
+      "cycles": 1138,
+      "profile": {
+        "cycles": 1138,
+        "reset_boot": 0,
+        "wfi": 3,
+        "lsu_sram": 0,
+        "lsu_mmio": 93,
+        "lsu_rf": 0,
+        "lsu_fifo": 0,
+        "lsu_other": 0,
+        "fetch": 1,
+        "load_hazard": 29,
+        "jump_hazard": 0,
+        "pipeline": 0,
+        "other_awake": 1012,
+        "instructions": 705,
+        "fetch_grant_wait": 4,
+        "data_grant_wait": 0
+      }
+    },
+    "checks": 7,
+    "cycle_reduction_percent": 34.885764499121265
+  },
+  "real_cpu_variants": {
+    "layout": {
+      "words": 718,
+      "cycles": 1066,
+      "profile": {
+        "cycles": 1066,
+        "reset_boot": 0,
+        "wfi": 3,
+        "lsu_sram": 0,
+        "lsu_mmio": 69,
+        "lsu_rf": 0,
+        "lsu_fifo": 0,
+        "lsu_other": 0,
+        "fetch": 1,
+        "load_hazard": 24,
+        "jump_hazard": 0,
+        "pipeline": 0,
+        "other_awake": 969,
+        "instructions": 717,
+        "fetch_grant_wait": 4,
+        "data_grant_wait": 0
+      },
+      "checks": 38
+    },
+    "packed": {
+      "words": 457,
+      "cycles": 801,
+      "profile": {
+        "cycles": 801,
+        "reset_boot": 0,
+        "wfi": 3,
+        "lsu_sram": 0,
+        "lsu_mmio": 44,
+        "lsu_rf": 0,
+        "lsu_fifo": 0,
+        "lsu_other": 0,
+        "fetch": 1,
+        "load_hazard": 18,
+        "jump_hazard": 0,
+        "pipeline": 0,
+        "other_awake": 735,
+        "instructions": 541,
+        "fetch_grant_wait": 4,
+        "data_grant_wait": 0
+      },
+      "checks": 15
+    },
+    "cnn": {
+      "words": 473,
+      "cycles": 726,
+      "profile": {
+        "cycles": 726,
+        "reset_boot": 0,
+        "wfi": 3,
+        "lsu_sram": 0,
+        "lsu_mmio": 61,
+        "lsu_rf": 0,
+        "lsu_fifo": 0,
+        "lsu_other": 0,
+        "fetch": 1,
+        "load_hazard": 21,
+        "jump_hazard": 0,
+        "pipeline": 0,
+        "other_awake": 640,
+        "instructions": 455,
+        "fetch_grant_wait": 4,
+        "data_grant_wait": 0
+      },
+      "checks": 9
+    }
+  },
+  "mnist_cycles": [
+    20728,
+    20728,
+    20728,
+    20728,
+    20728,
+    20728,
+    20728,
+    20728,
+    20728,
+    20728
+  ],
+  "ppa": {
+    "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261108-layout-events-v1",
+    "total_area_mm2": 2.637060199,
+    "standard_cell_area_mm2": 1.834173017,
+    "buckets": {
+      "XBAR": {
+        "area_um2": 307172.141,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_xbar",
+            "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6",
+            "cells": 13097,
+            "area_um2": 307172.141
+          }
+        ],
+        "area_mm2": 0.307172141,
+        "percent_total": 11.648279440737939
+      },
+      "CPU": {
+        "area_um2": 256763.763,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_cpu",
+            "module": "cv32e40p_top_COREV_PULP0_COREV_CLUSTER0_FPU0_NUM_M",
+            "cells": 9751,
+            "area_um2": 256763.763
+          }
+        ],
+        "area_mm2": 0.25676376300000003,
+        "percent_total": 9.736742570282143
+      },
+      "MMIO / task queues": {
+        "area_um2": 283975.462,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_mmio",
+            "module": "npu_mmio",
+            "cells": 9619,
+            "area_um2": 283975.462
+          }
+        ],
+        "area_mm2": 0.283975462,
+        "percent_total": 10.768637822818242
+      },
+      "Matrix": {
+        "area_um2": 362453.862,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_matmul",
+            "module": "npu_matmul",
+            "cells": 9872,
+            "area_um2": 251684.07
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_matrix_stream",
+            "module": "npu_matrix_stream_GATHER1",
+            "cells": 4414,
+            "area_um2": 110769.792
+          }
+        ],
+        "area_mm2": 0.362453862,
+        "percent_total": 13.744618425375583
+      },
+      "CNN": {
+        "area_um2": 241063.693,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_stream",
+            "module": "npu_stream_RF_SINK1",
+            "cells": 7794,
+            "area_um2": 192846.125
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_cnn",
+            "module": "npu_cnn",
+            "cells": 1989,
+            "area_um2": 48217.568
+          }
+        ],
+        "area_mm2": 0.241063693,
+        "percent_total": 9.141379976513765
+      },
+      "Shared quantizer": {
+        "area_um2": 149411.898,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_quant",
+            "module": "npu_shared_quant",
+            "cells": 5185,
+            "area_um2": 149411.898
+          }
+        ],
+        "area_mm2": 0.149411898,
+        "percent_total": 5.665850861374287
+      },
+      "Vector": {
+        "area_um2": 143541.933,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_vector",
+            "module": "npu_vector_PIPELINED_MUL1",
+            "cells": 4287,
+            "area_um2": 85136.442
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_vector_stream",
+            "module": "npu_vector_stream_GATHER1",
+            "cells": 2325,
+            "area_um2": 58405.491
+          }
+        ],
+        "area_mm2": 0.14354193299999998,
+        "percent_total": 5.443255829140061
+      },
+      "JTAG / debug": {
+        "area_um2": 86266.97,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_debug",
+            "module": "npu_jtag_debug",
+            "cells": 3567,
+            "area_um2": 85810.368
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_boot",
+            "module": "npu_debug_boot",
+            "cells": 42,
+            "area_um2": 456.602
+          }
+        ],
+        "area_mm2": 0.08626697,
+        "percent_total": 3.271331084239689
+      },
+      "SRAM macros": {
+        "area_um2": 802887.182,
+        "count": 2,
+        "area_mm2": 0.802887182,
+        "percent_total": 30.446297066121698
+      },
+      "Top / core glue": {
+        "area_um2": 3523.2949999999255,
+        "area_mm2": 0.0035232949999999255,
+        "percent_total": 0.1336069233965912
+      }
+    },
+    "synth_clock_groups": {
+      "cg_enable_group_jtag_clk": {
+        "slack_ns": 97.2748,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "cg_enable_group_sys_clk": {
+        "slack_ns": 0.37860000000000005,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "jtag_clk": {
+        "slack_ns": 47.9664,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "sys_clk": {
+        "slack_ns": 0.0068,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      }
+    },
+    "report_clock_groups": {
+      "cg_enable_group_jtag_clk": {
+        "slack_ns": 97.2748,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "cg_enable_group_sys_clk": {
+        "slack_ns": 2.3786,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "jtag_clk": {
+        "slack_ns": 47.9664,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "sys_clk": {
+        "slack_ns": 2.0068,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      }
+    },
+    "critical_path": {
+      "Startpoint": "(R) i_core_i_matrix_stream/state_reg[1]/CP",
+      "Endpoint": "(R) i_core_i_quant/product_reg[63]/D"
+    },
+    "settings": {
+      "effort": "high",
+      "synth_period_ns": 18.0,
+      "report_period_ns": 20.0,
+      "clock_gating": true,
+      "unit_boundaries_preserved": true,
+      "sram_banks": 2,
+      "rf_bank_words": 32,
+      "stream_fifo_depth": 8,
+      "matrix_queue_depth": 8,
+      "vector_queue_depth": 8,
+      "cnn_queue_depth": 8
+    },
+    "files_sha256": {
+      "optimized.v": "e5aba032eeb5586fd1729b74f0e034bc829a363742f4284255b5a6d650319d32",
+      "synth.sdc": "d90e9e5ab10344eb2e134128eb048b1c024bf01f186abf1677aece3dd31b0424",
+      "report.sdc": "619ca2d7b5d81b6e3d44f51415ba2eb813e40b672e5ce388e9e74d1ebd6da892",
+      "source_manifest.json": "d9a67cf3a0315755b8ad20b78cfc93f3d9346f9053b8cfde30283c273f2e8dd4",
+      "reports/area.rpt": "5f3568751d220d87f05ab770b2dc29d5ca491e5cf8a3e090519440fb5667582d",
+      "reports/optimized_synth_clock_qor.rpt": "be4af1d2a5eb26436dfc8e9b400b80a683e87b6cad2122a8bec53504ad187a5d",
+      "reports/qor.rpt": "927a07798a7639f63f408dca17d8d3c9fa1be706513905b5c50dddb504459eca"
+    },
+    "scope": "mapped cell area including two SRAM macros; no PAD, CTS, routing or SDF"
+  },
+  "baseline_ppa": {
+    "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261108-optimization-v4",
+    "total_area_mm2": 2.5621204619999998,
+    "standard_cell_area_mm2": 1.75923328,
+    "buckets": {
+      "XBAR": {
+        "area_um2": 307139.213,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_xbar",
+            "module": "xbar_GATHER_PORTS9_RF_SINK1_NUM_MASTERS6",
+            "cells": 13116,
+            "area_um2": 307139.213
+          }
+        ],
+        "area_mm2": 0.30713921299999997,
+        "percent_total": 11.987696033630133
+      },
+      "CPU": {
+        "area_um2": 256015.2,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_cpu",
+            "module": "cv32e40p_top_COREV_PULP0_COREV_CLUSTER0_FPU0_NUM_M",
+            "cells": 9673,
+            "area_um2": 256015.2
+          }
+        ],
+        "area_mm2": 0.2560152,
+        "percent_total": 9.992317059134436
+      },
+      "Matrix": {
+        "area_um2": 357367.584,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_matmul",
+            "module": "npu_matmul",
+            "cells": 9965,
+            "area_um2": 252349.216
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_matrix_stream",
+            "module": "npu_matrix_stream_GATHER1",
+            "cells": 4237,
+            "area_um2": 105018.368
+          }
+        ],
+        "area_mm2": 0.35736758399999996,
+        "percent_total": 13.948117947625214
+      },
+      "MMIO / task queues": {
+        "area_um2": 228979.117,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_mmio",
+            "module": "npu_mmio",
+            "cells": 7822,
+            "area_um2": 228979.117
+          }
+        ],
+        "area_mm2": 0.228979117,
+        "percent_total": 8.937094113883237
+      },
+      "CNN": {
+        "area_um2": 232416.80000000002,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_stream",
+            "module": "npu_stream_RF_SINK1",
+            "cells": 7565,
+            "area_um2": 184381.434
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_cnn",
+            "module": "npu_cnn",
+            "cells": 1967,
+            "area_um2": 48035.366
+          }
+        ],
+        "area_mm2": 0.2324168,
+        "percent_total": 9.071267469546482
+      },
+      "Shared quantizer": {
+        "area_um2": 149475.558,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_quant",
+            "module": "npu_shared_quant",
+            "cells": 5185,
+            "area_um2": 149475.558
+          }
+        ],
+        "area_mm2": 0.14947555799999998,
+        "percent_total": 5.834056603385418
+      },
+      "Vector": {
+        "area_um2": 138117.59399999998,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_vector",
+            "module": "npu_vector_PIPELINED_MUL1",
+            "cells": 4271,
+            "area_um2": 85092.538
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_vector_stream",
+            "module": "npu_vector_stream_GATHER1",
+            "cells": 2195,
+            "area_um2": 53025.056
+          }
+        ],
+        "area_mm2": 0.13811759399999998,
+        "percent_total": 5.390753325165083
+      },
+      "JTAG / debug": {
+        "area_um2": 86229.652,
+        "instances": [
+          {
+            "indent": 2,
+            "instance": "i_core_i_debug",
+            "module": "npu_jtag_debug",
+            "cells": 3571,
+            "area_um2": 85773.05
+          },
+          {
+            "indent": 2,
+            "instance": "i_core_i_boot",
+            "module": "npu_debug_boot",
+            "cells": 42,
+            "area_um2": 456.602
+          }
+        ],
+        "area_mm2": 0.086229652,
+        "percent_total": 3.365558071094317
+      },
+      "SRAM macros": {
+        "area_um2": 802887.182,
+        "count": 2,
+        "area_mm2": 0.802887182,
+        "percent_total": 31.336824084112873
+      },
+      "Top / core glue": {
+        "area_um2": 3492.561999999918,
+        "area_mm2": 0.003492561999999918,
+        "percent_total": 0.13631529242280874
+      }
+    },
+    "synth_clock_groups": {
+      "cg_enable_group_jtag_clk": {
+        "slack_ns": 97.2748,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "cg_enable_group_sys_clk": {
+        "slack_ns": 0.0431,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "jtag_clk": {
+        "slack_ns": 47.9664,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "sys_clk": {
+        "slack_ns": 0.0072,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      }
+    },
+    "report_clock_groups": {
+      "cg_enable_group_jtag_clk": {
+        "slack_ns": 97.2748,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "cg_enable_group_sys_clk": {
+        "slack_ns": 2.0431,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "jtag_clk": {
+        "slack_ns": 47.9664,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      },
+      "sys_clk": {
+        "slack_ns": 2.0072,
+        "tns_ns": 0.0,
+        "violating_paths": 0
+      }
+    },
+    "critical_path": {
+      "Startpoint": "(R) i_core_i_matrix_stream/state_reg[1]/CP",
+      "Endpoint": "(R) i_core_i_quant/product_reg[63]/D"
+    },
+    "settings": {
+      "effort": "high",
+      "synth_period_ns": 18.0,
+      "report_period_ns": 20.0,
+      "clock_gating": true,
+      "unit_boundaries_preserved": true,
+      "sram_banks": 2,
+      "rf_bank_words": 32,
+      "stream_fifo_depth": 8,
+      "matrix_queue_depth": 8,
+      "vector_queue_depth": 8,
+      "cnn_queue_depth": 8
+    },
+    "files_sha256": {
+      "optimized.v": "4c2a8e9f118011d23bc40eadcaffd3eedc031fef9eba67567c18b0f3c75abf2b",
+      "synth.sdc": "d90e9e5ab10344eb2e134128eb048b1c024bf01f186abf1677aece3dd31b0424",
+      "report.sdc": "619ca2d7b5d81b6e3d44f51415ba2eb813e40b672e5ce388e9e74d1ebd6da892",
+      "source_manifest.json": "2b64aa9eeec2192347304824c25bb9aa85da35229367d82628b7b9337e996f34",
+      "reports/area.rpt": "cb5624c41f5a50fb579a922984d522987307b0f1b46fe32a862c0b60dc5cc814",
+      "reports/optimized_synth_clock_qor.rpt": "fe9101eda288ff9eab26c055260406d6238a8d3e9a26a78dccdd657984e8baee",
+      "reports/qor.rpt": "0831ec4171b0683f723e99a76169d9e5bbe2bfd0aa28c2f89c8199aef4e7b547"
+    },
+    "scope": "mapped cell area including two SRAM macros; no PAD, CTS, routing or SDF"
+  },
+  "area_delta_mm2": 0.07493973700000023,
+  "new_pnr_performed": false,
+  "caveats": [
+    "Host case cycles include data loading and golden reads; not inference latency.",
+    "CPU bins partition time; other_awake includes execution and unclassified awake cycles.",
+    "Full model regression is MNIST; attention test is only QK-transpose and row-max primitives.",
+    "Shared program/geometry and event reuse lifetimes remain software-owned.",
+    "The old general-workloads-validation.json is a historical software-only checkpoint."
+  ],
+  "source_sha256": {
+    "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+    "npu/rtl/cnn/npu_cnn_mac.sv": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+    "npu/rtl/cnn/npu_stream.sv": "dfed51c2cbb9144e3ee3528404cf13db952e5ef3b7eb78bae93b85e8aa454ebb",
+    "npu/rtl/cnn/npu_stream_control.sv": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
+    "npu/rtl/cnn/npu_stream_engine.sv": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
+    "npu/rtl/cnn/npu_stream_pkg.sv": "d4c1b89c87098ac9adce72ab60ea9a1d4401d074ffe835fc109ab0f82d8e8d72",
+    "npu/rtl/common/npu_addr_pkg.sv": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
+    "npu/rtl/common/npu_clock_gate.sv": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+    "npu/rtl/common/npu_rr_select.sv": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+    "npu/rtl/common/npu_store_pack.sv": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
+    "npu/rtl/control/npu_mmio.sv": "6b03d1acecd5c72f83ff5060e8888ad3de29a741642353b39a8b1c5ead412806",
+    "npu/rtl/debug/npu_debug_boot.sv": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+    "npu/rtl/debug/npu_jtag_debug.sv": "d2324d487db499ca8b30226f438c1a527f73cba72e6c8762ba4d9237e880b69a",
+    "npu/rtl/interconnect/npu_data_regfile.sv": "7fffbed85311f8e8be3028c058bb60f25962e4b2d9dfefeb97c1a8132c9be278",
+    "npu/rtl/interconnect/npu_multi_read.sv": "a6827b272c5169e6b836683a52d76b1239ba41f2b2b37dd865df11cd944b325b",
+    "npu/rtl/interconnect/xbar.sv": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
+    "npu/rtl/interconnect/xbar_stream.sv": "0a5d25fa9aec9378e5d66fb8840cf41ffd42e837d941220bfdd301bbd2b01a0c",
+    "npu/rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+    "npu/rtl/matrix/npu_matrix_stream.sv": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
+    "npu/rtl/quant/npu_shared_quant.sv": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
+    "npu/rtl/top/npu_core.sv": "178e6b23f8a0e1f73bb006269404a88bf2b3dabd4fad814a4b8536757ffbae9c",
+    "npu/rtl/top/npu_soc.sv": "397998f42b58b0fffab53adabc454945d198b78fa0dbccc685bda9fc20064a95",
+    "npu/rtl/vector/npu_vector.sv": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
+    "npu/rtl/vector/npu_vector_stream.sv": "808debe76f7d6ca9373867aa61f1ca94357bac3adeee2ba75d6cf66d5435b77a",
+    "npu/rtl/files.f": "e48ec36e122f1b05e9a164cc1846096dbf1398b99d37ecadc2e23efcc5cdbef3",
+    "npu/sw/npu.h": "48b0657984cfca58829e557ec1bdc2ab7db8d75d32cd9cf3da1b4e237ff980d4",
+    "npu/sw/task_graph.py": "d717661b68fa138674e4a7dad633291601ee4b9668db78bd24a1816e9f124e33",
+    "npu/sw/plan_rv32.py": "3474794f6c362e51709d1f20e55fdc35f23a67aa5d52be09518bffffb135644d",
+    "npu/workloads/generate.py": "fe470952b23a413664c60502c6715c728975ad31d4a9dab91c7b64e2b9594029",
+    "npu/scripts/run_vcs.py": "4a347e33f52158c87ac0217d138256d3651a526a4b70fe4b04af34e6693c7244",
+    "npu/scripts/run_gate.py": "cf53ebb051797a2185687427ffe383d4eef0e5f21315c9b974f6e6d2c7b6ed8f",
+    "npu/eda/tsmc180/draw_architecture.py": "27bb15993ca9cb39d50e94f33d999d16941a2c8e7de345d56277866322307451",
+    "npu/docs/images/architecture-detailed.png": "4cd9ae443d0db8323b830f81df9d014020b558ddafef3a13ecbdc23d171bdd51",
+    "npu/docs/images/architecture-detailed.svg": "863b6d7028248cd864089358474adc134ea1bb95ed50d7382097c6cf485fafc8",
+    "npu/docs/images/architecture-detailed.source.json": "3be0396b280444c3c39d8e4e8f56dd16e67a99ada1c376349be26f761ff2497f",
+    "npu/scripts/collect_layout_events.py": "dd1fa7af0fc438c4fa5d1e191ee9c281d097c7fc03bd1ff96fea5a2f2718fe45"
+  }
+}

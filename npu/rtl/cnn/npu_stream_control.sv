@@ -4,6 +4,8 @@
 module npu_stream_control #(
   parameter int QUEUE_DEPTH = 16
 ) (
+  input logic [7:0] event_bits_i,
+  output logic [7:0] event_signal_o,
   input logic [31:0] observe_i,
   input logic quant_pack_i,
   input logic clk_i,
@@ -29,11 +31,17 @@ module npu_stream_control #(
   stream_config_t cfg;
   logic [31:0] command;
   stream_task_t queue[QUEUE_DEPTH];
+  logic [15:0] event_queue[QUEUE_DEPTH];
+  logic [15:0] event_config;
+  logic [7:0] active_signal;
+  logic event_blocked;
   logic [PW-1:0] head, tail;
   logic [$clog2(QUEUE_DEPTH+1)-1:0] qcount;
   logic fault, push, known, writable, valid_write, valid_command;
   logic [31:0] started, started_ticket, faults, cancelled;
   logic [31:0] completed, submitted, total_cycles, total_macs;
+  assign event_blocked=qcount!=0 && ((event_bits_i & event_queue[head][7:0])!=event_queue[head][7:0]);
+  assign event_signal_o = events_i.done && !events_i.fault ? active_signal : 8'b0;
   function automatic logic [PW-1:0] advance(input logic [PW-1:0] p);
     return p == QUEUE_DEPTH - 1 ? '0 : p + 1'b1;
   endfunction
@@ -41,7 +49,7 @@ module npu_stream_control #(
   assign command_o = stream_task_t'(queue[head]);
   assign busy_o = events_i.busy || qcount != 0;
   assign irq_o = done_o || fault;
-  assign start_o = qcount != 0 && !events_i.busy && !blocked_i && !fault;
+  assign start_o = qcount != 0 && !events_i.busy && !blocked_i && !event_blocked && !fault;
   assign valid_command=
     cfg.ci!=0 && cfg.row_stride!=0 && cfg.plane_stride!=0 &&
     data_range_ok(
@@ -59,6 +67,10 @@ module npu_stream_control #(
     valid_write = 1;
     case (csr_addr_i)
       'h00: ;
+      'h74: begin
+        csr_rdata_o = {16'b0, event_config};
+        valid_write = csr_wdata_i <= 65535;
+      end
       'h04: begin
         csr_rdata_o = {29'b0, fault, done_o, busy_o};
         writable = 0;
@@ -127,7 +139,13 @@ module npu_stream_control #(
       end
       'h50: begin
         csr_rdata_o = {
-          26'b0, blocked_i, events_i.fault, events_i.done, (qcount != 0), start_o, events_i.busy
+          26'b0,
+          (blocked_i || event_blocked),
+          events_i.fault,
+          events_i.done,
+          (qcount != 0),
+          start_o,
+          events_i.busy
         };
         writable = 0;
       end
@@ -169,10 +187,16 @@ module npu_stream_control #(
       (!writable || !valid_write ||
        (csr_addr_i==0 && csr_wdata_i[0] && (fault || (qcount==QUEUE_DEPTH && !start_o)))));
   end
-  always_ff @(posedge clk_i) if (push) queue[tail] <= stream_task_t'(command);
+  always_ff @(posedge clk_i)
+    if (push) begin
+      queue[tail] <= stream_task_t'(command);
+      event_queue[tail] <= event_config;
+    end
   always_ff @(posedge clk_i or negedge rst_ni)
     if (!rst_ni) begin
       cfg <= '0;
+      event_config <= 0;
+      active_signal <= 0;
       command <= 0;
       head <= 0;
       tail <= 0;
@@ -196,6 +220,7 @@ module npu_stream_control #(
         submitted <= submitted + 1'b1;
       end
       if (start_o) begin
+        active_signal <= event_queue[head][15:8];
         head <= advance(head);
         started <= started + 1;
         started_ticket <= submitted - 32'(qcount) + 1;
@@ -220,6 +245,7 @@ module npu_stream_control #(
               if (!valid_command) fault <= 1;
             end
           end
+          'h74: event_config <= csr_wdata_i[15:0];
           'h08: cfg.src <= csr_wdata_i[14:0];
           'h0c: cfg.kernel <= csr_wdata_i[14:0];
           'h10: cfg.dst <= csr_wdata_i[14:0];

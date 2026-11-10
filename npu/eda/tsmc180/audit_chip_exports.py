@@ -42,7 +42,8 @@ definition = (OUT / (top + ".def")).read_text()
 units = int(re.search(r"UNITS DISTANCE MICRONS (\d+)", definition).group(1))
 die_match = re.search(r"DIEAREA\s+\(\s*(\d+)\s+(\d+)\s*\)\s+\(\s*(\d+)\s+(\d+)\s*\)", definition)
 die = [int(x) / units for x in die_match.groups()]
-assert die == [0, 0, 2000, 2000], die
+expected_die = json.loads((ROOT / "manifest.json").read_text()).get("die_um", [2000, 2000])
+assert die == [0, 0, *expected_die], (die, expected_die)
 pin_body = definition.split("\nPINS ", 1)[1].split("END PINS", 1)[0]
 pins = set(re.findall(r"^-\s+(\S+)\s+\+", pin_body, re.M))
 assert pins == signals | supplies, pins

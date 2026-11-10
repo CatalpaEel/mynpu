@@ -1,5 +1,15 @@
 # 当前架构入口
 
+## 当前版本：独立计算单元与软件任务调度（2026-11-10）
+
+CPU/JTAG SBA、两块8KB SRAM、软件管理的256B RF和XBAR连接独立的Matrix 4×4外积、CNN 3×3 DOT9及Vector INT32/4路INT8 SIMD计算单元。Matrix/Vector/CNN任务队列各4项，4条流FIFO各8 words；无独立外部DMA、无透明SRAM缓存。默认配置见[build_config.json](build_config.json)。
+
+- [通用软件任务层](docs/general-workloads.md)与[LY01布局 / EV01依赖事件](docs/layout-events.md)：GEMM、步长/广播、归约、卷积组合，运行时配置由软件负责。
+- [4/4/4版本验证](docs/area26-all4.md)：综合cell面积2.569744mm²，包含两块SRAM，不含PAD/CTS/布线。
+- [1950µm完整后端与Lab 5报告](docs/die1950-signoff.md)：Die 1950×1950µm、Seal Ring外框1980×1980µm；PNR核心非filler面积2.633317mm²，50MHz setup/hold裕量+0.592/+0.019ns。Innovus DRC 0，最终Calibre DRC课程四类排除后0，LVS在3.48% PR教学容差下CORRECT，天线/WB均0；ERC原库/外圈残项及严格PR参数差异保留待评审，不表示正式投片签核通过。
+
+以下为历史迭代记录，其中的“当前”、面积、周期、位宽和队列配置只适用于相应历史版本；最新配置以上述入口和源码为准。
+
 本轮已实现 [FC K144、读口续发、弹性量化/字节写合并、Vector乘法切分和流FIFO精简](docs/throughput-optimization.md)。默认共享量化推理 **20,728周期/图**，比23,937减少13.41%；SYNC v2增加写合并取消计数，任务队列仍8/8/8、RF仍256B。18ns门控综合 **2.562120mm²**（含SRAM、不含PAD），20ns setup **+2.0072ns**；见[审计报告](reports/throughput-optimization-validation.json)，尚未重跑本版PNR。
 
 ## 历史实现记录

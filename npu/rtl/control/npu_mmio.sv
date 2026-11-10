@@ -1,8 +1,8 @@
 `ifndef NPU_MATRIX_QUEUE_DEPTH
-`define NPU_MATRIX_QUEUE_DEPTH 8
+`define NPU_MATRIX_QUEUE_DEPTH 4
 `endif
 `ifndef NPU_VECTOR_QUEUE_DEPTH
-`define NPU_VECTOR_QUEUE_DEPTH 8
+`define NPU_VECTOR_QUEUE_DEPTH 4
 `endif
 // Matrix/vector control: mutable CSR shadows -> validated FIFO snapshots ->
 // stable active ports. CNN has its own control module/CSR page; former DMA pages are reserved.
@@ -40,6 +40,11 @@ module npu_mmio #(
   output logic [15:0][31:0] vec_program_o,
   output logic [15:0] mat_lda_o,
   mat_ldb_o,
+  mat_ldc_o,
+  output logic [2:0][15:0] vec_stride_o,
+  output logic [2:0] vec_layout_o,
+  output logic [7:0] event_bits_o,
+  input logic [7:0] cnn_signal_i,
   output logic [4:0] mat_flags_o,
   output logic mat_precision_o,
   output logic [1:0] mat_element_log2_o,
@@ -64,12 +69,18 @@ module npu_mmio #(
   logic [31:0] mat_started, vec_started, mat_ticket, vec_ticket, mat_faults, vec_faults;
   logic mat_done_q, mat_error_q, vec_done_q, vec_error_q, mat_ok, vec_ok;
   logic mat_occupied, vec_occupied, writable, known, mpush, vpush, mpop, vpop;
-  logic [12:0] mla_q, mlb_q;
+  logic [12:0] mla_q, mlb_q, mlc_q, ldc;
+  logic [2:0][15:0] vstride_q;
+  logic [2:0] vlayout_q;
+  logic [15:0] mevent_q, vevent_q;
+  logic [7:0] mat_signal, vec_signal;
+  logic mat_event_blocked, vec_event_blocked, vec_extended_ok;
   logic [31:0] mp_q, me_q;
   logic [1:0] element_log2;
   logic [31:0] a_words, b_words, d_words;
   logic [12:0] lda, ldb;
   logic [20:0] a_span, b_span;
+  logic [17:0] d_span;
   logic vec_direct_ok, vec_program_ok;
   logic [31:0] vec_words;
   assign vec_words = vo_q[6] ? (vl_q + 3) >> 2 : vl_q;
@@ -80,13 +91,17 @@ module npu_mmio #(
     logic [2:0] flags;
     logic precision;
     logic [1:0] element_log2;
-    logic [12:0] lda, ldb;
+    logic [12:0] lda, ldb, ldc;
+    logic [7:0] wait_mask, signal_mask;
   } mat_desc_t;
   typedef struct packed {
     logic [14:0] a, b, d;
     logic [12:0] len;
     logic [8:0] op;
     logic [31:0] scalar;
+    logic [2:0][15:0] stride;
+    logic [2:0] layout;
+    logic [7:0] wait_mask, signal_mask;
   } vec_desc_t;
   localparam int MPW = MATRIX_QUEUE_DEPTH > 1 ? $clog2(MATRIX_QUEUE_DEPTH) : 1;
   localparam int VPW = VECTOR_QUEUE_DEPTH > 1 ? $clog2(VECTOR_QUEUE_DEPTH) : 1;
@@ -124,10 +139,12 @@ module npu_mmio #(
   assign element_log2 = me_q == 1 ? 0 : me_q == 2 ? 1 : 2;
   assign a_words = ((32'(a_span) << element_log2) + 3) >> 2;
   assign b_words = ((32'(b_span) << element_log2) + 3) >> 2;
-  assign d_words = {27'b0, mm_q[4:0]} * {27'b0, mn_q[4:0]};
+  assign ldc = mlc_q != 0 ? mlc_q : {8'b0, mn_q[4:0]};
+  assign d_span = 18'(5'(mm_q[4:0] - 5'd1)) * 18'(ldc) + 18'(mn_q[4:0]);
+  assign d_words = {14'b0, d_span};
   assign mat_ok=mm_q>=1 && mm_q<=16 && mn_q>=1 && mn_q<=16 && mf_q<=7 && mp_q<=1 &&
     (me_q==1 || me_q==2 || me_q==4) && (!mp_q || me_q>=2) &&
-    mk_q<=256 && (mk_q>=1 || mf_q[2]) && range_ok(
+    mk_q<=256 && ldc>=mn_q && (mk_q>=1 || mf_q[2]) && range_ok(
       md_q, d_words
   ) && (mk_q == 0 || (lda >= (mf_q[0] ? mm_q : mk_q) && ldb >= (mf_q[1] ? mk_q : mn_q) && range_ok(
       ma_q, a_words
@@ -171,7 +188,27 @@ module npu_mmio #(
                       {1'b0, va_q} < {1'b0, vd_q} + vl_q) : va_q == vd_q || !overlaps(
       va_q, vec_words, vd_q, vec_words
   )));
-  assign vec_ok = vec_direct_ok || vec_program_ok;
+  // Extended layout traversal and alias safety belong to software. Validate
+  // the initial access and encoding; xbar errors terminate invalid later reads.
+  // Avoid three length*stride multipliers in the MMIO validation path.
+  assign vec_extended_ok = vl_q>=1 && vl_q<=4096 &&
+    ((vo_q[5] && (vo_q==32'h20 || vo_q==32'h120 || vo_q==32'h60) &&
+      vec_program_cfg_o[4:0]>=1 && vec_program_cfg_o[4:0]<=16 &&
+      vec_program_cfg_o[12:8]<vec_program_cfg_o[4:0]) ||
+     (!vo_q[5] && (vo_q & 32'hffffff20)==0 &&
+      (vo_q[4:0]<=15 || (vo_q[4:0]>=18 && vo_q[4:0]<=20) || vo_q[4:0]==24 || vo_q[4:0]==26))) &&
+    range_ok(
+      va_q, 1
+  ) && (vo_q[8] ? data_range_ok(
+      vd_q, 1
+  ) : range_ok(
+      vd_q, 1
+  )) && (vo_q[5] || vo_q[7] || vo_q[4:0] == 0 || vo_q[4:0] == 2 ||
+         (vo_q[4:0] >= 13 && vo_q[4:0] <= 15) || range_ok(
+      vb_q, 1
+  )) && (!vlayout_q[2] ||
+         (vstride_q[0][1:0] == 0 && vstride_q[1][1:0] == 0 && (vo_q[8] || vstride_q[2][1:0] == 0)));
+  assign vec_ok = vlayout_q != 0 ? vec_extended_ok : vec_direct_ok || vec_program_ok;
 
 
   assign mat_pending_o = mc != 0 || mat_start_o;
@@ -179,8 +216,10 @@ module npu_mmio #(
   assign vec_occupied = vec_busy_i || vec_start_o || vc != 0;
   // The registered start pulse is part of occupancy: busy_i only rises on the
   // following edge. Without this guard one idle engine could pop two tasks.
-  assign mpop = mc != 0 && !mat_busy_i && !mat_blocked_i && !mat_start_o;
-  assign vpop = vc != 0 && !vec_busy_i && !vec_start_o;
+  assign mat_event_blocked = mc != 0 && ((event_bits_o & mq[mh].wait_mask) != mq[mh].wait_mask);
+  assign vec_event_blocked = vc != 0 && ((event_bits_o & vq[vh].wait_mask) != vq[vh].wait_mask);
+  assign mpop = mc != 0 && !mat_busy_i && !mat_blocked_i && !mat_event_blocked && !mat_start_o;
+  assign vpop = vc != 0 && !vec_busy_i && !vec_event_blocked && !vec_start_o;
   assign mpush = req_i && we_i && addr_i == 12'h100 && wdata_i[0] && !error_o && mat_ok;
   assign vpush = req_i && we_i && addr_i == 12'h200 && wdata_i[0] && !error_o && vec_ok;
   assign irq_o = {vec_done_q || vec_error_q, mat_done_q || mat_error_q};
@@ -272,6 +311,23 @@ module npu_mmio #(
         rdata_o = STREAM_BASE;
         writable = 0;
       end
+      12'h094: begin
+        rdata_o = 32'h4c593031;
+        writable = 0;
+      end
+      12'h088: begin
+        rdata_o = 32'h45563031;
+        writable = 0;
+      end
+      12'h08c: rdata_o = {24'b0, event_bits_o};  // W1S, read current sticky events.
+      12'h090: rdata_o = 0;  // W1C; hardware completion is set-dominant.
+      12'h158: rdata_o = {19'b0, mlc_q};
+      12'h15c: rdata_o = {16'b0, mevent_q};
+      12'h28c: rdata_o = {{16{vstride_q[0][15]}}, vstride_q[0]};
+      12'h290: rdata_o = {{16{vstride_q[1][15]}}, vstride_q[1]};
+      12'h294: rdata_o = {{16{vstride_q[2][15]}}, vstride_q[2]};
+      12'h298: rdata_o = {29'b0, vlayout_q};
+      12'h29c: rdata_o = {16'b0, vevent_q};
       12'h100, 12'h200: rdata_o = 0;
       12'h104: begin
         rdata_o = {29'b0, mat_error_q, mat_done_q, mat_occupied};
@@ -322,7 +378,13 @@ module npu_mmio #(
       end
       12'h154: begin
         rdata_o = {
-          26'b0, mat_blocked_i, mat_fault_i, mat_done_i, (mc != 0), mat_start_o, mat_busy_i
+          26'b0,
+          (mat_blocked_i || mat_event_blocked),
+          mat_fault_i,
+          mat_done_i,
+          (mc != 0),
+          mat_start_o,
+          mat_busy_i
         };
         writable = 0;
       end
@@ -343,7 +405,9 @@ module npu_mmio #(
         writable = 0;
       end
       12'h288: begin
-        rdata_o = {27'b0, vec_fault_i, vec_done_i, (vc != 0), vec_start_o, vec_busy_i};
+        rdata_o = {
+          26'b0, vec_event_blocked, vec_fault_i, vec_done_i, (vc != 0), vec_start_o, vec_busy_i
+        };
         writable = 0;
       end
       12'h080: begin
@@ -412,7 +476,7 @@ module npu_mmio #(
         end
       end
     endcase
-    error_o=(we_i && (addr_i==12'h134 || addr_i==12'h138) && (wdata_i>4096)) || !known || (we_i&&!writable) || (we_i && addr_i==12'h00c &&
+    error_o=(we_i && addr_i==12'h158 && wdata_i>4096) || (we_i && addr_i==12'h298 && wdata_i>7) || (we_i && (addr_i==12'h15c || addr_i==12'h29c) && wdata_i>65535) || (we_i && (addr_i==12'h134 || addr_i==12'h138) && (wdata_i>4096)) || !known || (we_i&&!writable) || (we_i && addr_i==12'h00c &&
       (cpu_release_o || wdata_i[31:14]!=18'h20000 || wdata_i[1:0]!=0)) ||
       (we_i && addr_i==12'h100 && wdata_i[0] && mc==MATRIX_QUEUE_DEPTH && !mpop) ||
       (we_i && addr_i==12'h200 && wdata_i[0] && vc==VECTOR_QUEUE_DEPTH && !vpop);
@@ -431,9 +495,24 @@ module npu_mmio #(
         mp_q[0],
         element_log2,
         lda[12:0],
-        ldb[12:0]
+        ldb[12:0],
+        ldc,
+        mevent_q[7:0],
+        mevent_q[15:8]
       };
-    if (vpush) vq[vt] <= {va_q[14:0], vb_q[14:0], vd_q[14:0], vl_q[12:0], vo_q[8:0], vs_q};
+    if (vpush)
+      vq[vt] <= {
+        va_q[14:0],
+        vb_q[14:0],
+        vd_q[14:0],
+        vl_q[12:0],
+        vo_q[8:0],
+        vs_q,
+        vstride_q,
+        vlayout_q,
+        vevent_q[7:0],
+        vevent_q[15:8]
+      };
   end
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -451,6 +530,17 @@ module npu_mmio #(
       mf_q <= 0;
       mat_lda_o <= 0;
       mla_q <= 0;
+      mlc_q <= 0;
+      mat_ldc_o <= 0;
+      vstride_q <= {16'd4, 16'd4, 16'd4};
+      vec_stride_o <= {16'd4, 16'd4, 16'd4};
+      vlayout_q <= 0;
+      vec_layout_o <= 0;
+      mevent_q <= 0;
+      vevent_q <= 0;
+      mat_signal <= 0;
+      vec_signal <= 0;
+      event_bits_o <= 0;
       mlb_q <= 0;
       mp_q <= 0;
       me_q <= 4;
@@ -503,6 +593,10 @@ module npu_mmio #(
     end else begin
       mat_start_o <= 0;
       vec_start_o <= 0;
+      event_bits_o <= (event_bits_o & ~((req_i && we_i && !error_o && addr_i==12'h090) ? wdata_i[7:0] : 8'b0)) |
+        ((req_i && we_i && !error_o && addr_i==12'h08c) ? wdata_i[7:0] : 8'b0) |
+        ((mat_done_i && !mat_fault_i) ? mat_signal : 8'b0) |
+        ((vec_done_i && !vec_fault_i) ? vec_signal : 8'b0) | cnn_signal_i;
       if (mat_busy_i) mat_cycles_q <= mat_cycles_q + 1;
       if (vec_busy_i) vec_cycles_q <= vec_cycles_q + 1;
       // Count the actual engine latch edge, one cycle after FIFO pop.
@@ -558,6 +652,8 @@ module npu_mmio #(
         mat_element_log2_o <= mq[mh].element_log2;
         mat_lda_o <= {3'b0, mq[mh].lda};
         mat_ldb_o <= {3'b0, mq[mh].ldb};
+        mat_ldc_o <= {3'b0, mq[mh].ldc};
+        mat_signal <= mq[mh].signal_mask;
         mh <= mnext(mh);
         mat_start_o <= 1;
       end
@@ -568,6 +664,9 @@ module npu_mmio #(
         vec_len_o <= vq[vh].len;
         vec_op_o <= vq[vh].op;
         vec_scalar_o <= vq[vh].scalar;
+        vec_stride_o <= vq[vh].stride;
+        vec_layout_o <= vq[vh].layout;
+        vec_signal <= vq[vh].signal_mask;
         vh <= vnext(vh);
         vec_start_o <= 1;
       end
@@ -624,6 +723,13 @@ module npu_mmio #(
             12'h13c: mp_q <= wdata_i;
             12'h140: me_q <= wdata_i;
             12'h138: mlb_q <= wdata_i[12:0];
+            12'h158: mlc_q <= wdata_i[12:0];
+            12'h15c: mevent_q <= wdata_i[15:0];
+            12'h28c: vstride_q[0] <= wdata_i[15:0];
+            12'h290: vstride_q[1] <= wdata_i[15:0];
+            12'h294: vstride_q[2] <= wdata_i[15:0];
+            12'h298: vlayout_q <= wdata_i[2:0];
+            12'h29c: vevent_q <= wdata_i[15:0];
             12'h230: vs_q <= wdata_i;
             12'h234: vec_program_cfg_o <= wdata_i;
             default:

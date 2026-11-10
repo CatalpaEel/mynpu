@@ -1,6 +1,6 @@
 // Shared transfer/control shell; arithmetic is an external ready/valid unit.
 `ifndef NPU_CNN_QUEUE_DEPTH
-`define NPU_CNN_QUEUE_DEPTH 8
+`define NPU_CNN_QUEUE_DEPTH 4
 `endif
 module npu_stream #(
   parameter int RF_SINK = 0,
@@ -28,6 +28,8 @@ module npu_stream #(
   csr_req_i,
   csr_we_i,
   blocked_i,
+  input logic [7:0] event_bits_i,
+  output logic [7:0] event_signal_o,
   input logic [7:0] csr_addr_i,
   input logic [31:0] csr_wdata_i,
   output logic [31:0] csr_rdata_o,

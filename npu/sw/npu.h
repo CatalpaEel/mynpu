@@ -31,6 +31,41 @@
 #define NPU_REGFILE_BASE_REG 0x054u
 #define NPU_REGFILE_BASE 0x80004000u
 static inline uint32_t npu_regfile_bank_bytes(void);
+/* Additive LY01 layout / EV01 sticky task events. All masks are 8 bits.
+ * Events are not consumed by WAIT: software clears them before safe reuse.
+ * Successful completion signals after write acknowledgement; faults do not.
+ */
+#define NPU_LAYOUT_CAP 0x094u
+#define NPU_LAYOUT_ABI 0x4c593031u
+#define NPU_EVENT_CAP 0x088u
+#define NPU_EVENT_ABI 0x45563031u
+#define NPU_EVENT_SET 0x08cu
+#define NPU_EVENT_CLEAR 0x090u
+#define NPU_MAT_LDC 0x158u
+#define NPU_MAT_EVENTS 0x15cu
+#define NPU_VEC_A_STRIDE 0x28cu
+#define NPU_VEC_B_STRIDE 0x290u
+#define NPU_VEC_D_STRIDE 0x294u
+#define NPU_VEC_LAYOUT 0x298u
+#define NPU_VEC_EVENTS 0x29cu
+#define NPU_CNN_EVENTS 0x674u
+#define NPU_VEC_FINAL_ONLY 1u
+#define NPU_VEC_KEEP_R2 2u
+#define NPU_VEC_STRIDES 4u
+struct npu_vector_layout {
+  int32_t a_stride, b_stride, d_stride;
+  uint32_t flags, events;
+};
+static inline uint32_t npu_task_events(unsigned wait_mask, unsigned signal_mask) {
+  return (wait_mask & 255u) | ((signal_mask & 255u) << 8);
+}
+static inline int npu_vector_layout_valid(const struct npu_vector_layout *l, int packed) {
+  return l && l->flags <= 7u && l->events <= 65535u && l->a_stride >= -32768 &&
+         l->a_stride <= 32767 && l->b_stride >= -32768 && l->b_stride <= 32767 &&
+         l->d_stride >= -32768 && l->d_stride <= 32767 &&
+         (!(l->flags & NPU_VEC_STRIDES) ||
+          (!(l->a_stride & 3) && !(l->b_stride & 3) && (packed || !(l->d_stride & 3))));
+}
 #define NPU_MAT_CONTROL 0x100u
 #define NPU_MAT_STATUS 0x104u
 #define NPU_VEC_CONTROL 0x200u
@@ -147,12 +182,20 @@ struct npu_vector_descriptor {
 #define NPU_BUSY 1u
 #define NPU_DONE 2u
 #define NPU_ERROR 4u
+/* Optional transport hooks also allow host-side validation of queue helpers. */
+#ifndef NPU_MMIO_READ32
+#define NPU_MMIO_READ32(address) (*(volatile uint32_t *)(uintptr_t)(address))
+#endif
+#ifndef NPU_MMIO_WRITE32
+#define NPU_MMIO_WRITE32(address, value) (*(volatile uint32_t *)(uintptr_t)(address) = (value))
+#endif
+#ifndef NPU_IO_FENCE
+#define NPU_IO_FENCE() __asm__ volatile("fence iorw, iorw" ::: "memory")
+#endif
 static inline void npu_write(uint32_t offset, uint32_t value) {
-  *(volatile uint32_t *)(uintptr_t)(NPU_MMIO_BASE + offset) = value;
+  NPU_MMIO_WRITE32(NPU_MMIO_BASE + offset, value);
 }
-static inline uint32_t npu_read(uint32_t offset) {
-  return *(volatile uint32_t *)(uintptr_t)(NPU_MMIO_BASE + offset);
-}
+static inline uint32_t npu_read(uint32_t offset) { return NPU_MMIO_READ32(NPU_MMIO_BASE + offset); }
 /* Read only NPU-local pending sources; CPU mie controls wake/interrupt masks. */
 static inline uint32_t npu_irq_pending(void) {
   uint32_t value;
@@ -163,7 +206,7 @@ static inline uint32_t npu_irq_pending(void) {
 static inline void npu_irq_ack_done(uint32_t control_offset) {
   npu_write(control_offset, NPU_CONTROL_ACK_DONE);
 }
-static inline void npu_fence(void) { __asm__ volatile("fence iorw, iorw" ::: "memory"); }
+static inline void npu_fence(void) { NPU_IO_FENCE(); }
 static inline uint32_t npu_regfile_bank_bytes(void) {
   return (npu_read(NPU_REGFILE_CAP) & 65535u) * 4u;
 }
@@ -216,6 +259,8 @@ static inline int npu_matmul_start(uint32_t a, uint32_t b, uint32_t d, uint32_t 
   npu_write(0x134, 0);
   npu_write(0x138, 0);
   npu_write(NPU_MAT_FLAGS, 0);
+  npu_write(NPU_MAT_LDC, 0);
+  npu_write(NPU_MAT_EVENTS, 0);
   npu_fence();
   npu_write(0x100, 1);
   return npu_read(NPU_MAT_SUBMITTED) == before + 1u ? 0 : -1;
@@ -231,6 +276,8 @@ static inline int npu_vector_start(uint32_t a, uint32_t b, uint32_t d, uint32_t 
   npu_write(0x20c, d);
   npu_write(0x210, len);
   npu_write(0x214, op);
+  npu_write(NPU_VEC_LAYOUT, 0);
+  npu_write(NPU_VEC_EVENTS, 0);
   npu_fence();
   npu_write(0x200, 1);
   return npu_read(NPU_VEC_SUBMITTED) == before + 1u ? 0 : -1;
@@ -260,7 +307,10 @@ static inline int npu_gemm_leading_dims(uint32_t lda, uint32_t ldb) {
   npu_write(NPU_MATRIX_LDB, ldb);
   return 0;
 }
-static inline int npu_gemm_start(const struct npu_gemm_descriptor *d) {
+static inline int npu_gemm_start_layout(const struct npu_gemm_descriptor *d, uint32_t ldc,
+                                        uint32_t events) {
+  if (!d || ldc > 4096u || (ldc && ldc < d->n) || events > 65535u)
+    return -1;
   if ((npu_read(NPU_OPERATOR_ABI) >> 16) != 2u || (d->flags & ~npu_read(NPU_GEMM_CAP)))
     return -1;
   if (d->precision > 1 ||
@@ -281,9 +331,14 @@ static inline int npu_gemm_start(const struct npu_gemm_descriptor *d) {
   npu_write(NPU_MATRIX_LDA, d->lda);
   npu_write(NPU_MATRIX_LDB, d->ldb);
   npu_write(NPU_MAT_FLAGS, d->flags);
+  npu_write(NPU_MAT_LDC, ldc);
+  npu_write(NPU_MAT_EVENTS, events);
   npu_fence();
   npu_write(0x100, 1);
   return npu_read(NPU_MAT_SUBMITTED) == before + 1u ? 0 : -1;
+}
+static inline int npu_gemm_start(const struct npu_gemm_descriptor *d) {
+  return npu_gemm_start_layout(d, 0, 0);
 }
 /* Optional direct CNN/Matrix result quantizer. Software owns update timing.
  * Arithmetic parameters are sampled per result; enable/pack/dst are live.
@@ -323,7 +378,14 @@ static inline int npu_quant_configure(uint32_t source, const struct npu_quant_co
   npu_write(base, q->control);
   return 0;
 }
-static inline int npu_elementwise_start(const struct npu_vector_descriptor *d) {
+/* Extended traversal bounds, aliases and KEEP_R2 lifetime are software-owned.
+ * SIMD strides advance once per four-byte group. Packed program D strides
+ * advance per output byte. With STRIDES clear, legacy dense addressing applies.
+ */
+static inline int npu_elementwise_start_layout(const struct npu_vector_descriptor *d,
+                                               const struct npu_vector_layout *l) {
+  if (!d || !npu_vector_layout_valid(l, d->op == 0x120u))
+    return -1;
   uint32_t opcode = d->op & 31u;
   int program = (d->op == 0x20u || d->op == 0x120u || d->op == 0x60u);
   if ((npu_read(NPU_OPERATOR_ABI) >> 16) != 2u ||
@@ -339,9 +401,18 @@ static inline int npu_elementwise_start(const struct npu_vector_descriptor *d) {
   npu_write(0x210, d->len);
   npu_write(0x214, d->op);
   npu_write(NPU_VEC_SCALAR, d->scalar);
+  npu_write(NPU_VEC_A_STRIDE, (uint32_t)l->a_stride);
+  npu_write(NPU_VEC_B_STRIDE, (uint32_t)l->b_stride);
+  npu_write(NPU_VEC_D_STRIDE, (uint32_t)l->d_stride);
+  npu_write(NPU_VEC_LAYOUT, l->flags);
+  npu_write(NPU_VEC_EVENTS, l->events);
   npu_fence();
   npu_write(0x200, 1);
   return npu_read(NPU_VEC_SUBMITTED) == before + 1u ? 0 : -1;
+}
+static inline int npu_elementwise_start(const struct npu_vector_descriptor *d) {
+  const struct npu_vector_layout dense = {4, 4, 4, 0, 0};
+  return npu_elementwise_start_layout(d, &dense);
 }
 #define NPU_CPU_CONTROL 0x008u
 #define NPU_CPU_BOOT_ADDR 0x00cu
@@ -438,7 +509,9 @@ static inline int npu_stream_task_checked(unsigned y, unsigned x, unsigned count
   *task = npu_stream_task(y, x, count, rows, left, right, dst_words);
   return 0;
 }
-static inline int npu_stream_submit(uint32_t task) {
+static inline int npu_stream_submit_events(uint32_t task, uint32_t events) {
+  if (events > 65535u)
+    return -1;
   if (npu_read(NPU_STREAM_ABI) != NPU_STREAM_ABI_V5 ||
       !npu_data_span(npu_read(0x618), ((task & 15u) + 1u) * 4u, npu_regfile_bank_bytes() * 2u) ||
       !npu_data_span(npu_read(NPU_CNN_KERNEL), npu_read(0x61c) * 9u,
@@ -447,10 +520,12 @@ static inline int npu_stream_submit(uint32_t task) {
     return -1;
   uint32_t before = npu_read(NPU_CNN_SUBMITTED);
   npu_write(NPU_CNN_WINDOW, task);
+  npu_write(NPU_CNN_EVENTS, events);
   npu_fence();
   npu_write(0x600, 1);
   return npu_read(NPU_CNN_SUBMITTED) == before + 1u ? 0 : -1;
 }
+static inline int npu_stream_submit(uint32_t task) { return npu_stream_submit_events(task, 0); }
 /* Source-level compatibility adapter. The old binary CRW2 ABI is retired.
  * Full convolution shape, tensor ranges and partial-buffer aliasing are now
  * software checks; raw MMIO callers must enforce equivalent ownership rules. */
@@ -480,11 +555,16 @@ static inline int npu_cnn_descriptor_valid(const struct npu_cnn_descriptor *d, u
           !npu_spans_overlap(d->dst, output, d->weights, weights) &&
           !npu_spans_overlap(d->dst, output, partial, partial_bytes));
 }
-static inline int npu_cnn_start(const struct npu_cnn_descriptor *d) {
+/* Validate the whole row, then enqueue windows as space becomes available.
+ * Returns after all windows are accepted, not after compute completes.
+ * queue_timeout counts queue-full polls across this row. On timeout/fault,
+ * already accepted windows may still execute; no transactional rollback.
+ */
+static inline int npu_cnn_start_wait(const struct npu_cnn_descriptor *d, uint32_t queue_timeout) {
+  if (!d)
+    return -1;
   uint32_t bytes = npu_regfile_bank_bytes() * 2;
-  /* Reserve every tile before submitting any part of this row. */
-  if (!npu_cnn_descriptor_valid(d, bytes) ||
-      (npu_read(NPU_CNN_QUEUE) >> 16) < (d->output_width + 15) / 16)
+  if (!npu_cnn_descriptor_valid(d, bytes))
     return -1;
   struct npu_stream_config cfg = {d->src,
                                   d->weights,
@@ -508,12 +588,28 @@ static inline int npu_cnn_start(const struct npu_cnn_descriptor *d) {
   for (unsigned x = 0; x < d->output_width; x += 16) {
     unsigned n = d->output_width - x > 16 ? 16 : d->output_width - x;
     uint32_t task;
+    while (!npu_queue_has_space(NPU_CNN_QUEUE)) {
+      if (npu_read(0x604) & NPU_ERROR)
+        return -1;
+      if (!queue_timeout)
+        return -2;
+      queue_timeout--;
+    }
     if (npu_stream_task_checked(d->output_row, x, n, mask, x == 0,
                                 (x + n - 1) * d->stride + 1 >= d->width, x, &task) ||
         npu_stream_submit(task))
       return -1;
   }
   return 0;
+}
+/* Legacy nonblocking row enqueue. A row must fit the physical queue capacity.
+ * Use start_wait or cnn_layer to stream wider rows through a smaller queue.
+ */
+static inline int npu_cnn_start(const struct npu_cnn_descriptor *d) {
+  if (!d || (npu_read(NPU_CNN_QUEUE) >> 16) < (d->output_width + 15) / 16)
+    return -1;
+  int result = npu_cnn_start_wait(d, 0);
+  return result == -2 ? -1 : result;
 }
 /* Blocking reference adapter. Optimized assembly batches commands per layer. */
 static inline int npu_cnn_layer(struct npu_cnn_descriptor row, uint32_t channels, uint32_t rows,
@@ -539,7 +635,7 @@ static inline int npu_cnn_layer(struct npu_cnn_descriptor row, uint32_t channels
   for (uint32_t c = 0; c < channels; c++) {
     for (uint32_t y = 0; y < rows; y++) {
       row.output_row = y;
-      int rc = npu_cnn_start(&row);
+      int rc = npu_cnn_start_wait(&row, timeout);
       if (rc)
         return rc;
       uint32_t ticket = npu_read(NPU_CNN_SUBMITTED), remaining = timeout;

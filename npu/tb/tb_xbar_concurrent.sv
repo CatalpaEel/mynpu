@@ -23,6 +23,7 @@ module tb_xbar_concurrent;
   wire [2:0][31:0] gather_data_o;
   xbar dut (
     .rf_sink_req_i   (1'b0),
+    .rf_sink_be_i    (4'hf),
     .rf_sink_addr_i  (32'b0),
     .rf_sink_wdata_i (32'b0),
     .rf_sink_gnt_o   (),

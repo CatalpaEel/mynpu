@@ -1,0 +1,11 @@
+{
+  "scope": "Actual Virtuoso GUI image of the final postDummy GDS imported at 2000 dbu/um; not a reconstructed diagram.",
+  "library": "mynpu_lab5_final",
+  "cell": "mynpu_asic_top_postDummy",
+  "sha256": {
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/die1950-postdummy.png": "d8a519a11661d0c2d718c2f0b49f5871259ab7e206adc3ee7a98902b37d24896",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261109-lab5-die1950/outputs/mynpu_asic_top_postDummy.gds": "5a6e74911aa3abd49e1a2738a392cf6d967a5cb1f809a71167dea777b2e66109",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261109-lab5-die1950/scripts/capture_high.il": "29dbd8a6c974c9df92274c26df3ce0892b304294ea360ccae8d0d5a09e119cdf",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261109-lab5-die1950/logs/capture_high.log": "bac370e3aa5dde314843817d86bf29f9a54b7b7e50b4481eb3396038e18de0dd"
+  }
+}

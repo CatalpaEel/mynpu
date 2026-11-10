@@ -46,6 +46,7 @@ module matrix_task_fixture (
     .data_o    (matrix_result_data)
   );
   npu_matrix_stream i_stream (
+    .ldc_i                 (16'b0),
     .quant_cancelled_o     (),
     .observe_o             (),
     .quant_written_o       (),
@@ -128,6 +129,8 @@ module vector_task_fixture (
     .data_o    (vector_compute_data)
   );
   npu_vector_stream i_issue (
+    .stride_i          ({16'd4, 16'd4, 16'd4}),
+    .layout_i          (3'b0),
     .compute_mul_simd_o(vector_mul_simd),
     .compute_mul_a_o   (vector_mul_a),
     .compute_mul_b_o   (vector_mul_b),

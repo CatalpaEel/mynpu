@@ -22,6 +22,10 @@ p.add_argument(
         "storepack",
         "unitsmoke",
         "sharedoperands",
+        "workloads",
+        "layoutevents",
+        "workloadlegacy",
+        "workloadcpu",
         "outergemm",
         "matrixtiles",
         "cnnstream",
@@ -52,9 +56,13 @@ p.add_argument(
     ],
     required=True,
 )
+p.add_argument("--cpu-case", choices=["pipeline", "layout", "packed", "cnn"], default="pipeline")
 p.add_argument("--parallel-units", type=int, choices=[0, 1], default=1)
 p.add_argument("--tag", required=True)
 p.add_argument("--macro", action="store_true")
+p.add_argument(
+    "--legacy-plan", action="store_true", help="Use reference scalar/scatter software lowering"
+)
 p.add_argument(
     "--matrix-queue-depth",
     type=int,
@@ -90,6 +98,8 @@ p.add_argument("--artifacts-dir", type=Path, default=ROOT / "mnist/artifacts")
 a = p.parse_args()
 if a.suite in ["dma", "stream", "soc", "layers", "ops", "burst"]:
     p.error("Legacy DMA-dependent suite retired; use jtag, latency, and independent compute suites")
+if a.cpu_case != "pipeline" and (a.suite != "workloadcpu" or a.legacy_plan):
+    p.error("cpu-case variants require native workloadcpu")
 a.artifacts_dir = a.artifacts_dir.resolve()
 if not re.fullmatch(r"[A-Za-z0-9_-]+", a.tag):
     p.error("tag must be a simple name")
@@ -111,6 +121,10 @@ tops = {
     "rfequivalence": "tb_rf_equivalence",
     "readbatch": "tb_read_batch",
     "sharedoperands": "tb_shared_operands",
+    "workloads": "tb_workloads",
+    "workloadlegacy": "tb_workloads",
+    "layoutevents": "tb_layout_events",
+    "workloadcpu": "tb_workloads",
     "ops": "tb_ops",
     "jtag": "tb_jtag",
     "quantlayers": "tb_quant_layers",
@@ -236,6 +250,10 @@ if a.macro:
         "irqwake",
         "softcfg",
         "sharedoperands",
+        "workloads",
+        "layoutevents",
+        "workloadlegacy",
+        "workloadcpu",
         "outergemm",
         "matrixtiles",
         "cnnstream",
@@ -362,6 +380,26 @@ if a.suite == "blocking":
         a.artifacts_dir / "test_meta.svh",
         pc_map,
     ]
+if a.suite in ("workloads", "workloadcpu", "workloadlegacy"):
+    subprocess.run(
+        ["/usr/bin/python3.12", str(ROOT / "workloads/generate.py"), "--out", str(out)]
+        + (["--legacy"] if a.suite == "workloadlegacy" or a.legacy_plan else []),
+        check=True,
+    )
+    tracked += [
+        ROOT / "workloads/generate.py",
+        ROOT / "sw/task_graph.py",
+        out / "workloads.hex",
+        out / "workloads_manifest.json",
+        ROOT / "sw/plan_rv32.py",
+        ROOT / "sw/rv32_asm.py",
+        out / "workload_cpu.hex",
+        out / "workload_cpu.S",
+        out / "workload_cpu_plan.h",
+        out / "workloads_plan.h",
+        *sorted((out / "cpu_variants").rglob("*.hex")),
+        *sorted((out / "cpu_variants").rglob("*.S")),
+    ]
 hashes = {str(f): hashlib.sha256(f.read_bytes()).hexdigest() for f in tracked if f.is_file()}
 cmd = [
     "vcs",
@@ -398,6 +436,15 @@ with (out / "compile-launcher.log").open("w") as f:
 if r.returncode:
     raise SystemExit("Compile failed: " + str(out))
 cmd = [str(out / "simv"), "-l", str(out / "run.log")]
+if a.suite == "workloadcpu":
+    cpu_image = (
+        out / "workload_cpu.hex"
+        if a.cpu_case == "pipeline"
+        else out / "cpu_variants" / a.cpu_case / "workload_cpu.hex"
+    )
+    cmd.append("+workload_cpu=" + str(cpu_image))
+if a.suite in ("workloads", "workloadlegacy"):
+    cmd.append("+workloads=" + str(out / "workloads.hex"))
 if a.suite == "blocking":
     cmd.append("+block_pc_map=" + str(pc_map))
 if a.macro:
@@ -420,6 +467,10 @@ markers = {
     "rfequivalence": "RF EQUIVALENCE PASS",
     "readbatch": "READ BATCH PASS",
     "sharedoperands": "SHARED OPERANDS PASS",
+    "workloads": "GENERAL WORKLOADS PASS",
+    "workloadlegacy": "GENERAL WORKLOADS PASS",
+    "layoutevents": "LAYOUT EVENTS PASS",
+    "workloadcpu": "GENERAL CPU PASS",
     "ops": "OPERATORS PASS",
     "jtag": "JTAG PASS",
     "quantlayers": "QUANT LAYERS PASS",
