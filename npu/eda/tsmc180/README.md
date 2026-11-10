@@ -20,7 +20,7 @@ RF容量及三组FIFO深度默认读取 `npu/build_config.json`。CNN输出原�
 
 ```sh
 /usr/bin/python3.12 npu/eda/tsmc180/prepare_run.py --out ../eda-runs/NEW_RUN --effort low --synth-period 16 --report-period 20
-genus -no_gui -batch -files ../eda-runs/NEW_RUN/synth.tcl > ../eda-runs/NEW_RUN/launcher.log 2>&1
+(cd ../eda-runs/NEW_RUN && genus -no_gui -batch -files synth.tcl > launcher.log 2>&1)
 /usr/bin/python3.12 npu/scripts/run_gate.py --run ../eda-runs/NEW_RUN --suite latency --tag NEW_GATE_TAG --max-cycles 20000
 /usr/bin/python3.12 npu/scripts/run_gate.py --run ../eda-runs/NEW_RUN --suite burst --tag NEW_BURST_GATE_TAG
 ```
@@ -83,7 +83,7 @@ genus -no_gui -batch -files ../eda-runs/NEW_RUN/synth.tcl > ../eda-runs/NEW_RUN/
 
 ```sh
 /usr/bin/python3.12 npu/eda/tsmc180/prepare_chip.py --core ../eda-runs/20261104-rf-gather/asic --out ../eda-runs/NEW_CHIP
-genus -no_gui -batch -files ../eda-runs/NEW_CHIP/scripts/synth_chip.tcl > ../eda-runs/NEW_CHIP/mynpu/chip_synth/launcher.log 2>&1
+(cd ../eda-runs/NEW_CHIP && genus -no_gui -batch -files scripts/synth_chip.tcl > mynpu/chip_synth/launcher.log 2>&1)
 /usr/bin/python3.12 npu/scripts/run_chip_gate.py --run ../eda-runs/NEW_CHIP --tag NEW_CHIP_MAPPED
 /usr/bin/python3.12 npu/eda/tsmc180/run_fullchip.py --run ../eda-runs/NEW_CHIP --macro-plan left
 ```
@@ -119,7 +119,7 @@ CNN最小计算核与SD91搬运任务见[设计记录](../../docs/minimal-comput
 
 ```sh
 python3.12 npu/eda/tsmc180/prepare_run.py --out ../eda-runs/NEW_RUN/asic --effort low --synth-period 16 --report-period 20
-/opt/eda/Cadence/GENUS191/bin/genus -no_gui -batch -files ../eda-runs/NEW_RUN/asic/synth.tcl > ../eda-runs/NEW_RUN/asic/launcher.log 2>&1
+(cd ../eda-runs/NEW_RUN/asic && /opt/eda/Cadence/GENUS191/bin/genus -no_gui -batch -files synth.tcl > launcher.log 2>&1)
 python3.12 npu/scripts/run_gate.py --run ../eda-runs/NEW_RUN/asic --suite latency --tag NEW_GATE
 ```
 
@@ -128,3 +128,9 @@ python3.12 npu/scripts/run_gate.py --run ../eda-runs/NEW_RUN/asic --suite latenc
 
 
 后续[CNN窗口预取与RF并行搬运](../../docs/window-prefetch.md)将默认窗口改为每行3words，并开启NMC的RF专用写回入口；共享RF容量和纯算术源文件未改。该版本的[报告](../../reports/window_prefetch_validation.json)仅包含RTL/宏模型功能与周期；最新PPA见上方完整后端链接。`prepare_run.py`会冻结新配置字段，不能把历史2.666814mm²等当作新版本测量。
+
+## 运行目录与生成文件
+
+Genus/Innovus会在进程当前目录创建命令记录、日志轮转和`fv/`中间文件。把`-files`和stdout指向外部目录不会改变这一行为，因此上面的Genus命令先进入独立运行目录；`run_fullchip.py`本身也以运行目录作为cwd。
+
+这些生成文件不提交Git。`npu/reports/`中的精选JSON/文本报告及文档截图继续保留；大型FPGA检查点和综合网表由`npu/scripts/build_vivado.tcl`重新生成，网表仿真前先完成构建。2026-11-10清理的旧生成物备份在服务器项目同级`eda-runs/20261110-repository-cleanup/`，附SHA256清单。

@@ -20,3 +20,21 @@ npu/reports/mnist_attempt_*/
 # Unused teaching-project predecessor
 external/lab2-ST/
 **/.ruff_cache/
+
+# Cadence session files, including numbered rotations (e.g. genus.log1).
+genus.cmd*
+genus.log*
+innovus.cmd*
+innovus.log*
+CDS.log*
+.rs_*.tstamp
+/fv/
+
+# Regenerable FPGA build artifacts; keep source RTL and selected reports.
+/npu/reports/*.dcp
+/npu/reports/npu_synth.v
+
+# Editor backup/swap files.
+*~
+*.swp
+*.swo
