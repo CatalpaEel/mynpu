@@ -1,3 +1,5 @@
+> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
+
 # Vector 单 ALU：INT32 / 4×INT8 SIMD
 
 Vector 不再分主 ALU 和独立轻量 ALU。`npu_vector.sv` 是唯一的组合计算单元，`npu_vector_stream.sv` 管理取数、四个 32 位临时寄存器、程序 PC、进位和写回。CPU、CNN、Matrix 和 XBAR 的职责不变。

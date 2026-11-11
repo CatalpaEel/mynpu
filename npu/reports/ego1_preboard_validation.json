@@ -1,0 +1,30 @@
+{
+  "board": "EGo1 V2.2",
+  "part": "xc7a35tcsg324-1",
+  "system_clock_hz": 50000000,
+  "status": "board_rtl_and_portable_build_prepared; Vivado execution blocked by unavailable installation",
+  "functional_simulation": {
+    "passed": true,
+    "checks": 38,
+    "scope": "Board wrapper functional simulation; MMCM/BUFG stand-ins, not Vivado or physical board validation",
+    "evidence": "npu/build/ego1-sim-release/validation.json",
+    "log_sha256": "b127300bf514ea6c700be9762dffbe8aad04eb602c05c0ee99507dbd486bf44b"
+  },
+  "vivado_synthesis_run": false,
+  "vivado_implementation_run": false,
+  "bitstream_generated": false,
+  "mcs_generated": false,
+  "physical_board_tested": false,
+  "source_manifest": "npu/build/ego1-release/source_manifest.json",
+  "source_manifest_sha256": "592ee690479b35330d74f0b4b30ebc036f3f29605248612440de72d4ab8e97b9",
+  "image_bin_hex_identical": true,
+  "sram_image_bytes": 16384,
+  "configuration": {
+    "rf_bank_words": 32,
+    "matrix_queue_depth": 4,
+    "vector_queue_depth": 4,
+    "cnn_queue_depth": 4,
+    "stream_fifo_depth": 8
+  },
+  "blocked_reason": "vivado absent from PATH and searched installation locations; historical /home/zzh/vivado path absent"
+}

@@ -1,20 +1,20 @@
-> 2026-11-09 [Lab5 后续流程实跑](../../docs/lab5-all4.md)：V2LVS、Seal Ring、Dummy、LVS/ERC、天线和WB已执行。教学容差LVS为CORRECT，天线/WB为0；仍有270处M1间距违规、ERC残项和尺寸超限，未完成验收。
+> 2026-11-09 Lab5 后续流程实跑（历史文档已移除）：V2LVS、Seal Ring、Dummy、LVS/ERC、天线和WB已执行。教学容差LVS为CORRECT，天线/WB为0；仍有270处M1间距违规、ERC残项和尺寸超限，未完成验收。
 
 > 最新RF 1R1W最终r3后端见[完整报告](../../docs/rf1r1w-die1950-signoff.md)：1950µm、2.632349mm²核心非filler，50MHz setup/hold +0.468/+0.018ns；Calibre驱动修复M2/WB间距，完整课程检查及原始残项均保留。
 
-> 最新1950µm布局布线及Lab 5完整检查见[报告](../../docs/die1950-signoff.md)：Seal Ring外框1980µm，50MHz setup/hold +0.592/+0.019ns；课程DRC排除后0、教学容差LVS CORRECT、天线/WB 0，ERC残项待评审。以下2000µm及更早运行保留为历史记录。
+> 最新1950µm布局布线及Lab 5完整检查见报告（历史文档已移除）：Seal Ring外框1980µm，50MHz setup/hold +0.592/+0.019ns；课程DRC排除后0、教学容差LVS CORRECT、天线/WB 0，ERC残项待评审。以下2000µm及更早运行保留为历史记录。
 
-> 2026-11-08 当前 4/4/4 队列的[完整含 PAD 后端结果](../../docs/area26-all4-pnr.md)：2×2mm²，布线后核心非 filler 2.638167mm²，50MHz setup +0.529ns、hold +0.020ns；两条原生 IO 电源轨提示保留。以下更早结果属于历史快照。
+> 2026-11-08 当前 4/4/4 队列的完整含 PAD 后端结果（历史文档已移除）：2×2mm²，布线后核心非 filler 2.638167mm²，50MHz setup +0.529ns、hold +0.020ns；两条原生 IO 电源轨提示保留。以下更早结果属于历史快照。
 
-> 当前vector已改为通用指令程序，见[设计说明](../../docs/vector-program.md)与[当前报告](../../reports/vector_program_validation.json)。以下此前PPA/布局布线结果不代表新RTL。
+> 当前vector已改为通用指令程序，见设计说明（历史文档已移除）与[当前报告](../../reports/vector_program_validation.json)。以下此前PPA/布局布线结果不代表新RTL。
 
-最新[完整含PAD后端结果](../../docs/window-prefetch-pnr.md)：2×2mm²，核心非filler面积2.738033mm²，TT 50MHz的setup/hold均收敛；原生IO电源轨的两条工具提示单独保留。
+最新完整含PAD后端结果（历史文档已移除）：2×2mm²，核心非filler面积2.738033mm²，TT 50MHz的setup/hold均收敛；原生IO电源轨的两条工具提示单独保留。
 
 > 最新逻辑精简综合：512B RF与8/8/16队列不变，Cell Area **2.876480mm²**，50MHz setup **+4.0017ns**；见[验证报告](../../reports/logic_trim_validation.json)。下文旧无PAD后端表格属于精简前快照。
 
 # 独立计算单元的 TSMC180 综合
 
-RF容量及三组FIFO深度默认读取 `npu/build_config.json`。CNN输出原始INT32，后处理由vector完成；当前结果见[报告](../../reports/regfile_vector_validation.json)和[说明](../../docs/regfile-vector.md)。本轮不包含布局布线、PAD或板级验证。
+RF容量及三组FIFO深度默认读取 `npu/build_config.json`。CNN输出原始INT32，后处理由vector完成；当前结果见[报告](../../reports/regfile_vector_validation.json)和说明（历史文档已移除）。本轮不包含布局布线、PAD或板级验证。
 
 从仓库根目录运行（目录必须不存在）：
 
@@ -108,14 +108,14 @@ JTAG约束为真实10MHz：TDO下降沿更新、外部上升沿采样；系统�
 
 [截图来源](../../docs/images/logic-trim-fullchip.source.json)。该次冻结脚本仍保留原始结果；仓库模板已修正PAD优化后`editPin`的自动边界吸附问题，使用INSIDE/MGRID精确放置，独立probe确认9个位置正确。此修复未应用到该次冻结网表，不能用probe结果扣除上述124处DRC。
 
-当前通用vector/256B RF的试跑见[本次后端记录](../../docs/vector-program-pnr.md)与[机器报告](../../reports/fullchip_vector_program_validation.json)：CTS后合法化失败，未完成数据网络详细布线，不能沿用上述历史版本的DRC/时序结果。`04c`为可选CTS后合法化阶段，`05`模板会在布线前检查实际放置合法性。
+当前通用vector/256B RF的试跑见本次后端记录（历史文档已移除）与[机器报告](../../reports/fullchip_vector_program_validation.json)：CTS后合法化失败，未完成数据网络详细布线，不能沿用上述历史版本的DRC/时序结果。`04c`为可选CTS后合法化阶段，`05`模板会在布线前检查实际放置合法性。
 
-CNN卷积专用化（CRW2）、FC迁移到Matrix的当前结果见[设计记录](../../docs/cnn-conv-only.md)和[机器报告](../../reports/cnn_conv_only_validation.json)。前述CRW1含PAD试跑属于删除FC之前，本次仅重跑综合与功能回归。
+CNN卷积专用化（CRW2）、FC迁移到Matrix的当前结果见设计记录（历史文档已移除）和[机器报告](../../reports/cnn_conv_only_validation.json)。前述CRW1含PAD试跑属于删除FC之前，本次仅重跑综合与功能回归。
 
-共享RF gather与CNN滑动窗口的当前试验见[设计与测量](../../docs/rf-gather.md)及[本次报告](../../reports/rf_gather_validation.json)。本次没有新的布局布线结果；旧CRW1和删除FC后的CRW2面积/周期均保留为历史基线。
+共享RF gather与CNN滑动窗口的当前试验见设计与测量（历史文档已移除）及[本次报告](../../reports/rf_gather_validation.json)。本次没有新的布局布线结果；旧CRW1和删除FC后的CRW2面积/周期均保留为历史基线。
 
 
-CNN最小计算核与SD91搬运任务见[设计记录](../../docs/minimal-compute.md)，当前综合冻结目录为`eda-runs/20261104-minimal-compute/asic`（与工程目录同级）。源清单包含独立`npu_cnn`和`npu_stream`，比较面积时必须合计两者。旧RF-gather/CRW2报告保留为基线；本轮没有新的含PAD布局布线结论。
+CNN最小计算核与SD91搬运任务见设计记录（历史文档已移除），当前综合冻结目录为`eda-runs/20261104-minimal-compute/asic`（与工程目录同级）。源清单包含独立`npu_cnn`和`npu_stream`，比较面积时必须合计两者。旧RF-gather/CRW2报告保留为基线；本轮没有新的含PAD布局布线结论。
 
 ```sh
 python3.12 npu/eda/tsmc180/prepare_run.py --out ../eda-runs/NEW_RUN/asic --effort low --synth-period 16 --report-period 20
@@ -124,10 +124,10 @@ python3.12 npu/scripts/run_gate.py --run ../eda-runs/NEW_RUN/asic --suite latenc
 ```
 
 
-2026-11-05进一步把Matrix和Vector拆成纯计算模块与外部供数/发射器，详见[结构与周期分析](../../docs/pure-compute.md)和[RTL/宏模型验证报告](../../reports/pure_compute_validation.json)。源列表自动包含`npu_matrix_stream.sv`、`npu_vector_stream.sv`；当前三个计算模块没有地址或任务描述符端口。本轮没有重跑综合或布局布线，上述PPA是其冻结版本的历史结果。
+2026-11-05进一步把Matrix和Vector拆成纯计算模块与外部供数/发射器，详见结构与周期分析（历史文档已移除）和[RTL/宏模型验证报告](../../reports/pure_compute_validation.json)。源列表自动包含`npu_matrix_stream.sv`、`npu_vector_stream.sv`；当前三个计算模块没有地址或任务描述符端口。本轮没有重跑综合或布局布线，上述PPA是其冻结版本的历史结果。
 
 
-后续[CNN窗口预取与RF并行搬运](../../docs/window-prefetch.md)将默认窗口改为每行3words，并开启NMC的RF专用写回入口；共享RF容量和纯算术源文件未改。该版本的[报告](../../reports/window_prefetch_validation.json)仅包含RTL/宏模型功能与周期；最新PPA见上方完整后端链接。`prepare_run.py`会冻结新配置字段，不能把历史2.666814mm²等当作新版本测量。
+后续CNN窗口预取与RF并行搬运（历史文档已移除）将默认窗口改为每行3words，并开启NMC的RF专用写回入口；共享RF容量和纯算术源文件未改。该版本的[报告](../../reports/window_prefetch_validation.json)仅包含RTL/宏模型功能与周期；最新PPA见上方完整后端链接。`prepare_run.py`会冻结新配置字段，不能把历史2.666814mm²等当作新版本测量。
 
 ## 运行目录与生成文件
 

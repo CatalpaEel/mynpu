@@ -1,8 +1,10 @@
+> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
+
 # JTAG 与 RISC-V Debug Module
 
-当前独立单元恢复及本轮验证见[independent-units.md](independent-units.md)。本文面积／时序／网表数据保留为此前快照，不能替代当前源码的物理验证。
+当前独立单元恢复及本轮验证见independent-units.md（历史文档已移除）。本文面积／时序／网表数据保留为此前快照，不能替代当前源码的物理验证。
 
-> 本文面积及验证记录属于通用算子扩充前的 JTAG 快照。调试接口保持一致；后续计算功能与验证见 [Operator ABI 1.0](operators.md)。
+> 本文面积及验证记录属于通用算子扩充前的 JTAG 快照。调试接口保持一致；后续计算功能与验证见 Operator ABI 1.0（历史文档已移除）。
 
 
 本次在 `experiment/dual-bank-queued` 双 SRAM 版本接回旧 `mynpu-torus/rtl/mynpu_soc_top.sv` 使用的课程库 DTM/DM。库代码保持原样，位于 `external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/`；没有重新引入 AXI。

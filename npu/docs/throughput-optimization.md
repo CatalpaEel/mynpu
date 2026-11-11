@@ -1,3 +1,5 @@
+> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
+
 # FC、供数、量化写回与 Vector 优化
 
 本轮在 `6697d58` 的功能基础上实现五项优化，保留 CPU、双 SRAM、共享 RF/XBAR、独立 CNN/Matrix/Vector、共享可选 QT01、JTAG SBA 和 IRQ。任务 FIFO 仍为8/8/8、描述符仍为32/96/99bit，RF仍为256B。

@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""Freeze a portable EGo1 build bundle, then optionally run Vivado locally."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+HERE = Path(__file__).resolve().parent
+NPU = HERE.parents[1]
+REPO = NPU.parent
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--out', type=Path, default=NPU / 'build/ego1')
+parser.add_argument('--prepare-only', action='store_true')
+parser.add_argument('--vivado', default='vivado', help='Vivado executable, including .bat on Windows')
+a = parser.parse_args()
+out = a.out.resolve()
+if out.exists():
+    parser.error('Choose a new --out directory to preserve previous evidence')
+subprocess.run([sys.executable, str(NPU / 'scripts/gen_sources.py')], check=True)
+files = [Path(s) for s in (NPU / 'build/sources.f').read_text().splitlines()]
+files.append(HERE / 'ego1_soc_top.sv')
+out.mkdir(parents=True)
+# Source snapshots keep all builds independent of later RTL edits and machine paths.
+for src in files:
+    dst = out / 'src' / src.relative_to(REPO)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dst)
+inc = REPO / 'external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include'
+shutil.copytree(inc, out / 'include')
+for name in ['ego1.xdc', 'build.tcl']:
+    shutil.copy2(HERE / name, out / name)
+config = json.loads((NPU / 'build_config.json').read_text())
+keys = {'rf_bank_words': 'NPU_RF_BANK_WORDS',
+        'matrix_queue_depth': 'NPU_MATRIX_QUEUE_DEPTH',
+        'vector_queue_depth': 'NPU_VECTOR_QUEUE_DEPTH',
+        'cnn_queue_depth': 'NPU_CNN_QUEUE_DEPTH',
+        'stream_fifo_depth': 'NPU_STREAM_FIFO_DEPTH'}
+tcl = 'set npu_defines {' + ' '.join(f'{v}={config[k]}' for k, v in keys.items()) + '}\n'
+tcl += 'set npu_sources [list \\\n' + ''.join(
+    '  [file join $run_dir {src/' + p.relative_to(REPO).as_posix() + '}] \\\n' for p in files) + ']\n'
+(out / 'sources.tcl').write_text(tcl)
+manifest = {p.relative_to(out).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in sorted(out.rglob('*')) if p.is_file()}
+(out / 'source_manifest.json').write_text(json.dumps({
+    'part': 'xc7a35tcsg324-1', 'board': 'EGo1 V2.2', 'clock_hz': 50000000,
+    'config': config, 'sha256': manifest}, indent=2) + '\n')
+print(f'Prepared {out}', flush=True)
+if a.prepare_only:
+    print('Run inside this directory: vivado -mode batch -source build.tcl')
+else:
+    exe = shutil.which(a.vivado)
+    if not exe:
+        parser.error('Vivado not found; prepared bundle is available for another machine')
+    with (out / 'launcher.log').open('w') as log:
+        subprocess.run([exe, '-mode', 'batch', '-source', 'build.tcl'], cwd=out,
+                       stdout=log, stderr=subprocess.STDOUT, check=True)
+    if not (out / 'implementation_pass.txt').is_file():
+        raise RuntimeError('Vivado exited without the implementation pass marker')
+    print((out / 'implementation_pass.txt').read_text())

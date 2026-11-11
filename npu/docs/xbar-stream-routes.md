@@ -1,3 +1,5 @@
+> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
+
 # xbar内的通用流转发
 
 当前任务队列配置：Matrix / Vector / CNN = **8 / 8 / 8**。xbar的4条数据流FIFO仍各16words。下方历史回归数字以对应冻结版本为准；8/8/8的新验证见[报告](../reports/queue888_validation.json)。此前2.694412mm²与setup +4.0012ns对应8/8/16，尚未重测本配置PPA。

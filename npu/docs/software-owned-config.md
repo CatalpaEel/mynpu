@@ -1,8 +1,10 @@
+> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
+
 # 配置修改时序交给软件
 
 CNN、Matrix、Vector 与共享 QT01 的配置允许在运行中或有排队任务时写入。取消的是配置一致性的 busy/排空写保护；没有新增双缓冲、配置版本、暂停派发 CSR 或自动屏障。FIFO 仍为 CNN/Matrix/Vector 各 8 项，条目分别为 32/96/99bit，RF 仍为 256B。
 
-新增只读启动、量化采样与写应答计数，详见 [软件可见同步与执行进度](software-sync-observation.md)。这些观测不增加配置保护。
+新增只读启动、量化采样与写应答计数，详见 软件可见同步与执行进度（历史文档已移除）。这些观测不增加配置保护。
 
 当前量化消费与写合并的边界见 [SYNC v2](throughput-optimization.md)：dst/pack/enable在ISSUED之前实时读取，ISSUED之后的已缓冲写地址固定，WRITTEN仍等待真实应答。
 
