@@ -1,0 +1,1690 @@
+{
+  "checked_date": "2026-11-11",
+  "git_commit": "9ddaac28e751da40087594ac57cc3a7f057f917c",
+  "scope": "Inventory and hash audit, no new simulation or PPA. Source observations can include historical baselines and partial maps; matches do not certify full design identity.",
+  "counts": {
+    "current-scoped": 5
+  },
+  "reports": [
+    {
+      "file": "backend_source_audit.json",
+      "sha256": "ce450cde21884c30d72604320c26085c17fa64abfe8c65e73d925b6730c415c9",
+      "classification": "current-scoped",
+      "note": "Source identity audit only; no new PPA measurement.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
+      "file": "ego1_preboard_validation.json",
+      "sha256": "5553792f41deab2a5d1c4f3f9aa1bdc4ced5c1c1bd2dbac162c68af6f3f6c4da",
+      "classification": "current-scoped",
+      "note": "Current board functional preparation only; no Vivado implementation or board test.",
+      "source_hash_observations": [],
+      "source_hash_counts": {},
+      "preboard_manifest_check": [
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/ego1-release/source_manifest.json",
+          "status": "match"
+        }
+      ],
+      "board_source_checks": [
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/mem/sram_ff.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/fpga/ego1/ego1_soc_top.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_cnn.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_cnn_mac.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_stream.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_stream_control.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_stream_engine.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_stream_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/common/npu_addr_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/common/npu_clock_gate.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/common/npu_rr_select.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/common/npu_store_pack.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/control/npu_mmio.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/debug/npu_debug_boot.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/debug/npu_jtag_debug.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/interconnect/npu_data_regfile.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/interconnect/npu_multi_read.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/interconnect/xbar.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/interconnect/xbar_stream.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/matrix/npu_matmul.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/matrix/npu_matrix_stream.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/quant/npu_shared_quant.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/top/npu_core.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/top/npu_soc.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/vector/npu_vector.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/vector/npu_vector_stream.sv",
+          "status": "match"
+        }
+      ]
+    },
+    {
+      "file": "lab5_rf1r1w_die1950_validation.json",
+      "sha256": "5904b2994d341c5b12433511fac0ecd731b36686ed694c04141e2b80d266c933",
+      "classification": "current-scoped",
+      "note": "Final r3 course checks; ERC and strict PR limitations remain.",
+      "source_hash_observations": [],
+      "source_hash_counts": {},
+      "frozen_files": [
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/outputs/mynpu_asic_top_postDummy.gds",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/cdl/mynpu_asic_top.cdl",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/drc_post/summary.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/lvs_strict/report.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/lvs/report.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/lvs/erc.summary",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/antenna/summary.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/wb/summary.rpt",
+          "status": "match"
+        }
+      ],
+      "frozen_file_counts": {
+        "match": 8
+      }
+    },
+    {
+      "file": "rf1r1w-validation.json",
+      "sha256": "af71bd213996eadf19158e84763f3a9b4fc908f27d55b884a68ff3bb1d457ded",
+      "classification": "current-scoped",
+      "note": "Current RF functionality, MNIST and synthesis; PNR limitations inside are the original pre-PNR snapshot.",
+      "source_hash_observations": [
+        {
+          "source": "npu/rtl/interconnect/npu_data_regfile.sv",
+          "recorded_sha256": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
+          "current_sha256": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
+          "status": "match"
+        }
+      ],
+      "source_hash_counts": {
+        "match": 1
+      }
+    },
+    {
+      "file": "rf1r1w_die1950_fullchip_validation.json",
+      "sha256": "2b827243a643f401d86226303414fc72f00cbd1e0207357c783a21a09bb04df6",
+      "classification": "current-scoped",
+      "note": "Final RF1R1W die1950 r3 PNR; not firstpass/r2.",
+      "source_hash_observations": [
+        {
+          "source": "npu/tb/tb_chip_jtag.sv",
+          "recorded_sha256": "75584170da50cec0452aebdc19d99c8e533f0caee0ab4a0c2fa2dd0dcd90ba1c",
+          "current_sha256": "75584170da50cec0452aebdc19d99c8e533f0caee0ab4a0c2fa2dd0dcd90ba1c",
+          "status": "match"
+        },
+        {
+          "source": "npu/tb/db_jtag_tasks.svh",
+          "recorded_sha256": "220e2617385913779c8530dc82ff5632f444c0f9438df1dc9e4482fdf750ac5b",
+          "current_sha256": "220e2617385913779c8530dc82ff5632f444c0f9438df1dc9e4482fdf750ac5b",
+          "status": "match"
+        }
+      ],
+      "source_hash_counts": {
+        "match": 2
+      },
+      "frozen_files": [
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/10_cts_place.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_drc.rpt.old",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/06_powerplan_drc.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/12_route_drc.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_pg.rpt.old",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/04_rings_drc.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_signal.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/06_io_pg.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/09_pg_edge_cleanup_drc.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/05_sram_power_drc.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/08_post_tie_place.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/10_cts_pg.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/06_core_pg.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_logical_area.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/08_post_tie_pg.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/11_route_entry_place.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_cell_footprints.tsv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/12_route_antenna.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/floorplan_check.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_antenna.rpt.old",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/12_route_pg.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/07_place_check.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/09_pg_edge_cleanup_connectivity.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_place.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_antenna_diodes.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_physical_area.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_signal.rpt.old",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/06_welltap.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/export_audit.json",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/12_route_signal.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_summary.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_implemented_footprint.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_drc.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_pg.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/floorplan_geometry.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_final_antenna.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/11_holdfix_pg.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/11_holdfix_place.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/13_eco_before_move.rpt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/mynpu_asic_top_postRoute.tran.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/mynpu_asic_top_postRoute.length.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/mynpu_asic_top_postRoute.fanout.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/mynpu_asic_top_postRoute.cap.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/mynpu_asic_top_postRoute_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/mynpu_asic_top_postRoute_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/mynpu_asic_top_postRoute_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/mynpu_asic_top_postRoute.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/mynpu_asic_top_postRoute_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/mynpu_asic_top_postRoute_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/mynpu_asic_top_postCTS_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/mynpu_asic_top_postCTS_hold.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/mynpu_asic_top_postCTS_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/mynpu_asic_top_postCTS_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/mynpu_asic_top_postCTS_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/mynpu_asic_top_postCTS_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/mynpu_asic_top_postRoute_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/mynpu_asic_top_postRoute_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/mynpu_asic_top_postRoute_hold.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/mynpu_asic_top_postRoute_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/mynpu_asic_top_postRoute_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/mynpu_asic_top_postRoute_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/mynpu_asic_top_postCTS_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/mynpu_asic_top_postCTS_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/mynpu_asic_top_postCTS.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/mynpu_asic_top_postCTS.length.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/mynpu_asic_top_postCTS_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/mynpu_asic_top_postCTS.fanout.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/mynpu_asic_top_postCTS_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/mynpu_asic_top_postCTS.tran.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/mynpu_asic_top_postCTS.cap.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/mynpu_asic_top_postCTS_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/mynpu_asic_top_preCTS_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/mynpu_asic_top_preCTS_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/mynpu_asic_top_preCTS.fanout.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/mynpu_asic_top_preCTS_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/mynpu_asic_top_preCTS.tran.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/mynpu_asic_top_preCTS.cap.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/mynpu_asic_top_preCTS.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/mynpu_asic_top_preCTS_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/mynpu_asic_top_preCTS_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/mynpu_asic_top_preCTS.length.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute.tran.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute.length.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute.fanout.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute.cap.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_hold.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/mynpu_asic_top_postRoute_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_hold.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS.length.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS.fanout.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS.tran.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS.cap.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/mynpu_asic_top_postCTS_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/mynpu_asic_top_postRoute.tran.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/mynpu_asic_top_postRoute.length.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/mynpu_asic_top_postRoute.fanout.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/mynpu_asic_top_postRoute.cap.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/mynpu_asic_top_postRoute_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/mynpu_asic_top_postRoute_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/mynpu_asic_top_postRoute_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/mynpu_asic_top_postRoute.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/mynpu_asic_top_postRoute_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/mynpu_asic_top_postRoute_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/mynpu_asic_top_postCTS_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/mynpu_asic_top_postCTS_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/mynpu_asic_top_postCTS.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/mynpu_asic_top_postCTS.length.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/mynpu_asic_top_postCTS_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/mynpu_asic_top_postCTS.fanout.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/mynpu_asic_top_postCTS_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/mynpu_asic_top_postCTS.tran.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/mynpu_asic_top_postCTS.cap.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/mynpu_asic_top_postCTS_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/mynpu_asic_top_postCTS_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/mynpu_asic_top_postCTS_hold.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/mynpu_asic_top_postCTS_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/mynpu_asic_top_postCTS_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/mynpu_asic_top_postCTS_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/mynpu_asic_top_postCTS_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/mynpu_asic_top_postRoute.tran.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/mynpu_asic_top_postRoute.length.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/mynpu_asic_top_postRoute.fanout.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/mynpu_asic_top_postRoute.cap.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/mynpu_asic_top_postRoute_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/mynpu_asic_top_postRoute_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/mynpu_asic_top_postRoute_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/mynpu_asic_top_postRoute.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/mynpu_asic_top_postRoute_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/mynpu_asic_top_postRoute_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/mynpu_asic_top_postRoute_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/mynpu_asic_top_postRoute_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/mynpu_asic_top_postRoute_hold.summary.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/mynpu_asic_top_postRoute_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/mynpu_asic_top_postRoute_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/mynpu_asic_top_postRoute_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/func_tt_io/mynpu_asic_top_postRoute_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/func_tt_io/mynpu_asic_top_postRoute_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/func_tt_io/mynpu_asic_top_postRoute_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/func_tt_io/mynpu_asic_top_postRoute_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_setupFix/func_tt_io/mynpu_asic_top_postRoute_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/func_tt_io/mynpu_asic_top_postCTS_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/func_tt_io/mynpu_asic_top_postCTS_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/func_tt_io/mynpu_asic_top_postCTS_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/func_tt_io/mynpu_asic_top_postCTS_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_hold/func_tt_io/mynpu_asic_top_postCTS_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/func_tt_io/mynpu_asic_top_postRoute_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/func_tt_io/mynpu_asic_top_postRoute_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/func_tt_io/mynpu_asic_top_postRoute_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/func_tt_io/mynpu_asic_top_postRoute_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_hold/func_tt_io/mynpu_asic_top_postRoute_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/func_tt_io/mynpu_asic_top_postCTS_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/func_tt_io/mynpu_asic_top_postCTS_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/func_tt_io/mynpu_asic_top_postCTS_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/func_tt_io/mynpu_asic_top_postCTS_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS/func_tt_io/mynpu_asic_top_postCTS_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/func_tt_io/mynpu_asic_top_preCTS_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/func_tt_io/mynpu_asic_top_preCTS_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/func_tt_io/mynpu_asic_top_preCTS_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/func_tt_io/mynpu_asic_top_preCTS_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/preCTS/func_tt_io/mynpu_asic_top_preCTS_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/func_tt_io/mynpu_asic_top_postRoute_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/func_tt_io/mynpu_asic_top_postRoute_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/func_tt_io/mynpu_asic_top_postRoute_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/func_tt_io/mynpu_asic_top_postRoute_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/func_tt_io/mynpu_asic_top_postRoute_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/func_tt_io/mynpu_asic_top_postRoute_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/func_tt_io/mynpu_asic_top_postRoute_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/func_tt_io/mynpu_asic_top_postRoute_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/func_tt_io/mynpu_asic_top_postRoute_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute_holdFix/func_tt_io/mynpu_asic_top_postRoute_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/func_tt_io/mynpu_asic_top_postCTS_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/func_tt_io/mynpu_asic_top_postCTS_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/func_tt_io/mynpu_asic_top_postCTS_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/func_tt_io/mynpu_asic_top_postCTS_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/func_tt_io/mynpu_asic_top_postCTS_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/func_tt_io/mynpu_asic_top_postCTS_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/func_tt_io/mynpu_asic_top_postCTS_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/func_tt_io/mynpu_asic_top_postCTS_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/func_tt_io/mynpu_asic_top_postCTS_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix/func_tt_io/mynpu_asic_top_postCTS_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/func_tt_io/mynpu_asic_top_postRoute_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/func_tt_io/mynpu_asic_top_postRoute_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/func_tt_io/mynpu_asic_top_postRoute_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/func_tt_io/mynpu_asic_top_postRoute_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_setup/func_tt_io/mynpu_asic_top_postRoute_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/func_tt_io/mynpu_asic_top_postCTS_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/func_tt_io/mynpu_asic_top_postCTS_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/func_tt_io/mynpu_asic_top_postCTS_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/func_tt_io/mynpu_asic_top_postCTS_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_setup_check/func_tt_io/mynpu_asic_top_postCTS_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/func_tt_io/mynpu_asic_top_postCTS_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/func_tt_io/mynpu_asic_top_postCTS_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/func_tt_io/mynpu_asic_top_postCTS_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/func_tt_io/mynpu_asic_top_postCTS_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postCTS_holdFix_hold_check/func_tt_io/mynpu_asic_top_postCTS_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/func_tt_io/mynpu_asic_top_postRoute_all.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/func_tt_io/mynpu_asic_top_postRoute_reg2reg.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/func_tt_io/mynpu_asic_top_postRoute_reg2cgate.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/func_tt_io/mynpu_asic_top_postRoute_tdgp_reg2reg_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/postRoute/func_tt_io/mynpu_asic_top_postRoute_default.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/func_tt_io/mynpu_asic_top_postRoute_all_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/func_tt_io/mynpu_asic_top_postRoute_tdgp_reg2reg_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/func_tt_io/mynpu_asic_top_postRoute_reg2reg_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/func_tt_io/mynpu_asic_top_postRoute_default_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/reports/final_hold/func_tt_io/mynpu_asic_top_postRoute_reg2cgate_hold.tarpt.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/12_route.def",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/08_post_tie.v",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/io_optimized.io",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/07_io_optimized.def",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/tie_supply_exclude.txt",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/io_registration.io",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/03_io_connected.v",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/pad_endpoints.tsv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/05_sram_power.def",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/pad_moves.json",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/06_powerplan.def",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/pad_moves.tcl",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/io_registered.io",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/03_io_floorplan.def",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/final/mynpu_asic_top.lef",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/final/mynpu_asic_top.path_adjust.tcl",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/final/mynpu_asic_top.flat_lvs.v",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/final/mynpu_asic_top.sdc",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/final/mynpu_asic_top.spef.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/final/mynpu_asic_top.def",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/final/mynpu_asic_top.gds.gz",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/final/mynpu_asic_top.hier_postpnr.v",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/outputs/final/mynpu_asic_top.sdf.gz",
+          "status": "match"
+        }
+      ],
+      "frozen_file_counts": {
+        "match": 248
+      },
+      "frozen_design_source_checks": [
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/common/npu_addr_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_stream_pkg.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/common/npu_rr_select.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/common/npu_clock_gate.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_cnn.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_cnn_mac.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/top/npu_core.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/interconnect/npu_data_regfile.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/debug/npu_debug_boot.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/debug/npu_jtag_debug.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/matrix/npu_matmul.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/matrix/npu_matrix_stream.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/control/npu_mmio.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_stream.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_stream_control.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/cnn/npu_stream_engine.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/vector/npu_vector.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/vector/npu_vector_stream.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/interconnect/xbar.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/interconnect/xbar_stream.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/interconnect/npu_multi_read.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/quant/npu_shared_quant.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/common/npu_store_pack.sv",
+          "status": "match"
+        },
+        {
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/rtl/top/npu_soc.sv",
+          "status": "match"
+        }
+      ],
+      "frozen_design_source_counts": {
+        "match": 70
+      },
+      "configuration_matches": true
+    }
+  ]
+}

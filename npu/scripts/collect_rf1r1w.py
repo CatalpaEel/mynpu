@@ -35,7 +35,7 @@ def main():
     assert json.loads((run / "library_manifest.json").read_text()) == json.loads(
         (baseline_run / "library_manifest.json").read_text()
     )
-    baseline = json.loads((NPU / "reports/area26-all4-validation.json").read_text())["ppa"]
+    baseline = ppa(baseline_run)  # Read frozen run evidence; old comparison JSON is not kept in Git.
     for p, h in baseline["files_sha256"].items():
         assert sha(baseline_run / p) == h, p
     current = ppa(run, live=True)

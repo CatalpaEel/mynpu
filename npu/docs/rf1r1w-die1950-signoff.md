@@ -2,26 +2,30 @@
 
 2026-11-10。本轮已对当前RF 1R1W版本完成全芯片布局布线、物理ECO、Seal Ring、Dummy Fill、最终DRC、LVS/ERC、天线、Wire Bond PAD检查和归档。最终版本为 **r3**。原始严格LVS的IO电阻参数偏差和ERC原库/外圈残项保留待评审，不能记为正式投片签核全部通过。
 
+## 源码版本核对
+
+2026-11-11将实际r3冻结清单中的70个输入文件与当前工作区逐项核对，全部SHA256一致，包含全部24个项目RTL；五项默认容量/队列配置也一致。见[审计明细](../reports/backend_source_audit.json)。冻结清单的Git基线为`549b352`，不代表当时工作区无修改，不能据此把本轮RF 1R1W误判为旧1RW。此核对未重新执行综合、布局布线或签核。
+
 ## 结果
 
-| 项目 | 原1RW，20261109 | 本轮1R1W，最终r3 |
-| --- | ---: | ---: |
-| Die | 1950×1950 µm | **1950×1950 µm** |
-| Seal Ring物理外框 | 1980×1980 µm | **1980×1980 µm** |
-| 综合cell面积，含两块SRAM | 2.569744 mm² | **2.569286 mm²** |
-| PNR核心非filler面积，含SRAM | 2.633317 mm² | **2.632349 mm²** |
-| PNR标准单元面积，含CTS/tie/tap/天线支持、不含core filler | 1.830430 mm² | **1.829462 mm²** |
-| SRAM宏面积 | 0.802887 mm² | 0.802887 mm² |
-| Core filler面积，单列 | 0.208630 mm² | 0.209659 mm² |
-| 原生IO几何并集，排除bond窗口重复面积 | 0.844100 mm² | 0.844100 mm² |
-| 非filler placement density | 89.562% | 89.510% |
-| 系统频率 | 50 MHz | **50 MHz** |
-| Post-route setup WNS / TNS | +0.592 ns / 0 | **+0.468 ns / 0** |
-| Post-route hold WNS / TNS | +0.019 ns / 0 | **+0.018 ns / 0** |
-| Setup / Hold违例路径 | 0 / 0 | **0 / 0** |
-| Innovus DRC / 天线 | 0 / 0 | **0 / 0** |
-| VDD/VSS特殊电源连通性 | 0问题 | **0问题** |
-| 布线后9信号PAD JTAG/MNIST回归 | 34 checks通过 | **34 checks通过** |
+| 项目 | 本轮1R1W，最终r3 |
+| --- | ---: |
+| Die | **1950×1950 µm** |
+| Seal Ring物理外框 | **1980×1980 µm** |
+| 综合cell面积，含两块SRAM | **2.569286 mm²** |
+| PNR核心非filler面积，含SRAM | **2.632349 mm²** |
+| PNR标准单元面积，含CTS/tie/tap/天线支持、不含core filler | **1.829462 mm²** |
+| SRAM宏面积 | 0.802887 mm² |
+| Core filler面积，单列 | 0.209659 mm² |
+| 原生IO几何并集，排除bond窗口重复面积 | 0.844100 mm² |
+| 非filler placement density | 89.510% |
+| 系统频率 | **50 MHz** |
+| Post-route setup WNS / TNS | **+0.468 ns / 0** |
+| Post-route hold WNS / TNS | **+0.018 ns / 0** |
+| Setup / Hold违例路径 | **0 / 0** |
+| Innovus DRC / 天线 | **0 / 0** |
+| VDD/VSS特殊电源连通性 | **0问题** |
+| 布线后9信号PAD JTAG/MNIST回归 | **34 checks通过** |
 
 面积基本持平；微小差异包含全局综合映射、布局、CTS和优化选择，不能解释为新增读写端口本身节省了面积。最终STD cell 80,778个、SRAM 2个、core filler 31,407个。9个信号PAD、28个供电/POC PAD、37个Bond PAD均保留，最终导出审计无缺失GDS结构引用。
 
@@ -49,7 +53,7 @@ CTS使用完整`ccopt_design`。系统时钟树插入延迟约1.367～1.497ns，
 ## 本轮修复的真实物理问题
 
 | 阶段 | 实际问题 | 最终修正与复核 |
-| --- | --- | --- |
+| --- | --- |
 | 常规布线收尾 | 63处native DRC：58处PG过孔重叠、4处TCK PAD绕线、1处底边reset接入 | 删除两组重复19-cut VIA12阵列，保留同网18-/25-cut连接和全部电源导体；移动CPU寄存器文件`mem_reg[6][7]`；只删除已证明为单PAD端点＋重叠top port的外部多余绕线，内部核心网络保留。DRC、PG、STA重测通过。 |
 | 第一轮Calibre | 1处M2.S.2，CPU内部乘法网络在底边IO宽M2附近间距不足；Innovus抽象检查未报出 | 在原生PVSS2CDG顶边增加项目级M2信号禁布区`(849,114.8)–(911,115.8)`，只重新布线一个CPU网络。没有编辑共享PDK、IO/SRAM原库或原始SPI/CDL。 |
 | 第二轮WB | 5处CB.S.2.M5/M6：Bond金属到M5/M6走线不足2.5µm | 从原始PAD60LU_OBV GDS核对金属范围，给37个Bond PAD的M5/M6增加74个仅约束信号的route blockage，保留PG。实际仅4条CPU数据网络需要重新布线，影响时钟网络0条。 |

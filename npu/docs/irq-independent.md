@@ -1,10 +1,6 @@
-> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
-
 # 独立IRQ与故障唤醒
 
-当前格式已更新为 [SD93 / Matrix 4 / VPG3](command-layout.md)：卷积核改为共享配置，任务与程序编码已调整。以下相应格式与测量属于历史版本。
-
-IRQ 映射保持有效；后续 CNN 已切换到 SD92 显式卷积核地址（历史文档已移除），最新固件与周期请以该文档为准。
+任务格式见[字节码布局](command-layout.md)和[LY01/EV01](layout-events.md)。本页记录IRQ机制；性能和当前验证使用[报告索引](../reports/README.md)，不沿用本页历史周期。
 
 当前CPU本地中断分配如下。三路均为电平中断，完成与错误通过该单元的状态寄存器区分。
 
@@ -58,30 +54,7 @@ npu_irq_pending();   // 读mip中的三个来源
 npu_irq_ack_done(NPU_MAT_CONTROL); // 运行中确认完成，不清错误
 ```
 
-## 验证与周期
 
-[机器报告](../reports/irq_v2_validation.json)审计20组当前源码回归：
+## 当前验证入口
 
-- 真实CPU先进入WFI，再分别运行三种单元的正常任务与运行时故障：Matrix量化输出越出RF、Vector非法程序操作码、CNN输入越出RF。均能从对应IRQ唤醒，且故障不伪造成功完成票据。
-- CPU仅开启Matrix IRQ16时，CNN故障IRQ18保持挂起而CPU继续睡眠；Matrix随后完成才唤醒。mip同时读到16/18，确认Matrix不会清CNN。
-- 上述7种场景分别在256B、512B RF配置通过；控制级38项检查覆盖运行中确认、同拍完成/故障、错误保持及独立电平。
-- 两条软件路径各10张MNIST、各60个中间层张量/17,940字节逐字节匹配golden，各42项JTAG检查通过；GEMM、CNN、SIMD、共享量化、队列、单元连接及错误恢复回归通过。
-
-| 路径 | 上一版周期/张 | 当前周期/张 | 变化 |
-|---|---:|---:|---:|
-| 共享QT01、中断等待 | 26,092 | **25,965** | −127 |
-| 通用Vector后处理 | 29,173 | **29,298** | +125（0.43%） |
-
-通用路径的额外确认/检查带来小幅开销，没有宣称所有路径都加速。本轮以完整故障唤醒和独立路由为目标，尚未达到20k。
-
-**本轮修改了RTL，未重测综合、门级仿真或PNR。此前2.507805/2.515488mm²与相应时序是IRQ改动前测量，不能作为当前RTL的新PPA结论。** 没有增加队列、存储或新的控制状态，只调整IRQ路由、确认和事件优先级。
-
-复现：
-
-```bash
-python3.12 npu/scripts/run_vcs.py --suite irqcontrol --tag IRQ_CONTROL
-python3.12 npu/scripts/run_vcs.py --suite irqwake --macro --tag IRQ_WAKE
-python3.12 npu/scripts/run_vcs.py --suite latency --macro --tag IRQ_MNIST
-# 共享QT01示例：准备独立的model/params/input/golden目录后生成新固件
-NPU_ARTIFACTS_DIR=/path/to/artifacts NPU_SHARED_QUANT=1 python3.12 npu/mnist/firmware.py
-```
+默认配置和性能使用[项目首页](../../README.md)；当前版本的功能、综合、最终PNR及检查证据统一见[报告索引](../reports/README.md)。

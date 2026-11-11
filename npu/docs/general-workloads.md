@@ -1,5 +1,3 @@
-> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
-
 > 本页记录前一轮软件参考降低器；当前已实现原生步长、末项归约、ldc和硬件事件，见 [LY01/EV01](layout-events.md)。复现本页参考策略使用 `Plan(native=False)`，历史验证JSON不代表本轮RTL。
 
 # 面向多负载的软件任务层
@@ -54,7 +52,7 @@ loop:     r2 = add/max/min(r2, r0)   # r0 是当前输入，r2 跨元素保留
           r0 = r2                   # 现有输出路径写一个前缀结果
 ```
 
-末尾用一个 Copy 任务将最后的前缀结果写入目标。**长度N需要4N字节临时区，并有N次前缀输出。** 这验证了现有指令的组合能力，也暴露了以后增加“仅末项写回”模式的价值。当前只提供 INT32 归约，不把 SIMD8 的4个独立累加器误称为跨 lane 的 INT32 归约。
+硬件支持FINAL_ONLY末项写回和KEEP_R2跨任务累加；原生任务降低使用这些能力，详见[布局与事件](layout-events.md)。兼容降低路径可能使用前缀暂存及末项复制。当前归约使用INT32，不把SIMD8独立累加误称为跨lane归约。
 
 广播和重排也有清晰代价：连续向量是一条较长任务，非连续或零步长输入按位置生成任务，增加配置和排队开销。没有为了少数 MNIST 地址在硬件里增加特殊路径。
 
@@ -108,41 +106,6 @@ RV32I 后端针对复位后零票据的队列生成小型展开程序，限制�
 
 计划必须显式调用 `wait`/`drain` 才保证末项已完成，执行器不会在计划末尾偷偷加入全局屏障。超时或故障可能留下部分输出，缓冲复用/清理/恢复仍由软件处理。当前高级接口按默认256字节 RF 检查地址，不自动利用更大参数化 RF。
 
-## 回归与性能边界
-
-```sh
-python3.12 npu/tests/test_task_graph.py
-cc -std=c11 -Wall -Wextra -Werror npu/tests/plan_executor.c -o /tmp/npu-plan-test
-/tmp/npu-plan-test
-python3.12 npu/scripts/run_vcs.py --suite workloads --tag YOUR_TAG --macro
-python3.12 npu/scripts/run_vcs.py --suite workloadcpu --tag YOUR_TAG --macro
-python3.12 npu/scripts/run_vcs.py --suite blocking --tag YOUR_TAG --macro
-```
-
-多负载测试覆盖 GEMM/GEMV/外积、M/N尾块、K=257分块累加、INT16回绕、输入转置和间距、带 ldc 输出、共享权重的批量 GEMM、SIMD尾部、残差/广播/反向遍历、转置、Sum/Max/Min、两通道卷积及 stride=2、RF中间结果、软件 maxpool，以及 QKᵀ→逐行Max子图。后者是 attention 的部分整数原语，**不包含 Softmax，不等同完整 Transformer 推理**。
-
-所有数值由独立的 Python 整数公式生成，测试台只通过真实 MMIO/数据端口检查，没有用层级信号替代计算结果。层级观察只用于计数 busy 和并行周期。SRAM 使用实际宏功能模型，关闭 timing check，无 SDF。
-
-`WORKLOAD_PROFILE` 给出各单元 busy、两个以上单元同时 busy、完成等待、队列空间检查、配置写和数据写。空间检查时间包含立即成功的 MMIO 读取，不能全部称为“队列满阻塞”。各案例总周期包含 host 加载和 golden 读取，不是 CPU 推理延迟，busy 和等待可以重叠，不能直接相加。
-
-验证结果由 `npu/scripts/collect_general_workloads.py` 收集到 `npu/reports/general-workloads-validation.json`。本轮没有改计算 RTL，不产生新的面积/时序数字，也不把历史综合报告当成新 PPA 测量。
-
-## 本轮实测
-
-TSMC180 SRAM 宏功能模型下，19类案例共411项数值检查通过；7项 Python 软件契约测试及 C 执行器的票据回绕、故障、超时检查通过，生成的 C 计划也通过编译器语法检查。真实 CPU 小程序673条 RV32I 指令，执行1,138周期、7项结果自检通过；执行周期从释放 CPU 到成功标志，不包含主机下载程序。
-
-MNIST 完整10张回归仍为每张20,728周期，未改其模型、参数、golden 或手写汇编。
-
-| 代表案例 | 配置写次数 | 单元 busy 周期 | 可见代价 |
-|---|---:|---:|---|
-| 19×5×7 GEMM、尾块、带 ldc | 158 | Matrix 1331、Vector 570 | 紧凑 tile 结果搬出与工作区复用 |
-| 13元素广播后反向搬运 | 182 | Vector 169 | 标量任务的配置开销 |
-| 3×5转置 | 105 | Vector 90 | 缺少直接 stride 描述的任务开销 |
-| 4个2×2 MaxPool | 112 | Vector 236 | 供数、归约前缀输出与小任务开销 |
-| CNN/Vector分支汇合 | 26 | CNN 159、Vector 224 | 两个单元有112个周期同时 busy |
-
-这些是当前软件降低策略的观测，不是不同方案的加速比。广播、重排的配置开销说明下一项硬件优化应优先评估通用 stride 和归约最终项写回；这比只针对 MNIST 增加 MAC 更有依据。
-
 ## 后续硬件优化如何选择
 
 这次实现提供了可量化的通用性基础，但不掩盖软件组合的成本：
@@ -152,3 +115,7 @@ MNIST 完整10张回归仍为每张20,728周期，未改其模型、参数、gol
 3. 若工作区复用屏障占主导，软件先尝试双工作区；容量/吞吐证据充分后再扩大 RF。
 4. 若 CPU 等待影响跨单元提交，才扩展队列级 WAIT/SIGNAL；必须与故障、取消、真实写回完成语义一起验证。
 5. 完整 MobileNet、Transformer、音频等模型仍需算子覆盖、导出器和精度回归，当前内核套件不构成这些模型已适配的声明。
+
+## 当前验证入口
+
+默认配置和性能使用[项目首页](../../README.md)；当前版本的功能、综合、最终PNR及检查证据统一见[报告索引](../reports/README.md)。

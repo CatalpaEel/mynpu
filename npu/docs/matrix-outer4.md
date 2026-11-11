@@ -1,8 +1,6 @@
-> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
-
 # Matrix 4×4 外积计算单元
 
-后续已完成三种Stream精简（历史文档已移除），最新面积与时序（历史文档已移除）另列。本文记录外积版初始实现与当时测量。
+本文记录外积版初始实现与当时测量。最新面积与时序见[RF 1R1W最终r3](rf1r1w-die1950-signoff.md)，当前报告定位见[索引](../reports/README.md)。
 
 从检查点 `d7b1794` 改为4×4外积。`npu_matmul.sv` 只保留计算和握手：16个INT32累加器；每个有效计算步接受4个A和4个B，更新 `C[r,c] += A[r]*B[c]`。INT8和INT16均支持，INT8由Stream符号扩展到16位。乘加按INT32回绕。
 
@@ -24,7 +22,7 @@ flowchart LR
 
 ## 数据布局与供数
 
-任务继续计算 `D=op(A)*op(B)`，可选择 `D+=`。M/N/K最大仍为16；Stream自动拆成4×4输出块，遍历K后逐个写回有效单元，再计算下一块。输入支持原有非打包低字节/低半字布局，以及紧密打包INT8/INT16。
+任务继续计算 `D=op(A)*op(B)`，可选择 `D+=`。M/N最大为16，K最大为256；Stream自动拆成4×4输出块，遍历K后逐个写回有效单元，再计算下一块。输入支持原有非打包低字节/低半字布局，以及紧密打包INT8/INT16。
 
 - A向量取同一K下最多4个输出行的数据，B向量取同一K下最多4个输出列的数据。
 - 8个32位寄存器保留当前A/B字片段，并带有效位和字地址。多个元素位于同一个字时合并一次读取；K继续访问同一个字时直接复用。每个新输出块清空这些操作数暂存。
@@ -36,7 +34,7 @@ flowchart LR
 
 ## 软件接口
 
-原来的Matrix任务寄存器、标志位和8项队列不变。新增：
+Matrix使用4项队列，任务寄存器与标志包括：
 
 | MMIO偏移，相对0x40000000 | 内容 |
 |---|---|
@@ -50,38 +48,7 @@ C接口增加 `npu_gemm_leading_dims(lda,ldb)`；旧程序未写这两个寄存�
 
 新增合法退化情形：**K=0且ACCUMULATE=1**。这时只读取、导出已有INT32 D，不访问A/B，可经共享量化单元处理最终结果；没有增加专用量化指令。K=0而ACCUMULATE=0仍拒绝。
 
-## MNIST调度
 
-FC有10个输出、144个输入。原来每个输出分别提交9个K16任务，共90个Matrix任务。现在：
+## 当前验证入口
 
-1. 输入仍原地转成有符号INT8，权重仍只有一份。
-2. B设置TRANS_B、LDB=144，直接访问原来的10×144权重矩阵。
-3. 输出按4/4/2分组，各提交9个K16任务，共27个Matrix任务。每组内部的第一次覆盖，其余使用ACCUMULATE，结果保存为连续INT32。
-4. 通用Vector软件后处理路径保持支持。使用QT01实验路径时，每个输出再提交一次K=0、ACCUMULATE任务，以应用该通道独立的缩放/偏置/零点，共37个Matrix任务。共享量化没有把不同通道的参数错误地合并。
-
-单张图的FC是M=1，因此一次只有阵列的一行、最多4个乘加单元有效。完整16路并行由M/N均不小于4的矩阵测试覆盖；没有声称单图FC获得16倍加速。
-
-软件代码/描述符布局调整为：代码不越过0xD00，描述符0xD00，任务表0xE50，程序镜像到0x1300；仍在原来两块SRAM内，早于最小输入地址0x1360。默认VPG2后处理固件737条CPU指令，QT01固件600条；连续输入固件分别750/603条，均通过代码与表不重叠断言。连续输入固件本轮只验证生成，未测吞吐。
-
-## 验证与结果
-
-[机器报告](../reports/matrix_outer4_validation.json)记录源码、固件和golden哈希、逐项结果及周期。
-
-- 独立算术参考覆盖16个累加器、任意行列mask、INT16极值与溢出、加旧D、输出背压和flush。
-- SoC测试覆盖全部32组旧标志，密集/自定义跨度，1/3/4/5/8/9/16等边界尺寸、多个4×4块、SRAM/RF组合、K=0导出、多块量化字节写回与量化流输出顺序。
-- MNIST的QT01固件为 **27,432周期/张**，相比旧点积版QT01的27,633减少201周期（0.73%）。CNN未改变，单图FC只能使用阵列一行，所以总推理收益有限。
-- 默认通用Vector后处理的新批量固件为 **29,173周期/张**（旧点积版为29,817）。旧标量二进制在新硬件上仍正确，但为30,710周期；需要采用新的4/4/2调度才能获得本轮软件收益。
-- 已完成本版综合测量（历史文档已移除）：总面积 **2.976653mm²**（含两块SRAM、不含PAD），相比旧点积版增加15.07%。保留层级统计Matrix计算核0.263470mm²、Stream 0.209350mm²。50MHz综合setup slack为+4.0012ns，尚未重新布局布线或物理时序签核。
-
-```bash
-python3.12 npu/scripts/run_vcs.py --suite matrixouter --tag OUTER_ALU
-python3.12 npu/scripts/run_vcs.py --suite outergemm --macro --tag OUTER_GEMM
-# 默认软件使用通用Vector后处理，已生成到npu/mnist/artifacts
-python3.12 npu/scripts/run_vcs.py --suite latency --macro --tag OUTER_DEFAULT
-# 可选共享量化软件
-mkdir -p npu/build/outer-artifacts
-cp npu/mnist/artifacts/* npu/build/outer-artifacts/
-NPU_SHARED_QUANT=1 NPU_ARTIFACTS_DIR="$PWD/npu/build/outer-artifacts" python3.12 npu/mnist/firmware.py
-python3.12 npu/scripts/run_vcs.py --suite latency --macro --tag OUTER_QT --artifacts-dir npu/build/outer-artifacts
-python3.12 npu/scripts/run_vcs.py --suite quantlayers --macro --tag OUTER_QT_LAYERS --artifacts-dir npu/build/outer-artifacts
-```
+默认配置和性能使用[项目首页](../../README.md)；当前版本的功能、综合、最终PNR及检查证据统一见[报告索引](../reports/README.md)。

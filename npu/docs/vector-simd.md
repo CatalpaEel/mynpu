@@ -1,5 +1,3 @@
-> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
-
 # Vector 单 ALU：INT32 / 4×INT8 SIMD
 
 Vector 不再分主 ALU 和独立轻量 ALU。`npu_vector.sv` 是唯一的组合计算单元，`npu_vector_stream.sv` 管理取数、四个 32 位临时寄存器、程序 PC、进位和写回。CPU、CNN、Matrix 和 XBAR 的职责不变。
@@ -49,15 +47,7 @@ npu_elementwise_start(&job);  // 共处理5个字，最后仅写1个字节
 
 此前的第二轻量 ALU 可以并行处理两个 INT32 直接模式元素；合并后 INT32 直接模式每步一个元素，SIMD8 每步四个字节。四个 INT8 通道执行相同操作码，并非四条不同指令，也不是四个完整 32 位 ALU。
 
-## 验证与限制
 
-详见 [验证报告](../reports/vector_simd_validation.json)。独立整数参考模型检查 ALU；SoC 测试覆盖 SIMD8 直接 / 程序、SRAM / RF、scalar、原地写回、非4倍数长度和非法程序。旧 MNIST 后处理输入仍是 INT32 累加值，继续使用 INT32 通用指令，不会因为增加 SIMD8 自动获得四倍加速。
+## 当前验证入口
 
-本次不以代码结构推断面积或时序改善；此前的面积测量属于旧源码，单 ALU SIMD 版尚未重新综合。
-
-```bash
-python3.12 npu/scripts/run_vcs.py --suite purecompute --tag SIMD_ALU
-python3.12 npu/scripts/run_vcs.py --suite vectorsimd --macro --tag SIMD_SOC
-python3.12 npu/scripts/run_vcs.py --suite vectorprogram --tag SIMD_VPG2
-python3.12 npu/scripts/run_vcs.py --suite latency --macro --tag SIMD_MNIST
-```
+默认配置和性能使用[项目首页](../../README.md)；当前版本的功能、综合、最终PNR及检查证据统一见[报告索引](../reports/README.md)。

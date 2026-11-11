@@ -1,10 +1,7 @@
-> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
-
 # 配置修改时序交给软件
 
-CNN、Matrix、Vector 与共享 QT01 的配置允许在运行中或有排队任务时写入。取消的是配置一致性的 busy/排空写保护；没有新增双缓冲、配置版本、暂停派发 CSR 或自动屏障。FIFO 仍为 CNN/Matrix/Vector 各 8 项，条目分别为 32/96/99bit，RF 仍为 256B。
+CNN、Matrix、Vector 与共享 QT01 的配置允许在运行中或有排队任务时写入。取消的是配置一致性的 busy/排空写保护；没有新增双缓冲、配置版本、暂停派发 CSR 或自动屏障。FIFO 为 CNN/Matrix/Vector 各4项，包含事件后的条目分别为48/125/166bit，RF 仍为 256B。
 
-新增只读启动、量化采样与写应答计数，详见 软件可见同步与执行进度（历史文档已移除）。这些观测不增加配置保护。
 
 当前量化消费与写合并的边界见 [SYNC v2](throughput-optimization.md)：dst/pack/enable在ISSUED之前实时读取，ISSUED之后的已缓冲写地址固定，WRITTEN仍等待真实应答。
 
@@ -46,17 +43,7 @@ Operator ABI 的 minor 版本为 **2.2**：`0x40000040` 返回 `0x00020002`。�
 
 SD95 数量编码、VPG3 指令编码、Matrix 4 格式和 QT01 算术 ABI 不变。默认共享量化 boot 二进制与提交 `65ea66f` 完全一致，仅模型元数据更新为 Operator ABI 2.2。
 
-## 本功能初次实现时的验证（edbb4ce，历史记录）
 
-运行 `python3.12 npu/scripts/collect_software_config_validation.py` 审核结果和依赖 SHA，生成 `npu/reports/software-config-validation.json`。
+## 当前验证入口
 
-15 组 VCS 回归及 657 项 C 软件检查通过。新增 `softcfg --macro` 有 27 项结果检查，通过 FIFO 制造确定的等待阶段，验证实际数据行为：
-
-1. CNN 活动窗口等待输入时，修改 src/kernel/dst；活动窗口得到旧结果 12，已排队窗口得到新结果 27。
-2. Vector 活动任务与排队任务共存时改程序表及 count；活动任务按旧 count 执行新指令得到 12，后续任务按新 count 得到 26。
-3. Matrix 等待输入时修改量化参数和目的地，结果按新参数写到新地址。
-4. 量化结果被满 FIFO 阻塞时改算术参数，已经接收的结果仍为旧值 36；改目的地后该结果写入新地址，FIFO 原内容保持不变。下一结果使用新参数得到 120。
-
-另覆盖深度 8/16 队列、共享量化、CNN Stream、Vector 程序、单元间流转发、共享操作数与 IRQ/WFI。默认推理 10 张图、60 个逐层张量共 17,940B 一致，JTAG 42 项检查通过，仍为 **23,937 周期/图**。
-
-没有重跑综合或布局布线，当前面积和时序尚未重测。
+默认配置和性能使用[项目首页](../../README.md)；当前版本的功能、综合、最终PNR及检查证据统一见[报告索引](../reports/README.md)。

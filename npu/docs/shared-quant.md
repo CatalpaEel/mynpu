@@ -1,8 +1,5 @@
-> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
-
 # CNN / Matrix 共享可选量化单元
 
-当前Matrix已改为[4×4外积](matrix-outer4.md)。本文的27,633周期和2.586795mm²为旧点积Matrix检查点记录；量化数学与CSR接口保持有效。
 
 修改前检查点提交：`d4a89a9`。纯计算核仍负责乘加；新增 `npu_shared_quant.sv` 直接接收 CNN、Matrix 的结果。进入量化单元不经过 XBAR。写回 RF / SRAM 或流 FIFO 仍使用各自原有 Stream 接口。
 
@@ -80,33 +77,7 @@ CNN 的任务 `dst_words` 在字节量化模式中表示相对量化目的地址
 
 字节量化目的地址仅支持 RF / SRAM，允许不对齐；32 位目的地址要求字对齐，也可使用流 FIFO。字节模式直接输出到流 FIFO 会被拒绝，避免把每个字节误当成一个打包字。软件负责目的张量的总长度和活跃张量之间的别名检查；越界访存仍沿用 Stream 的 fault 路径。
 
-## MNIST 软件与测量
 
-保留原通用 Vector 固件为默认，便于比较和通用计算。实验固件通过 `NPU_SHARED_QUANT=1` 生成，权重、量化参数和 golden 不变：
+## 当前验证入口
 
-- 卷积按输出通道配置量化参数，向 CNN FIFO 提交该通道的行 / tile 任务。CNN 完成跨输入通道累加，最终结果直接量化写回。通道任务排空后再换参数；不再提交 Vector 后处理任务。
-- FC 仍使用 Matrix 的 9 个 K16 tile。先以原始 INT32 完成前 8 个 tile，排空队列；配置该输出通道的量化参数，再提交第 9 个带累加任务。最终量化直接写入字节输出，原始部分和地址与最终输出地址分开。
-- 保留原 RF 权重暂存策略。
-
-| 同一 SRAM 宏模型、10 张图 | 推理周期 / 张 | 50 MHz 下换算延迟 |
-|---|---:|---:|
-| 量化关闭，旧 VPG2 固件 | 29,817 | 596.34 µs |
-| QT01 实验固件 | 27,633 | 552.66 µs |
-
-周期减少 **7.32%**。最初版本为 29,262 周期，恢复 RF 写回与权重暂存后为 29,021，再减少一级结果等待后达到 27,633。结果没有达到 20k；当前共享单元吞吐、逐字节写回和按通道配置 / 排空仍有代价。已完成本版综合测量（历史文档已移除）：总面积 **2.586795mm²**，含两块SRAM、不含PAD；相比加入量化前同配置净增加0.151089mm²（6.20%）。50MHz综合setup slack为+4.0014ns，尚未重新布局布线或完成物理时序签核。
-
-[验证报告](../reports/shared_quant_validation.json)记录功能结果、源码哈希及周期。带主机逐层 ACK 的检查用于核对中间张量，不计入上表的性能测量。
-
-## 复现
-
-```bash
-mkdir -p npu/build/quant-artifacts
-cp npu/mnist/artifacts/* npu/build/quant-artifacts/
-NPU_ARTIFACTS_DIR="$PWD/npu/build/quant-artifacts" NPU_SHARED_QUANT=1 \
-  python3.12 npu/mnist/firmware.py
-python3.12 npu/scripts/run_vcs.py --suite sharedquant --macro --tag QT_UNIT
-python3.12 npu/scripts/run_vcs.py --suite latency --macro --tag QT_MNIST \
-  --artifacts-dir npu/build/quant-artifacts
-python3.12 npu/scripts/run_vcs.py --suite quantlayers --macro --tag QT_LAYERS \
-  --artifacts-dir npu/build/quant-artifacts
-```
+默认配置和性能使用[项目首页](../../README.md)；当前版本的功能、综合、最终PNR及检查证据统一见[报告索引](../reports/README.md)。

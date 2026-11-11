@@ -77,5 +77,5 @@ python3.12 npu/scripts/run_vcs.py --suite workloadcpu --tag my_workloads
 | [EGo1工程](npu/fpga/ego1/README.md) | 板级准备；尚无本版Vivado实现结果 |
 | [格式约定](FORMATTING.md) | 代码格式与检查入口 |
 
-`npu/reports/`中的报告保留各次实验的输入和测量证据，旧报告不代表当前版本。
+[报告索引与逐文件审计](npu/reports/README.md)仅保留当前版本证据。
 已撤回方案与被替代的阶段文档从工作树删除，历史可通过Git查看。EDA日志、网表和检查点等生成物不入库。

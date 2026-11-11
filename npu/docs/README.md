@@ -1,7 +1,7 @@
 # 文档索引
 
 [项目首页](../../README.md)描述当前默认版本；[源码导航](../rtl/README.md)和[build_config.json](../build_config.json)是实现入口。
-本次移除已撤回实验、旧ABI迁移和重复阶段面积文档；原文仍可通过Git历史获取。机器验证报告保留在`../reports/`。
+本次移除已撤回实验、旧ABI迁移和重复阶段面积文档；原文仍可通过Git历史获取。当前版本机器验证报告保留在`../reports/`，旧版本数据已删除。
 
 ## 当前证据
 
@@ -22,5 +22,5 @@
 - [Matrix外积](matrix-outer4.md)、[Vector SIMD](vector-simd.md)、[可选共享量化](shared-quant.md)。
 - [XBAR流转发](xbar-stream-routes.md)、[软件管理RF与无SRAM缓存](no-sram-cache.md)。
 
-专题文档记录功能引入时的实现和测量；旧队列、周期、面积或ABI版本不代表当前默认值。
+专题文档保留接口与实现机制；测量入口仅使用当前版本。
 最新默认为任务队列4/4/4、流FIFO各8 words、256 B RF各bank 1R1W；最新物理证据仅使用上方最终r3报告。

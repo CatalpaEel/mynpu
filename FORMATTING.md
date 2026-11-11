@@ -44,5 +44,3 @@ make format-check   # 只检查；有差异或工具报错时返回非零
 ```
 
 此模式逐文件核对冻结源码的原始 SHA，并以 Verible 比较当前 RTL 的 token；任何实际 token 改动都拒绝复用旧网表。结果记录旧、新源码 SHA 和等价验证。没有该选项时仍要求源码 SHA 完全一致。
-
-本次验证见 [code_format_validation.json](npu/reports/code_format_validation.json)：包括 RTL token 一致、Python AST 一致、Shell/C 语法、格式检查、RTL 回归和旧映射网表功能复测。未重新运行综合或布局布线；此前面积与时序报告保留原始源码哈希，不覆盖为“新测量”。旧文档中的代码行数为格式化前统计；排版增加行数不表示增加了硬件逻辑。

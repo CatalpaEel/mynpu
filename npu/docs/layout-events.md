@@ -1,10 +1,7 @@
-> 实现专题：文中阶段性队列、周期和面积仅适用于当时快照。当前默认配置及最终结果见[项目首页](../../README.md)；接口字段以当前 RTL / `npu/sw/npu.h` 为准。
-
-> 当前默认任务队列已统一为4/4/4，最新面积2.569744mm²及性能见全4项面积优化（历史文档已移除）。本页8项面积与周期保留为功能扩展时的历史基线；末尾架构图展示当前默认配置。
 
 # LY01 布局与 EV01 任务事件
 
-本轮实现通用布局、归约末项写回、输出行距和队列事件同步，并让软件使用这些能力。计算规模不变：Matrix 仍为4×4外积，CNN仍为3×3 DOT9，Vector仍为一套INT32/4路INT8 SIMD ALU；RF为256字节，任务队列8/8/8，数据FIFO每通道8 words。没有增加模型级 FSM 或配置写保护。
+本轮实现通用布局、归约末项写回、输出行距和队列事件同步，并让软件使用这些能力。计算规模不变：Matrix 仍为4×4外积，CNN仍为3×3 DOT9，Vector仍为一套INT32/4路INT8 SIMD ALU；RF为256字节，任务队列4/4/4，数据FIFO每通道8 words。没有增加模型级 FSM 或配置写保护。
 
 ```mermaid
 flowchart LR
@@ -119,61 +116,7 @@ CNN任务：   wait=2，signal=4
 - `gemm()`和`reduce()`原生实现不需要scratch；保留可选参数用于旧调用兼容。
 - 小型RV32测试预加载归约程序后，将GEMM→偏置→SUM用硬件事件连接，最后由CPU检查结果。
 
-## 验证与综合
 
-运行入口：
+## 当前验证入口
 
-```sh
-python3.12 npu/scripts/run_vcs.py --suite layoutevents --tag YOUR_TAG --macro
-python3.12 npu/scripts/run_vcs.py --suite workloads --tag YOUR_TAG --macro
-python3.12 npu/scripts/run_vcs.py --suite workloadlegacy --tag YOUR_TAG --macro
-python3.12 npu/scripts/run_vcs.py --suite workloadcpu --tag YOUR_TAG --macro
-python3.12 npu/scripts/run_vcs.py --suite workloadcpu --legacy-plan --tag YOUR_LEGACY_TAG --macro
-python3.12 npu/scripts/run_vcs.py --suite workloadcpu --cpu-case layout --tag YOUR_LAYOUT_TAG --macro
-python3.12 npu/scripts/run_vcs.py --suite workloadcpu --cpu-case packed --tag YOUR_PACKED_TAG --macro
-python3.12 npu/scripts/run_vcs.py --suite workloadcpu --cpu-case cnn --tag YOUR_CNN_TAG --macro
-```
-
-边界测试覆盖排队快照、零/负步长、SIMD尾部、packed字节输出、末项写回、KEEP_R2、消费者先于另一单元的生产者入队、三个单元的事件、运行时错误不置成功位；控制测试另验证W1C与完成同周期时set-dominant。
-
-多负载套件保留原19类共同案例，并增加紧凑INT8/INT16带转置和尾块的矩阵、零输出步长，总计22类、1,173项数值检查。原MNIST模型、参数和汇编不变，10张仍为每张20,728周期、逐层60个张量17,940字节一致。
-
-综合使用TSMC180 TT、18ns优化目标、20ns同网表报告、clock gating、high effort、保留功能单元边界，包含两块8KB SRAM。面积是mapped cell area，**不含PAD环、CTS和布线开销**；时序是综合STA，不是完成布局布线后的signoff。映射网表功能测试使用标准单元和真实SRAM功能模型、零延迟、无SDF。
-
-实测统计与来源见`npu/reports/layout-events-validation.json`。综合目录为`../eda-runs/20261108-layout-events-v1`。
-
-## 实测结果
-
-| 指标 | 修改前 | 本轮 |
-|---|---:|---:|
-| 综合总cell面积，含两块SRAM | 2.562120 mm² | **2.637060 mm²** |
-| 标准单元面积 | 1.759233 mm² | 1.834173 mm² |
-| SRAM宏面积 | 0.802887 mm² | 0.802887 mm² |
-| 18ns setup WNS | +0.0072ns | **+0.0068ns** |
-| 20ns setup WNS | +2.0072ns | **+2.0068ns** |
-| 各时钟组TNS | 0 | 0 |
-
-面积增加0.074940mm²，约2.93%。MMIO/任务队列约0.2840mm²，比前版增加约0.0550mm²，是主要增量；计算阵列、SRAM与RF容量保持不变。完整队列快照名义存储增加896bit，另外还有active/shadow与地址生成状态。两次全局综合映射也会使未改动模块的单元选择略有变化，不能将每一项层级差异都解释成新增逻辑的精确面积。
-
-| 同一硬件上的软件比较 | 参考降低器 | 原生降低器 |
-|---|---:|---:|
-| 19个共同案例总host周期，含加载/检查 | 15,046 | 11,944 |
-| 19×5×7 GEMM配置写 | 158 | 20 |
-| 上述GEMM的Vector搬出busy周期 | 570 | 0 |
-| 广播＋反向搬运配置写 | 182 | 20 |
-| 3×5转置配置写 | 105 | 16 |
-| 真实CPU：GEMM→偏置→Sum周期 | 1,138 | **741** |
-| 上述CPU动态执行指令数 | 705 | 453 |
-| 上述CPU的LSU MMIO等待周期 | 93 | 55 |
-
-真实CPU流水周期减少34.89%，程序从673减至485个静态RV32I指令word。CPU分类中fetch等待为1周期、请求grant等待为4周期，两版相同；此小负载的主要收益来自配置/控制指令减少和跨单元事件调度。`other_awake`包含普通执行及未进一步分类的清醒周期，不等同全部有效运算。profile各原因互斥，但总线事件计数与原因周期可以重叠。
-
-新增的真实CPU用例也已通过：布局广播/反向/转置1,066周期、38项自检；紧凑INT16 GEMM 801周期、15项自检；CNN→Vector 726周期、9项自检。四个CPU小图合计69项自检，不等同新增完整模型的精度验证。
-
-串行访存模式和队列深度1也通过全部1,173项数值检查。串行模式曾揭示参考测试中的Matrix→Vector漏依赖，修复后RF GEMV消费者显式等待生产者；最终回归不再依赖多端口路径的偶然速度。
-
-映射网表通过MNIST一张、计算单元、LY01/EV01边界测试、JTAG四组功能测试，共113项检查；RTL完整回归还覆盖旧指令、IRQ/WFI、错误恢复、FIFO和多端口仲裁。最新综合路径指针是`npu/build/latest-area-timing-run.txt`。
-
-附当前逻辑架构图：
-
-![LY01/EV01架构](images/architecture-detailed.png)
+默认配置和性能使用[项目首页](../../README.md)；当前版本的功能、综合、最终PNR及检查证据统一见[报告索引](../reports/README.md)。

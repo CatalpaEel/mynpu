@@ -1,0 +1,371 @@
+{
+  "checked_date": "2026-11-11",
+  "checked_git_commit": "9ddaac28e751da40087594ac57cc3a7f057f917c",
+  "pnr_run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3",
+  "frozen_manifest_sha256": "55561035029c6a328a95eaf3705c597820b8e30158c6b6c940057917b23dbab9",
+  "frozen_git_base_commit": "549b352ad6a99942d09fbe03781b6d85ca6f791b",
+  "source_hashes_all_match": true,
+  "matched_files": 70,
+  "project_rtl_files": 24,
+  "default_configuration_matches": true,
+  "configuration": {
+    "rf_bank_words": 32,
+    "matrix_queue_depth": 4,
+    "vector_queue_depth": 4,
+    "cnn_queue_depth": 4,
+    "stream_fifo_depth": 8
+  },
+  "scope": "Source/configuration identity audit only; no new synthesis, PNR or signoff run. Git base alone does not describe uncommitted RTL at freeze time.",
+  "files": {
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv": {
+      "frozen_sha256": "3fee39d262ef44bff6ee00b591fe08830e5e35cdd1b9e5eb9eb06da6f6525805",
+      "current_sha256": "3fee39d262ef44bff6ee00b591fe08830e5e35cdd1b9e5eb9eb06da6f6525805",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv": {
+      "frozen_sha256": "33d7c06b0fef3ae2c8814b040abe3cdaa23065cf12643de20e8275f44f97abe1",
+      "current_sha256": "33d7c06b0fef3ae2c8814b040abe3cdaa23065cf12643de20e8275f44f97abe1",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv": {
+      "frozen_sha256": "ae738f408ba2ade41bfcf0488c8f611a2c39b26915191890dac907b8a7a518e5",
+      "current_sha256": "ae738f408ba2ade41bfcf0488c8f611a2c39b26915191890dac907b8a7a518e5",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv": {
+      "frozen_sha256": "afc32fcae21f6cbb834c5ee602a1aaee1b518fc436a86d4fe1b97942473d35c8",
+      "current_sha256": "afc32fcae21f6cbb834c5ee602a1aaee1b518fc436a86d4fe1b97942473d35c8",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv": {
+      "frozen_sha256": "c46075cb09de0e773c91da62d02497673945b7a3e5de176363e5b5e118f82eea",
+      "current_sha256": "c46075cb09de0e773c91da62d02497673945b7a3e5de176363e5b5e118f82eea",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv": {
+      "frozen_sha256": "7eb340f76c76d18f4ac3b6d1d61433c7372118d24f57f83a6ceae82cdbf51c2d",
+      "current_sha256": "7eb340f76c76d18f4ac3b6d1d61433c7372118d24f57f83a6ceae82cdbf51c2d",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv": {
+      "frozen_sha256": "717fc6e7ec754807440f346d9b8bb930da302fffd294550e30ceae78009f4e87",
+      "current_sha256": "717fc6e7ec754807440f346d9b8bb930da302fffd294550e30ceae78009f4e87",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv": {
+      "frozen_sha256": "0bf54e372850c1af22264711d311d943718dc4c8d918e47cc98e9a8d07461d44",
+      "current_sha256": "0bf54e372850c1af22264711d311d943718dc4c8d918e47cc98e9a8d07461d44",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv": {
+      "frozen_sha256": "08cc968a5b26b5a68ad2c548755e6b3b0d07a7ad75a3f11e92bc1bab71eeb7c6",
+      "current_sha256": "08cc968a5b26b5a68ad2c548755e6b3b0d07a7ad75a3f11e92bc1bab71eeb7c6",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv": {
+      "frozen_sha256": "cff163332b28e84904955e88691f973a47f90a4209b3f0ae0d2afe94f6a49921",
+      "current_sha256": "cff163332b28e84904955e88691f973a47f90a4209b3f0ae0d2afe94f6a49921",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv": {
+      "frozen_sha256": "3720278ce00b5591a1a63fe5515528dd4223a35070303e58cf2e48bd0b56c8c1",
+      "current_sha256": "3720278ce00b5591a1a63fe5515528dd4223a35070303e58cf2e48bd0b56c8c1",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv": {
+      "frozen_sha256": "51322d03a0479f16a4acb66cccee48003e2e224c02a7d3188cbaea9b2f8b2756",
+      "current_sha256": "51322d03a0479f16a4acb66cccee48003e2e224c02a7d3188cbaea9b2f8b2756",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv": {
+      "frozen_sha256": "83d9f70bab3b514062a7a79a581919afd5de466167dfcd08733c773f36ba094a",
+      "current_sha256": "83d9f70bab3b514062a7a79a581919afd5de466167dfcd08733c773f36ba094a",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv": {
+      "frozen_sha256": "fa60eaab03518e8e145a3f0a626bc7945e79265e8322ce874a6c8f6996f0e10b",
+      "current_sha256": "fa60eaab03518e8e145a3f0a626bc7945e79265e8322ce874a6c8f6996f0e10b",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv": {
+      "frozen_sha256": "0538bf1d829187699085de361d20ab79d04a459b06060a8f04709105f61818dc",
+      "current_sha256": "0538bf1d829187699085de361d20ab79d04a459b06060a8f04709105f61818dc",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv": {
+      "frozen_sha256": "cf047a8b7654f2cb0d36050c41b57cf95bf0a0a21f5dea346d38aa0da57c24fe",
+      "current_sha256": "cf047a8b7654f2cb0d36050c41b57cf95bf0a0a21f5dea346d38aa0da57c24fe",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv": {
+      "frozen_sha256": "e7e30ce0f0e6f652dcf59e586933cada245018b80f2529da476b4272e86e4380",
+      "current_sha256": "e7e30ce0f0e6f652dcf59e586933cada245018b80f2529da476b4272e86e4380",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv": {
+      "frozen_sha256": "5fa2656a11759ff10fd016ed885761c9c379627b9a1b83ddee6e03a35ee9e23f",
+      "current_sha256": "5fa2656a11759ff10fd016ed885761c9c379627b9a1b83ddee6e03a35ee9e23f",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv": {
+      "frozen_sha256": "ad8a13c8314b9a3c28228db2844466c9d750460d6afa8f6299a7229d80f8dd47",
+      "current_sha256": "ad8a13c8314b9a3c28228db2844466c9d750460d6afa8f6299a7229d80f8dd47",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv": {
+      "frozen_sha256": "50d1b4d325694f4e898d5b2f2e7b26a7e631a5abdd1cd283500c900b079275ab",
+      "current_sha256": "50d1b4d325694f4e898d5b2f2e7b26a7e631a5abdd1cd283500c900b079275ab",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv": {
+      "frozen_sha256": "807cf3fb86fe7060cdb1fa21dfbc843220b09a4d694d23ad4bc1cdd3e7118264",
+      "current_sha256": "807cf3fb86fe7060cdb1fa21dfbc843220b09a4d694d23ad4bc1cdd3e7118264",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv": {
+      "frozen_sha256": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
+      "current_sha256": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv": {
+      "frozen_sha256": "6eca8d4c2e299adcc498417220478360cc22898ba9037cdad6a1b81e80373c7b",
+      "current_sha256": "6eca8d4c2e299adcc498417220478360cc22898ba9037cdad6a1b81e80373c7b",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv": {
+      "frozen_sha256": "11035bcbb28447fa5a3e40d5cad4f257e763f75e49664ce8098ab6247a9a57cb",
+      "current_sha256": "11035bcbb28447fa5a3e40d5cad4f257e763f75e49664ce8098ab6247a9a57cb",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv": {
+      "frozen_sha256": "27931c8004e4d266c6ea02c9d5c19968c67d7e6ab86e57da4088531b13c8c48f",
+      "current_sha256": "27931c8004e4d266c6ea02c9d5c19968c67d7e6ab86e57da4088531b13c8c48f",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv": {
+      "frozen_sha256": "db90df2f8737aff29d73b3d242dd33aeb6750ae69ae7eb8e118b531180945d7f",
+      "current_sha256": "db90df2f8737aff29d73b3d242dd33aeb6750ae69ae7eb8e118b531180945d7f",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv": {
+      "frozen_sha256": "858b172963e17529de0b40a5be6ddfdadfc60bdca967819e4fc558b0ed6d7b87",
+      "current_sha256": "858b172963e17529de0b40a5be6ddfdadfc60bdca967819e4fc558b0ed6d7b87",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv": {
+      "frozen_sha256": "6a78a0d77d32e6795f63e5149f77b98320ce504c67c44a2e359c9aea70989224",
+      "current_sha256": "6a78a0d77d32e6795f63e5149f77b98320ce504c67c44a2e359c9aea70989224",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv": {
+      "frozen_sha256": "e2cec8f3d273748783275c60b1ec89101336608638d7e7783b03dd6b9dbb0345",
+      "current_sha256": "e2cec8f3d273748783275c60b1ec89101336608638d7e7783b03dd6b9dbb0345",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv": {
+      "frozen_sha256": "6e12f673e05380e34a35c38d8ee8b6878935d96b6f2dfda72c67f8a6e92a6e4e",
+      "current_sha256": "6e12f673e05380e34a35c38d8ee8b6878935d96b6f2dfda72c67f8a6e92a6e4e",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv": {
+      "frozen_sha256": "1510df315721b370c2d86b1c1d134a3ff6beefba2d072de7a4a611e3ecffb753",
+      "current_sha256": "1510df315721b370c2d86b1c1d134a3ff6beefba2d072de7a4a611e3ecffb753",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv": {
+      "frozen_sha256": "6b646e6aa931f8ab56b85ee27549a422450b456270a54d68a4130329823226b6",
+      "current_sha256": "6b646e6aa931f8ab56b85ee27549a422450b456270a54d68a4130329823226b6",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv": {
+      "frozen_sha256": "d910cbd0751f38d349e8975de22b43d0a2937f9e905b0d9b82894fd83c53fe8a",
+      "current_sha256": "d910cbd0751f38d349e8975de22b43d0a2937f9e905b0d9b82894fd83c53fe8a",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv": {
+      "frozen_sha256": "c2a0787c07bcd6c198b6338c4c6ee372b4bce96ec4a4def467ff0ae03da4e43a",
+      "current_sha256": "c2a0787c07bcd6c198b6338c4c6ee372b4bce96ec4a4def467ff0ae03da4e43a",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv": {
+      "frozen_sha256": "98b246d9ada45a7073d217d5c3bbc86941ee76bb00e7e0edda61d3bbec83728e",
+      "current_sha256": "98b246d9ada45a7073d217d5c3bbc86941ee76bb00e7e0edda61d3bbec83728e",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv": {
+      "frozen_sha256": "e2d1cc9bc433a093938f2d4e4268c611f9a9bf199101e85114d417ff04597626",
+      "current_sha256": "e2d1cc9bc433a093938f2d4e4268c611f9a9bf199101e85114d417ff04597626",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv": {
+      "frozen_sha256": "24df51d9cb33f5c8760a8cfbc7931aafc94c2ab0523c7df55b2635e7778af16f",
+      "current_sha256": "24df51d9cb33f5c8760a8cfbc7931aafc94c2ab0523c7df55b2635e7778af16f",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv": {
+      "frozen_sha256": "857962513fc5bd3eb3d6b28c55fdfb15ef53f8ce8a59173a7d583efb8caee66f",
+      "current_sha256": "857962513fc5bd3eb3d6b28c55fdfb15ef53f8ce8a59173a7d583efb8caee66f",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv": {
+      "frozen_sha256": "6a0cf2f15c69886ad5497222aa203f6f5b1fdd004b32a4ab87b36a0960ba2254",
+      "current_sha256": "6a0cf2f15c69886ad5497222aa203f6f5b1fdd004b32a4ab87b36a0960ba2254",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv": {
+      "frozen_sha256": "2b0a58e5c2f758dbe5f6e8f786c547da5508ce466007517434e2f7d817b758ed",
+      "current_sha256": "2b0a58e5c2f758dbe5f6e8f786c547da5508ce466007517434e2f7d817b758ed",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv": {
+      "frozen_sha256": "7a2dbeded21929832b40fc8d068b35b7281c75a63c426feed207127d4da08e4e",
+      "current_sha256": "7a2dbeded21929832b40fc8d068b35b7281c75a63c426feed207127d4da08e4e",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv": {
+      "frozen_sha256": "a2fcbe6b783659ebecaf25d105f30c68af9b68c2850b833af64a2cec3ec29262",
+      "current_sha256": "a2fcbe6b783659ebecaf25d105f30c68af9b68c2850b833af64a2cec3ec29262",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv": {
+      "frozen_sha256": "66e6078ea3b3acd3ceea4b974c0488d25e02324935532de1f2d39cdc34c875a0",
+      "current_sha256": "66e6078ea3b3acd3ceea4b974c0488d25e02324935532de1f2d39cdc34c875a0",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv": {
+      "frozen_sha256": "cd04d46afbf778ff3f1573bdd390784e5461a09b33fd670fa126ae7d3c433e89",
+      "current_sha256": "cd04d46afbf778ff3f1573bdd390784e5461a09b33fd670fa126ae7d3c433e89",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv": {
+      "frozen_sha256": "1cf012a83b54472931ad9944e7774e311222641a0aa026229c19467f90bf5448",
+      "current_sha256": "1cf012a83b54472931ad9944e7774e311222641a0aa026229c19467f90bf5448",
+      "matches": true
+    },
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv": {
+      "frozen_sha256": "2467f6b3c2745e687edad1a0c88ab5267b4ba8642c91e1fc0f282cf4223e5dc3",
+      "current_sha256": "2467f6b3c2745e687edad1a0c88ab5267b4ba8642c91e1fc0f282cf4223e5dc3",
+      "matches": true
+    },
+    "npu/rtl/common/npu_addr_pkg.sv": {
+      "frozen_sha256": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
+      "current_sha256": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
+      "matches": true
+    },
+    "npu/rtl/cnn/npu_stream_pkg.sv": {
+      "frozen_sha256": "d4c1b89c87098ac9adce72ab60ea9a1d4401d074ffe835fc109ab0f82d8e8d72",
+      "current_sha256": "d4c1b89c87098ac9adce72ab60ea9a1d4401d074ffe835fc109ab0f82d8e8d72",
+      "matches": true
+    },
+    "npu/rtl/common/npu_rr_select.sv": {
+      "frozen_sha256": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+      "current_sha256": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+      "matches": true
+    },
+    "npu/rtl/common/npu_clock_gate.sv": {
+      "frozen_sha256": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+      "current_sha256": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+      "matches": true
+    },
+    "npu/rtl/cnn/npu_cnn.sv": {
+      "frozen_sha256": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+      "current_sha256": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+      "matches": true
+    },
+    "npu/rtl/cnn/npu_cnn_mac.sv": {
+      "frozen_sha256": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+      "current_sha256": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+      "matches": true
+    },
+    "npu/rtl/top/npu_core.sv": {
+      "frozen_sha256": "178e6b23f8a0e1f73bb006269404a88bf2b3dabd4fad814a4b8536757ffbae9c",
+      "current_sha256": "178e6b23f8a0e1f73bb006269404a88bf2b3dabd4fad814a4b8536757ffbae9c",
+      "matches": true
+    },
+    "npu/rtl/interconnect/npu_data_regfile.sv": {
+      "frozen_sha256": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
+      "current_sha256": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
+      "matches": true
+    },
+    "npu/rtl/debug/npu_debug_boot.sv": {
+      "frozen_sha256": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+      "current_sha256": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+      "matches": true
+    },
+    "npu/rtl/debug/npu_jtag_debug.sv": {
+      "frozen_sha256": "d2324d487db499ca8b30226f438c1a527f73cba72e6c8762ba4d9237e880b69a",
+      "current_sha256": "d2324d487db499ca8b30226f438c1a527f73cba72e6c8762ba4d9237e880b69a",
+      "matches": true
+    },
+    "npu/rtl/matrix/npu_matmul.sv": {
+      "frozen_sha256": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+      "current_sha256": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+      "matches": true
+    },
+    "npu/rtl/matrix/npu_matrix_stream.sv": {
+      "frozen_sha256": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
+      "current_sha256": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
+      "matches": true
+    },
+    "npu/rtl/control/npu_mmio.sv": {
+      "frozen_sha256": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
+      "current_sha256": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
+      "matches": true
+    },
+    "npu/rtl/cnn/npu_stream.sv": {
+      "frozen_sha256": "292658bd3818c0af4ab0f48bd7168032bd39c7b03d9870a73917713228b4d787",
+      "current_sha256": "292658bd3818c0af4ab0f48bd7168032bd39c7b03d9870a73917713228b4d787",
+      "matches": true
+    },
+    "npu/rtl/cnn/npu_stream_control.sv": {
+      "frozen_sha256": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
+      "current_sha256": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
+      "matches": true
+    },
+    "npu/rtl/cnn/npu_stream_engine.sv": {
+      "frozen_sha256": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
+      "current_sha256": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
+      "matches": true
+    },
+    "npu/rtl/vector/npu_vector.sv": {
+      "frozen_sha256": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
+      "current_sha256": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
+      "matches": true
+    },
+    "npu/rtl/vector/npu_vector_stream.sv": {
+      "frozen_sha256": "808debe76f7d6ca9373867aa61f1ca94357bac3adeee2ba75d6cf66d5435b77a",
+      "current_sha256": "808debe76f7d6ca9373867aa61f1ca94357bac3adeee2ba75d6cf66d5435b77a",
+      "matches": true
+    },
+    "npu/rtl/interconnect/xbar.sv": {
+      "frozen_sha256": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
+      "current_sha256": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
+      "matches": true
+    },
+    "npu/rtl/interconnect/xbar_stream.sv": {
+      "frozen_sha256": "0a5d25fa9aec9378e5d66fb8840cf41ffd42e837d941220bfdd301bbd2b01a0c",
+      "current_sha256": "0a5d25fa9aec9378e5d66fb8840cf41ffd42e837d941220bfdd301bbd2b01a0c",
+      "matches": true
+    },
+    "npu/rtl/interconnect/npu_multi_read.sv": {
+      "frozen_sha256": "a6827b272c5169e6b836683a52d76b1239ba41f2b2b37dd865df11cd944b325b",
+      "current_sha256": "a6827b272c5169e6b836683a52d76b1239ba41f2b2b37dd865df11cd944b325b",
+      "matches": true
+    },
+    "npu/rtl/quant/npu_shared_quant.sv": {
+      "frozen_sha256": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
+      "current_sha256": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
+      "matches": true
+    },
+    "npu/rtl/common/npu_store_pack.sv": {
+      "frozen_sha256": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
+      "current_sha256": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
+      "matches": true
+    },
+    "npu/rtl/top/npu_soc.sv": {
+      "frozen_sha256": "397998f42b58b0fffab53adabc454945d198b78fa0dbccc685bda9fc20064a95",
+      "current_sha256": "397998f42b58b0fffab53adabc454945d198b78fa0dbccc685bda9fc20064a95",
+      "matches": true
+    }
+  }
+}
