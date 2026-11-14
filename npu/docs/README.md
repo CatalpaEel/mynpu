@@ -24,8 +24,6 @@
 
 ## 软件与接口
 
-- [GPIO8](gpio8.md)：8位方向/输入/输出、按位原子更新及CPU/JTAG控制。
-
 - [通用任务层](general-workloads.md)：GEMM、向量、布局、归约、卷积和图调度的实际覆盖范围。
 - [LY01布局与EV01事件](layout-events.md)：步长、输出布局、依赖与计数。
 - [字节码布局](command-layout.md)：基础任务编码；后续扩展结合LY01/EV01与当前`npu.h`查看。

@@ -10,7 +10,6 @@ p = argparse.ArgumentParser()
 p.add_argument(
     "--suite",
     choices=[
-        "gpio",
         "irqcontrol",
         "addressranges",
         "sramuncached",
@@ -111,7 +110,6 @@ subprocess.run(["/usr/bin/python3.12", str(ROOT / "scripts/gen_sources.py")], ch
 files = [Path(s) for s in (ROOT / "build/sources.f").read_text().splitlines()]
 assert files, "Generated source list is empty"
 tops = {
-    "gpio": "tb_gpio",
     "irqcontrol": "tb_irq_control",
     "softcfg": "tb_software_config",
     "quantsync": "tb_quant_sync",
@@ -252,7 +250,6 @@ if any(f.name in ["npu_data_regfile.sv", "xbar_stream.sv", "xbar.sv"] for f in f
 if a.macro:
     if a.suite not in [
         "jtagrunning",
-        "gpio",
         "irqwake",
         "softcfg",
         "sharedoperands",
@@ -298,8 +295,6 @@ assets = (
     if a.suite in ["jtag", "quantlayers", "layers", "blocking", "latency", "stream", "soc"]
     else []
 )
-if a.suite == "gpio":
-    files.append(Path("/home/almalinux/tsmc180/tpd018nv_280a/TSMCHOME/digital/Front_End/verilog/tpd018nv_260a/tpd018nv.v"))
 
 tracked = (
     files
@@ -464,7 +459,6 @@ with (out / "run-launcher.log").open("w") as f:
     r = subprocess.run(cmd, cwd=cwd, stdout=f, stderr=subprocess.STDOUT)
 text = (out / "run.log").read_text()
 markers = {
-    "gpio": "GPIO PASS",
     "irqcontrol": "IRQ CONTROL PASS",
     "softcfg": "SOFTWARE CONFIG PASS",
     "quantsync": "QUANT SYNC PASS",

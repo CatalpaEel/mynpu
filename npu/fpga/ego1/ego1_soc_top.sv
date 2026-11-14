@@ -70,9 +70,7 @@ module ego1_soc_top (
 
   // CPU starts in its bootstrap WFI; firmware/data are loaded via JTAG SBA.
   // The board and simulation both expose only the external JTAG DTM.
-  // GPIO is ASIC-facing for now; no unverified EGo1 header pins assigned.
   npu_soc i_soc (
-    .gpio_i(8'b0), .gpio_o(), .gpio_oe_o(),
     .clk_i(clk_sys), .rst_ni(sys_rst_ni), .cpu_run_i(1'b1),
     .tck_i(tck_i), .tms_i(tms_i), .td_i(td_i), .td_o(td_o),
     .cpu_debug_halted_o(cpu_debug_halted),

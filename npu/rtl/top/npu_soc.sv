@@ -1,6 +1,4 @@
 module npu_soc (
-  input logic [7:0] gpio_i,
-  output logic [7:0] gpio_o, gpio_oe_o,
   input logic clk_i,
   rst_ni,
   cpu_run_i,

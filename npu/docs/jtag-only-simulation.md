@@ -1,6 +1,6 @@
 # 移除Host：统一JTAG Debug Module仿真
 
-2026-11-14。当前SoC级仿真的装载、MMIO配置和结果读取统一走：
+2026-11-14。main已撤除GPIO，保留JTAG-only改动，并针对无GPIO版重新验证。当前SoC级仿真的装载、MMIO配置和结果读取统一走：
 
 ```mermaid
 flowchart LR
@@ -81,4 +81,4 @@ python3.12 npu/scripts/run_vcs.py --suite sharedoperands --tag jtag-parallel-loc
 python3.12 npu/fpga/ego1/simulate.py --out npu/build/ego1-jtag-local
 ```
 
-本轮没有重跑综合/布局布线，也没有重新生成或下载FPGA bitstream。此前GPIO面积和完整r3后端报告都是旧源码冻结基线，不能为本次接口/DM变化背书。仿真没有复现板上故障，不能据此宣布已定位或消除了旧bitstream的运行态SBA问题；需使用本轮源码重新构建后板测。
+本轮没有重跑综合/布局布线，也没有重新生成或下载FPGA bitstream。完整r3后端报告是旧源码冻结基线，不能为本次接口/DM变化背书。仿真没有复现板上故障，不能据此宣布已定位或消除了旧bitstream的运行态SBA问题；需使用本轮源码重新构建后板测。

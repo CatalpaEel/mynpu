@@ -7,7 +7,7 @@
 | --- | --- |
 | `top/` | `npu_core`集成CPU、MMIO、调试及计算单元；`npu_soc`接两块同步SRAM模型 |
 | `debug/` | JTAG DTM、Debug Module、SBA桥和CPU bootstrap |
-| `control/` | MMIO、任务队列、配置、计数器、IRQ、依赖事件及GPIO8寄存器 |
+| `control/` | MMIO、任务队列、配置、计数器、IRQ、依赖事件 |
 | `matrix/` | 4×4外积核与供数/写回Stream |
 | `cnn/` | 3×3 DOT9核、窗口供数、任务控制与流引擎 |
 | `vector/` | INT32/4×INT8 SIMD核、程序发射和供数Stream |

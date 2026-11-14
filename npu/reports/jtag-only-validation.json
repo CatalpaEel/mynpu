@@ -1,45 +1,15 @@
 {
   "date": "2026-11-14",
   "passed": true,
-  "scope": "JTAG-only SoC regression, including real SRAM macro and board-wrapper functional models. No new synthesis/PNR, Vivado implementation, bitstream or board test.",
+  "scope": "Corrected main without GPIO, JTAG-only SoC and board-wrapper functional validation. No new PPA, Vivado implementation, bitstream or board verification.",
   "external_host_interface_removed": true,
-  "sba_running": {
-    "iterations": 1024,
-    "checks": 1161,
-    "accepted": 2278,
-    "responses": 2278,
-    "grants_with_other_requesters": 1996,
-    "cpu_fetch_grants": 2034575,
-    "cpu_data_grants": 905011,
-    "vector_grants": 870991,
-    "max_grant_wait_cycles": 1,
-    "cpu_halted_during_stress": false
-  },
-  "mnist": {
-    "samples": 10,
-    "checks": 120,
-    "ingress_cycles": 244608,
-    "command_start_to_done_cycles": 21728,
-    "command_to_mmio_commit_cycles": 723,
-    "mmio_commit_to_done_cycles": 21005,
-    "useful_macs": 39330,
-    "kernel_cycles": 15180
-  },
+  "gpio_included": false,
   "runs": [
     {
       "suite": "jtag",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-final-jtag/result.json",
-      "passed": true,
-      "summaries": [
-        "JTAG PASS checks=34"
-      ]
-    },
-    {
-      "suite": "jtag",
       "macro": true,
-      "result": "npu/build/vcs-sba-only-final-macro-jtag-macro/result.json",
       "passed": true,
+      "result": "npu/build/vcs-no-gpio-main-jtag-macro/result.json",
       "summaries": [
         "JTAG PASS checks=34"
       ]
@@ -47,142 +17,17 @@
     {
       "suite": "jtagrunning",
       "macro": true,
-      "result": "npu/build/vcs-sba-running-r4-jtagrunning-macro/result.json",
       "passed": true,
+      "result": "npu/build/vcs-no-gpio-main-jtagrunning-macro/result.json",
       "summaries": [
         "JTAG RUNNING PASS checks=1161 grants=2278 replies=2278 overlap=1996 fetch=2034575 data=905011 vector=870991 max_wait=1"
       ]
     },
     {
-      "suite": "unitsmoke",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-final-unitsmoke/result.json",
-      "passed": true,
-      "summaries": [
-        "UNIT SMOKE PASS checks=25 INT32-multiply/high-signed/high-unsigned/SIMD8/tail/Matrix-pack/CNN-pack/real-ACK-counts"
-      ]
-    },
-    {
-      "suite": "outergemm",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-final-outergemm/result.json",
-      "passed": true,
-      "summaries": [
-        "OUTER GEMM PASS checks=30020 macs=383344 full_steps=22246 flags/strides/tails/tiles/SRAM/RF/K0"
-      ]
-    },
-    {
-      "suite": "sharedoperands",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-final-sharedoperands/result.json",
-      "passed": true,
-      "summaries": [
-        "SHARED OPERANDS PASS checks=3409 matrix_terms=10848 matrix_parallel_reads=1190 vector_parallel_reads=312"
-      ]
-    },
-    {
-      "suite": "cnnstream",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-regression-cnnstream/result.json",
-      "passed": true,
-      "summaries": [
-        "CNN STREAM PASS cases=216 checks=1548 stride1/2/borders/unaligned-rows/1..256-channels/RF/SRAM"
-      ]
-    },
-    {
-      "suite": "vectorsimd",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-regression-vectorsimd/result.json",
-      "passed": true,
-      "summaries": [
-        "VECTOR SIMD PASS checks=42594 direct/program/SRAM/RF/inplace/scalar/tail/fault"
-      ]
-    },
-    {
-      "suite": "sharedquant",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-regression-sharedquant/result.json",
-      "passed": true,
-      "summaries": [
-        "SHARED QUANT PASS checks=437 raw/quant32/quant8/concurrent/CNN-partial/Matrix-accumulate/signed-round/wrap/tail/RF/SRAM"
-      ]
-    },
-    {
-      "suite": "softcfg",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-regression-softcfg/result.json",
-      "passed": true,
-      "summaries": [
-        "SOFTWARE CONFIG CNN PASS active-old/queued-new/nonempty-FIFO/runtime-writes",
-        "SOFTWARE CONFIG VECTOR PASS active-program-live/count-latched/queued-count-new",
-        "SOFTWARE CONFIG QUANT PASS active-source/pre-accept-parameters/new-destination",
-        "SOFTWARE CONFIG QUANT INFLIGHT PASS arithmetic-latched/destination-live/FIFO-unchanged/next-result-new",
-        "SOFTWARE CONFIG SYNC PASS readonly/start-tickets/observe/quant-stalls/real-write-ACK/errors",
-        "SOFTWARE CONFIG PASS checks=118 CNN/Matrix/Vector/quant runtime ownership and sampling boundaries"
-      ]
-    },
-    {
-      "suite": "irqwake",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-regression-irqwake/result.json",
-      "passed": true,
-      "summaries": [
-        "IRQ WAKE CASE unit=0 irq=16 fault=0 PASS",
-        "IRQ WAKE CASE unit=0 irq=16 fault=1 PASS",
-        "IRQ WAKE CASE unit=1 irq=17 fault=0 PASS",
-        "IRQ WAKE CASE unit=1 irq=17 fault=1 PASS",
-        "IRQ WAKE CASE unit=2 irq=18 fault=0 PASS",
-        "IRQ WAKE CASE unit=2 irq=18 fault=1 PASS",
-        "IRQ MASK PASS unrelated-source-stays-asleep/two-pending-MIP/independent-ACK",
-        "IRQ WAKE PASS cases=7 real-CPU-WFI/three-distinct-sources/completion/runtime-fault/MIP/tickets"
-      ]
-    },
-    {
-      "suite": "unitroutes",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-regression-unitroutes/result.json",
-      "passed": true,
-      "summaries": [
-        "UNIT ROUTE producer=0 consumer=1 PASS",
-        "UNIT ROUTE producer=0 consumer=2 PASS",
-        "UNIT ROUTE producer=1 consumer=0 PASS",
-        "UNIT ROUTE producer=1 consumer=2 PASS",
-        "UNIT ROUTE producer=2 consumer=0 PASS",
-        "UNIT ROUTE producer=2 consumer=1 PASS",
-        "UNIT ROUTES PASS checks=24 six directed pairs, three-stage chain, 256-word GEMM, streamed DOT9 weights"
-      ]
-    },
-    {
-      "suite": "matrixtiles",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-regression-matrixtiles/result.json",
-      "passed": true,
-      "summaries": [
-        "MATRIX STREAM TILE CASE id=0 inputs=1 fifo_out=0 M/N/K=5/6/3 full_steps=3 PASS",
-        "MATRIX STREAM TILE CASE id=1 inputs=2 fifo_out=1 M/N/K=5/6/3 full_steps=3 PASS",
-        "MATRIX STREAM TILE CASE id=2 inputs=3 fifo_out=0 M/N/K=7/6/3 full_steps=3 PASS",
-        "MATRIX STREAM TILE CASE id=3 inputs=1 fifo_out=1 M/N/K=7/6/3 full_steps=3 PASS",
-        "MATRIX STREAM TILE CASE id=4 inputs=2 fifo_out=0 M/N/K=5/6/17 full_steps=17 PASS",
-        "MATRIX STREAM TILE CASE id=5 inputs=3 fifo_out=1 M/N/K=5/6/17 full_steps=17 PASS",
-        "MATRIX STREAM TILE CASE id=6 inputs=1 fifo_out=0 M/N/K=7/6/17 full_steps=17 PASS",
-        "MATRIX STREAM TILE CASE id=7 inputs=2 fifo_out=1 M/N/K=7/6/17 full_steps=17 PASS",
-        "MATRIX STREAM TILES PASS cases=8 checks=288 full_steps=80 mixed-SRAM/FIFO/tails/INT8/INT16/backpressure/tile-order"
-      ]
-    },
-    {
-      "suite": "quantsync",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-regression-quantsync/result.json",
-      "passed": true,
-      "summaries": [
-        "QUANT SYNC PASS checks=27 elastic-II1/owners/stalls/parameter-sampling/ACK-counts/flush/cancel/wrap/reset"
-      ]
-    },
-    {
       "suite": "latency",
       "macro": false,
-      "result": "npu/build/vcs-sba-only-final-latency/result.json",
       "passed": true,
+      "result": "npu/build/vcs-no-gpio-main-latency/result.json",
       "summaries": [
         "SINGLE_INPUT sample=0 ingress_cycles=244608 input_to_classification_cycles=266336 input_to_classification_us_at_50mhz=5326.72 PASS",
         "SINGLE sample=0 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21728 kernel_utilization_pct=28.79 system_utilization_pct=20.11 latency_us_at_50mhz=434.56 PASS",
@@ -208,40 +53,31 @@
       ]
     },
     {
-      "suite": "layoutevents",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-final-layoutevents/result.json",
-      "passed": true,
-      "summaries": [
-        "LAYOUT EVENTS PASS checks=34 snapshots, zero/negative strides, final-only, keep-r2, packed stores, three-unit events, fault"
-      ]
-    },
-    {
-      "suite": "workloadcpu",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-final-workloadcpu/result.json",
-      "passed": true,
-      "summaries": [
-        "GENERAL CPU PASS words=485 cycles=1461"
-      ]
-    },
-    {
-      "suite": "gpio",
-      "macro": false,
-      "result": "npu/build/vcs-sba-only-final-gpio/result.json",
-      "passed": true,
-      "summaries": [
-        "GPIO PASS checks=78 CPU, JTAG SBA, actual PAD, direction, masks, resets"
-      ]
-    },
-    {
       "suite": "ego1-wrapper",
       "passed": true,
       "checks": 38,
-      "result": "npu/build/ego1-sba-only/validation.json",
+      "result": "npu/build/ego1-no-gpio-main/validation.json",
       "scope": "Board wrapper functional simulation; MMCM/BUFG stand-ins, not Vivado or physical board validation"
     }
   ],
+  "sba_running": {
+    "checks": 1161,
+    "grants": 2278,
+    "replies": 2278,
+    "overlap": 1996,
+    "fetch": 2034575,
+    "data": 905011,
+    "vector": 870991,
+    "max_wait": 1
+  },
+  "mnist": {
+    "samples": 10,
+    "checks": 120,
+    "ingress_cycles": 244608,
+    "command_start_to_done_cycles": 21728,
+    "command_to_mmio_commit_cycles": 723,
+    "mmio_commit_to_done_cycles": 21005
+  },
   "source_sha256": {
     "npu/rtl/common/npu_addr_pkg.sv": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
     "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv": "3fee39d262ef44bff6ee00b591fe08830e5e35cdd1b9e5eb9eb06da6f6525805",
@@ -265,7 +101,6 @@
     "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv": "ad8a13c8314b9a3c28228db2844466c9d750460d6afa8f6299a7229d80f8dd47",
     "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv": "50d1b4d325694f4e898d5b2f2e7b26a7e631a5abdd1cd283500c900b079275ab",
     "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv": "807cf3fb86fe7060cdb1fa21dfbc843220b09a4d694d23ad4bc1cdd3e7118264",
-    "external/lab3-ST/SoC_cv32e40p/soc/rtl/mem/sram_ff.sv": "1bd0872748ec505d5eb18cb94c6a5660ae3d5c48990d12cb1c6cbbb111f774d5",
     "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
     "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv": "6eca8d4c2e299adcc498417220478360cc22898ba9037cdad6a1b81e80373c7b",
     "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv": "11035bcbb28447fa5a3e40d5cad4f257e763f75e49664ce8098ab6247a9a57cb",
@@ -296,14 +131,13 @@
     "npu/rtl/common/npu_clock_gate.sv": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
     "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
     "npu/rtl/cnn/npu_cnn_mac.sv": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
-    "npu/rtl/top/npu_core.sv": "32977365d3c7a9e4154cdfab4c2ef2b90aeb011cf45f18576ac5ab47e0921aa6",
+    "npu/rtl/top/npu_core.sv": "b0e5fd6949aa58f15299185e7f40f09e46d2920781c4ba6c77c2c1b50b35f7e0",
     "npu/rtl/interconnect/npu_data_regfile.sv": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
     "npu/rtl/debug/npu_debug_boot.sv": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
     "npu/rtl/debug/npu_jtag_debug.sv": "1bbcb4cd30213a282c53b812fd969cdb1c4b89d703b9799ac58df73296469464",
     "npu/rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
     "npu/rtl/matrix/npu_matrix_stream.sv": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
     "npu/rtl/control/npu_mmio.sv": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
-    "npu/rtl/top/npu_soc.sv": "a1ee918f37a2ee30d4dd79a3680974ecc3dc0cfee18c2a70a6a1bcec668d7aa5",
     "npu/rtl/cnn/npu_stream.sv": "292658bd3818c0af4ab0f48bd7168032bd39c7b03d9870a73917713228b4d787",
     "npu/rtl/cnn/npu_stream_control.sv": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
     "npu/rtl/cnn/npu_stream_engine.sv": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
@@ -314,76 +148,32 @@
     "npu/rtl/interconnect/npu_multi_read.sv": "a6827b272c5169e6b836683a52d76b1239ba41f2b2b37dd865df11cd944b325b",
     "npu/rtl/quant/npu_shared_quant.sv": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
     "npu/rtl/common/npu_store_pack.sv": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
-    "npu/rtl/control/npu_gpio.sv": "7618a92516f6fd89eaff3688bb9d5f10a9d09a3e9c3b463573cbae0ab564f2f6",
     "npu/tb/tb_jtag.sv": "269b8e543ed2a08f08811d5f6d951f5fdbe7fbad3a69b0ca235417a79821d1a1",
     "npu/tb/db_jtag_tasks.svh": "220e2617385913779c8530dc82ff5632f444c0f9438df1dc9e4482fdf750ac5b",
     "npu/tb/db_sba_access.svh": "547ee8a28e1e41a199de1ca261d8392b5042a00e91a40a2001bb4148cff3c66e",
     "npu/mnist/artifacts/test_meta.svh": "3111fbafcb1b6b5fd75f44e911554aec45c1f89c02a0a65472851c495d2a9cf4",
-    "npu/tb/tb_jtag_running.sv": "999b1527264cf681b60e005f1280057c7b890edb0d40e1937e0f3df6d3030fee",
-    "npu/tb/tb_netlist_units.sv": "5e71c3fbd0d1c9a232fd09b3f37437b8eae5e0543e9655ae2e3e3de6c4201e0a",
-    "npu/tb/tb_outer_gemm.sv": "0162cc24a0155f026152e3e2cda6787ecd0eb57559ce421ffb67a11738103270",
-    "npu/tb/tb_shared_operands.sv": "d652f93df6e5be8b58b5f173dd9715a4419ec95c8c43444e62a215c4805e313b",
-    "npu/tb/tb_cnn_stream.sv": "0641330d2e0a3a858dc338dae7a02fee44ed440f93956a937e52ac3b8104bd17",
-    "npu/tb/tb_vector_simd.sv": "f11a6dedf374ff07ddeb279f5f819530250186cb4aa70086bbd790ff9e34bfd3",
-    "npu/tb/tb_shared_quant.sv": "edcfde61237659cd6761f378600310eeabbe15e0088e6d0672d80141166dc7ef",
-    "npu/tb/tb_software_config.sv": "ed6c3c425b4f4c0ced0913105fb702309ae92f6e299451872bfe7c0d15d57b21",
-    "npu/tb/tb_irq_wake.sv": "ead9a85551c21f5cd7766f1f51b649dcfc8ae203ffeb90df6795a72fe440ed43",
-    "npu/tb/tb_unit_routes.sv": "5a1108f4e441d44b183de8fa54094e4e00bb17279376e81a8bc4e92bcaeae522",
-    "npu/tb/tb_matrix_stream_tiles.sv": "73fdcfc7450a28cb5dd091f9468c6bb8838ab79330524e0b82a7d9bab47321cc",
-    "npu/tb/tb_quant_sync.sv": "f556adb4240dfb5bbbc6452068d8e73993764e1b508d2552414ea3e0f3b5a397",
+    "npu/tb/tb_jtag_running.sv": "c79f2c878e065c3c2f9603ca6f86358952e138bf98bd4f119b292b3443c0acdc",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/mem/sram_ff.sv": "1bd0872748ec505d5eb18cb94c6a5660ae3d5c48990d12cb1c6cbbb111f774d5",
+    "npu/rtl/top/npu_soc.sv": "07c69dfc0e5306a38268c247dff927735eca9381b250a88ec581c5963508a5c0",
     "npu/tb/tb_mnist_latency.sv": "b929b28f509a91fac272cce0273ca985e666765105a98762ba9a21d81d4f0994",
     "npu/tb/mnist_profile.svh": "867efb96f3f02e9ecaaff1a727fbddfe9fc8ffd67e2ef6d8b58a6c7b02861f78",
-    "npu/tb/tb_layout_events.sv": "a92d0d587492787161d4aba9ce3826a2768ae73bfde7a84d60cd2100cd0ece24",
-    "npu/tb/tb_workloads.sv": "fb3f101016753c64b026dbefbfcd38c6631ca842c5096e940fc8325e97fd1781",
-    "npu/workloads/generate.py": "2d65519ea9df4b7509ca8cd3d575a6c4e6ba7824629202236bd0fd529442dce0",
-    "npu/sw/task_graph.py": "d717661b68fa138674e4a7dad633291601ee4b9668db78bd24a1816e9f124e33",
-    "npu/sw/plan_rv32.py": "3474794f6c362e51709d1f20e55fdc35f23a67aa5d52be09518bffffb135644d",
-    "npu/sw/rv32_asm.py": "c8d9bfae840de787653e05ecbaf0658bc298a6b79f8a8be7ca7c13e64c9a586c",
-    "npu/tb/tb_gpio.sv": "5ca69e2ec86af764e886ebdbad4fd7aaf8dccbc561a6050a10886c31a7b88bb0"
+    "npu/fpga/ego1/ego1_soc_top.sv": "0fe922f53c57479f360980f363682c22829bb278609214b1f7e26541493d9f82",
+    "npu/fpga/ego1/sim_clock_primitives.sv": "8bb5f1b093bcbb3863bfd9317e35c5991f6e7c5e60f883e25bb0f71cfee51bef",
+    "npu/tb/tb_chip_jtag.sv": "75584170da50cec0452aebdc19d99c8e533f0caee0ab4a0c2fa2dd0dcd90ba1c",
+    "npu/fpga/ego1/simulate.py": "21d80ece4f61cc52488eedea1f56181b9a905c0170f296ba75f61970f55806f3"
   },
   "evidence_sha256": {
-    "npu/build/vcs-sba-only-final-jtag/result.json": "72e488092d9dfa5015fbcbd0a06bf51019752a29ba74912e90770aa3c28602da",
-    "npu/build/vcs-sba-only-final-jtag/run.log": "e6cca797033338adff29c0e6c4f7a3680eec1728a93857fd10ab9d0f12b2ee7d",
-    "npu/build/vcs-sba-only-final-macro-jtag-macro/result.json": "513dd7e6fda8432d30660864b63b44e40d69cfa36e7f53f0c68ffd322589ae9a",
-    "npu/build/vcs-sba-only-final-macro-jtag-macro/run.log": "c81235f130a9aada6d3fc8f7eae506b3b0b98ae4fc086e190467e8b4e0e43eb6",
-    "npu/build/vcs-sba-running-r4-jtagrunning-macro/result.json": "d52fd4a71494bcc86b20d699276a47c194b5ea628b545bea0c9d0b5da92819b2",
-    "npu/build/vcs-sba-running-r4-jtagrunning-macro/run.log": "c08113e0aaf1b762524f5f1ea398b5f14807641ded466e5c6b510946fa4d7280",
-    "npu/build/vcs-sba-only-final-unitsmoke/result.json": "c90a1e2e4bc2d0384ea95e52f4951aa80686b54c4d7a6e081f1694d5f797da99",
-    "npu/build/vcs-sba-only-final-unitsmoke/run.log": "18acbef40810ea783143194c8f5a49987492c9712ebd4314b51b6033d5bd637d",
-    "npu/build/vcs-sba-only-final-outergemm/result.json": "6a68aaf8e9c64c65060b1a36ec5ddd2fa891ce715c6ec3bff98cb7909b458ffa",
-    "npu/build/vcs-sba-only-final-outergemm/run.log": "e8e897cd2e848a55b7d0bc32280153ac35a26b41fbc085137c8cdc27ca253dd6",
-    "npu/build/vcs-sba-only-final-sharedoperands/result.json": "d904c88b61ad4d13300d392cb8c8f236c882ca988c8fc3e1a921e60fa292ba77",
-    "npu/build/vcs-sba-only-final-sharedoperands/run.log": "017411cf32cdcbb5ed03669b76b35fc116bce8750f7e30d25769549f011e1303",
-    "npu/build/vcs-sba-only-regression-cnnstream/result.json": "92c4c05bfbd00a2a3667c71cc9bab540e80ad2c0a61fe8ac096fd166858fad61",
-    "npu/build/vcs-sba-only-regression-cnnstream/run.log": "dff45abe121ab11b6ebf48335beae3f8f0a7b0d1ae6ffec9ca2dabcc80b212cd",
-    "npu/build/vcs-sba-only-regression-vectorsimd/result.json": "1097cad833d7792e8b3f664c61d92a72813289222535189c57527193099ba818",
-    "npu/build/vcs-sba-only-regression-vectorsimd/run.log": "dc910d3073f07119c33a69db0e53108dcf62fd9d873ba8bf80bd5a3b54c53df3",
-    "npu/build/vcs-sba-only-regression-sharedquant/result.json": "89473d564d07d3ac4dbdaadf28209073a6353b1784fe557234bb9bb1732d69c9",
-    "npu/build/vcs-sba-only-regression-sharedquant/run.log": "0cb6c25960f53dfd9d638355cae0af8d36a173f0d54fd35cd228c21fa7c59469",
-    "npu/build/vcs-sba-only-regression-softcfg/result.json": "29daf5817c498fb47db6c860d4354bd2e491f9a20b311324014f583567214d70",
-    "npu/build/vcs-sba-only-regression-softcfg/run.log": "51f89dd9d4ee220f0eeb8b7247463c20572be800da29704f8816507e7a848ed3",
-    "npu/build/vcs-sba-only-regression-irqwake/result.json": "823e75e2aec14ddf7a25b2df0793590339b01a63df90cfa4b68c9954d250693b",
-    "npu/build/vcs-sba-only-regression-irqwake/run.log": "b52c807899f83afd4196f3b40e0bb32f037c9a999caa3c3866cb48ac1eee2175",
-    "npu/build/vcs-sba-only-regression-unitroutes/result.json": "181e19f2f0bb34b2fc36d0e02a4b5775eebb5157cae6b117f063ba60a90d30e1",
-    "npu/build/vcs-sba-only-regression-unitroutes/run.log": "5d3bf1a23fcaf1d77f13d8af2535fb9cd97825ce270fa62658f63d4c978d66cf",
-    "npu/build/vcs-sba-only-regression-matrixtiles/result.json": "20be10063e5064e473d08c9b160acfcd1c8f8597bddd3b6c88d1f9ad9b4f5c38",
-    "npu/build/vcs-sba-only-regression-matrixtiles/run.log": "bde67f2f9418d3426b0695b90e9f3abede53faaf049bed7cf298c7d8a8bf9cf8",
-    "npu/build/vcs-sba-only-regression-quantsync/result.json": "ee0d6bb3675366949bfa6dd0b63b1f90b5e8a36abf0163868a510993dffbe558",
-    "npu/build/vcs-sba-only-regression-quantsync/run.log": "cf11af7a1f138e244383f6af395b13444f348a33c1ae3e0b40884b3408fa1459",
-    "npu/build/vcs-sba-only-final-latency/result.json": "4478561f56ae4d4788a84f45717189beb559cfc5840c1344e1df26ef68f46589",
-    "npu/build/vcs-sba-only-final-latency/run.log": "fa1d12c26db0b239b81fbfa6294135a00e6677f568b564a63dea6571ba807e6b",
-    "npu/build/vcs-sba-only-final-layoutevents/result.json": "984129e9aea1b4c96169b641c1c3e7e7bbbba9e4521f8b52093d81b2dc40299a",
-    "npu/build/vcs-sba-only-final-layoutevents/run.log": "7f38971d988e4584d4c4f8a236af6744a42ef34abfc028248ec7113a2b079104",
-    "npu/build/vcs-sba-only-final-workloadcpu/result.json": "41c6c4aa2612f4d1ae38474c30379e40d878ad9ea5fd94104121e004e0bb8ac4",
-    "npu/build/vcs-sba-only-final-workloadcpu/run.log": "c4357a1a62b570ccd97924769421a9a170aa1679ba3f48714b7668f58c95b4d5",
-    "npu/build/vcs-sba-only-final-gpio/result.json": "aca35252f910e25ba31b0de5164244a74027314a6a6498866fe075d01352120a",
-    "npu/build/vcs-sba-only-final-gpio/run.log": "2a01f6d9df429e8229314fdbfd64a0509cec9ebc263b11b4027799c9d2c6b25b",
-    "npu/build/ego1-sba-only/validation.json": "d6d7c2212c2ccb882e79ef1a1353f7864c8bf3addf8957d638f7afc63570191c"
+    "npu/build/vcs-no-gpio-main-jtag-macro/result.json": "a993720729f8bffdf0061f2cb0f414fcf5e62020a33b2b40f045c2561ab4c9c6",
+    "npu/build/vcs-no-gpio-main-jtag-macro/run.log": "078393657732fd0871dd545d211fd0be34f3d6536a0a5c732b9d0327cba5dab1",
+    "npu/build/vcs-no-gpio-main-jtagrunning-macro/result.json": "5bd48e87fe4f0e729fa3136813de78007dd0cbe110a33ba9447682da2bdf9d52",
+    "npu/build/vcs-no-gpio-main-jtagrunning-macro/run.log": "0583e0433c8e6ed018a35c08752d4752b7a3bc018e42f2209e49d0f4bb81fbf1",
+    "npu/build/vcs-no-gpio-main-latency/result.json": "12719eb361d2d15ff74cb6a3c6f1017b2cce665984857a4a338241b9c2a5151f",
+    "npu/build/vcs-no-gpio-main-latency/run.log": "32a04c403badaf618ff0b3f625e19b3f3ba91ea1fa6e1ce9faf3e1cf9f8ec9af",
+    "npu/build/ego1-no-gpio-main/validation.json": "823e6e25e75ed396237a5388b7eac66a6f6972636e0ca8f77da751115b1b89ef"
   },
   "limitations": [
-    "No physical board verification; original running-SBA failure has not been reproduced or established fixed.",
-    "No new area/timing measurement; prior GPIO and r3 physical reports are frozen baselines.",
-    "A single ordered outstanding SBA remains; no hardware response timeout was added.",
-    "Sparse simulation byte masks become separate byte transactions, not an atomic masked write."
+    "The earlier 19-run report applied to the GPIO-containing snapshot and is superseded by this corrected no-GPIO validation.",
+    "Original physical-board running-SBA failure has not been reproduced or established fixed.",
+    "No new physical area/timing measurement."
   ]
 }

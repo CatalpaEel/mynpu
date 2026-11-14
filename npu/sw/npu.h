@@ -196,24 +196,6 @@ static inline void npu_write(uint32_t offset, uint32_t value) {
   NPU_MMIO_WRITE32(NPU_MMIO_BASE + offset, value);
 }
 static inline uint32_t npu_read(uint32_t offset) { return NPU_MMIO_READ32(NPU_MMIO_BASE + offset); }
-
-/* GPIO8 on the XBAR MMIO slave: full aligned 32-bit accesses, low byte only.
- * DIR bit 1 drives OUT; bit 0 releases the corresponding bidirectional pin.
- * Write OUT before enabling DIR to avoid an unintended transition. No IRQ.
- */
-#define NPU_GPIO_IN 0x800u
-#define NPU_GPIO_OUT 0x804u
-#define NPU_GPIO_DIR 0x808u
-#define NPU_GPIO_SET 0x80cu
-#define NPU_GPIO_CLEAR 0x810u
-#define NPU_GPIO_TOGGLE 0x814u
-#define NPU_GPIO_CAP 0x818u
-static inline uint8_t npu_gpio_read(void) { return (uint8_t)npu_read(NPU_GPIO_IN); }
-static inline void npu_gpio_write(uint8_t value) { npu_write(NPU_GPIO_OUT, value); }
-static inline void npu_gpio_direction(uint8_t outputs) { npu_write(NPU_GPIO_DIR, outputs); }
-static inline void npu_gpio_set(uint8_t mask) { npu_write(NPU_GPIO_SET, mask); }
-static inline void npu_gpio_clear(uint8_t mask) { npu_write(NPU_GPIO_CLEAR, mask); }
-static inline void npu_gpio_toggle(uint8_t mask) { npu_write(NPU_GPIO_TOGGLE, mask); }
 /* Read only NPU-local pending sources; CPU mie controls wake/interrupt masks. */
 static inline uint32_t npu_irq_pending(void) {
   uint32_t value;

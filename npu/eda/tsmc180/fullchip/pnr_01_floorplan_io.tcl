@@ -116,9 +116,6 @@ foreach side {top bottom left right} {
         if {$suffix eq "vssio"} {lappend supply_terms [list $name VSSPST]}
     }
 }
-source $run_root/scripts/gpio_pads.tcl
-place_gpio_pads
-lappend pad_plan {*}[gpio_pad_plan]
 # Register actual IO sides before filling. Preserve all fixed geometry.
 set io_file [open $out/outputs/io_registration.io w]
 puts $io_file "(globals\n version = 3\n io_order = default\n)\n(iopad"
@@ -177,7 +174,6 @@ foreach {port side pos direction} $signal_plan {
     set net [dbGet [dbGet top.terms.name $port -p].net.name]
     createPhysicalPin $port -net $net -layer METAL4 -rect [list $x $y [expr {$x+1}] [expr {$y+1}]]
 }
-label_gpio_pads
 createPGPin VDD -net VDD -geom METAL4 270 1948 280 1949
 createPGPin VSS -net VSS -geom METAL4 370 1948 380 1949
 createPGPin VDDPST -net VDDPST -geom METAL4 1260 1948 1270 1949

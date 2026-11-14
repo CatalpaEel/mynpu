@@ -6,7 +6,7 @@ module tb_jtag_running;
   wire tdo, halted;
   npu_soc dut(.clk_i(clk),.rst_ni(rst_n),.cpu_run_i(1'b1),
     .tck_i(tck),.tms_i(tms),.td_i(tdi),.td_o(tdo),
-    .cpu_debug_halted_o(halted),.gpio_i(8'b0),.gpio_o(),.gpio_oe_o(),
+    .cpu_debug_halted_o(halted),
     .irq_o(),.cpu_test_done_o(),.cpu_test_pass_o());
   `include "db_jtag_tasks.svh"
   `include "db_sba_access.svh"

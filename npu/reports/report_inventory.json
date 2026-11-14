@@ -1,26 +1,25 @@
 {
   "checked_date": "2026-11-14",
-  "git_commit": "afb74fd005ec76ae3afc761fa40a48a5d30aa656",
+  "git_commit": "1fb32ed5710c8c73bb4623fdeddf4bf00cac1d29",
   "scope": "Inventory and hash audit, no new simulation or PPA. Source observations can include historical baselines and partial maps; matches do not certify full design identity.",
   "counts": {
-    "pre-gpio-baseline": 5,
-    "pre-jtag-only-baseline": 1,
+    "pre-jtag-only-baseline": 5,
     "current-scoped": 1
   },
   "reports": [
     {
       "file": "backend_source_audit.json",
       "sha256": "ce450cde21884c30d72604320c26085c17fa64abfe8c65e73d925b6730c415c9",
-      "classification": "pre-gpio-baseline",
-      "note": "Frozen evidence predating GPIO8; cannot certify current full-chip design. Source identity audit only; no new PPA measurement.",
+      "classification": "pre-jtag-only-baseline",
+      "note": "Frozen evidence before Host removal and SBA changes; not current RTL PPA. Source identity audit only; no new PPA measurement.",
       "source_hash_observations": [],
       "source_hash_counts": {}
     },
     {
       "file": "ego1_preboard_validation.json",
       "sha256": "5553792f41deab2a5d1c4f3f9aa1bdc4ced5c1c1bd2dbac162c68af6f3f6c4da",
-      "classification": "pre-gpio-baseline",
-      "note": "Frozen evidence predating GPIO8; cannot certify current full-chip design. Current board functional preparation only; no Vivado implementation or board test.",
+      "classification": "pre-jtag-only-baseline",
+      "note": "Frozen evidence before Host removal and SBA changes; not current RTL PPA. Current board functional preparation only; no Vivado implementation or board test.",
       "source_hash_observations": [],
       "source_hash_counts": {},
       "preboard_manifest_check": [
@@ -321,551 +320,8 @@
       ]
     },
     {
-      "file": "gpio8-validation.json",
-      "sha256": "6f4971d7379b6a53a66f495de4655e86c7f55ce97bc9a0581a7fb2da71cff3ee",
-      "classification": "pre-jtag-only-baseline",
-      "note": "Frozen GPIO evidence before external Host removal and SBA error/subword changes; not current RTL PPA.",
-      "source_hash_observations": [
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv",
-          "recorded_sha256": "3fee39d262ef44bff6ee00b591fe08830e5e35cdd1b9e5eb9eb06da6f6525805",
-          "current_sha256": "3fee39d262ef44bff6ee00b591fe08830e5e35cdd1b9e5eb9eb06da6f6525805",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv",
-          "recorded_sha256": "33d7c06b0fef3ae2c8814b040abe3cdaa23065cf12643de20e8275f44f97abe1",
-          "current_sha256": "33d7c06b0fef3ae2c8814b040abe3cdaa23065cf12643de20e8275f44f97abe1",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv",
-          "recorded_sha256": "ae738f408ba2ade41bfcf0488c8f611a2c39b26915191890dac907b8a7a518e5",
-          "current_sha256": "ae738f408ba2ade41bfcf0488c8f611a2c39b26915191890dac907b8a7a518e5",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv",
-          "recorded_sha256": "afc32fcae21f6cbb834c5ee602a1aaee1b518fc436a86d4fe1b97942473d35c8",
-          "current_sha256": "afc32fcae21f6cbb834c5ee602a1aaee1b518fc436a86d4fe1b97942473d35c8",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv",
-          "recorded_sha256": "c46075cb09de0e773c91da62d02497673945b7a3e5de176363e5b5e118f82eea",
-          "current_sha256": "c46075cb09de0e773c91da62d02497673945b7a3e5de176363e5b5e118f82eea",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv",
-          "recorded_sha256": "7eb340f76c76d18f4ac3b6d1d61433c7372118d24f57f83a6ceae82cdbf51c2d",
-          "current_sha256": "7eb340f76c76d18f4ac3b6d1d61433c7372118d24f57f83a6ceae82cdbf51c2d",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv",
-          "recorded_sha256": "717fc6e7ec754807440f346d9b8bb930da302fffd294550e30ceae78009f4e87",
-          "current_sha256": "717fc6e7ec754807440f346d9b8bb930da302fffd294550e30ceae78009f4e87",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv",
-          "recorded_sha256": "0bf54e372850c1af22264711d311d943718dc4c8d918e47cc98e9a8d07461d44",
-          "current_sha256": "0bf54e372850c1af22264711d311d943718dc4c8d918e47cc98e9a8d07461d44",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv",
-          "recorded_sha256": "08cc968a5b26b5a68ad2c548755e6b3b0d07a7ad75a3f11e92bc1bab71eeb7c6",
-          "current_sha256": "08cc968a5b26b5a68ad2c548755e6b3b0d07a7ad75a3f11e92bc1bab71eeb7c6",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv",
-          "recorded_sha256": "cff163332b28e84904955e88691f973a47f90a4209b3f0ae0d2afe94f6a49921",
-          "current_sha256": "cff163332b28e84904955e88691f973a47f90a4209b3f0ae0d2afe94f6a49921",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv",
-          "recorded_sha256": "3720278ce00b5591a1a63fe5515528dd4223a35070303e58cf2e48bd0b56c8c1",
-          "current_sha256": "3720278ce00b5591a1a63fe5515528dd4223a35070303e58cf2e48bd0b56c8c1",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv",
-          "recorded_sha256": "51322d03a0479f16a4acb66cccee48003e2e224c02a7d3188cbaea9b2f8b2756",
-          "current_sha256": "51322d03a0479f16a4acb66cccee48003e2e224c02a7d3188cbaea9b2f8b2756",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv",
-          "recorded_sha256": "83d9f70bab3b514062a7a79a581919afd5de466167dfcd08733c773f36ba094a",
-          "current_sha256": "83d9f70bab3b514062a7a79a581919afd5de466167dfcd08733c773f36ba094a",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv",
-          "recorded_sha256": "fa60eaab03518e8e145a3f0a626bc7945e79265e8322ce874a6c8f6996f0e10b",
-          "current_sha256": "fa60eaab03518e8e145a3f0a626bc7945e79265e8322ce874a6c8f6996f0e10b",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv",
-          "recorded_sha256": "0538bf1d829187699085de361d20ab79d04a459b06060a8f04709105f61818dc",
-          "current_sha256": "f9a9e098336d85bf662a88337f88195fec531951596cc2492c80bbeb4ea82898",
-          "status": "different"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv",
-          "recorded_sha256": "cf047a8b7654f2cb0d36050c41b57cf95bf0a0a21f5dea346d38aa0da57c24fe",
-          "current_sha256": "cf047a8b7654f2cb0d36050c41b57cf95bf0a0a21f5dea346d38aa0da57c24fe",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv",
-          "recorded_sha256": "e7e30ce0f0e6f652dcf59e586933cada245018b80f2529da476b4272e86e4380",
-          "current_sha256": "98bc5baa5da92dce96b6a0adad5cfc6da0b9e255f26925dba35ebc460a35344e",
-          "status": "different"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv",
-          "recorded_sha256": "5fa2656a11759ff10fd016ed885761c9c379627b9a1b83ddee6e03a35ee9e23f",
-          "current_sha256": "699d5b4991b56626253ff7544fbc442eb1048b2762d17b10fb42467ca4cfd076",
-          "status": "different"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv",
-          "recorded_sha256": "ad8a13c8314b9a3c28228db2844466c9d750460d6afa8f6299a7229d80f8dd47",
-          "current_sha256": "ad8a13c8314b9a3c28228db2844466c9d750460d6afa8f6299a7229d80f8dd47",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv",
-          "recorded_sha256": "50d1b4d325694f4e898d5b2f2e7b26a7e631a5abdd1cd283500c900b079275ab",
-          "current_sha256": "50d1b4d325694f4e898d5b2f2e7b26a7e631a5abdd1cd283500c900b079275ab",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv",
-          "recorded_sha256": "807cf3fb86fe7060cdb1fa21dfbc843220b09a4d694d23ad4bc1cdd3e7118264",
-          "current_sha256": "807cf3fb86fe7060cdb1fa21dfbc843220b09a4d694d23ad4bc1cdd3e7118264",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv",
-          "recorded_sha256": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
-          "current_sha256": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv",
-          "recorded_sha256": "6eca8d4c2e299adcc498417220478360cc22898ba9037cdad6a1b81e80373c7b",
-          "current_sha256": "6eca8d4c2e299adcc498417220478360cc22898ba9037cdad6a1b81e80373c7b",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv",
-          "recorded_sha256": "11035bcbb28447fa5a3e40d5cad4f257e763f75e49664ce8098ab6247a9a57cb",
-          "current_sha256": "11035bcbb28447fa5a3e40d5cad4f257e763f75e49664ce8098ab6247a9a57cb",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv",
-          "recorded_sha256": "27931c8004e4d266c6ea02c9d5c19968c67d7e6ab86e57da4088531b13c8c48f",
-          "current_sha256": "27931c8004e4d266c6ea02c9d5c19968c67d7e6ab86e57da4088531b13c8c48f",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv",
-          "recorded_sha256": "db90df2f8737aff29d73b3d242dd33aeb6750ae69ae7eb8e118b531180945d7f",
-          "current_sha256": "db90df2f8737aff29d73b3d242dd33aeb6750ae69ae7eb8e118b531180945d7f",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv",
-          "recorded_sha256": "858b172963e17529de0b40a5be6ddfdadfc60bdca967819e4fc558b0ed6d7b87",
-          "current_sha256": "858b172963e17529de0b40a5be6ddfdadfc60bdca967819e4fc558b0ed6d7b87",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv",
-          "recorded_sha256": "6a78a0d77d32e6795f63e5149f77b98320ce504c67c44a2e359c9aea70989224",
-          "current_sha256": "6a78a0d77d32e6795f63e5149f77b98320ce504c67c44a2e359c9aea70989224",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv",
-          "recorded_sha256": "e2cec8f3d273748783275c60b1ec89101336608638d7e7783b03dd6b9dbb0345",
-          "current_sha256": "e2cec8f3d273748783275c60b1ec89101336608638d7e7783b03dd6b9dbb0345",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv",
-          "recorded_sha256": "6e12f673e05380e34a35c38d8ee8b6878935d96b6f2dfda72c67f8a6e92a6e4e",
-          "current_sha256": "6e12f673e05380e34a35c38d8ee8b6878935d96b6f2dfda72c67f8a6e92a6e4e",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv",
-          "recorded_sha256": "1510df315721b370c2d86b1c1d134a3ff6beefba2d072de7a4a611e3ecffb753",
-          "current_sha256": "1510df315721b370c2d86b1c1d134a3ff6beefba2d072de7a4a611e3ecffb753",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv",
-          "recorded_sha256": "6b646e6aa931f8ab56b85ee27549a422450b456270a54d68a4130329823226b6",
-          "current_sha256": "6b646e6aa931f8ab56b85ee27549a422450b456270a54d68a4130329823226b6",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv",
-          "recorded_sha256": "d910cbd0751f38d349e8975de22b43d0a2937f9e905b0d9b82894fd83c53fe8a",
-          "current_sha256": "d910cbd0751f38d349e8975de22b43d0a2937f9e905b0d9b82894fd83c53fe8a",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv",
-          "recorded_sha256": "c2a0787c07bcd6c198b6338c4c6ee372b4bce96ec4a4def467ff0ae03da4e43a",
-          "current_sha256": "c2a0787c07bcd6c198b6338c4c6ee372b4bce96ec4a4def467ff0ae03da4e43a",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv",
-          "recorded_sha256": "98b246d9ada45a7073d217d5c3bbc86941ee76bb00e7e0edda61d3bbec83728e",
-          "current_sha256": "98b246d9ada45a7073d217d5c3bbc86941ee76bb00e7e0edda61d3bbec83728e",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv",
-          "recorded_sha256": "e2d1cc9bc433a093938f2d4e4268c611f9a9bf199101e85114d417ff04597626",
-          "current_sha256": "e2d1cc9bc433a093938f2d4e4268c611f9a9bf199101e85114d417ff04597626",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv",
-          "recorded_sha256": "24df51d9cb33f5c8760a8cfbc7931aafc94c2ab0523c7df55b2635e7778af16f",
-          "current_sha256": "24df51d9cb33f5c8760a8cfbc7931aafc94c2ab0523c7df55b2635e7778af16f",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv",
-          "recorded_sha256": "857962513fc5bd3eb3d6b28c55fdfb15ef53f8ce8a59173a7d583efb8caee66f",
-          "current_sha256": "857962513fc5bd3eb3d6b28c55fdfb15ef53f8ce8a59173a7d583efb8caee66f",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv",
-          "recorded_sha256": "6a0cf2f15c69886ad5497222aa203f6f5b1fdd004b32a4ab87b36a0960ba2254",
-          "current_sha256": "6a0cf2f15c69886ad5497222aa203f6f5b1fdd004b32a4ab87b36a0960ba2254",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv",
-          "recorded_sha256": "2b0a58e5c2f758dbe5f6e8f786c547da5508ce466007517434e2f7d817b758ed",
-          "current_sha256": "2b0a58e5c2f758dbe5f6e8f786c547da5508ce466007517434e2f7d817b758ed",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv",
-          "recorded_sha256": "7a2dbeded21929832b40fc8d068b35b7281c75a63c426feed207127d4da08e4e",
-          "current_sha256": "7a2dbeded21929832b40fc8d068b35b7281c75a63c426feed207127d4da08e4e",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv",
-          "recorded_sha256": "a2fcbe6b783659ebecaf25d105f30c68af9b68c2850b833af64a2cec3ec29262",
-          "current_sha256": "a2fcbe6b783659ebecaf25d105f30c68af9b68c2850b833af64a2cec3ec29262",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv",
-          "recorded_sha256": "66e6078ea3b3acd3ceea4b974c0488d25e02324935532de1f2d39cdc34c875a0",
-          "current_sha256": "66e6078ea3b3acd3ceea4b974c0488d25e02324935532de1f2d39cdc34c875a0",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv",
-          "recorded_sha256": "cd04d46afbf778ff3f1573bdd390784e5461a09b33fd670fa126ae7d3c433e89",
-          "current_sha256": "cd04d46afbf778ff3f1573bdd390784e5461a09b33fd670fa126ae7d3c433e89",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv",
-          "recorded_sha256": "1cf012a83b54472931ad9944e7774e311222641a0aa026229c19467f90bf5448",
-          "current_sha256": "1cf012a83b54472931ad9944e7774e311222641a0aa026229c19467f90bf5448",
-          "status": "match"
-        },
-        {
-          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv",
-          "recorded_sha256": "2467f6b3c2745e687edad1a0c88ab5267b4ba8642c91e1fc0f282cf4223e5dc3",
-          "current_sha256": "2467f6b3c2745e687edad1a0c88ab5267b4ba8642c91e1fc0f282cf4223e5dc3",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/common/npu_addr_pkg.sv",
-          "recorded_sha256": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
-          "current_sha256": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/cnn/npu_stream_pkg.sv",
-          "recorded_sha256": "d4c1b89c87098ac9adce72ab60ea9a1d4401d074ffe835fc109ab0f82d8e8d72",
-          "current_sha256": "d4c1b89c87098ac9adce72ab60ea9a1d4401d074ffe835fc109ab0f82d8e8d72",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/common/npu_rr_select.sv",
-          "recorded_sha256": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
-          "current_sha256": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/common/npu_clock_gate.sv",
-          "recorded_sha256": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
-          "current_sha256": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/cnn/npu_cnn.sv",
-          "recorded_sha256": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
-          "current_sha256": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/cnn/npu_cnn_mac.sv",
-          "recorded_sha256": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
-          "current_sha256": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/top/npu_core.sv",
-          "recorded_sha256": "550aa8e94af55bd6011a8273ac3354bf283ab327ca278a3e3f627cccaed27183",
-          "current_sha256": "32977365d3c7a9e4154cdfab4c2ef2b90aeb011cf45f18576ac5ab47e0921aa6",
-          "status": "different"
-        },
-        {
-          "source": "npu/rtl/interconnect/npu_data_regfile.sv",
-          "recorded_sha256": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
-          "current_sha256": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/debug/npu_debug_boot.sv",
-          "recorded_sha256": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
-          "current_sha256": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/debug/npu_jtag_debug.sv",
-          "recorded_sha256": "d2324d487db499ca8b30226f438c1a527f73cba72e6c8762ba4d9237e880b69a",
-          "current_sha256": "1bbcb4cd30213a282c53b812fd969cdb1c4b89d703b9799ac58df73296469464",
-          "status": "different"
-        },
-        {
-          "source": "npu/rtl/matrix/npu_matmul.sv",
-          "recorded_sha256": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
-          "current_sha256": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/matrix/npu_matrix_stream.sv",
-          "recorded_sha256": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
-          "current_sha256": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/control/npu_mmio.sv",
-          "recorded_sha256": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
-          "current_sha256": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/cnn/npu_stream.sv",
-          "recorded_sha256": "292658bd3818c0af4ab0f48bd7168032bd39c7b03d9870a73917713228b4d787",
-          "current_sha256": "292658bd3818c0af4ab0f48bd7168032bd39c7b03d9870a73917713228b4d787",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/cnn/npu_stream_control.sv",
-          "recorded_sha256": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
-          "current_sha256": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/cnn/npu_stream_engine.sv",
-          "recorded_sha256": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
-          "current_sha256": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/vector/npu_vector.sv",
-          "recorded_sha256": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
-          "current_sha256": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/vector/npu_vector_stream.sv",
-          "recorded_sha256": "808debe76f7d6ca9373867aa61f1ca94357bac3adeee2ba75d6cf66d5435b77a",
-          "current_sha256": "808debe76f7d6ca9373867aa61f1ca94357bac3adeee2ba75d6cf66d5435b77a",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/interconnect/xbar.sv",
-          "recorded_sha256": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
-          "current_sha256": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/interconnect/xbar_stream.sv",
-          "recorded_sha256": "0a5d25fa9aec9378e5d66fb8840cf41ffd42e837d941220bfdd301bbd2b01a0c",
-          "current_sha256": "0a5d25fa9aec9378e5d66fb8840cf41ffd42e837d941220bfdd301bbd2b01a0c",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/interconnect/npu_multi_read.sv",
-          "recorded_sha256": "a6827b272c5169e6b836683a52d76b1239ba41f2b2b37dd865df11cd944b325b",
-          "current_sha256": "a6827b272c5169e6b836683a52d76b1239ba41f2b2b37dd865df11cd944b325b",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/quant/npu_shared_quant.sv",
-          "recorded_sha256": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
-          "current_sha256": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/common/npu_store_pack.sv",
-          "recorded_sha256": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
-          "current_sha256": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/control/npu_gpio.sv",
-          "recorded_sha256": "7618a92516f6fd89eaff3688bb9d5f10a9d09a3e9c3b463573cbae0ab564f2f6",
-          "current_sha256": "7618a92516f6fd89eaff3688bb9d5f10a9d09a3e9c3b463573cbae0ab564f2f6",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/top/npu_soc.sv",
-          "recorded_sha256": "7f1ad670b7e35134ff2e5ac5d4777e6f63bdec0c61b4f47d4f214c05be280ef3",
-          "current_sha256": "a1ee918f37a2ee30d4dd79a3680974ecc3dc0cfee18c2a70a6a1bcec668d7aa5",
-          "status": "different"
-        },
-        {
-          "source": "npu/eda/tsmc180/chip_top.sv",
-          "recorded_sha256": "fb51c26e3e4d0bbeeef8199244482d0a2ce2b284e01897476d93bbb923bd24f6",
-          "current_sha256": "e31ddb6f3b7666adb76f1d01d17918928bdffaa08e615f35c6e62a1d45c74467",
-          "status": "different"
-        },
-        {
-          "source": "npu/sw/npu.h",
-          "recorded_sha256": "0da1a35246af6e661a191f30459d0915d8acd6b90b70dabf24296a950182e330",
-          "current_sha256": "0da1a35246af6e661a191f30459d0915d8acd6b90b70dabf24296a950182e330",
-          "status": "match"
-        }
-      ],
-      "source_hash_counts": {
-        "match": 66,
-        "different": 7
-      },
-      "frozen_files": [
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/source_manifest.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/library_manifest.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/optimized.v",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/reports/area.rpt",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/reports/qor.rpt",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/reports/timing.rpt",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-unit/npu_gpio.sv",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-unit/synth.tcl",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-unit/area.rpt",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-unit/mapped.v",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/manifest.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/inputs/chip_top.sv",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/mynpu/chip_synth/mynpu_asic_top.postsyn.v",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/mynpu/chip_synth/area.rpt",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/mynpu/chip_synth/unresolved.rpt",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/logs/01-gpio8-floorplan-fixed.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/mynpu/pnr/outputs/03_io_floorplan.def",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/gpio_pad_audit.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/gpio8-pad-floorplan.png",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/scripts/export_io_functional.tcl",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/logs/export_io_functional.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/mynpu/pnr/outputs/io_connected_functional.v",
-          "status": "match"
-        }
-      ],
-      "frozen_file_counts": {
-        "match": 22
-      }
-    },
-    {
       "file": "jtag-only-validation.json",
-      "sha256": "da31e510efccf22c5a9f3e2910748db662d4be1775cd70d55a5c3f3c5c55ac79",
+      "sha256": "1a46e0838ff43f69ea5a1ddd417e9f5b5f9c698d8e8d1f3282d393cea1fce20c",
       "classification": "current-scoped",
       "note": "Current JTAG-only RTL, running CPU/NPU/SBA concurrency, macro and board-wrapper functional simulation; no new PPA or physical board test.",
       "source_hash_observations": [
@@ -1002,12 +458,6 @@
           "status": "match"
         },
         {
-          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/mem/sram_ff.sv",
-          "recorded_sha256": "1bd0872748ec505d5eb18cb94c6a5660ae3d5c48990d12cb1c6cbbb111f774d5",
-          "current_sha256": "1bd0872748ec505d5eb18cb94c6a5660ae3d5c48990d12cb1c6cbbb111f774d5",
-          "status": "match"
-        },
-        {
           "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv",
           "recorded_sha256": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
           "current_sha256": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
@@ -1189,8 +639,8 @@
         },
         {
           "source": "npu/rtl/top/npu_core.sv",
-          "recorded_sha256": "32977365d3c7a9e4154cdfab4c2ef2b90aeb011cf45f18576ac5ab47e0921aa6",
-          "current_sha256": "32977365d3c7a9e4154cdfab4c2ef2b90aeb011cf45f18576ac5ab47e0921aa6",
+          "recorded_sha256": "b0e5fd6949aa58f15299185e7f40f09e46d2920781c4ba6c77c2c1b50b35f7e0",
+          "current_sha256": "b0e5fd6949aa58f15299185e7f40f09e46d2920781c4ba6c77c2c1b50b35f7e0",
           "status": "match"
         },
         {
@@ -1227,12 +677,6 @@
           "source": "npu/rtl/control/npu_mmio.sv",
           "recorded_sha256": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
           "current_sha256": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
-          "status": "match"
-        },
-        {
-          "source": "npu/rtl/top/npu_soc.sv",
-          "recorded_sha256": "a1ee918f37a2ee30d4dd79a3680974ecc3dc0cfee18c2a70a6a1bcec668d7aa5",
-          "current_sha256": "a1ee918f37a2ee30d4dd79a3680974ecc3dc0cfee18c2a70a6a1bcec668d7aa5",
           "status": "match"
         },
         {
@@ -1296,12 +740,6 @@
           "status": "match"
         },
         {
-          "source": "npu/rtl/control/npu_gpio.sv",
-          "recorded_sha256": "7618a92516f6fd89eaff3688bb9d5f10a9d09a3e9c3b463573cbae0ab564f2f6",
-          "current_sha256": "7618a92516f6fd89eaff3688bb9d5f10a9d09a3e9c3b463573cbae0ab564f2f6",
-          "status": "match"
-        },
-        {
           "source": "npu/tb/tb_jtag.sv",
           "recorded_sha256": "269b8e543ed2a08f08811d5f6d951f5fdbe7fbad3a69b0ca235417a79821d1a1",
           "current_sha256": "269b8e543ed2a08f08811d5f6d951f5fdbe7fbad3a69b0ca235417a79821d1a1",
@@ -1327,74 +765,20 @@
         },
         {
           "source": "npu/tb/tb_jtag_running.sv",
-          "recorded_sha256": "999b1527264cf681b60e005f1280057c7b890edb0d40e1937e0f3df6d3030fee",
-          "current_sha256": "999b1527264cf681b60e005f1280057c7b890edb0d40e1937e0f3df6d3030fee",
+          "recorded_sha256": "c79f2c878e065c3c2f9603ca6f86358952e138bf98bd4f119b292b3443c0acdc",
+          "current_sha256": "c79f2c878e065c3c2f9603ca6f86358952e138bf98bd4f119b292b3443c0acdc",
           "status": "match"
         },
         {
-          "source": "npu/tb/tb_netlist_units.sv",
-          "recorded_sha256": "5e71c3fbd0d1c9a232fd09b3f37437b8eae5e0543e9655ae2e3e3de6c4201e0a",
-          "current_sha256": "5e71c3fbd0d1c9a232fd09b3f37437b8eae5e0543e9655ae2e3e3de6c4201e0a",
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/mem/sram_ff.sv",
+          "recorded_sha256": "1bd0872748ec505d5eb18cb94c6a5660ae3d5c48990d12cb1c6cbbb111f774d5",
+          "current_sha256": "1bd0872748ec505d5eb18cb94c6a5660ae3d5c48990d12cb1c6cbbb111f774d5",
           "status": "match"
         },
         {
-          "source": "npu/tb/tb_outer_gemm.sv",
-          "recorded_sha256": "0162cc24a0155f026152e3e2cda6787ecd0eb57559ce421ffb67a11738103270",
-          "current_sha256": "0162cc24a0155f026152e3e2cda6787ecd0eb57559ce421ffb67a11738103270",
-          "status": "match"
-        },
-        {
-          "source": "npu/tb/tb_shared_operands.sv",
-          "recorded_sha256": "d652f93df6e5be8b58b5f173dd9715a4419ec95c8c43444e62a215c4805e313b",
-          "current_sha256": "d652f93df6e5be8b58b5f173dd9715a4419ec95c8c43444e62a215c4805e313b",
-          "status": "match"
-        },
-        {
-          "source": "npu/tb/tb_cnn_stream.sv",
-          "recorded_sha256": "0641330d2e0a3a858dc338dae7a02fee44ed440f93956a937e52ac3b8104bd17",
-          "current_sha256": "0641330d2e0a3a858dc338dae7a02fee44ed440f93956a937e52ac3b8104bd17",
-          "status": "match"
-        },
-        {
-          "source": "npu/tb/tb_vector_simd.sv",
-          "recorded_sha256": "f11a6dedf374ff07ddeb279f5f819530250186cb4aa70086bbd790ff9e34bfd3",
-          "current_sha256": "f11a6dedf374ff07ddeb279f5f819530250186cb4aa70086bbd790ff9e34bfd3",
-          "status": "match"
-        },
-        {
-          "source": "npu/tb/tb_shared_quant.sv",
-          "recorded_sha256": "edcfde61237659cd6761f378600310eeabbe15e0088e6d0672d80141166dc7ef",
-          "current_sha256": "edcfde61237659cd6761f378600310eeabbe15e0088e6d0672d80141166dc7ef",
-          "status": "match"
-        },
-        {
-          "source": "npu/tb/tb_software_config.sv",
-          "recorded_sha256": "ed6c3c425b4f4c0ced0913105fb702309ae92f6e299451872bfe7c0d15d57b21",
-          "current_sha256": "ed6c3c425b4f4c0ced0913105fb702309ae92f6e299451872bfe7c0d15d57b21",
-          "status": "match"
-        },
-        {
-          "source": "npu/tb/tb_irq_wake.sv",
-          "recorded_sha256": "ead9a85551c21f5cd7766f1f51b649dcfc8ae203ffeb90df6795a72fe440ed43",
-          "current_sha256": "ead9a85551c21f5cd7766f1f51b649dcfc8ae203ffeb90df6795a72fe440ed43",
-          "status": "match"
-        },
-        {
-          "source": "npu/tb/tb_unit_routes.sv",
-          "recorded_sha256": "5a1108f4e441d44b183de8fa54094e4e00bb17279376e81a8bc4e92bcaeae522",
-          "current_sha256": "5a1108f4e441d44b183de8fa54094e4e00bb17279376e81a8bc4e92bcaeae522",
-          "status": "match"
-        },
-        {
-          "source": "npu/tb/tb_matrix_stream_tiles.sv",
-          "recorded_sha256": "73fdcfc7450a28cb5dd091f9468c6bb8838ab79330524e0b82a7d9bab47321cc",
-          "current_sha256": "73fdcfc7450a28cb5dd091f9468c6bb8838ab79330524e0b82a7d9bab47321cc",
-          "status": "match"
-        },
-        {
-          "source": "npu/tb/tb_quant_sync.sv",
-          "recorded_sha256": "f556adb4240dfb5bbbc6452068d8e73993764e1b508d2552414ea3e0f3b5a397",
-          "current_sha256": "f556adb4240dfb5bbbc6452068d8e73993764e1b508d2552414ea3e0f3b5a397",
+          "source": "npu/rtl/top/npu_soc.sv",
+          "recorded_sha256": "07c69dfc0e5306a38268c247dff927735eca9381b250a88ec581c5963508a5c0",
+          "current_sha256": "07c69dfc0e5306a38268c247dff927735eca9381b250a88ec581c5963508a5c0",
           "status": "match"
         },
         {
@@ -1410,210 +794,72 @@
           "status": "match"
         },
         {
-          "source": "npu/tb/tb_layout_events.sv",
-          "recorded_sha256": "a92d0d587492787161d4aba9ce3826a2768ae73bfde7a84d60cd2100cd0ece24",
-          "current_sha256": "a92d0d587492787161d4aba9ce3826a2768ae73bfde7a84d60cd2100cd0ece24",
+          "source": "npu/fpga/ego1/ego1_soc_top.sv",
+          "recorded_sha256": "0fe922f53c57479f360980f363682c22829bb278609214b1f7e26541493d9f82",
+          "current_sha256": "0fe922f53c57479f360980f363682c22829bb278609214b1f7e26541493d9f82",
           "status": "match"
         },
         {
-          "source": "npu/tb/tb_workloads.sv",
-          "recorded_sha256": "fb3f101016753c64b026dbefbfcd38c6631ca842c5096e940fc8325e97fd1781",
-          "current_sha256": "fb3f101016753c64b026dbefbfcd38c6631ca842c5096e940fc8325e97fd1781",
+          "source": "npu/fpga/ego1/sim_clock_primitives.sv",
+          "recorded_sha256": "8bb5f1b093bcbb3863bfd9317e35c5991f6e7c5e60f883e25bb0f71cfee51bef",
+          "current_sha256": "8bb5f1b093bcbb3863bfd9317e35c5991f6e7c5e60f883e25bb0f71cfee51bef",
           "status": "match"
         },
         {
-          "source": "npu/workloads/generate.py",
-          "recorded_sha256": "2d65519ea9df4b7509ca8cd3d575a6c4e6ba7824629202236bd0fd529442dce0",
-          "current_sha256": "2d65519ea9df4b7509ca8cd3d575a6c4e6ba7824629202236bd0fd529442dce0",
+          "source": "npu/tb/tb_chip_jtag.sv",
+          "recorded_sha256": "75584170da50cec0452aebdc19d99c8e533f0caee0ab4a0c2fa2dd0dcd90ba1c",
+          "current_sha256": "75584170da50cec0452aebdc19d99c8e533f0caee0ab4a0c2fa2dd0dcd90ba1c",
           "status": "match"
         },
         {
-          "source": "npu/sw/task_graph.py",
-          "recorded_sha256": "d717661b68fa138674e4a7dad633291601ee4b9668db78bd24a1816e9f124e33",
-          "current_sha256": "d717661b68fa138674e4a7dad633291601ee4b9668db78bd24a1816e9f124e33",
-          "status": "match"
-        },
-        {
-          "source": "npu/sw/plan_rv32.py",
-          "recorded_sha256": "3474794f6c362e51709d1f20e55fdc35f23a67aa5d52be09518bffffb135644d",
-          "current_sha256": "3474794f6c362e51709d1f20e55fdc35f23a67aa5d52be09518bffffb135644d",
-          "status": "match"
-        },
-        {
-          "source": "npu/sw/rv32_asm.py",
-          "recorded_sha256": "c8d9bfae840de787653e05ecbaf0658bc298a6b79f8a8be7ca7c13e64c9a586c",
-          "current_sha256": "c8d9bfae840de787653e05ecbaf0658bc298a6b79f8a8be7ca7c13e64c9a586c",
-          "status": "match"
-        },
-        {
-          "source": "npu/tb/tb_gpio.sv",
-          "recorded_sha256": "5ca69e2ec86af764e886ebdbad4fd7aaf8dccbc561a6050a10886c31a7b88bb0",
-          "current_sha256": "5ca69e2ec86af764e886ebdbad4fd7aaf8dccbc561a6050a10886c31a7b88bb0",
+          "source": "npu/fpga/ego1/simulate.py",
+          "recorded_sha256": "21d80ece4f61cc52488eedea1f56181b9a905c0170f296ba75f61970f55806f3",
+          "current_sha256": "21d80ece4f61cc52488eedea1f56181b9a905c0170f296ba75f61970f55806f3",
           "status": "match"
         }
       ],
       "source_hash_counts": {
-        "match": 97
+        "match": 82
       },
       "frozen_files": [
         {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-jtag/result.json",
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-no-gpio-main-jtag-macro/result.json",
           "status": "match"
         },
         {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-jtag/run.log",
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-no-gpio-main-jtag-macro/run.log",
           "status": "match"
         },
         {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-macro-jtag-macro/result.json",
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-no-gpio-main-jtagrunning-macro/result.json",
           "status": "match"
         },
         {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-macro-jtag-macro/run.log",
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-no-gpio-main-jtagrunning-macro/run.log",
           "status": "match"
         },
         {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-running-r4-jtagrunning-macro/result.json",
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-no-gpio-main-latency/result.json",
           "status": "match"
         },
         {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-running-r4-jtagrunning-macro/run.log",
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-no-gpio-main-latency/run.log",
           "status": "match"
         },
         {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-unitsmoke/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-unitsmoke/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-outergemm/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-outergemm/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-sharedoperands/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-sharedoperands/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-cnnstream/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-cnnstream/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-vectorsimd/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-vectorsimd/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-sharedquant/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-sharedquant/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-softcfg/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-softcfg/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-irqwake/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-irqwake/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-unitroutes/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-unitroutes/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-matrixtiles/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-matrixtiles/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-quantsync/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-regression-quantsync/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-latency/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-latency/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-layoutevents/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-layoutevents/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-workloadcpu/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-workloadcpu/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-gpio/result.json",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/vcs-sba-only-final-gpio/run.log",
-          "status": "match"
-        },
-        {
-          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/ego1-sba-only/validation.json",
+          "file": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/ego1-no-gpio-main/validation.json",
           "status": "match"
         }
       ],
       "frozen_file_counts": {
-        "match": 37
+        "match": 7
       }
     },
     {
       "file": "lab5_rf1r1w_die1950_validation.json",
       "sha256": "5904b2994d341c5b12433511fac0ecd731b36686ed694c04141e2b80d266c933",
-      "classification": "pre-gpio-baseline",
-      "note": "Frozen evidence predating GPIO8; cannot certify current full-chip design. Final r3 course checks; ERC and strict PR limitations remain.",
+      "classification": "pre-jtag-only-baseline",
+      "note": "Frozen evidence before Host removal and SBA changes; not current RTL PPA. Final r3 course checks; ERC and strict PR limitations remain.",
       "source_hash_observations": [],
       "source_hash_counts": {},
       "frozen_files": [
@@ -1657,8 +903,8 @@
     {
       "file": "rf1r1w-validation.json",
       "sha256": "af71bd213996eadf19158e84763f3a9b4fc908f27d55b884a68ff3bb1d457ded",
-      "classification": "pre-gpio-baseline",
-      "note": "Frozen evidence predating GPIO8; cannot certify current full-chip design. Current RF functionality, MNIST and synthesis; PNR limitations inside are the original pre-PNR snapshot.",
+      "classification": "pre-jtag-only-baseline",
+      "note": "Frozen evidence before Host removal and SBA changes; not current RTL PPA. Current RF functionality, MNIST and synthesis; PNR limitations inside are the original pre-PNR snapshot.",
       "source_hash_observations": [
         {
           "source": "npu/rtl/interconnect/npu_data_regfile.sv",
@@ -1674,8 +920,8 @@
     {
       "file": "rf1r1w_die1950_fullchip_validation.json",
       "sha256": "2b827243a643f401d86226303414fc72f00cbd1e0207357c783a21a09bb04df6",
-      "classification": "pre-gpio-baseline",
-      "note": "Frozen evidence predating GPIO8; cannot certify current full-chip design. Final RF1R1W die1950 r3 PNR; not firstpass/r2.",
+      "classification": "pre-jtag-only-baseline",
+      "note": "Frozen evidence before Host removal and SBA changes; not current RTL PPA. Final RF1R1W die1950 r3 PNR; not firstpass/r2.",
       "source_hash_observations": [
         {
           "source": "npu/tb/tb_chip_jtag.sv",

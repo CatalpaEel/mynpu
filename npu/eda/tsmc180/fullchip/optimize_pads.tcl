@@ -1,4 +1,4 @@
-# Record actual endpoints, then preserve the constrained IO plan and GPIO slots.
+# Preserve the left-JTAG and paired-supply plan.
 set signal_plan {clk_i top 300 in rst_ni top 1600 in tck_i bottom 250 in tms_i bottom 450 in td_i bottom 1450 in td_o bottom 1700 out boot_ready_i left 300 in npu_irq_o right 300 out cpu_debug_halted_o right 1600 out}
 set points [open $out/outputs/pad_endpoints.tsv w]
 foreach {port side pos direction} $signal_plan {
@@ -48,8 +48,6 @@ foreach side {top bottom left right} {
         lappend pad_plan [list i_pad_${side}_$suffix $cell $side $pos]
     }
 }
-source $run_root/scripts/gpio_pads.tcl
-lappend pad_plan {*}[gpio_pad_plan]
 set file [open $out/outputs/io_optimized.io w]
 puts $file "(globals\n version = 3\n io_order = default\n)\n(iopad"
 foreach {side corner ori} {topright corner_tr R180 topleft corner_tl MX bottomleft corner_bl R0 bottomright corner_br MY} {
@@ -74,5 +72,3 @@ globalNetConnect VDD -type pgpin -pin VDD -all
 globalNetConnect VSS -type pgpin -pin VSS -all
 defOut $out/outputs/07_io_optimized.def
 puts FLOW_PAD_DISCRETE_ASSIGNMENT_COMPLETED
-
-label_gpio_pads

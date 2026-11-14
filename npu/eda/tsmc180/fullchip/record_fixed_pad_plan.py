@@ -27,5 +27,4 @@ a.out.write_text('set optimized_signal_plan {' + ' '.join(plan) + '}\n')
 a.out.with_suffix('.json').write_text(json.dumps({
     'objective': 'Fixed left-JTAG and paired-supply plan; no global optimality claim. Geometric estimate, not routed wirelength.',
     'assignment': assignment, 'after_cost_um': score,
-    'terminals_per_signal': {n: len(v) for n, v in points.items()},
-    'gpio_pins': m.get('gpio_pins', 0)}, indent=2) + '\n')
+    'terminals_per_signal': {n: len(v) for n, v in points.items()}}, indent=2) + '\n')

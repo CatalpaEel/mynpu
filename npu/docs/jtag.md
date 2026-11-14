@@ -13,7 +13,7 @@ flowchart LR
   D -->|SBA master 3| X[XBAR]
   C -->|instruction master 4 / data master 0| X
   X --> S[两个8KB SRAM bank]
-  X --> M[NPU / GPIO MMIO]
+  X --> M[NPU MMIO]
   X --> R[RF / Stream FIFO / DM ROM / Boot ROM]
 ```
 

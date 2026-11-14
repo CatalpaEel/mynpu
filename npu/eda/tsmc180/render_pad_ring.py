@@ -20,7 +20,6 @@ for name,r in data['pads'].items():
  power='PVDD' in r['cell'];ground='PVSS' in r['cell'];jtag=n in ['tck_i','tms_i','td_i','td_o']
  color='#f87171' if power else '#60a5fa' if ground else '#4ade80' if jtag else '#c4b5fd'
  if label=='POC':color='#fbbf24'
- if n.startswith('gpio'):color='#fb923c'
  x0,y0=r['x_um'],r['y_um'];w,h=(115,60) if side in ['left','right'] else (60,115)
  b=(*p0(x0,y0+h),*p0(x0+w,y0));d.rectangle(b,fill=color,outline='#111827',width=2)
  if side in ['left','right']:
@@ -39,6 +38,6 @@ d.text((1050,1005),'CORE',font=font(50),fill='#64748b',anchor='mm')
 d.text((1050,1070),'12 adjacent VDD/VSS pairs across 4 sides',font=font(26),fill='#cbd5e1',anchor='mm')
 d.text((1050,1120),'JTAG: TCK / TMS / TDI / TDO on LEFT',font=font(26),fill='#4ade80',anchor='mm')
 d.text((1050,1170),f"POC retained separately; {data['signal_pads']} signal + 28 supply/POC PADs",font=font(23),fill='#cbd5e1',anchor='mm')
-d.text((70,2045),'Red: VDD    Blue: VSS    Green: JTAG    Orange: GPIO    Yellow: POC',font=font(25),fill='white')
+d.text((70,2045),'Red: VDD    Blue: VSS    Green: JTAG    Yellow: POC',font=font(25),fill='white')
 d.text((70,2095),'Numbers: lower/left native PAD edge coordinate, um. Pair adjacency permits IO filler.',font=font(23),fill='#becbdf')
 a.out.parent.mkdir(parents=True,exist_ok=True);im.save(a.out);print(a.out)

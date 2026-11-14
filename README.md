@@ -1,6 +1,6 @@
 # mynpu
 
-> 外部Host接口已删除，SoC仿真与板级访问统一走[JTAG Debug Module SBA](npu/docs/jtag.md)。保留[GPIO8](npu/docs/gpio8.md)。完整后端与模块分布图为加入GPIO前的冻结版本；GPIO加入时、Host删除前的综合2.571490mm²及初始floorplan也是历史基线，不代表本次改动已完成物理验证。
+> 外部Host接口已删除，SoC仿真与板级访问统一走[JTAG Debug Module SBA](npu/docs/jtag.md)。当前main不包含GPIO；完整r3后端是接口改动前的冻结基线，本次尚未重跑PPA或实体板验证。
 
 基于 CV32E40P 的整数 NPU，使用独立 Matrix、CNN、Vector 计算单元和软件任务调度。
 本文描述当前默认设计；配置来源为 [build_config.json](npu/build_config.json)，接口以 RTL 和软件头文件为准。
@@ -24,8 +24,6 @@ flowchart LR
  X <--> S[2×8 KiB SRAM]
  X <--> R[256 B RF：8 bank，各1R1W]
  X <--> F[4条流FIFO，各8×32bit]
- X <--> G[GPIO8 MMIO]
- G <--> GP[8个双向IO PAD]
 ```
 
 - Matrix：INT8/INT16 输入、INT32 累加；CNN：U8×I8 DOT9、INT32 累加。
