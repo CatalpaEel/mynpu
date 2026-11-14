@@ -1,5 +1,11 @@
 # EGo1 板级 Vivado 工程
 
+本地上板验证分支 `fpga/ego1-asic-validation` 的新增连续推理、重载和 ASIC/FPGA 双后端测试见
+[上板验证操作说明](VALIDATION.md)。本机 Vivado 2023.2 已实际执行默认配置：综合通过，
+布局因约 25,077 LUT 超出 XC7A35T 的 20,800 LUT 容量而失败，尚无本版可下载镜像。
+本节以下的“服务器未找到 Vivado”是原主分支的准备记录，不代表本分支本机执行状态。
+本分支构建默认25MHz，通过实际MMCM分频实现，可选择10/25/50MHz；芯片共用RTL保持原样。
+
 沿用此前 EGo1 V2.2，器件 **XC7A35T-CSG324-1**，100 MHz 输入经 MMCM 生成 50 MHz。
 本目录接入当前独立 Matrix/CNN/Vector、256 B RF、4/4/4 任务队列和两块 8 KiB SRAM。
 没有恢复旧版 torus、NoC 或外部 DMA。SRAM 为同步读、字节写使能的可推断 BRAM，是否实际映射为 RAMB 以综合报告为准。

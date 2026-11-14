@@ -14,8 +14,14 @@ REPO = NPU.parent
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--out', type=Path, default=NPU / 'build/ego1')
 parser.add_argument('--prepare-only', action='store_true')
+parser.add_argument('--area', action='store_true', help='Try Vivado area strategies without changing RTL/configuration')
+parser.add_argument('--area-medium', action='store_true', help='Use the less expensive medium area strategy')
+parser.add_argument('--threads', type=int, choices=range(1, 9), default=4, help='Vivado thread ceiling, default 4')
+parser.add_argument('--clock-mhz', type=int, choices=(10, 25, 50), default=25, help='Actual FPGA system clock, default 25 MHz')
 parser.add_argument('--vivado', default='vivado', help='Vivado executable, including .bat on Windows')
 a = parser.parse_args()
+if a.area and a.area_medium:
+    parser.error('Choose --area or --area-medium, not both')
 out = a.out.resolve()
 if out.exists():
     parser.error('Choose a new --out directory to preserve previous evidence')
@@ -39,13 +45,18 @@ keys = {'rf_bank_words': 'NPU_RF_BANK_WORDS',
         'cnn_queue_depth': 'NPU_CNN_QUEUE_DEPTH',
         'stream_fifo_depth': 'NPU_STREAM_FIFO_DEPTH'}
 tcl = 'set npu_defines {' + ' '.join(f'{v}={config[k]}' for k, v in keys.items()) + '}\n'
+tcl += 'set npu_area_strategy ' + ('2' if a.area_medium else '1' if a.area else '0') + '\n'
+tcl += 'set npu_threads ' + str(a.threads) + '\n'
+tcl += 'set npu_system_mhz ' + str(a.clock_mhz) + '\n'
 tcl += 'set npu_sources [list \\\n' + ''.join(
     '  [file join $run_dir {src/' + p.relative_to(REPO).as_posix() + '}] \\\n' for p in files) + ']\n'
 (out / 'sources.tcl').write_text(tcl)
 manifest = {p.relative_to(out).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
             for p in sorted(out.rglob('*')) if p.is_file()}
 (out / 'source_manifest.json').write_text(json.dumps({
-    'part': 'xc7a35tcsg324-1', 'board': 'EGo1 V2.2', 'clock_hz': 50000000,
+    'part': 'xc7a35tcsg324-1', 'board': 'EGo1 V2.2', 'clock_hz': a.clock_mhz * 1000000,
+    'area_strategy': a.area,
+    'medium_area_strategy': a.area_medium, 'threads': a.threads,
     'config': config, 'sha256': manifest}, indent=2) + '\n')
 print(f'Prepared {out}', flush=True)
 if a.prepare_only:

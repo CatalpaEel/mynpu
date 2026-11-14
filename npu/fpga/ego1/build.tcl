@@ -5,14 +5,25 @@ foreach name {implementation_pass.txt ego1_mynpu.bit ego1_mynpu.mcs} {
 }
 source [file join $run_dir sources.tcl]
 create_project -force ego1_mynpu [file join $run_dir project] -part xc7a35tcsg324-1
+if {[info exists npu_area_strategy] && $npu_area_strategy} {
+  if {$npu_area_strategy == 2} {
+    set_property strategy Flow_AreaOptimized_medium [get_runs synth_1]
+  } else {
+    set_property strategy Flow_AreaOptimized_high [get_runs synth_1]
+  }
+  set_property strategy Area_Explore [get_runs impl_1]
+}
 set_property target_language Verilog [current_project]
 set_property include_dirs [list [file join $run_dir include]] [get_filesets sources_1]
 set_property verilog_define [concat NPU_FPGA_TEST $npu_defines] [get_filesets sources_1]
 add_files -norecurse $npu_sources
 add_files -fileset constrs_1 [file join $run_dir ego1.xdc]
 set_property top ego1_soc_top [get_filesets sources_1]
+if {![info exists npu_system_mhz]} {set npu_system_mhz 50}
+set_property generic [list SYSTEM_MHZ=$npu_system_mhz] [get_filesets sources_1]
 update_compile_order -fileset sources_1
-set_param general.maxThreads 4
+if {![info exists npu_threads]} {set npu_threads 4}
+set_param general.maxThreads $npu_threads
 file mkdir [file join $run_dir reports]
 launch_runs synth_1 -jobs 4
 wait_on_run synth_1
@@ -48,7 +59,7 @@ write_cfgmem -force -format mcs -interface SPIx4 -size 8 \
   -loadbit [list up 0x0 [file join $run_dir ego1_mynpu.bit]] \
   -file [file join $run_dir ego1_mynpu.mcs]
 set f [open [file join $run_dir implementation_pass.txt] w]
-puts $f "Vivado [version -short]; xc7a35tcsg324-1; 50 MHz"
+puts $f "Vivado [version -short]; xc7a35tcsg324-1; $npu_system_mhz MHz"
 puts $f "setup_slack_ns=[get_property SLACK $setup]"
 puts $f "hold_slack_ns=[get_property SLACK $hold]"
 close $f
