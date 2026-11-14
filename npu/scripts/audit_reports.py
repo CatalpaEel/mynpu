@@ -10,6 +10,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / 'npu/reports'
 CURRENT = {
+    'ego1_merge_validation_20261114.json': 'Current local EGo1/JTAG-only integration: dual-backend functional tests and Vivado 2025.2 RTL elaboration; not full implementation or new board verification.',
     'jtag-only-validation.json': 'Current JTAG-only RTL, running CPU/NPU/SBA concurrency, macro and board-wrapper functional simulation; no new PPA or physical board test.',
     'rf1r1w-validation.json': 'Current RF functionality, MNIST and synthesis; PNR limitations inside are the original pre-PNR snapshot.',
     'rf1r1w_die1950_fullchip_validation.json': 'Final RF1R1W die1950 r3 PNR; not firstpass/r2.',
@@ -102,9 +103,14 @@ for name in sorted(set(paths)):
     entry = {'file': p.name, 'sha256': digest(p), 'classification':
              'current-scoped' if p.name in CURRENT else 'historical-snapshot',
              'note': CURRENT.get(p.name, 'Earlier experiment/baseline; not a current whole-design result.')}
-    if p.name in CURRENT and p.name != 'jtag-only-validation.json':
+    if p.name in CURRENT and p.name not in {'jtag-only-validation.json','ego1_merge_validation_20261114.json'}:
         entry['classification'] = 'pre-jtag-only-baseline'
         entry['note'] = 'Frozen evidence before Host removal and SBA changes; not current RTL PPA. ' + entry['note']
+    if p.name == 'jtag-only-validation.json':
+        entry['classification'] = 'pre-ego1-merge-baseline'
+        entry['note'] = 'Frozen main before the configurable EGo1 wrapper merge; shared chip RTL remains unchanged, but this is not the new wrapper validation.'
+    if p.name in {'ego1_board_validation_20261114.json','ego1_validation_preparation.json'}:
+        entry['note'] = 'Frozen afb74fd/03e2870 board-branch evidence; not PPA or physical-board proof for merged JTAG-only sources.'
     if p.suffix == '.json':
         try:
             obj = json.loads(p.read_text())
@@ -130,7 +136,7 @@ for name in sorted(set(paths)):
                     entry['frozen_design_source_checks'] = file_checks(source['source_sha256'], ROOT)
                     entry['frozen_design_source_counts'] = dict(Counter(c['status'] for c in entry['frozen_design_source_checks']))
                     entry['configuration_matches'] = all(source[k] == v for k, v in json.loads((ROOT/'npu/build_config.json').read_text()).items())
-            if p.name == 'jtag-only-validation.json':
+            if p.name in {'jtag-only-validation.json','ego1_merge_validation_20261114.json'}:
                 entry['frozen_files'] = file_checks(obj['evidence_sha256'], ROOT)
                 entry['frozen_file_counts'] = dict(Counter(c['status'] for c in entry['frozen_files']))
             if p.name == 'ego1_preboard_validation.json':
@@ -151,16 +157,19 @@ inventory = {'checked_date': TODAY, 'git_commit': subprocess.check_output(['git'
 lines = ['# 报告索引与版本审计', '', TODAY + '。报告是冻结证据，文件名不带日期也不表示当前版本；不修改原报告里的历史数值或当时结论。', '',
 '## 当前采用的入口', '', '| 报告 | 适用范围 |', '| --- | --- |']
 labels = {
- 'jtag-only-validation.json':'当前JTAG-only功能验证：无GPIO版重新验证，含不停机CPU/NPU/SBA竞争、宏模型及EGo1壳层；未重跑PPA/实体板。',
+ 'ego1_merge_validation_20261114.json':'当前本地集成：FPGA/ASIC各20帧、CPU RF 40000检查、Vivado 2025.2 RTL展开；未做新PPA/板测。',
+ 'jtag-only-validation.json':'合并前JTAG-only冻结功能验证：无GPIO版，含不停机CPU/NPU/SBA竞争、宏模型及EGo1壳层；未重跑PPA/实体板。',
  'rf1r1w-validation.json':'RF功能、21,008周期MNIST及综合2.569286mm²；内部“未跑PNR”是当时快照，后续见r3。',
  'rf1r1w_die1950_fullchip_validation.json':'最终r3布局布线；核心非filler 2.632349mm²、50MHz +0.468/+0.018ns。',
  'lab5_rf1r1w_die1950_validation.json':'最终r3课程检查；严格PR/ERC残项保留，非正式投片全部通过。',
  'ego1_preboard_validation.json':'EGo1功能仿真38项；尚无本版Vivado综合/实现/实体板结果。',
  'backend_source_audit.json':'70个ASIC输入、24个项目RTL与默认配置核对。'}
 for name, label in labels.items():
-    lines.append(f'| [{name}]({name}) | ' + ('JTAG-only改动前冻结证据：' if name != 'jtag-only-validation.json' else '') + label + ' |')
-lines += ['', '## 版本判读', '',
-'当前main不含GPIO，Host接口已删除；当前功能结果见jtag-only-validation。旧r3物理检查仅为冻结基线，不代表本次改动后的PPA或签核。',
+    lines.append(f'| [{name}]({name}) | ' + ('JTAG-only改动前冻结证据：' if name not in {'jtag-only-validation.json','ego1_merge_validation_20261114.json'} else '') + label + ' |')
+lines += ['', '## 旧版FPGA归档', '',
+'[2026-11-14旧版实板报告](ego1_board_validation_20261114.json)与[构建试验](ego1_validation_preparation.json)适用于afb74fd/03e2870。归档10MHz镜像在halt/resume流程下通过2021次推理，不代表当前合并后设计通过实体板测；见[固定版本](../fpga/ego1/versions/ego1-10mhz-20261114/README.md)。', '',
+'## 版本判读', '',
+'当前main不含GPIO，Host接口已删除；当前本地集成结果见ego1_merge_validation_20261114；合并前功能结果见jtag-only-validation。旧r3物理检查仅为冻结基线，不代表本次改动后的PPA或签核。',
 '原始当前报告中的对照字段与阶段追踪作为证据保留；首页指标只使用当前最终结果。',
 '审计详细记录每份JSON的已记录源哈希比对，以及最终PNR/Lab5产物完整性。部分哈希一致不等于整份报告对应当前设计；缺少证据时不推断通过。',
 '输入版本一致也不等于检查全部通过：最终Lab5仍保留ERC及严格PR限制。', '',
@@ -168,7 +177,7 @@ lines += ['', '## 版本判读', '',
 '## 全量清单', '', '| 文件 | 定位 | 源哈希观察：一致/不同/缺失 |', '| --- | --- | --- |']
 for e in entries:
     c=e.get('source_hash_counts',{})
-    label='当前范围' if e['classification']=='current-scoped' else '历史快照' if e['classification']=='historical-snapshot' else 'GPIO加入前冻结证据' if e['classification']=='pre-gpio-baseline' else 'JTAG-only改动前冻结证据' if e['classification']=='pre-jtag-only-baseline' else '解析失败'
+    label='当前范围' if e['classification']=='current-scoped' else '历史快照' if e['classification']=='historical-snapshot' else 'GPIO加入前冻结证据' if e['classification']=='pre-gpio-baseline' else 'JTAG-only改动前冻结证据' if e['classification']=='pre-jtag-only-baseline' else 'EGo1合并前冻结证据' if e['classification']=='pre-ego1-merge-baseline' else '解析失败'
     observation='/'.join(str(c.get(k,0)) for k in ['match','different','missing']) if c else '无可直接比对的源哈希'
     lines.append(f"| [{e['file']}]({e['file']}) | {label} | {observation} |")
 (REPORTS/'README.md').write_text('\n'.join(lines)+'\n')

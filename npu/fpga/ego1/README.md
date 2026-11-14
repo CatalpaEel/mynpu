@@ -1,6 +1,20 @@
+> 本地集成说明（2026-11-14）：开发代码已合入无GPIO、无Host的JTAG-only主线。`versions/ego1-10mhz-20261114`是旧`afb74fd`硬件/板测的冻结归档，其旧Host端口只存在于归档源码，不参与当前编译；不能将归档镜像当成合并后设计的bitstream。
+> 当前服务器已安装Vivado 2025.2，推荐用`~/tools/bin/vivado`兼容启动器；下面历史板测使用Vivado 2023.2。新的合并验证见[集成报告](MERGE-20261114.md)。
+
 # EGo1 板级 Vivado 工程
 
-沿用此前 EGo1 V2.2，器件 **XC7A35T-CSG324-1**，100 MHz 输入经 MMCM 生成 50 MHz。
+已发布上板分支：`fpga/ego1-board-20261114-afb74fd`。
+**本次实板验证的固定版本见 [ego1-10mhz-20261114](versions/ego1-10mhz-20261114/README.md)**，
+包含实际构建的源码快照、bit/MCS、配套输入/程序和原始测试记录。
+SoC 基线为 `afb74fd`，冻结硬件源码对应 `03e2870`；不代表后续 `main` 已通过本次板测。
+
+原本地工作分支 `fpga/ego1-asic-validation` 的连续推理、重载和 ASIC/FPGA 双后端测试见
+[上板验证操作说明](VALIDATION.md)。原板测环境的Vivado 2023.2已实际执行完整SoC构建。原始RTL默认50MHz优化后25,077 LUT，
+中等面积策略在25MHz和10MHz下均为22,431 LUT，超出XC7A35T的20,800 LUT。
+10MHz FPGA专用CPU寄存器堆和CNN DSP映射已经生成可下载镜像，板测包见VALIDATION.md。
+本分支构建默认25MHz，通过实际MMCM分频实现，可选择10/25/50MHz；芯片共用RTL保持原样。
+
+沿用此前 EGo1 V2.2，器件 **XC7A35T-CSG324-1**，100MHz输入经MMCM生成系统时钟，构建默认25MHz，可选10/25/50MHz。
 本目录接入当前独立 Matrix/CNN/Vector、256 B RF、4/4/4 任务队列和两块 8 KiB SRAM。
 没有恢复旧版 torus、NoC 或外部 DMA。SRAM 为同步读、字节写使能的可推断 BRAM，是否实际映射为 RAMB 以综合报告为准。
 
@@ -10,14 +24,14 @@
 板级功能仿真使用真实 CPU/DTM/DM，通过引脚装载完整 MNIST 镜像并比较十个整数输出；额外检查复位、时钟和 LED。
 MMCM/BUFG 在 VCS 中使用功能替身，不代表真实 FPGA 时序或硬件测试。
 
-**本服务器未找到 Vivado**，旧 `/home/zzh/vivado/config/env_2025.2.sh` 也不存在。
-因此当前没有本版 Vivado 综合/实现结果、资源占用、时序闭合证据或 `.bit/.mcs`。
-不能把已有 ASIC 结果或以前板卡结果当作本版 FPGA 成功。
+本次合并验证使用新的JTAG-only源码：FPGA 10MHz＋CPU LUTRAM和ASIC 50MHz＋真实SRAM宏，分别做两次启动、20帧推理；具体检查数及版本哈希见[集成报告](MERGE-20261114.md)。Vivado 2025.2的RTL展开通过，不等于资源映射或布局布线通过。
+
+旧冻结10MHz版本已完成布局布线，实体板100kHz JTAG通过2021次推理，使用PC访问前halt/之后resume的流程。它的资源数据与失败记录仍见`ego1_validation_preparation.json`，不将该镜像/时序结果归给当前合并代码。
 
 ## 构建到上板前
 
 从仓库根目录执行，建议使用此前板卡使用过的 Vivado 2023.2；2025.2 也可尝试，但应记录实际工具版本。
-无需旧 `xc7a35t.xpr`、板卡数据库或绝对路径工程。尚未用 Vivado 验证这两版兼容性。
+无需旧 `xc7a35t.xpr`、板卡数据库或绝对路径工程。旧版本已用2023.2实际执行；当前合并代码已通过2025.2 RTL展开，完整综合/实现尚未执行。
 
 ```sh
 # 已将 Vivado 加入 PATH 时
@@ -77,7 +91,10 @@ LED5=软件测试完成，LED6=测试成功，LED7=0。此处 LED4 是活动指�
 RESET 为板级 POR；Debug Module 的 ndmreset 不重新锁定 MMCM。
 所有外部信号沿用 LVCMOS33。TCK 按最高 1 MHz 约束，实际连接先使用 10 kHz。
 
-## JTAG 推理（留待实体上板后执行）
+## JTAG 推理
+
+已实板验证的入口是版本目录内的 `npu/fpga/ego1/jtag_validation.py`，操作见版本说明。
+下面的旧 `load_mnist.tcl` 入口未参与本次2021帧板测，不等同于已验证的暂停/恢复流程。
 
 板卡经原配置 JTAG 下载 `.bit` 后，CPU 在 bootstrap WFI 等待；没有把 MNIST 程序固化进 BRAM。
 FT232H 的 AD0/1/2/3 分别接 TCK/TDI/TDO/TMS，接公共 GND，沿用旧板接线。

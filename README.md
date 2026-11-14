@@ -5,6 +5,11 @@
 基于 CV32E40P 的整数 NPU，使用独立 Matrix、CNN、Vector 计算单元和软件任务调度。
 本文描述当前默认设计；配置来源为 [build_config.json](npu/build_config.json)，接口以 RTL 和软件头文件为准。
 
+已本地合入 **`fpga/ego1-board-20261114-afb74fd` 的板级工具与冻结归档**，集成情况见[合并验证](npu/fpga/ego1/MERGE-20261114.md)。
+其中旧板测SoC基线为`afb74fd`、硬件源码对应`03e2870`；当前JTAG-only开发设计与它不同。
+EGo1 / XC7A35T：10MHz系统、100kHz外接JTAG，使用CPU暂停/恢复流程通过2021次推理。
+源码、镜像、PC程序、原始记录及限制见[固定上板版本说明](npu/fpga/ego1/versions/ego1-10mhz-20261114/README.md)。
+
 ## 设计架构
 
 ```mermaid

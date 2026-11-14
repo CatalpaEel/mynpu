@@ -1,0 +1,428 @@
+{
+  "date": "2026-11-13",
+  "branch": "fpga/ego1-asic-validation",
+  "base_commit": "afb74fd005ec76ae3afc761fa40a48a5d30aa656",
+  "primary_target": "complete 0.18um ASIC SoC; FPGA is a functional prototype",
+  "status": "Physical EGo1 PASS at 10MHz / JTAG 100kHz: 2021 frames using CPU halt/access/resume; running SBA root cause unresolved",
+  "physical_board_tested": true,
+  "production_core_and_artifacts_unchanged": true,
+  "fpga_wrapper_changes": "parameterized actual MMCM output: 10/25/50 MHz; builder default 25 MHz",
+  "host_tests": {
+    "passed": true,
+    "checks": 13,
+    "scope": "host protocol/fault-detection tests, not hardware simulation",
+    "log_sha256": "e0ceb70a35618632eca8d6c3e87faaf4bedca284fe01cfdd5015e90742249525"
+  },
+  "simulations": [
+    {
+      "memory": "asic",
+      "passed": true,
+      "frames_checked": 200,
+      "boots": 2,
+      "checks": 11006,
+      "changed_during_run": [],
+      "scope": "JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",
+      "clock_hz": 50000000,
+      "evidence": "npu\\build\\validation-evidence-20261113\\asic-200.json",
+      "evidence_sha256": "8d78229faf94f8b6cb334824085e431233eac60a397aa39f3d024175756415ef"
+    },
+    {
+      "memory": "fpga",
+      "passed": true,
+      "frames_checked": 200,
+      "boots": 2,
+      "checks": 11006,
+      "changed_during_run": [],
+      "scope": "JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",
+      "clock_hz": 50000000,
+      "evidence": "npu\\build\\validation-evidence-20261113\\fpga-200.json",
+      "evidence_sha256": "839711ca1c29a0a44a437fe0143138248055e804c33393e4a995b977a2bbc862"
+    },
+    {
+      "memory": "fpga",
+      "passed": true,
+      "frames_checked": 20,
+      "boots": 2,
+      "checks": 8486,
+      "changed_during_run": [],
+      "scope": "JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",
+      "clock_hz": 25000000,
+      "evidence": "npu\\build\\validation-evidence-20261113\\fpga-25m.json",
+      "evidence_sha256": "26286c28879156b8156df2414492cfe07c0dff7794dc910ce563cfd7649070d4"
+    },
+    {
+      "memory": "fpga",
+      "passed": true,
+      "frames_checked": 20,
+      "boots": 2,
+      "checks": 8486,
+      "changed_during_run": [],
+      "scope": "JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",
+      "clock_hz": 10000000,
+      "evidence": "npu/build/validation-evidence-20261113/fpga-10m.json",
+      "evidence_sha256": "e92584e99f99a0b1b799f38accbd129912f38ae2afb56bb0e5d9307a7c29f2bc"
+    },
+    {
+      "memory": "fpga",
+      "cpu_rf_implementation": "lutram_lvt",
+      "passed": true,
+      "frames_checked": 200,
+      "boots": 2,
+      "checks": 11006,
+      "changed_during_run": [],
+      "clock_hz": 25000000,
+      "scope": "JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",
+      "evidence": "npu/build/validation-evidence-20261113/fpga-cpurf-200.json",
+      "evidence_sha256": "2b63f95eff7d601a22ba51da1a0ac4e78d990a5bd7a0f7ef254e73c62e5ca9ec"
+    },
+    {
+      "memory": "fpga",
+      "cpu_rf_implementation": "lutram_lvt",
+      "passed": true,
+      "frames_checked": 200,
+      "boots": 2,
+      "checks": 11006,
+      "changed_during_run": [],
+      "clock_hz": 10000000,
+      "scope": "JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",
+      "evidence": "npu/build/validation-evidence-20261113/fpga-cpurf-10m-200.json",
+      "evidence_sha256": "ecb1ec39474dfb4ed4d80e9d7ce9fdb9666cd4b1f89a64262160f538c2ea0d7f"
+    }
+  ],
+  "macro_model_sha256": "52fd590082b4f63573856baf44d8e59b5ab21db56b9c11aeaf4d45376b32d54d",
+  "macro_matches_user_supplied_file": true,
+  "macro_timing_checks_disabled": true,
+  "baseline_vivado": {
+    "tool": "Vivado 2023.2",
+    "part": "xc7a35tcsg324-1",
+    "clock_hz": 50000000,
+    "threads_ceiling": 4,
+    "synthesis_passed": true,
+    "synthesis_elapsed_s": 329,
+    "synth_luts": 25142,
+    "synth_ffs": 15172,
+    "ramb36": 4,
+    "dsps": 34,
+    "post_opt_slice_luts": 25077,
+    "available_luts": 20800,
+    "placement_passed": false,
+    "blocker": "UTLZ-1 LUT capacity",
+    "pre_route_setup_wns_ns": -9.351,
+    "timing_value_scope": "unplaced synthesis estimate, not routed timing",
+    "run": "npu/build/ego1-baseline-20261113"
+  },
+  "cancelled_runs": [
+    {
+      "run": "npu/build/ego1-area-20261113",
+      "reason": "stopped after user accepted lower FPGA frequency; no completed area result"
+    },
+    {
+      "run": "npu/build/ego1-medium8-20261113",
+      "reason": "stopped after user accepted lower FPGA frequency; no completed area result"
+    },
+    {
+      "run": "npu/build/ego1-rflutram25-20261113",
+      "reason": "FPGA-only XDC experiment stopped: diagnostic if/puts commands unsupported in XDC; no completed utilization result; no RTL changes"
+    }
+  ],
+  "current_fpga_build": {
+    "run": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114",
+    "clock_hz": 10000000,
+    "threads_ceiling": 8,
+    "strategy": "Flow_AreaOptimized_medium + Area_Explore",
+    "cpu_rf_implementation": "lutram_lvt",
+    "cnn_dsp_requested": true,
+    "preplacement_lut_estimate_check_deferred": true,
+    "synthesis_passed": true,
+    "implementation_passed": true,
+    "bitstream_generated": true,
+    "default_resource_drc_restored": true,
+    "default_drc_errors": 0,
+    "fully_routed_nets": 35160,
+    "placed_luts": 19799,
+    "placed_logic_luts": 19673,
+    "placed_lutram": 126,
+    "placed_ffs": 14185,
+    "ramb36": 4,
+    "dsps": 56,
+    "setup_slack_ns": 48.244,
+    "hold_slack_ns": 0.019,
+    "timing_scope": "routed Vivado timing report at 10MHz, setup and hold non-negative",
+    "bit_sha256": "9bd3b176981fc5c153d47acc02f1509c66dcc5fa9132b0a6e14ba6ac5a37082a",
+    "mcs_sha256": "86886fa4c2c64d355b3e6157800fd831d9d7b8027f01af4a36ba41f7a97491fd",
+    "pass_marker_sha256": "6dc607a2ecb64449b1d041e04160df68917348f8a8330acad717d788c198bd04",
+    "package": "npu/build/ego1-board-kit-10m-cpurf-dsp-20261114"
+  },
+  "testbench_fix": {
+    "reason": "final-frame DONE/status read race exposed at 25MHz",
+    "shared_chip_rtl_changed": false,
+    "failed_run": "npu/build/validation-evidence-20261113/fpga-25m-before-fix.json",
+    "fixed_run": "npu/build/validation-evidence-20261113/fpga-25m.json"
+  },
+  "remaining_coverage": [
+    "CPU running continuously during direct PC SBA access",
+    "repeated physical power interruption",
+    "USB disconnect/reconnect fault recovery",
+    "random reset at every compute phase",
+    "full MNIST dataset or arbitrary operator workloads",
+    "ASIC physical/electrical or PDK timing signoff"
+  ],
+  "production_project_rtl_sha256": {
+    "npu/rtl/cnn/npu_cnn.sv": "5d59bbbf7a0431fba412627b08c598969f2f0fc80124a1ece99d78e83d144f6b",
+    "npu/rtl/cnn/npu_cnn_mac.sv": "b1df61b06b659f040efc81532a320df368e9b25adf3d7225fe69d40e66251861",
+    "npu/rtl/cnn/npu_stream.sv": "908cbb663623c5c539b18a07e2c9839dea4b652566fc595d281d5f34137bb2c0",
+    "npu/rtl/cnn/npu_stream_control.sv": "859222aaf5fcabf1593d45b92f55e578e8afa5f1b25249ab5b292ded50107125",
+    "npu/rtl/cnn/npu_stream_engine.sv": "9da8f5d94a4dea6657a35af494ab842caa019117c482d2f86a59a0c94b878345",
+    "npu/rtl/cnn/npu_stream_pkg.sv": "773da72bb666e39190a61fb811561d2f565b3d2d527f1a5a03cb4c306c9b5f63",
+    "npu/rtl/common/npu_addr_pkg.sv": "1569fa7ecda0f49b3e2e4e235a117ccb0e29ad5b5fff7ab40a382e9e64db3209",
+    "npu/rtl/common/npu_clock_gate.sv": "813bf2ec21db06f92adf7bb763fee9ccac89a404613ac8e278294ad672cb3289",
+    "npu/rtl/common/npu_rr_select.sv": "cc86ac011d238db6793ac9d4c6d21531f726a82db87ac2a5e50530e6b98fa944",
+    "npu/rtl/common/npu_store_pack.sv": "4ef804ab574409402a4e4b4eb81c8715d6fdc3f55a24f8c7e46e4eb0dabaf8cf",
+    "npu/rtl/control/npu_mmio.sv": "31fc6d9bb51b4b37f1da2babbc157f6944bca8dd7e64f5deedfacdaa7b885cf2",
+    "npu/rtl/debug/npu_debug_boot.sv": "bd19d7faafcfd5a2cfae552574c58e0b0eeeefa42b122ce5431222d47ac15fa1",
+    "npu/rtl/debug/npu_jtag_debug.sv": "b3314a8dff7f13036b8a064fc62a82a24efce942d1900922a19bc0b4be7cf186",
+    "npu/rtl/interconnect/npu_data_regfile.sv": "8d08c8affba68937588ad03abb512161ea9ef2b0f4c96688c0d51020f9c68cdd",
+    "npu/rtl/interconnect/npu_multi_read.sv": "dced3c54f2793b8ce3628fd0d099487959ec83daf1ee4e2b03fe906313046c50",
+    "npu/rtl/interconnect/xbar.sv": "c87178ca75fc20b25d52b179abe26d1dfa7bc3b32a15567396b7fdfdcb447494",
+    "npu/rtl/interconnect/xbar_stream.sv": "70f906e51bba47aaa256870f29f5f2f60a9e18e5d0b7fde67c3be618641c8376",
+    "npu/rtl/matrix/npu_matmul.sv": "e7b6dd88fd29df2229fdfab95ee6e08fea27dbd403f3f90f23522e4088f70e71",
+    "npu/rtl/matrix/npu_matrix_stream.sv": "ad966e72bdc062f2771457d29bae856158a89decb086105b980b51c6f230f1d1",
+    "npu/rtl/quant/npu_shared_quant.sv": "5501e0b14f8d5efe53d43b4f0b97756084eb3d0a21f6f1a5efb3663aa01f624a",
+    "npu/rtl/top/npu_core.sv": "1c74425132da41c5a0ee7017a9f52a6a848198b3e5bcbcb107529a97ecaa0828",
+    "npu/rtl/top/npu_soc.sv": "c413002f95faa7bddd8162bde9f0562454cf18cb092e8afb9f789e67b960658d",
+    "npu/rtl/vector/npu_vector.sv": "107a4c1c8bf1acd5bfea43653cffbafa1bd194ec456debe662fdd63989d56735",
+    "npu/rtl/vector/npu_vector_stream.sv": "2d456902f186de61fb68635cdb76a5dea6433e93f088c4d382cc40a21055c34f"
+  },
+  "completed_fpga_builds": [
+    {
+      "run": "npu/build/ego1-medium8-25m-20261113",
+      "tool": "Vivado 2023.2",
+      "part": "xc7a35tcsg324-1",
+      "clock_hz": 25000000,
+      "threads_ceiling": 8,
+      "strategy": "Flow_AreaOptimized_medium",
+      "synthesis_passed": true,
+      "synthesis_elapsed_s": 675,
+      "synth_luts": 22867,
+      "synth_ffs": 15150,
+      "ramb36": 4,
+      "dsps": 34,
+      "post_opt_slice_luts": 22431,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "pre_route_setup_wns_ns": 6.214,
+      "pre_route_hold_whs_ns": -1.001,
+      "timing_value_scope": "unplaced synthesis estimate, not timing closure",
+      "generated_clock_period_ns": 40.0,
+      "bitstream_generated": false,
+      "launcher_sha256": "c6fba14fcb703f2dffb5cebaab3060bf7920daf9b1276c7ac6f5560d10f8f7da",
+      "synthesis_wait_elapsed_s": 692
+    },
+    {
+      "run": "npu/build/ego1-medium4-10m-20261113",
+      "tool": "Vivado 2023.2",
+      "part": "xc7a35tcsg324-1",
+      "clock_hz": 10000000,
+      "threads_ceiling": 4,
+      "strategy": "Flow_AreaOptimized_medium",
+      "synthesis_passed": true,
+      "synthesis_elapsed_s": 897,
+      "synth_luts": 22867,
+      "synth_ffs": 15150,
+      "ramb36": 4,
+      "dsps": 34,
+      "post_opt_slice_luts": 22431,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "pre_route_setup_wns_ns": 66.199,
+      "pre_route_hold_whs_ns": -1.001,
+      "timing_value_scope": "unplaced synthesis estimate, not timing closure",
+      "generated_clock_period_ns": 100.0,
+      "bitstream_generated": false,
+      "launcher_sha256": "00f0601833bd9656025d5209e968e8bc3a2ab843955b24a362cbafeb0e2af46c"
+    }
+  ],
+  "implementation_probes": [
+    {
+      "synthesis_input": "npu/build/ego1-medium8-25m-20261113",
+      "directive": "ExploreWithRemap",
+      "post_opt_slice_luts": 22866,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "run": "npu/build/ego1-impl-explore-25m-20261113/ExploreWithRemap",
+      "result_sha256": "111b51e1dcbd7345d188367ce00191bfb966307bb3d0747d78eb434cc2c53f7d"
+    },
+    {
+      "synthesis_input": "npu/build/ego1-medium8-25m-20261113",
+      "directive": "ExploreSequentialArea",
+      "post_opt_slice_luts": 22584,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "run": "npu/build/ego1-impl-explore-25m-20261113/ExploreSequentialArea",
+      "result_sha256": "1b2a8705ca7c44ba21f0c9c89d14d10de90ec5a0a35f79508162bfb441daf3f4"
+    },
+    {
+      "synthesis_input": "npu/build/ego1-medium8-25m-20261113",
+      "directive": "ResynthRemap",
+      "post_opt_slice_luts": 22789,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "run": "npu/build/ego1-impl-resynth-25m-20261114/ResynthRemap"
+    },
+    {
+      "synthesis_input": "npu/build/ego1-medium8-25m-20261113",
+      "directive": "AreaThenResynthRemap",
+      "post_opt_slice_luts": 22430,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "run": "npu/build/ego1-impl-resynth-25m-20261114/AreaThenResynthRemap"
+    }
+  ],
+  "additional_running_builds": [
+    {
+      "run": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114",
+      "clock_hz": 10000000,
+      "threads_ceiling": 8,
+      "strategy": "Flow_AreaOptimized_medium",
+      "cpu_rf_implementation": "lutram_lvt",
+      "cnn_dsp_requested": true,
+      "preplacement_lut_estimate_check_deferred": true,
+      "postplacement_and_final_default_drc_mandatory": true,
+      "status": "completed",
+      "status_detail": "implementation_passed, bitstream and mcs generated",
+      "status_artifact": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114/implementation_pass.txt",
+      "bitstream_generated": true
+    }
+  ],
+  "rf_mapping_probe": {
+    "scope": "RF-only out-of-context synthesis, not full SoC resources or physical board results",
+    "part": "xc7a35tcsg324-1",
+    "clock_hz": 25000000,
+    "rf_bytes": 256,
+    "gather_ports": 9,
+    "ordinary_masters": 7,
+    "baseline": {
+      "total_luts": 3397,
+      "lutram_luts": 0,
+      "ffs": 2485
+    },
+    "xdc_distributed_override": {
+      "total_luts": 3397,
+      "lutram_luts": 0,
+      "ffs": 2485
+    },
+    "isolated_rtl_attribute_only": {
+      "total_luts": 3397,
+      "lutram_luts": 0,
+      "ffs": 2485,
+      "warning": "Synth 8-7186: RAM_STYLE ignored; existing storage usage not inferred as RAM"
+    },
+    "isolated_bank_template": {
+      "total_luts": 3448,
+      "lutram_luts": 512,
+      "ffs": 437,
+      "ram32x1d_primitives": 256,
+      "lut_delta": 51,
+      "ff_delta": -2048,
+      "source_sha256": "29743a58f981f0f20649ae70796c74e50760abdd01436416aaf42213ba47b9d6",
+      "rtl_functional_scoreboard_passed": true,
+      "functional_test_scope": "RTL byte-write/read-before-write/random-contention/fairness/throughput scoreboard; not gate-level equivalence",
+      "functional_log_sha256": "e0e8144e29c39a52784dafa6c52d82d83e35273ac6c60ae043713a67338ee172"
+    },
+    "decision": "not integrated: total LUT usage increased; ASIC/shared project RTL unchanged",
+    "runs": [
+      "npu/build/ego1-rf-probe-20261113",
+      "npu/build/ego1-rf-attribute-probe-20261113",
+      "npu/build/ego1-rf-bank-probe-20261113"
+    ]
+  },
+  "last_updated_date": "2026-11-14",
+  "current_best_post_opt_luts": 22430,
+  "fpga_only_cpu_rf_override": {
+    "optional_flag": "--cpu-rf-lutram",
+    "implementation": "two single-write distributed-RAM banks with live-value/valid bits",
+    "supported_configuration": "current ADDR_WIDTH=6 FPU=0 integer register file; unsupported configurations reject elaboration",
+    "asic_cpu_register_rtl_unchanged": true,
+    "cpu_rf_source": "npu/fpga/ego1/cv32e40p_register_file_lutram.sv",
+    "standalone_synthesis": {
+      "scope": "out-of-context CPU RF only, not whole SoC",
+      "baseline_luts": 1425,
+      "baseline_ffs": 992,
+      "candidate_luts": 356,
+      "candidate_lutram_luts": 144,
+      "candidate_ffs": 62
+    },
+    "rtl_reference_comparison": {
+      "passed": true,
+      "checks": 40000,
+      "cycles": 20000,
+      "evidence": "npu/build/validation-evidence-20261113/cpu-rf-equivalence.json",
+      "sha256": "0dc1d02d863bf88767f7c01c7ea883d465b69a3a7807d42b5bda4c744ed58d92"
+    },
+    "first_isolated_prototype_failure": "continuous-assignment function did not refresh read outputs after global array updates in VCS; changed to always_comb before integration; failed logs preserved on clab",
+    "full_soc_validation": "PASS: 200 frames, 2 boots, 11006 checks at 25MHz with JTAG-only CPU-in-loop; no source changes during run",
+    "full_soc_build": "npu/build/ego1-cpurf-medium8-25m-20261114",
+    "bitstream_generated": true,
+    "full_soc_synthesis": {
+      "luts": 22216,
+      "ffs": 14217,
+      "ramb36": 4,
+      "dsps": 34,
+      "post_opt_luts": 21775,
+      "placement_blocked_by_default_precheck": true,
+      "diagnostic_post_place_luts": 20907,
+      "default_resource_drc_still_fails": true
+    },
+    "final_board_variant": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114"
+  },
+  "placement_probes": [
+    {
+      "run": "npu/build/ego1-placement-probe-20261114",
+      "cpu_rf_implementation": "flipflop",
+      "pre_placement_luts": 22431,
+      "post_placement_luts": 21611,
+      "default_drc_restored": true,
+      "default_resource_drc_errors": 2,
+      "scope": "diagnostic placement only; not routed or board-ready"
+    },
+    {
+      "run": "npu/build/ego1-cpurf-placement-probe-20261114",
+      "cpu_rf_implementation": "lutram_lvt",
+      "pre_placement_luts": 21775,
+      "post_placement_luts": 20907,
+      "default_drc_restored": true,
+      "default_resource_drc_errors": 1,
+      "scope": "diagnostic placement only; not routed or board-ready"
+    }
+  ],
+  "recovery": {
+    "high_area": "process exited without complete marker or final report; checkpoint unavailable",
+    "cpu_rf_dsp": {
+      "saved_synthesis_checkpoint": true,
+      "implementation_passed": true,
+      "resume_script": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114/resume_implementation.tcl",
+      "default_drc_errors": 0,
+      "bitstream_generated": true
+    },
+    "run": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114",
+    "resume_script": "resume_implementation.tcl"
+  },
+  "high_area_run": {
+    "run": "npu/build/ego1-high8-25m-20261113",
+    "clock_hz": 25000000,
+    "status": "ended without synthesis completion or final utilization report",
+    "bitstream_generated": false,
+    "decision": "not used for board kit because no completed result"
+  },
+  "physical_board_report": "npu/reports/ego1_board_validation_20261114.json",
+  "published_branch": "fpga/ego1-board-20261114-afb74fd",
+  "publication_tag": "ego1-board-10mhz-20261114",
+  "hardware_source_commit": "03e28704f6200269ef58e75b5133a30abcb01c24",
+  "frozen_version_directory": "npu/fpga/ego1/versions/ego1-10mhz-20261114"
+}

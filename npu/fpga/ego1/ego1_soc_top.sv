@@ -3,7 +3,9 @@
 // EGo1/Lab 6 board wrapper.
 // P17 100 MHz -> Artix-7 MMCM -> 50 MHz system clock. The RISC-V Debug
 // Module uses the four external J5 signals; configuration JTAG is separate.
-module ego1_soc_top (
+module ego1_soc_top #(
+  parameter integer SYSTEM_MHZ = 50
+) (
   input logic fpga_clk_i, rst_ni, tck_i, tms_i, td_i,
   output logic td_o,
   output logic [7:0] led_o
@@ -25,7 +27,7 @@ module ego1_soc_top (
       .CLKFBOUT_MULT_F(10.0),
       .DIVCLK_DIVIDE(1),
       .CLKIN1_PERIOD(10.0),
-      .CLKOUT0_DIVIDE_F(20.0),
+      .CLKOUT0_DIVIDE_F(1000.0 / SYSTEM_MHZ),
       .REF_JITTER1(0.010)
   ) i_mmcm (
       .CLKIN1(fpga_clk_i),

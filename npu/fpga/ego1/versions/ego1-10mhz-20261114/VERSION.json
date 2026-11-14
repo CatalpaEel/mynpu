@@ -1,0 +1,522 @@
+{
+  "version": "ego1-10mhz-20261114",
+  "publication_branch": "fpga/ego1-board-20261114-afb74fd",
+  "publication_tag": "ego1-board-10mhz-20261114",
+  "soc_baseline_commit": "afb74fd005ec76ae3afc761fa40a48a5d30aa656",
+  "hardware_source_content_commit": "03e28704f6200269ef58e75b5133a30abcb01c24",
+  "source_match_method": "All frozen Git inputs compared after CRLF/LF normalization; byte-exact frozen inputs checked against original source manifest",
+  "upstream_main_at_publication_not_tested": "1fb32ed5710c8c73bb4623fdeddf4bf00cac1d29",
+  "part": "xc7a35tcsg324-1",
+  "vivado": "2023.2",
+  "clock_hz": 10000000,
+  "jtag_clock_hz": 100000,
+  "config": {
+    "rf_bank_words": 32,
+    "matrix_queue_depth": 4,
+    "vector_queue_depth": 4,
+    "cnn_queue_depth": 4,
+    "stream_fifo_depth": 8
+  },
+  "cpu_rf_implementation": "lutram_lvt",
+  "cnn_dsp_requested": true,
+  "compiled_sources_count": 72,
+  "source_manifest_sha256": "71943a2b1324224d3ba6a2e65b82b45be6afbd43b2bcbbeb1296bd23b90bcbef",
+  "bit_sha256": "9bd3b176981fc5c153d47acc02f1509c66dcc5fa9132b0a6e14ba6ac5a37082a",
+  "mcs_sha256": "86886fa4c2c64d355b3e6157800fd831d9d7b8027f01af4a36ba41f7a97491fd",
+  "validation_assets_manifest_sha256": "d1b261e53d83b35ef6d600577c406ebb973a32eeb0c17096d06bc7b8ba821c79",
+  "physical_board_tested": true,
+  "frames_passed": 2021,
+  "ndmreset_boot_checks": 23,
+  "access_policy": "halt CPU / PC memory access / resume CPU",
+  "direct_running_sba_validated": false,
+  "running_access_root_cause_confirmed": false,
+  "shared_asic_rtl_changed": false,
+  "sources": [
+    {
+      "snapshot_path": "build.tcl",
+      "repository_path": "npu/fpga/ego1/build.tcl",
+      "git_blob": "6c4803f4d5a4d6716da3ee7779ad1099fb222d0a",
+      "snapshot_sha256": "d4f04fc82b4cca6f9fa06314d4850cf4af13b0d962dec1311067de7339ddac4e"
+    },
+    {
+      "snapshot_path": "cnn_dsp.xdc",
+      "repository_path": "npu/fpga/ego1/cnn_dsp.xdc",
+      "git_blob": "2deb4cb15e80f24ddef475385d494954982b67ae",
+      "snapshot_sha256": "e8835c1f72c5be21d23b2ef754d81df523dc6f8d9b34efc08a15e85e52fd36af"
+    },
+    {
+      "snapshot_path": "ego1.xdc",
+      "repository_path": "npu/fpga/ego1/ego1.xdc",
+      "git_blob": "045a618552e094e1611fee93274d73fe294b2980",
+      "snapshot_sha256": "f6c9f23ec060ab1971d31889208f3506431075ac1843d78699087f334e238c47"
+    },
+    {
+      "snapshot_path": "include/cv32e40p_apu_core_pkg.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv",
+      "git_blob": "26cb42fa9269d4429ea24a78e2f94b748ac62eb1",
+      "snapshot_sha256": "094187ebc720b8636efc7779349b334db00af03a986db8798cd9f5a707b758d7"
+    },
+    {
+      "snapshot_path": "include/cv32e40p_fpu_pkg.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv",
+      "git_blob": "fe24153258d6a4cf06c514889df5773d72ce8cb4",
+      "snapshot_sha256": "e5f46fa1ef236a07aa331ce610989a2a9efc68f4593857c459f94261ab7cb2c6"
+    },
+    {
+      "snapshot_path": "include/cv32e40p_pkg.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv",
+      "git_blob": "319e790b62623d5daa0388cc92af1ce83aed61fc",
+      "snapshot_sha256": "332faa387f4351b65d76af6233e847846ec864fc901ae440e624bc2f32d7dfe8"
+    },
+    {
+      "snapshot_path": "post_place.tcl",
+      "repository_path": "npu/fpga/ego1/post_place.tcl",
+      "git_blob": "5d6e0555e450c4aedcf89a62c4464f6c6844881b",
+      "snapshot_sha256": "8ca8cd1a11ee404a99f0fb9541aac55f474608d80ebd8cfda1f84db9a121d9ee"
+    },
+    {
+      "snapshot_path": "pre_place.tcl",
+      "repository_path": "npu/fpga/ego1/pre_place.tcl",
+      "git_blob": "58d5dbd37e714beee85deb5a9accd248fc27fdeb",
+      "snapshot_sha256": "8f10da3bcdfcfeaadb6ee3c00431fa7a33cc93960d9508c3ca708f874e7da73a"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv",
+      "git_blob": "26cb42fa9269d4429ea24a78e2f94b748ac62eb1",
+      "snapshot_sha256": "094187ebc720b8636efc7779349b334db00af03a986db8798cd9f5a707b758d7"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv",
+      "git_blob": "fe24153258d6a4cf06c514889df5773d72ce8cb4",
+      "snapshot_sha256": "e5f46fa1ef236a07aa331ce610989a2a9efc68f4593857c459f94261ab7cb2c6"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv",
+      "git_blob": "319e790b62623d5daa0388cc92af1ce83aed61fc",
+      "snapshot_sha256": "332faa387f4351b65d76af6233e847846ec864fc901ae440e624bc2f32d7dfe8"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv",
+      "git_blob": "a61f7e9282cad72fb47093a183cdba2c171fba45",
+      "snapshot_sha256": "45aac71dd7ba9d58dd552d9dcfa8ab4daf6a718459616d3fcfc52fb320a3eb19"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv",
+      "git_blob": "aa900a787d985d9d62d55118914f2646e4ffc6e5",
+      "snapshot_sha256": "c0234b6228532cf1234b070a2fa01e7001f85969d6d7bed15368219256b38014"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv",
+      "git_blob": "a7449e01cf1c566838d6e3478c83f34cf66fe892",
+      "snapshot_sha256": "c4c4e53ab0b71f944f3d36bd69faae289b8189490f3115a83d01adc8e425d8b9"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv",
+      "git_blob": "94ca9bcbdbded0e1dd5ad518133fcffd20c42952",
+      "snapshot_sha256": "466b12aebb9cc6a389e5189667c1c6904cfb06a471a7839ed80f9ae6c566af33"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv",
+      "git_blob": "4621c754d315e2cf3d5929b9d211bd382c5b32ae",
+      "snapshot_sha256": "d1f11381b78e89f33ca5ccd404a3e3278f9abfc02b63777faeb991bc10f8a922"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv",
+      "git_blob": "d1c86d6c849e0cc4f41899f0db091866a1ed69ff",
+      "snapshot_sha256": "7206745d0764ff24f383b491accbb9ac6cb27e274a3f5fa4e50745471e3d6f0b"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv",
+      "git_blob": "4275cf9c13aef1a4517e7696a5fd2a1acd6a996a",
+      "snapshot_sha256": "d1ad108c16a80a24403eeadc8ea3cd20f28701b4e8cd6d4302dba6feea3dc91d"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv",
+      "git_blob": "d543179f5fb9dd02383250870becc270ddd2af04",
+      "snapshot_sha256": "ea73da23681836a141c47b21c8785e720e837acc9d10ac74c741523fee18854b"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv",
+      "git_blob": "c1608eb4a648dafb2e500c6eb55ee4251cd766d8",
+      "snapshot_sha256": "b6184048b55a978723b5df88bb71e16ff2474d245f44af1f738b8f13e2303d86"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv",
+      "git_blob": "488a83dc279ca11852c30e1a5d5415d5b377fa1c",
+      "snapshot_sha256": "365ea3c8bb180d48ceb4137a21e2b5451b7bab1b784ab8657dd98dc9f78a03f6"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv",
+      "git_blob": "57461c6114763836df894bd5da4c785d727d5afc",
+      "snapshot_sha256": "e0033cf9e38c4a63ebec3cd31ebd3ac7cbb1509faff191c5d7c17e6385296742"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv",
+      "git_blob": "496ac4ce0048d6b166363abc8c0ec79d32ef8649",
+      "snapshot_sha256": "b6d199e1398f3ce0a10e51490ef96588496b3cfd5b85a6a3803325eb033df498"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv",
+      "git_blob": "fc835fbe4b509da356cd23e8ccc32a4cf6e9314e",
+      "snapshot_sha256": "f12f1ebaba063039ac3d92fc5daa019931a482ff878e95483818fb360c975154"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv",
+      "git_blob": "f323cbe5fdb9b2280be5d7e8a0273f1b4d8a03dd",
+      "snapshot_sha256": "9002df7002145d5e8c8f221b680416e26bd8b82edc75296ca723c7320e30b1b3"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv",
+      "git_blob": "23fd14f5f0c622dae1fdb34dcb6c4369dd79c0c3",
+      "snapshot_sha256": "c08b7411f21bbfda94127777c18610e0d51a1c866957da9ce58b80c264b9f3b5"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv",
+      "git_blob": "af8489e0f5a86bfdf246e6cc1df7b75eefe4694b",
+      "snapshot_sha256": "4471fc83880ae5026d295b98576a8c54bb186f9b365dfdf2b235870744404dc0"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv",
+      "git_blob": "f9c4db4a85974ae6801b8525b194458e6f9fccad",
+      "snapshot_sha256": "61617042d886f60018b2effcd6d871580c453faaccb3668029b8477685a7ad07"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv",
+      "git_blob": "afdc5e2fcad69762855d4605936c751de35a7e5d",
+      "snapshot_sha256": "c6f2b0f2273a26c134d7ddde6d29c18698042623b4f70287e3090b6a5d89c6a5"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv",
+      "git_blob": "b44fbeba123f5228a3cf3620dd81b5c0923a6c1f",
+      "snapshot_sha256": "f133668887acae65ff68df6f14216793c7f5372f5c4849ec09a3f6ae5551efa0"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv",
+      "git_blob": "c7fe53e810c411a4cef0ab6ae8591b9e54e652f9",
+      "snapshot_sha256": "ba71335fdc2fd86c7d8d5a09f81f3677743abd71caa5016fc9b8e915400795dd"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv",
+      "git_blob": "596bdfe94f4c74df657235d58d3d41739bd6b306",
+      "snapshot_sha256": "b64ee004bebf2d808cd5aedd1346c6020e36d4de64f964cbb512b7e11e3b6f55"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv",
+      "git_blob": "d00406e54fcba2c7025742640ff1719d154ea35f",
+      "snapshot_sha256": "a4b93f90bceb0f1345ab556bd8ed8e0510186981c9c14180fd90fe052e515eee"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv",
+      "git_blob": "4d31c1277552ade8ec162869975645925d5ddb12",
+      "snapshot_sha256": "0ca0e541a7989dc96707ae89d2875ee25b8ceaa8c2fd4c447a6d6fbac3c55f90"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv",
+      "git_blob": "03e519487c0f620b39dd4cde0685e15c61723ae8",
+      "snapshot_sha256": "de71deacdef21a22aa1733e92fd16530ec330de83aae5a9d5fa03738d2c1c854"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv",
+      "git_blob": "43eee77bde2d42ea7e4401ae5ee1bb53137a0788",
+      "snapshot_sha256": "b0d9341cc231d72333b196748a3500c32f3335b6e24092f8565dce776720aeed"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv",
+      "git_blob": "bc7ed5c7285606e27d1ec3064a00944a7e1e1682",
+      "snapshot_sha256": "2399c31b486a335c58a638269fa24df646b0ab7c46d29b6b5aaa2d7c4d988ca0"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv",
+      "git_blob": "53ad07f0b49686230de4203cc48fd7dc4866691d",
+      "snapshot_sha256": "da2692cdedf40e09b348a01243aa61ae1e5b4b74e08b17e447d8b9d9b3e4fae6"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv",
+      "git_blob": "a7dccc63b03c1aad44a7c807c3259e7b4cb3949d",
+      "snapshot_sha256": "60112bbb94ba37ab32892cf5f25dfca3adafd3fa7bb851cf4f2cdc68ba6b7c23"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv",
+      "git_blob": "c51ee835482f38b4f253dedd5f5664f0f094f8b8",
+      "snapshot_sha256": "e2ed229b88574e71f1e51a70093d675a7ae99b7a612be491d6a08a71e9d1cc27"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv",
+      "git_blob": "3ab329e49307e65e9f79180efa66d49be1c50363",
+      "snapshot_sha256": "dd77fdf15cadd86d842971de8f764dcaabcd80c9458b7aad9c8f1b3f1a7af227"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv",
+      "git_blob": "8e770abfa185e51e261ef4db76881647f46ac43e",
+      "snapshot_sha256": "da8f621e9e5f1a498c8bffb1cfc30d9400a76ce04c1b945587c5dd4b165a1c23"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv",
+      "git_blob": "9f35a44e98039233fb868d31a7e2265f30e70f2c",
+      "snapshot_sha256": "8680aaeb726e7f7de4b465f3100d05b4b71b5cef7699185718f3ffd3f17cd1f4"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv",
+      "git_blob": "9c87ed9692be1b36e24ad42328ed1a6353f67f2a",
+      "snapshot_sha256": "67e301adc9acd9651d6f0344854888fc2fa608007a5e11dde68ac5df32266dd2"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv",
+      "git_blob": "a1b6118083c63c4f9c448af0c75f220bbc598a32",
+      "snapshot_sha256": "81e19fb19a281a2e41136786401395c39ae8886dab0acf1f0e0a3831e31589d5"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv",
+      "git_blob": "0299db6bb499be585cd6c497cd6bb70ee94c6968",
+      "snapshot_sha256": "9c84d4d8c1646c8694387cdaab0575363c07ea6c7c88ebbb37c8f4dbb7a28c5e"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv",
+      "git_blob": "45e8878dd0565abdada4218b0053bd84d88f794e",
+      "snapshot_sha256": "e054eab2cb5d33ad053f8a5d295855e87933bdb5a241b89a48d83400bfa93eb2"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv",
+      "git_blob": "178259f6fdd380a5f27a5bf88e36313c7e14e84d",
+      "snapshot_sha256": "464265b51e72cfc3c4d05eee14795f8ecf132d10bba4074c14b5fe9bfa7f3147"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv",
+      "git_blob": "971f12812d5e37faeddf512317f2ad5c17bc6bba",
+      "snapshot_sha256": "0f4fc3c88b5eccc4265f1f60ac8b77f9086d72581c685c24d8bc74d1795913d2"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv",
+      "git_blob": "98c586c6b5cacbada0fc1b152fee007fb8f3007d",
+      "snapshot_sha256": "5ab6277e38575ee7f1c48d4636ffade38f6f41d32ded22b1bd5e7cc4e974e26f"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv",
+      "git_blob": "9887aef6a131b549238f8e60604921b1d873e942",
+      "snapshot_sha256": "02cead868b0ce3ff9f7d36d2706c6dfd28fd1455798ded446862b660d0303a1a"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv",
+      "git_blob": "4665c917857a016a5de26c9f9bebaa5436022e17",
+      "snapshot_sha256": "64432dca4fe89e05c5361f7423bbc3473ae2799b58ff54df7a87d5c64c732b33"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv",
+      "git_blob": "c4c7b525d2b9e7a2b8595cdf3bb3110c56d29fa3",
+      "snapshot_sha256": "e352c40abe2121e4f8097729a84d343a8b35ea3a20988ca02515a62461c04295"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv",
+      "git_blob": "c2e8d6efac3757ad1f81459627c9f1ef78cbfb53",
+      "snapshot_sha256": "a273c9b1e97a9d72225bba2b8bb2e20451b66f2772e17b49b0624c1a27846d64"
+    },
+    {
+      "snapshot_path": "src/external/lab3-ST/SoC_cv32e40p/soc/rtl/mem/sram_ff.sv",
+      "repository_path": "external/lab3-ST/SoC_cv32e40p/soc/rtl/mem/sram_ff.sv",
+      "git_blob": "e94ec745a07197ee5d931837aa2a1668929edcdb",
+      "snapshot_sha256": "1bd0872748ec505d5eb18cb94c6a5660ae3d5c48990d12cb1c6cbbb111f774d5"
+    },
+    {
+      "snapshot_path": "src/npu/fpga/ego1/cv32e40p_register_file_lutram.sv",
+      "repository_path": "npu/fpga/ego1/cv32e40p_register_file_lutram.sv",
+      "git_blob": "58727dfa57acc511677a5dc10362f096f256e463",
+      "snapshot_sha256": "b2acdca17b1be8104d32a87861b8d88744161a86c8daa05ffa3cdc0defa3f94f"
+    },
+    {
+      "snapshot_path": "src/npu/fpga/ego1/ego1_soc_top.sv",
+      "repository_path": "npu/fpga/ego1/ego1_soc_top.sv",
+      "git_blob": "a885a410b654146014edc9eff205e991bb25ec76",
+      "snapshot_sha256": "988280de3cdcaedf5fe4e8e56d0b37fff593057dc0fd3e7ece63f9a3cea621ea"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/cnn/npu_cnn.sv",
+      "repository_path": "npu/rtl/cnn/npu_cnn.sv",
+      "git_blob": "4e0d8573fc3c4de03e1c2d54abf2a8720aa0dae3",
+      "snapshot_sha256": "5d59bbbf7a0431fba412627b08c598969f2f0fc80124a1ece99d78e83d144f6b"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/cnn/npu_cnn_mac.sv",
+      "repository_path": "npu/rtl/cnn/npu_cnn_mac.sv",
+      "git_blob": "f1f209de374f578073600aa8cfa69f8817e00ad4",
+      "snapshot_sha256": "b1df61b06b659f040efc81532a320df368e9b25adf3d7225fe69d40e66251861"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/cnn/npu_stream.sv",
+      "repository_path": "npu/rtl/cnn/npu_stream.sv",
+      "git_blob": "ce30c23e9e8053a0a1ebd38158eac9895afac246",
+      "snapshot_sha256": "908cbb663623c5c539b18a07e2c9839dea4b652566fc595d281d5f34137bb2c0"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/cnn/npu_stream_control.sv",
+      "repository_path": "npu/rtl/cnn/npu_stream_control.sv",
+      "git_blob": "8243e9829d79b0cc623240fc2a920b0edf330e8d",
+      "snapshot_sha256": "859222aaf5fcabf1593d45b92f55e578e8afa5f1b25249ab5b292ded50107125"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/cnn/npu_stream_engine.sv",
+      "repository_path": "npu/rtl/cnn/npu_stream_engine.sv",
+      "git_blob": "9319ef371c0300243b78291875b820282bd7d4a7",
+      "snapshot_sha256": "9da8f5d94a4dea6657a35af494ab842caa019117c482d2f86a59a0c94b878345"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/cnn/npu_stream_pkg.sv",
+      "repository_path": "npu/rtl/cnn/npu_stream_pkg.sv",
+      "git_blob": "5ba30522aae19b2438a530ed9df7751d0bbfdbbc",
+      "snapshot_sha256": "773da72bb666e39190a61fb811561d2f565b3d2d527f1a5a03cb4c306c9b5f63"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/common/npu_addr_pkg.sv",
+      "repository_path": "npu/rtl/common/npu_addr_pkg.sv",
+      "git_blob": "8c1cee08b52d03398798808c591626b12006f602",
+      "snapshot_sha256": "1569fa7ecda0f49b3e2e4e235a117ccb0e29ad5b5fff7ab40a382e9e64db3209"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/common/npu_clock_gate.sv",
+      "repository_path": "npu/rtl/common/npu_clock_gate.sv",
+      "git_blob": "5e3781f3f21a2fc60fab1cb6a7cd37b98d83e8d8",
+      "snapshot_sha256": "813bf2ec21db06f92adf7bb763fee9ccac89a404613ac8e278294ad672cb3289"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/common/npu_rr_select.sv",
+      "repository_path": "npu/rtl/common/npu_rr_select.sv",
+      "git_blob": "bffd4d8aab776ecf19e2879dd0a997b2fce98c10",
+      "snapshot_sha256": "cc86ac011d238db6793ac9d4c6d21531f726a82db87ac2a5e50530e6b98fa944"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/common/npu_store_pack.sv",
+      "repository_path": "npu/rtl/common/npu_store_pack.sv",
+      "git_blob": "13bda67122aff6cc08bad5bb600de2af96459ad3",
+      "snapshot_sha256": "4ef804ab574409402a4e4b4eb81c8715d6fdc3f55a24f8c7e46e4eb0dabaf8cf"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/control/npu_mmio.sv",
+      "repository_path": "npu/rtl/control/npu_mmio.sv",
+      "git_blob": "9a17b634c79424c82e8675c9267678246d2d6ecd",
+      "snapshot_sha256": "31fc6d9bb51b4b37f1da2babbc157f6944bca8dd7e64f5deedfacdaa7b885cf2"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/debug/npu_debug_boot.sv",
+      "repository_path": "npu/rtl/debug/npu_debug_boot.sv",
+      "git_blob": "598484228764b3642798dd7758d0ce2549fb210b",
+      "snapshot_sha256": "bd19d7faafcfd5a2cfae552574c58e0b0eeeefa42b122ce5431222d47ac15fa1"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/debug/npu_jtag_debug.sv",
+      "repository_path": "npu/rtl/debug/npu_jtag_debug.sv",
+      "git_blob": "8363f6ea12b03200ecb2924cb0fcce224933f222",
+      "snapshot_sha256": "b3314a8dff7f13036b8a064fc62a82a24efce942d1900922a19bc0b4be7cf186"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/interconnect/npu_data_regfile.sv",
+      "repository_path": "npu/rtl/interconnect/npu_data_regfile.sv",
+      "git_blob": "f2c075902ae14f910481bdb0c999073aa5f21b19",
+      "snapshot_sha256": "8d08c8affba68937588ad03abb512161ea9ef2b0f4c96688c0d51020f9c68cdd"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/interconnect/npu_multi_read.sv",
+      "repository_path": "npu/rtl/interconnect/npu_multi_read.sv",
+      "git_blob": "e75a3fc5eec6693b266c899d64021da5c616beca",
+      "snapshot_sha256": "dced3c54f2793b8ce3628fd0d099487959ec83daf1ee4e2b03fe906313046c50"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/interconnect/xbar.sv",
+      "repository_path": "npu/rtl/interconnect/xbar.sv",
+      "git_blob": "d1bc99405c30714ba152a0dcfc83773f504a843d",
+      "snapshot_sha256": "c87178ca75fc20b25d52b179abe26d1dfa7bc3b32a15567396b7fdfdcb447494"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/interconnect/xbar_stream.sv",
+      "repository_path": "npu/rtl/interconnect/xbar_stream.sv",
+      "git_blob": "d25147c21a25b718545dd7dd61df5a96281ba9b0",
+      "snapshot_sha256": "70f906e51bba47aaa256870f29f5f2f60a9e18e5d0b7fde67c3be618641c8376"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/matrix/npu_matmul.sv",
+      "repository_path": "npu/rtl/matrix/npu_matmul.sv",
+      "git_blob": "82b86251cfb4709bee298623626c1593a39b15fa",
+      "snapshot_sha256": "e7b6dd88fd29df2229fdfab95ee6e08fea27dbd403f3f90f23522e4088f70e71"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/matrix/npu_matrix_stream.sv",
+      "repository_path": "npu/rtl/matrix/npu_matrix_stream.sv",
+      "git_blob": "8ce335a0789646cc7e7462701960ece2b4a40779",
+      "snapshot_sha256": "ad966e72bdc062f2771457d29bae856158a89decb086105b980b51c6f230f1d1"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/quant/npu_shared_quant.sv",
+      "repository_path": "npu/rtl/quant/npu_shared_quant.sv",
+      "git_blob": "c20c6d23defbf980f2b92fd15bdf602c91d3d275",
+      "snapshot_sha256": "5501e0b14f8d5efe53d43b4f0b97756084eb3d0a21f6f1a5efb3663aa01f624a"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/top/npu_core.sv",
+      "repository_path": "npu/rtl/top/npu_core.sv",
+      "git_blob": "67ce8b175fa8446a3838fec4e259afbb9d5758a9",
+      "snapshot_sha256": "1c74425132da41c5a0ee7017a9f52a6a848198b3e5bcbcb107529a97ecaa0828"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/top/npu_soc.sv",
+      "repository_path": "npu/rtl/top/npu_soc.sv",
+      "git_blob": "beb208aa4cd5b61ea1b91a348f404345fac97aa9",
+      "snapshot_sha256": "c413002f95faa7bddd8162bde9f0562454cf18cb092e8afb9f789e67b960658d"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/vector/npu_vector.sv",
+      "repository_path": "npu/rtl/vector/npu_vector.sv",
+      "git_blob": "630715ea22c2e1a7547597a3f3d14bea5e26c52a",
+      "snapshot_sha256": "107a4c1c8bf1acd5bfea43653cffbafa1bd194ec456debe662fdd63989d56735"
+    },
+    {
+      "snapshot_path": "src/npu/rtl/vector/npu_vector_stream.sv",
+      "repository_path": "npu/rtl/vector/npu_vector_stream.sv",
+      "git_blob": "c3e3a496507298e9c9231546f30d8363001689c4",
+      "snapshot_sha256": "2d456902f186de61fb68635cdb76a5dea6433e93f088c4d382cc40a21055c34f"
+    }
+  ]
+}

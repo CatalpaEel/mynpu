@@ -2,15 +2,25 @@
 # openocd -f npu/fpga/ego1/ft232h.cfg -f npu/debug/target.cfg \
 #         -f npu/fpga/ego1/load_mnist.tcl
 init
-# Stop a previous run and return the CPU to its bootstrap, then halt it.
-mww 0x40000008 0
+# Clear the whole non-debug system, including active tasks and stale success.
+# CPU_CONTROL=0 alone only resets the hart and cannot recover a stalled NPU.
+poll off
+riscv dmi_write 0x10 1
+riscv dmi_write 0x10 3
+sleep 10
+riscv dmi_write 0x10 0x80000001
+sleep 10
 halt
+riscv set_mem_access sysbus
+if {[lindex [read_memory 0x40000004 32 1] 0] != 0} {error "Reset did not clear old result"}
 # Contiguous 16 KiB image: xbar maps it onto the two 8 KiB SRAM banks.
 load_image npu/mnist/artifacts/sram0.bin 0x80000000 bin
 verify_image npu/mnist/artifacts/sram0.bin 0x80000000 bin
+mww 0x40000004 0
 mww 0x4000000c 0x80000080
 mww 0x40000008 1
 resume
+poll on
 set result 0
 for {set i 0} {$i < 200} {incr i} {
   set result [lindex [read_memory 0x40000004 32 1] 0]

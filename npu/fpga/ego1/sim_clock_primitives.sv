@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 // Functional stand-ins for VCS only. Never include in Vivado sources.
-// They validate the wrapper's /2 clock/reset sequence, not MMCM analog behavior.
+// Validate the selected digital clock/reset sequence, not MMCM analog behavior.
 module BUFG(input wire I, output wire O);
   assign O = I;
 endmodule
@@ -10,14 +10,17 @@ module MMCME2_BASE #(
   REF_JITTER1=0.010
 )(input wire CLKIN1, CLKFBIN, RST, PWRDWN,
   output wire CLKFBOUT, output logic CLKOUT0=0, LOCKED=0);
-  int lock_count=0;
+  int lock_count=0, divide_count=0;
+  localparam int HALF_DIVIDE = int'(CLKOUT0_DIVIDE_F / 20.0);
   assign CLKFBOUT=CLKIN1;
   initial if (CLKFBOUT_MULT_F != 10.0 || DIVCLK_DIVIDE != 1 ||
-              CLKOUT0_DIVIDE_F != 20.0) $fatal(1, "Unsupported MMCM model ratio");
+              !(CLKOUT0_DIVIDE_F == 20.0 || CLKOUT0_DIVIDE_F == 40.0 ||
+                CLKOUT0_DIVIDE_F == 100.0)) $fatal(1, "Unsupported MMCM model ratio");
   always @(posedge CLKIN1 or posedge RST or posedge PWRDWN) begin
-    if (RST || PWRDWN) begin CLKOUT0<=0; LOCKED<=0; lock_count<=0; end
+    if (RST || PWRDWN) begin CLKOUT0<=0; LOCKED<=0; lock_count<=0;divide_count<=0;end
     else begin
-      CLKOUT0<=~CLKOUT0;
+      if(divide_count == HALF_DIVIDE-1)begin CLKOUT0<=~CLKOUT0;divide_count<=0;end
+      else divide_count<=divide_count+1;
       if (lock_count<16) lock_count<=lock_count+1;
       else LOCKED<=1;
     end

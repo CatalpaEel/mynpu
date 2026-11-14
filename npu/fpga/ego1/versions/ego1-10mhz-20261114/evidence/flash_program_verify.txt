@@ -1,0 +1,84 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Sat Nov 14 02:21:12 2026
+# Process ID: 18200
+# Current directory: C:/Users/zhujunan/Desktop/tapeout
+# Command line: vivado.exe -mode batch -source C:/Users/zhujunan/Desktop/tapeout/program_flash5.tcl
+# Log file: C:/Users/zhujunan/Desktop/tapeout/vivado.log
+# Journal file: C:/Users/zhujunan/Desktop/tapeout\vivado.jou
+# Running On: LAPTOP-L4U4N8ER, OS: Windows, CPU Frequency: 3302 MHz, CPU Physical cores: 8, Host memory: 33804 MB
+#-----------------------------------------------------------
+source C:/Users/zhujunan/Desktop/tapeout/program_flash5.tcl
+# set bit [file normalize "C:/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/ego1_mynpu.bit"]
+# set mcs [file normalize "C:/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/ego1_mynpu.mcs"]
+# open_hw_manager
+open_hw_manager: Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 464.812 ; gain = 185.746
+# connect_hw_server
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-2222] Launching hw_server...
+INFO: [Labtools 27-2221] Launch Output:
+ECHO 处于关闭状态。
+ECHO 处于关闭状态。
+
+****** Xilinx hw_server v2023.2
+  **** Build date : Oct 13 2023 at 21:31:40
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:0
+INFO: [Labtools 27-3417] Launching cs_server...
+INFO: [Labtools 27-2221] Launch Output:
+ECHO 处于关闭状态。
+ECHO 处于关闭状态。
+
+
+******** Xilinx cs_server v2023.2.0
+  ****** Build date   : Oct 09 2023-21:01:56
+    **** Build number : 2023.2.1696910516
+      ** Copyright 2017-2022 Xilinx, Inc. All Rights Reserved.
+      ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+
+
+connect_hw_server: Time (s): cpu = 00:00:01 ; elapsed = 00:00:05 . Memory (MB): peak = 467.777 ; gain = 2.965
+# set targets [get_hw_targets]
+# if {[llength $targets] != 1} {error "Expected one onboard configuration target"}
+# open_hw_target [lindex $targets 0]
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Xilinx/1234-tulA
+# set d [lindex [get_hw_devices -filter {PART =~ xc7a35t*}] 0]
+# if {$d eq ""} {error "XC7A35T not found"}
+# current_hw_device $d
+# refresh_hw_device $d
+INFO: [Labtools 27-1434] Device xc7a35t (JTAG device index = 0) is programmed with a design that has no supported debug core(s) in it.
+# set part [lindex [get_cfgmem_parts n25q64-3.3v-spi-x1_x2_x4] 0]
+# set cfg [create_hw_cfgmem -hw_device $d -mem_dev $part]
+# set_property PROGRAM.FILES [list $mcs] $cfg
+# set_property PROGRAM.ADDRESS_RANGE {use_file} $cfg
+# set_property PROGRAM.ERASE 1 $cfg
+# set_property PROGRAM.BLANK_CHECK 1 $cfg
+# set_property PROGRAM.CFG_PROGRAM 1 $cfg
+# set_property PROGRAM.VERIFY 1 $cfg
+# set_property PROGRAM.UNUSED_PIN_TERMINATION {pull-none} $cfg
+# set_property PROBES.FILE {} $d
+# create_hw_bitstream -hw_device $d [get_property PROGRAM.HW_CFGMEM_BITFILE $d]
+# program_hw_devices $d
+INFO: [Labtools 27-3164] End of startup status: HIGH
+# puts "Programming and verifying configuration memory..."
+Programming and verifying configuration memory...
+# program_hw_cfgmem -hw_cfgmem $cfg
+Mfg ID : 20   Memory Type : ba   Memory Capacity : 17   Device ID 1 : 0   Device ID 2 : 0
+Performing Erase Operation...
+Erase Operation successful.
+Performing Blank Check Operation...
+Blank Check Operation successful. The part is blank.
+Performing Program and Verify Operations...
+Program/Verify Operation successful.
+INFO: [Labtoolstcl 44-377] Flash programming completed successfully
+program_hw_cfgmem: Time (s): cpu = 00:00:00 ; elapsed = 00:01:13 . Memory (MB): peak = 518.664 ; gain = 5.438
+# puts "FLASH_PROGRAM_VERIFY_PASS: 10MHz current board kit"
+FLASH_PROGRAM_VERIFY_PASS: 10MHz current board kit
+# close_hw_manager
+INFO: [Common 17-206] Exiting Vivado at Sat Nov 14 02:22:39 2026...

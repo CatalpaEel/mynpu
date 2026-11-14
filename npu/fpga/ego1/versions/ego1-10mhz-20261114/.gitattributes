@@ -1,0 +1,4 @@
+* -text -whitespace
+*.bit binary
+*.bin binary
+*.mcs binary
