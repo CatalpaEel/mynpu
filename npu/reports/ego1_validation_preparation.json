@@ -3,7 +3,7 @@
   "branch": "fpga/ego1-asic-validation",
   "base_commit": "afb74fd005ec76ae3afc761fa40a48a5d30aa656",
   "primary_target": "complete 0.18um ASIC SoC; FPGA is a functional prototype",
-  "status": "functional_validated; 10/25MHz medium-area builds exceed LUT capacity; 25MHz high-area retry running",
+  "status": "FPGA board kit ready at 10 MHz with FPGA-only CPU RF LUTRAM mapping and CNN DSP mapping; physical board test pending",
   "physical_board_tested": false,
   "production_core_and_artifacts_unchanged": true,
   "fpga_wrapper_changes": "parameterized actual MMCM output: 10/25/50 MHz; builder default 25 MHz",
@@ -61,6 +61,32 @@
       "clock_hz": 10000000,
       "evidence": "npu/build/validation-evidence-20261113/fpga-10m.json",
       "evidence_sha256": "e92584e99f99a0b1b799f38accbd129912f38ae2afb56bb0e5d9307a7c29f2bc"
+    },
+    {
+      "memory": "fpga",
+      "cpu_rf_implementation": "lutram_lvt",
+      "passed": true,
+      "frames_checked": 200,
+      "boots": 2,
+      "checks": 11006,
+      "changed_during_run": [],
+      "clock_hz": 25000000,
+      "scope": "JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",
+      "evidence": "npu/build/validation-evidence-20261113/fpga-cpurf-200.json",
+      "evidence_sha256": "2b63f95eff7d601a22ba51da1a0ac4e78d990a5bd7a0f7ef254e73c62e5ca9ec"
+    },
+    {
+      "memory": "fpga",
+      "cpu_rf_implementation": "lutram_lvt",
+      "passed": true,
+      "frames_checked": 200,
+      "boots": 2,
+      "checks": 11006,
+      "changed_during_run": [],
+      "clock_hz": 10000000,
+      "scope": "JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",
+      "evidence": "npu/build/validation-evidence-20261113/fpga-cpurf-10m-200.json",
+      "evidence_sha256": "ecb1ec39474dfb4ed4d80e9d7ce9fdb9666cd4b1f89a64262160f538c2ea0d7f"
     }
   ],
   "macro_model_sha256": "52fd590082b4f63573856baf44d8e59b5ab21db56b9c11aeaf4d45376b32d54d",
@@ -100,12 +126,32 @@
     }
   ],
   "current_fpga_build": {
-    "run": "npu/build/ego1-high8-25m-20261113",
-    "clock_hz": 25000000,
+    "run": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114",
+    "clock_hz": 10000000,
     "threads_ceiling": 8,
-    "strategy": "Flow_AreaOptimized_high",
-    "status": "running",
-    "bitstream_generated": false
+    "strategy": "Flow_AreaOptimized_medium + Area_Explore",
+    "cpu_rf_implementation": "lutram_lvt",
+    "cnn_dsp_requested": true,
+    "preplacement_lut_estimate_check_deferred": true,
+    "synthesis_passed": true,
+    "implementation_passed": true,
+    "bitstream_generated": true,
+    "default_resource_drc_restored": true,
+    "default_drc_errors": 0,
+    "fully_routed_nets": 35160,
+    "placed_luts": 19799,
+    "placed_logic_luts": 19673,
+    "placed_lutram": 126,
+    "placed_ffs": 14185,
+    "ramb36": 4,
+    "dsps": 56,
+    "setup_slack_ns": 48.244,
+    "hold_slack_ns": 0.019,
+    "timing_scope": "routed Vivado timing report at 10MHz, setup and hold non-negative",
+    "bit_sha256": "9bd3b176981fc5c153d47acc02f1509c66dcc5fa9132b0a6e14ba6ac5a37082a",
+    "mcs_sha256": "86886fa4c2c64d355b3e6157800fd831d9d7b8027f01af4a36ba41f7a97491fd",
+    "pass_marker_sha256": "6dc607a2ecb64449b1d041e04160df68917348f8a8330acad717d788c198bd04",
+    "package": "npu/build/ego1-board-kit-10m-cpurf-dsp-20261114"
   },
   "testbench_fix": {
     "reason": "final-frame DONE/status read race exposed at 25MHz",
@@ -218,9 +264,40 @@
       "blocker": "UTLZ-1 LUT capacity",
       "run": "npu/build/ego1-impl-explore-25m-20261113/ExploreSequentialArea",
       "result_sha256": "1b2a8705ca7c44ba21f0c9c89d14d10de90ec5a0a35f79508162bfb441daf3f4"
+    },
+    {
+      "synthesis_input": "npu/build/ego1-medium8-25m-20261113",
+      "directive": "ResynthRemap",
+      "post_opt_slice_luts": 22789,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "run": "npu/build/ego1-impl-resynth-25m-20261114/ResynthRemap"
+    },
+    {
+      "synthesis_input": "npu/build/ego1-medium8-25m-20261113",
+      "directive": "AreaThenResynthRemap",
+      "post_opt_slice_luts": 22430,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "run": "npu/build/ego1-impl-resynth-25m-20261114/AreaThenResynthRemap"
     }
   ],
-  "additional_running_builds": [],
+  "additional_running_builds": [
+    {
+      "run": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114",
+      "clock_hz": 10000000,
+      "threads_ceiling": 8,
+      "strategy": "Flow_AreaOptimized_medium",
+      "cpu_rf_implementation": "lutram_lvt",
+      "cnn_dsp_requested": true,
+      "preplacement_lut_estimate_check_deferred": true,
+      "postplacement_and_final_default_drc_mandatory": true,
+      "status": "running",
+      "bitstream_generated": false
+    }
+  ],
   "rf_mapping_probe": {
     "scope": "RF-only out-of-context synthesis, not full SoC resources or physical board results",
     "part": "xc7a35tcsg324-1",
@@ -262,5 +339,83 @@
       "npu/build/ego1-rf-attribute-probe-20261113",
       "npu/build/ego1-rf-bank-probe-20261113"
     ]
+  },
+  "last_updated_date": "2026-11-14",
+  "current_best_post_opt_luts": 22430,
+  "fpga_only_cpu_rf_override": {
+    "optional_flag": "--cpu-rf-lutram",
+    "implementation": "two single-write distributed-RAM banks with live-value/valid bits",
+    "supported_configuration": "current ADDR_WIDTH=6 FPU=0 integer register file; unsupported configurations reject elaboration",
+    "asic_cpu_register_rtl_unchanged": true,
+    "cpu_rf_source": "npu/fpga/ego1/cv32e40p_register_file_lutram.sv",
+    "standalone_synthesis": {
+      "scope": "out-of-context CPU RF only, not whole SoC",
+      "baseline_luts": 1425,
+      "baseline_ffs": 992,
+      "candidate_luts": 356,
+      "candidate_lutram_luts": 144,
+      "candidate_ffs": 62
+    },
+    "rtl_reference_comparison": {
+      "passed": true,
+      "checks": 40000,
+      "cycles": 20000,
+      "evidence": "npu/build/validation-evidence-20261113/cpu-rf-equivalence.json",
+      "sha256": "0dc1d02d863bf88767f7c01c7ea883d465b69a3a7807d42b5bda4c744ed58d92"
+    },
+    "first_isolated_prototype_failure": "continuous-assignment function did not refresh read outputs after global array updates in VCS; changed to always_comb before integration; failed logs preserved on clab",
+    "full_soc_validation": "PASS: 200 frames, 2 boots, 11006 checks at 25MHz with JTAG-only CPU-in-loop; no source changes during run",
+    "full_soc_build": "npu/build/ego1-cpurf-medium8-25m-20261114",
+    "bitstream_generated": true,
+    "full_soc_synthesis": {
+      "luts": 22216,
+      "ffs": 14217,
+      "ramb36": 4,
+      "dsps": 34,
+      "post_opt_luts": 21775,
+      "placement_blocked_by_default_precheck": true,
+      "diagnostic_post_place_luts": 20907,
+      "default_resource_drc_still_fails": true
+    },
+    "final_board_variant": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114"
+  },
+  "placement_probes": [
+    {
+      "run": "npu/build/ego1-placement-probe-20261114",
+      "cpu_rf_implementation": "flipflop",
+      "pre_placement_luts": 22431,
+      "post_placement_luts": 21611,
+      "default_drc_restored": true,
+      "default_resource_drc_errors": 2,
+      "scope": "diagnostic placement only; not routed or board-ready"
+    },
+    {
+      "run": "npu/build/ego1-cpurf-placement-probe-20261114",
+      "cpu_rf_implementation": "lutram_lvt",
+      "pre_placement_luts": 21775,
+      "post_placement_luts": 20907,
+      "default_drc_restored": true,
+      "default_resource_drc_errors": 1,
+      "scope": "diagnostic placement only; not routed or board-ready"
+    }
+  ],
+  "recovery": {
+    "high_area": "process exited without complete marker or final report; checkpoint unavailable",
+    "cpu_rf_dsp": {
+      "saved_synthesis_checkpoint": true,
+      "implementation_passed": true,
+      "resume_script": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114/resume_implementation.tcl",
+      "default_drc_errors": 0,
+      "bitstream_generated": true
+    },
+    "run": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114",
+    "resume_script": "resume_implementation.tcl"
+  },
+  "high_area_run": {
+    "run": "npu/build/ego1-high8-25m-20261113",
+    "clock_hz": 25000000,
+    "status": "ended without synthesis completion or final utilization report",
+    "bitstream_generated": false,
+    "decision": "not used for board kit because no completed result"
   }
 }

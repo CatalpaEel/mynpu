@@ -18,6 +18,14 @@ set_property include_dirs [list [file join $run_dir include]] [get_filesets sour
 set_property verilog_define [concat NPU_FPGA_TEST $npu_defines] [get_filesets sources_1]
 add_files -norecurse $npu_sources
 add_files -fileset constrs_1 [file join $run_dir ego1.xdc]
+if {[info exists npu_cnn_dsp] && $npu_cnn_dsp} {
+  add_files -fileset constrs_1 [file join $run_dir cnn_dsp.xdc]
+  set_property USED_IN_IMPLEMENTATION false [get_files *cnn_dsp.xdc]
+}
+if {[info exists npu_place_before_capacity_check] && $npu_place_before_capacity_check} {
+  set_property STEPS.PLACE_DESIGN.TCL.PRE [file join $run_dir pre_place.tcl] [get_runs impl_1]
+  set_property STEPS.PLACE_DESIGN.TCL.POST [file join $run_dir post_place.tcl] [get_runs impl_1]
+}
 set_property top ego1_soc_top [get_filesets sources_1]
 if {![info exists npu_system_mhz]} {set npu_system_mhz 50}
 set_property generic [list SYSTEM_MHZ=$npu_system_mhz] [get_filesets sources_1]
@@ -36,6 +44,7 @@ launch_runs impl_1 -to_step route_design -jobs 4
 wait_on_run impl_1
 if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} {error "Implementation failed"}
 open_run impl_1
+set_param drc.disableLUTOverUtilError 0
 write_checkpoint -force [file join $run_dir ego1_routed.dcp]
 report_utilization -hierarchical -file [file join $run_dir reports utilization_routed.rpt]
 report_timing_summary -delay_type min_max -report_unconstrained -file [file join $run_dir reports timing_routed.rpt]
@@ -62,5 +71,6 @@ set f [open [file join $run_dir implementation_pass.txt] w]
 puts $f "Vivado [version -short]; xc7a35tcsg324-1; $npu_system_mhz MHz"
 puts $f "setup_slack_ns=[get_property SLACK $setup]"
 puts $f "hold_slack_ns=[get_property SLACK $hold]"
+puts $f "default_resource_drc_restored=1"
 close $f
 close_project

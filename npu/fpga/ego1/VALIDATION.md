@@ -1,11 +1,12 @@
 # EGo1 验证分支与操作说明
 
 分支：`fpga/ego1-asic-validation`，基线：`afb74fd`。
-最终目标是 0.18µm ASIC。FPGA 验证使用同一 CPU、NPU、任务队列、RF、量化和调试 RTL，
-以 BRAM 推断模型替代 ASIC 的两块单口 SRAM，并沿用现有 FPGA 时钟门控旁路与 MMCM。
+最终目标是 0.18µm ASIC。FPGA默认使用同一CPU、NPU、任务队列、RF、量化和调试RTL。
+另有可选的FPGA CPU寄存器堆映射，属于CPU内部的等价实现尝试，见下文；ASIC仍用原寄存器堆。
+FPGA以 BRAM 推断模型替代 ASIC 的两块单口 SRAM，并沿用现有 FPGA 时钟门控旁路与 MMCM。
 默认容量和队列保持主分支配置，FPGA 功能结果不证明 ASIC 时钟树或电气特性。
 
-## 当前上板阻塞
+## 默认实现与当前板测版本
 
 2026-11-13，本机 Vivado 2023.2 的默认50MHz构建优化后需要25,077个Slice LUT，
 25MHz中等面积策略优化后仍需22,431个，XC7A35T只有20,800个，超出1,631个（约7.8%）。
@@ -17,8 +18,8 @@
 都在布局前因超容量失败；面积策略并不保证逐级改善。
 10MHz中等强度对照也完成：综合仍为22,867 LUT，优化后仍为22,431 LUT，
 预布线setup WNS改善到+66.199ns，但同样在布局前因超容量失败。
-所以本版降到10MHz没有节省LUT。正在等待25MHz高强度结果，尚无可下载的`.bit/.mcs`。
-不要使用之前架构的镜像代替。
+所以原始RTL降到10MHz没有节省LUT。25MHz高强度实验没有留下完成报告。
+当前可下载版本采用FPGA专用CPU寄存器堆和CNN DSP映射，系统时钟为10MHz，镜像在下文给出。
 
 `build.py --area` 只尝试 Vivado 面积映射策略，不改变芯片 RTL。
 若依然放不下，需要评审等价 RTL 优化或更大 FPGA；不能为了上板静默删减 ASIC 功能。
@@ -46,6 +47,37 @@ RF单模块、同样256B/G9/M7/25MHz/中等面积策略的综合结果如下，�
 这不是综合网表等价性验证，也没有改动ASIC或共用RTL。
 可使用`probe_rf_mapping.tcl`复现，参数为新输出目录及可选样式列表
 `baseline distributed rtl_attribute bank_template`。后两者只修改隔离源码副本。
+
+## 可选FPGA CPU寄存器堆映射
+
+`build.py`和`simulate_validation.py --memory fpga`均接受`--cpu-rf-lutram`。
+这会用`cv32e40p_register_file_lutram.sv`替换FPGA编译清单中的原CPU寄存器堆，
+ASIC编译清单与`external/`源码不变。构建快照同时保留未编译的ASIC参考文件，
+`compiled_sources`和`cpu_rf_implementation`明确记录实际选择，不能混称为相同RTL。
+仅支持当前整数CPU的ADDR_WIDTH=6/FPU=0配置，其他配置在elaboration阶段拒绝。
+
+原型由两个单写LUTRAM bank、最新写入选择位和有效位组成，保留B写端口优先、
+x0为零、三路组合读及异步复位后读零。单模块中LUT从1425降到356、FF从992降到62；
+通过与原实现对照的20000随机周期、40000次检查。这不是综合网表等价证明。
+完整FPGA SoC的JTAG-only CPU-in-loop复测已通过200帧、两次启动、11006项检查。
+相应Vivado资源构建已经通过并生成板测包，实体板配置和JTAG测试仍待执行。
+
+可复现CPU寄存器堆对照测试（VCS主机）：
+
+```bash
+python3.11 npu/fpga/ego1/simulate_cpu_rf.py --out npu/build/cpu-rf-equivalence
+```
+
+## 已生成的 EGo1 板测包
+
+CPU寄存器堆使用FPGA专用LUTRAM实现，CNN算术映射到DSP，系统时钟为10MHz。
+Vivado 2023.2对`xc7a35tcsg324-1`已完成布局布线，默认资源DRC为0个Error，所有35160条网络完成布线。
+最终资源为19799个Slice LUT、14185个寄存器、4个RAMB36和56个DSP。
+setup slack为48.244ns，hold slack为0.019ns。
+
+板测包位于`npu/build/ego1-board-kit-10m-cpurf-dsp-20261114`，其中包含`ego1_mynpu.bit`、`ego1_mynpu.mcs`、`README.txt`、固件资产和OpenOCD/JTAG脚本。上板时使用这个包。
+
+实体板配置和FT232H JTAG测试还未执行。写入Flash或下载bitstream后，先启动OpenOCD，再按包内README执行smoke、reload和continuous测试。
 
 ## 变更范围
 

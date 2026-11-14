@@ -25,17 +25,23 @@ def main():
     p.add_argument("--boots", type=int, default=2)
     p.add_argument("--seed", type=int, default=20261113)
     p.add_argument("--clock-mhz", type=int, choices=(10,25,50), default=50)
+    p.add_argument("--cpu-rf-lutram", action="store_true")
     p.add_argument("--out", type=Path, required=True)
     a = p.parse_args()
     if a.frames<2 or a.boots<1:
         p.error("frames >= 2 and boots >= 1 required")
     if a.memory=="asic" and (not a.macro_model or not a.macro_model.is_file()):
         p.error("ASIC requires a private --macro-model; it is never committed")
+    if a.memory=="asic" and a.cpu_rf_lutram:
+        p.error("CPU LUTRAM mapping is FPGA-only; ASIC must use the original RF")
     validate_assets(a.assets)
     out = a.out.resolve()
     out.mkdir(parents=True, exist_ok=False)
     subprocess.run([sys.executable,str(NPU / "scripts/gen_sources.py")],check=True)
     files = [Path(line) for line in (NPU / "build/sources.f").read_text().splitlines()]
+    if a.cpu_rf_lutram:
+        files=[f for f in files if f.name != "cv32e40p_register_file_ff.sv"]
+        files.append(HERE / "cv32e40p_register_file_lutram.sv")
     if a.memory=="asic":
         wrapper=out / "npu_soc_macro.sv"
         wrapper.write_text(macro_wrapper((NPU / "rtl/top/npu_soc.sv").read_text()))
@@ -62,6 +68,7 @@ def main():
          "+incdir+"+str(NPU.parent / "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include"),
          *defines,*map(str,files),"-o",str(out / "simv")]
     result={"passed":False,"memory":a.memory,"frames_per_boot":a.frames,"boots":a.boots,
+            "cpu_rf_implementation":"lutram_lvt" if a.cpu_rf_lutram else "flipflop",
             "clock_hz":a.clock_mhz*1000000,
             "seed":a.seed,"source_sha256":before,
             "scope":"JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",

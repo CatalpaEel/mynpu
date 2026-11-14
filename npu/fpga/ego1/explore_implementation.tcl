@@ -1,7 +1,14 @@
 # Reuse a frozen synthesis checkpoint to compare implementation area directives.
 # No RTL edits, frequency changes, resource-DRC overrides, or device changes.
-# vivado -mode batch -source explore_implementation.tcl -tclargs SYNTH_BUILD NEW_OUT
-if {$argc != 2} {error "Expected SYNTH_BUILD NEW_OUT"}
+# vivado -mode batch -source explore_implementation.tcl -tclargs SYNTH_BUILD NEW_OUT [DIRECTIVE_LIST]
+if {$argc < 2 || $argc > 3} {error "Expected SYNTH_BUILD NEW_OUT and optional DIRECTIVE_LIST"}
+set directives {ExploreWithRemap ExploreSequentialArea}
+if {$argc == 3} {set directives [lindex $argv 2]}
+foreach d $directives {
+  if {$d ni {ExploreWithRemap ExploreSequentialArea ResynthRemap AreaThenResynthRemap}} {
+    error "Unknown directive $d"
+  }
+}
 set synth_build [file normalize [lindex $argv 0]]
 set out [file normalize [lindex $argv 1]]
 set checkpoint [file join $synth_build project ego1_mynpu.runs synth_1 ego1_soc_top.dcp]
@@ -12,7 +19,7 @@ file copy $checkpoint [file join $out input_synth.dcp]
 file copy [file join $synth_build source_manifest.json] [file join $out source_manifest.json]
 set_param general.maxThreads 8
 set any_pass 0
-foreach directive {ExploreWithRemap ExploreSequentialArea} {
+foreach directive $directives {
   set variant [file join $out $directive]
   file mkdir $variant
   set stage open_checkpoint
@@ -22,7 +29,15 @@ foreach directive {ExploreWithRemap ExploreSequentialArea} {
       error "Unexpected FPGA part"
     }
     set stage opt_design
-    opt_design -directive $directive
+    if {$directive eq "ResynthRemap"} {
+      opt_design
+      opt_design -resynth_remap
+    } elseif {$directive eq "AreaThenResynthRemap"} {
+      opt_design -directive ExploreArea
+      opt_design -resynth_remap
+    } else {
+      opt_design -directive $directive
+    }
     report_utilization -file [file join $variant utilization_opt.rpt]
     report_utilization -hierarchical -file [file join $variant utilization_opt_hierarchy.rpt]
     report_timing_summary -file [file join $variant timing_opt.rpt]

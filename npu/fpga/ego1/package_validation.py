@@ -44,6 +44,7 @@ def package(build, assets, out):
     shutil.copy2(HERE.parents[1]/'debug/target.cfg',out/'npu/debug/target.cfg')
     (out/'README.txt').write_text(
         f'EGo1 / xc7a35tcsg324-1 / {snapshot["clock_hz"]}Hz / ASIC architecture validation\n'
+        f'FPGA CPU RF implementation: {snapshot.get("cpu_rf_implementation", "flipflop")}\n'
         '1. Program ego1_mynpu.bit via the board configuration USB (Vivado Hardware Manager).\n'
         '2. Connect the external FT232H J5 chain and attach it to WSL.\n'
         '3. In WSL, cd to this kit and run: bash npu/fpga/ego1/start_openocd.sh\n'
@@ -55,6 +56,7 @@ def package(build, assets, out):
         'A kit is not proof of physical-board testing; inspect result.json after execution.\n')
     (out/'kit_manifest.json').write_text(json.dumps({
         'part':manifest['part'],'physical_board_tested':False,
+        'cpu_rf_implementation':snapshot.get('cpu_rf_implementation','flipflop'),
         'sha256':{p.relative_to(out).as_posix():digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
     },indent=2)+'\n')
     print(f'BOARD KIT PREPARED: {out}')

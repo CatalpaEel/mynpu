@@ -1,9 +1,9 @@
 # EGo1 板级 Vivado 工程
 
 本地上板验证分支 `fpga/ego1-asic-validation` 的新增连续推理、重载和 ASIC/FPGA 双后端测试见
-[上板验证操作说明](VALIDATION.md)。本机Vivado 2023.2已实际执行完整SoC构建：默认50MHz优化后25,077 LUT，
-中等面积策略在25MHz和10MHz下均为22,431 LUT，超出XC7A35T的20,800 LUT，布局失败。
-尚无本版可下载镜像；25MHz高强度面积策略仍在运行。
+[上板验证操作说明](VALIDATION.md)。本机Vivado 2023.2已实际执行完整SoC构建。原始RTL默认50MHz优化后25,077 LUT，
+中等面积策略在25MHz和10MHz下均为22,431 LUT，超出XC7A35T的20,800 LUT。
+10MHz FPGA专用CPU寄存器堆和CNN DSP映射已经生成可下载镜像，板测包见VALIDATION.md。
 本分支构建默认25MHz，通过实际MMCM分频实现，可选择10/25/50MHz；芯片共用RTL保持原样。
 
 沿用此前 EGo1 V2.2，器件 **XC7A35T-CSG324-1**，100MHz输入经MMCM生成系统时钟，构建默认25MHz，可选10/25/50MHz。
@@ -18,7 +18,7 @@ MMCM/BUFG 在 VCS 中使用功能替身，不代表真实 FPGA 时序或硬件�
 
 ASIC SRAM和FPGA BRAM两后端已各通过200帧、两次启动的JTAG CPU-in-loop仿真，
 每帧核对全部十个整数输出。FPGA 25MHz和10MHz也分别通过20帧仿真。
-当前未完成实体上板、布局布线或时序收敛；资源结果和失败证据见`npu/reports/ego1_validation_preparation.json`。
+10MHz版本已完成布局布线、默认DRC和时序检查，实体上板仍待执行。资源结果和失败证据见`npu/reports/ego1_validation_preparation.json`。
 
 ## 构建到上板前
 
