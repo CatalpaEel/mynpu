@@ -1,12 +1,12 @@
 # EGo1 板级 Vivado 工程
 
 本地上板验证分支 `fpga/ego1-asic-validation` 的新增连续推理、重载和 ASIC/FPGA 双后端测试见
-[上板验证操作说明](VALIDATION.md)。本机 Vivado 2023.2 已实际执行默认配置：综合通过，
-布局因约 25,077 LUT 超出 XC7A35T 的 20,800 LUT 容量而失败，尚无本版可下载镜像。
-本节以下的“服务器未找到 Vivado”是原主分支的准备记录，不代表本分支本机执行状态。
+[上板验证操作说明](VALIDATION.md)。本机Vivado 2023.2已实际执行完整SoC构建：默认50MHz优化后25,077 LUT，
+中等面积策略在25MHz和10MHz下均为22,431 LUT，超出XC7A35T的20,800 LUT，布局失败。
+尚无本版可下载镜像；25MHz高强度面积策略仍在运行。
 本分支构建默认25MHz，通过实际MMCM分频实现，可选择10/25/50MHz；芯片共用RTL保持原样。
 
-沿用此前 EGo1 V2.2，器件 **XC7A35T-CSG324-1**，100 MHz 输入经 MMCM 生成 50 MHz。
+沿用此前 EGo1 V2.2，器件 **XC7A35T-CSG324-1**，100MHz输入经MMCM生成系统时钟，构建默认25MHz，可选10/25/50MHz。
 本目录接入当前独立 Matrix/CNN/Vector、256 B RF、4/4/4 任务队列和两块 8 KiB SRAM。
 没有恢复旧版 torus、NoC 或外部 DMA。SRAM 为同步读、字节写使能的可推断 BRAM，是否实际映射为 RAMB 以综合报告为准。
 
@@ -16,14 +16,14 @@
 板级功能仿真使用真实 CPU/DTM/DM，通过引脚装载完整 MNIST 镜像并比较十个整数输出；额外检查复位、时钟和 LED。
 MMCM/BUFG 在 VCS 中使用功能替身，不代表真实 FPGA 时序或硬件测试。
 
-**本服务器未找到 Vivado**，旧 `/home/zzh/vivado/config/env_2025.2.sh` 也不存在。
-因此当前没有本版 Vivado 综合/实现结果、资源占用、时序闭合证据或 `.bit/.mcs`。
-不能把已有 ASIC 结果或以前板卡结果当作本版 FPGA 成功。
+ASIC SRAM和FPGA BRAM两后端已各通过200帧、两次启动的JTAG CPU-in-loop仿真，
+每帧核对全部十个整数输出。FPGA 25MHz和10MHz也分别通过20帧仿真。
+当前未完成实体上板、布局布线或时序收敛；资源结果和失败证据见`npu/reports/ego1_validation_preparation.json`。
 
 ## 构建到上板前
 
 从仓库根目录执行，建议使用此前板卡使用过的 Vivado 2023.2；2025.2 也可尝试，但应记录实际工具版本。
-无需旧 `xc7a35t.xpr`、板卡数据库或绝对路径工程。尚未用 Vivado 验证这两版兼容性。
+无需旧 `xc7a35t.xpr`、板卡数据库或绝对路径工程。本分支已用2023.2实际执行；2025.2尚未验证。
 
 ```sh
 # 已将 Vivado 加入 PATH 时

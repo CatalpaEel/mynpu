@@ -3,7 +3,7 @@
   "branch": "fpga/ego1-asic-validation",
   "base_commit": "afb74fd005ec76ae3afc761fa40a48a5d30aa656",
   "primary_target": "complete 0.18um ASIC SoC; FPGA is a functional prototype",
-  "status": "functional_validated; 25MHz Vivado build still running",
+  "status": "functional_validated; 10/25MHz medium-area builds exceed LUT capacity; 25MHz high-area retry running",
   "physical_board_tested": false,
   "production_core_and_artifacts_unchanged": true,
   "fpga_wrapper_changes": "parameterized actual MMCM output: 10/25/50 MHz; builder default 25 MHz",
@@ -49,6 +49,18 @@
       "clock_hz": 25000000,
       "evidence": "npu\\build\\validation-evidence-20261113\\fpga-25m.json",
       "evidence_sha256": "26286c28879156b8156df2414492cfe07c0dff7794dc910ce563cfd7649070d4"
+    },
+    {
+      "memory": "fpga",
+      "passed": true,
+      "frames_checked": 20,
+      "boots": 2,
+      "checks": 8486,
+      "changed_during_run": [],
+      "scope": "JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",
+      "clock_hz": 10000000,
+      "evidence": "npu/build/validation-evidence-20261113/fpga-10m.json",
+      "evidence_sha256": "e92584e99f99a0b1b799f38accbd129912f38ae2afb56bb0e5d9307a7c29f2bc"
     }
   ],
   "macro_model_sha256": "52fd590082b4f63573856baf44d8e59b5ab21db56b9c11aeaf4d45376b32d54d",
@@ -81,13 +93,17 @@
     {
       "run": "npu/build/ego1-medium8-20261113",
       "reason": "stopped after user accepted lower FPGA frequency; no completed area result"
+    },
+    {
+      "run": "npu/build/ego1-rflutram25-20261113",
+      "reason": "FPGA-only XDC experiment stopped: diagnostic if/puts commands unsupported in XDC; no completed utilization result; no RTL changes"
     }
   ],
   "current_fpga_build": {
-    "run": "npu/build/ego1-medium8-25m-20261113",
+    "run": "npu/build/ego1-high8-25m-20261113",
     "clock_hz": 25000000,
     "threads_ceiling": 8,
-    "strategy": "Flow_AreaOptimized_medium",
+    "strategy": "Flow_AreaOptimized_high",
     "status": "running",
     "bitstream_generated": false
   },
@@ -130,5 +146,121 @@
     "npu/rtl/top/npu_soc.sv": "c413002f95faa7bddd8162bde9f0562454cf18cb092e8afb9f789e67b960658d",
     "npu/rtl/vector/npu_vector.sv": "107a4c1c8bf1acd5bfea43653cffbafa1bd194ec456debe662fdd63989d56735",
     "npu/rtl/vector/npu_vector_stream.sv": "2d456902f186de61fb68635cdb76a5dea6433e93f088c4d382cc40a21055c34f"
+  },
+  "completed_fpga_builds": [
+    {
+      "run": "npu/build/ego1-medium8-25m-20261113",
+      "tool": "Vivado 2023.2",
+      "part": "xc7a35tcsg324-1",
+      "clock_hz": 25000000,
+      "threads_ceiling": 8,
+      "strategy": "Flow_AreaOptimized_medium",
+      "synthesis_passed": true,
+      "synthesis_elapsed_s": 675,
+      "synth_luts": 22867,
+      "synth_ffs": 15150,
+      "ramb36": 4,
+      "dsps": 34,
+      "post_opt_slice_luts": 22431,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "pre_route_setup_wns_ns": 6.214,
+      "pre_route_hold_whs_ns": -1.001,
+      "timing_value_scope": "unplaced synthesis estimate, not timing closure",
+      "generated_clock_period_ns": 40.0,
+      "bitstream_generated": false,
+      "launcher_sha256": "c6fba14fcb703f2dffb5cebaab3060bf7920daf9b1276c7ac6f5560d10f8f7da",
+      "synthesis_wait_elapsed_s": 692
+    },
+    {
+      "run": "npu/build/ego1-medium4-10m-20261113",
+      "tool": "Vivado 2023.2",
+      "part": "xc7a35tcsg324-1",
+      "clock_hz": 10000000,
+      "threads_ceiling": 4,
+      "strategy": "Flow_AreaOptimized_medium",
+      "synthesis_passed": true,
+      "synthesis_elapsed_s": 897,
+      "synth_luts": 22867,
+      "synth_ffs": 15150,
+      "ramb36": 4,
+      "dsps": 34,
+      "post_opt_slice_luts": 22431,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "pre_route_setup_wns_ns": 66.199,
+      "pre_route_hold_whs_ns": -1.001,
+      "timing_value_scope": "unplaced synthesis estimate, not timing closure",
+      "generated_clock_period_ns": 100.0,
+      "bitstream_generated": false,
+      "launcher_sha256": "00f0601833bd9656025d5209e968e8bc3a2ab843955b24a362cbafeb0e2af46c"
+    }
+  ],
+  "implementation_probes": [
+    {
+      "synthesis_input": "npu/build/ego1-medium8-25m-20261113",
+      "directive": "ExploreWithRemap",
+      "post_opt_slice_luts": 22866,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "run": "npu/build/ego1-impl-explore-25m-20261113/ExploreWithRemap",
+      "result_sha256": "111b51e1dcbd7345d188367ce00191bfb966307bb3d0747d78eb434cc2c53f7d"
+    },
+    {
+      "synthesis_input": "npu/build/ego1-medium8-25m-20261113",
+      "directive": "ExploreSequentialArea",
+      "post_opt_slice_luts": 22584,
+      "available_luts": 20800,
+      "placement_passed": false,
+      "blocker": "UTLZ-1 LUT capacity",
+      "run": "npu/build/ego1-impl-explore-25m-20261113/ExploreSequentialArea",
+      "result_sha256": "1b2a8705ca7c44ba21f0c9c89d14d10de90ec5a0a35f79508162bfb441daf3f4"
+    }
+  ],
+  "additional_running_builds": [],
+  "rf_mapping_probe": {
+    "scope": "RF-only out-of-context synthesis, not full SoC resources or physical board results",
+    "part": "xc7a35tcsg324-1",
+    "clock_hz": 25000000,
+    "rf_bytes": 256,
+    "gather_ports": 9,
+    "ordinary_masters": 7,
+    "baseline": {
+      "total_luts": 3397,
+      "lutram_luts": 0,
+      "ffs": 2485
+    },
+    "xdc_distributed_override": {
+      "total_luts": 3397,
+      "lutram_luts": 0,
+      "ffs": 2485
+    },
+    "isolated_rtl_attribute_only": {
+      "total_luts": 3397,
+      "lutram_luts": 0,
+      "ffs": 2485,
+      "warning": "Synth 8-7186: RAM_STYLE ignored; existing storage usage not inferred as RAM"
+    },
+    "isolated_bank_template": {
+      "total_luts": 3448,
+      "lutram_luts": 512,
+      "ffs": 437,
+      "ram32x1d_primitives": 256,
+      "lut_delta": 51,
+      "ff_delta": -2048,
+      "source_sha256": "29743a58f981f0f20649ae70796c74e50760abdd01436416aaf42213ba47b9d6",
+      "rtl_functional_scoreboard_passed": true,
+      "functional_test_scope": "RTL byte-write/read-before-write/random-contention/fairness/throughput scoreboard; not gate-level equivalence",
+      "functional_log_sha256": "e0e8144e29c39a52784dafa6c52d82d83e35273ac6c60ae043713a67338ee172"
+    },
+    "decision": "not integrated: total LUT usage increased; ASIC/shared project RTL unchanged",
+    "runs": [
+      "npu/build/ego1-rf-probe-20261113",
+      "npu/build/ego1-rf-attribute-probe-20261113",
+      "npu/build/ego1-rf-bank-probe-20261113"
+    ]
   }
 }

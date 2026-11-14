@@ -7,11 +7,18 @@
 
 ## 当前上板阻塞
 
-2026-11-13，本机 Vivado 2023.2 的默认构建已经完成综合，但实现阶段拒绝布局：
-优化后需要 25,077 个 Slice LUT，XC7A35T 只有 20,800 个。
-两块 8KiB SRAM 正确映射为 4 个 RAMB36，综合使用 34 个 DSP。
-这是完整 SoC 的逻辑容量问题，不能关闭资源 DRC、降低频率或换一个器件名当作解决。
-本版尚无可下载的 `.bit/.mcs`，不要使用之前架构的镜像代替。
+2026-11-13，本机 Vivado 2023.2 的默认50MHz构建优化后需要25,077个Slice LUT，
+25MHz中等面积策略优化后仍需22,431个，XC7A35T只有20,800个，超出1,631个（约7.8%）。
+后者综合用时约11分32秒，在布局前被资源DRC拒绝。
+两块8KiB SRAM正确映射为4个RAMB36，综合使用34个DSP。
+25MHz综合预布线setup WNS为+6.214ns，但尚未布局布线，不能宣称时序收敛。
+这是完整SoC的逻辑容量问题，不能关闭资源DRC或换一个器件名当作解决。
+额外实现探索中，`ExploreWithRemap`为22,866 LUT，`ExploreSequentialArea`为22,584 LUT，
+都在布局前因超容量失败；面积策略并不保证逐级改善。
+10MHz中等强度对照也完成：综合仍为22,867 LUT，优化后仍为22,431 LUT，
+预布线setup WNS改善到+66.199ns，但同样在布局前因超容量失败。
+所以本版降到10MHz没有节省LUT。正在等待25MHz高强度结果，尚无可下载的`.bit/.mcs`。
+不要使用之前架构的镜像代替。
 
 `build.py --area` 只尝试 Vivado 面积映射策略，不改变芯片 RTL。
 若依然放不下，需要评审等价 RTL 优化或更大 FPGA；不能为了上板静默删减 ASIC 功能。
@@ -21,6 +28,24 @@
 这实际调整 FPGA wrapper 的 MMCM 分频，不是把时序约束写松但继续跑50MHz。
 默认50MHz综合的预布线WNS为-9.351ns，也未满足时序；降低频率仍不能解决LUT超容量。
 两轮未完成的50MHz面积优化已停止，不当作通过或最终资源测量。
+
+## RF映射隔离实验
+
+RF单模块、同样256B/G9/M7/25MHz/中等面积策略的综合结果如下，不能当作完整SoC资源：
+
+| 隔离版本 | 总LUT | 其中LUTRAM | 寄存器 |
+| --- | ---: | ---: | ---: |
+| 原触发器模板 | 3397 | 0 | 2485 |
+| XDC覆盖distributed属性 | 3397 | 0 | 2485 |
+| 副本只改RTL属性 | 3397 | 0 | 2485 |
+| 副本改为每bank独立RAM模板 | 3448 | 512 | 437 |
+
+原模板不能仅靠属性推断RAM。独立模板能推断256个RAM32X1D原语，
+但总LUT反而增加51个，所以未并入项目。寄存器减少2048不解决当前LUT容量阻塞。
+独立模板通过既有RF随机读写/字节写/同字读写旧值/公平性/持续读写吞吐的RTL scoreboard；
+这不是综合网表等价性验证，也没有改动ASIC或共用RTL。
+可使用`probe_rf_mapping.tcl`复现，参数为新输出目录及可选样式列表
+`baseline distributed rtl_attribute bank_template`。后两者只修改隔离源码副本。
 
 ## 变更范围
 
@@ -51,6 +76,15 @@ python npu/fpga/ego1/build.py --area-medium --threads 8 --clock-mhz 25 --out npu
 
 `--threads 8` 可把线程上限提高到8，默认4；它不保证每个阶段都能并行。
 `--area-medium` 是相对省时的中等面积策略，与 `--area` 二选一。每轮结果必须分别记录。
+
+已有综合checkpoint可以复用，独立尝试Remap和SequentialArea两种实现优化：
+
+```powershell
+vivado -mode batch -source npu/fpga/ego1/explore_implementation.tcl -tclargs npu/build/board-build npu/build/implementation-explore
+```
+
+每个策略从同一份综合checkpoint重新开始，保留资源DRC，记录优化资源和失败阶段。
+该探索目录用于对比，不作为主打包脚本的完整构建目录。通过布局后才会继续布线和时序检查。
 
 每次使用新的输出目录。只有实现成功并通过脚本的时序和 DRC 检查后，才会产生
 `implementation_pass.txt`、`ego1_mynpu.bit`、`ego1_mynpu.mcs`。
