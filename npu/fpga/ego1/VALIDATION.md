@@ -1,12 +1,27 @@
 # EGo1 验证分支与操作说明
 
-分支：`fpga/ego1-asic-validation`，基线：`afb74fd`。
+发布分支：`fpga/ego1-board-20261114-afb74fd`，SoC 基线：`afb74fd`。
+本次实际硬件源码对应提交 `03e2870`；原本地执行分支为 `fpga/ego1-asic-validation`。
+镜像、源码快照与配套资产固定于 [ego1-10mhz-20261114](versions/ego1-10mhz-20261114/README.md)，
+标签为 `ego1-board-10mhz-20261114`；后续源码更新须另行验证。
 最终目标是 0.18µm ASIC。FPGA默认使用同一CPU、NPU、任务队列、RF、量化和调试RTL。
 另有可选的FPGA CPU寄存器堆映射，属于CPU内部的等价实现尝试，见下文；ASIC仍用原寄存器堆。
 FPGA以 BRAM 推断模型替代 ASIC 的两块单口 SRAM，并沿用现有 FPGA 时钟门控旁路与 MMCM。
 默认容量和队列保持主分支配置，FPGA 功能结果不证明 ASIC 时钟树或电气特性。
 
 ## 默认实现与当前板测版本
+
+2026-11-14 实体 EGo1 已完成验证：系统 10MHz、外接 FT232H JTAG 100kHz。
+冒烟 1 次、ndmreset 后完整重载 20 次、两批各 1000 次连续推理全部通过，共 2021 次。
+每次核对十个整数输出和 CPU argmax；连续测试还核对双槽 READY/DONE 序号。
+连续测试随机排列的是十张已知 golden 样本，未覆盖完整 MNIST 数据集。
+记录见 `npu/reports/ego1_board_validation_20261114.json`。
+
+上述结果使用主机在内存访问前暂停 CPU、访问后恢复的流程。CPU halt 不暂停 NPU。
+CPU 运行中直接使用 OpenOCD 内存命令曾报读写失败，根因仍未定位，不能宣称该路径已通过。
+SBA 在 XBAR 上已有独立请求入口；单 outstanding 或共享 SRAM 不能单独证明硬件错误。
+仍需原始 DMI/SBA 与 OpenOCD 高层命令的对照以及失败周期证据，才能判断修复位置。
+本次仅修改 PC 侧验证脚本和文档，未修改 ASIC/共用芯片 RTL。
 
 2026-11-13，本机 Vivado 2023.2 的默认50MHz构建优化后需要25,077个Slice LUT，
 25MHz中等面积策略优化后仍需22,431个，XC7A35T只有20,800个，超出1,631个（约7.8%）。
@@ -157,7 +172,8 @@ J5：AD0=TCK(E15)、AD1=TDI(E16)、AD2=TDO(D15)、AD3=TMS(C15)，接公共 GND�
 bash npu/fpga/ego1/start_openocd.sh
 ```
 
-初始 TCK 为 10kHz，RPC 仅监听本机 6666。主机程序可在同一 WSL 终端环境的新窗口执行，
+初始 TCK 为 10kHz，RPC 仅监听本机 6666。实板已通过 100kHz；在客户端都断开时可通过
+OpenOCD Tcl 命令 `adapter speed 100` 调整。主机程序可在同一 WSL 环境的新窗口执行，
 不依赖 Windows 到 WSL 的端口转发。GDB 可连接 3333，基础验证不要求使用 GDB。
 没有自动下载或自动恢复；启动服务后按下一节选择测试。
 
@@ -207,5 +223,6 @@ ASIC 只运行私有 SRAM 宏的功能模型，关闭 timing check，不执行 P
 
 ## 当前仍未覆盖
 
-尚未完成实体掉电重启、USB 断开重连、每个计算阶段的随机复位、完整 MNIST 数据集、
+本次已烧写并校验 QSPI Flash，操作者确认重新上电后完成上述测试；尚未进行反复物理掉电压力测试。
+尚未完成 CPU 持续运行时的直接 SBA 访问、USB 断开重连、每个计算阶段的随机复位、完整 MNIST 数据集、
 任意随机算子组合和穷举仲裁验证。通过本套件也不能推导 ASIC 电气/物理签核通过。

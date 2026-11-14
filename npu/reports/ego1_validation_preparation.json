@@ -3,8 +3,8 @@
   "branch": "fpga/ego1-asic-validation",
   "base_commit": "afb74fd005ec76ae3afc761fa40a48a5d30aa656",
   "primary_target": "complete 0.18um ASIC SoC; FPGA is a functional prototype",
-  "status": "FPGA board kit ready at 10 MHz with FPGA-only CPU RF LUTRAM mapping and CNN DSP mapping; physical board test pending",
-  "physical_board_tested": false,
+  "status": "Physical EGo1 PASS at 10MHz / JTAG 100kHz: 2021 frames using CPU halt/access/resume; running SBA root cause unresolved",
+  "physical_board_tested": true,
   "production_core_and_artifacts_unchanged": true,
   "fpga_wrapper_changes": "parameterized actual MMCM output: 10/25/50 MHz; builder default 25 MHz",
   "host_tests": {
@@ -160,12 +160,12 @@
     "fixed_run": "npu/build/validation-evidence-20261113/fpga-25m.json"
   },
   "remaining_coverage": [
-    "physical FPGA configuration and external FT232H tests",
-    "1000-frame physical runs",
-    "USB disconnect/reconnect",
+    "CPU running continuously during direct PC SBA access",
+    "repeated physical power interruption",
+    "USB disconnect/reconnect fault recovery",
     "random reset at every compute phase",
-    "full MNIST dataset and arbitrary workloads",
-    "not ASIC timing/PDK signoff"
+    "full MNIST dataset or arbitrary operator workloads",
+    "ASIC physical/electrical or PDK timing signoff"
   ],
   "production_project_rtl_sha256": {
     "npu/rtl/cnn/npu_cnn.sv": "5d59bbbf7a0431fba412627b08c598969f2f0fc80124a1ece99d78e83d144f6b",
@@ -419,5 +419,10 @@
     "status": "ended without synthesis completion or final utilization report",
     "bitstream_generated": false,
     "decision": "not used for board kit because no completed result"
-  }
+  },
+  "physical_board_report": "npu/reports/ego1_board_validation_20261114.json",
+  "published_branch": "fpga/ego1-board-20261114-afb74fd",
+  "publication_tag": "ego1-board-10mhz-20261114",
+  "hardware_source_commit": "03e28704f6200269ef58e75b5133a30abcb01c24",
+  "frozen_version_directory": "npu/fpga/ego1/versions/ego1-10mhz-20261114"
 }

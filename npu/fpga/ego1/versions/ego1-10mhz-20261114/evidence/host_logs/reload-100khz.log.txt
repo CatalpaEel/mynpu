@@ -1,0 +1,3 @@
+Checked 10 frames
+Checked 20 frames
+EGO1 VALIDATION PASS: 20 frames, 20 boots

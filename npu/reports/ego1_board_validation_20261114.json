@@ -1,0 +1,161 @@
+{
+  "date": "2026-11-14",
+  "branch": "fpga/ego1-asic-validation",
+  "base_commit": "afb74fd005ec76ae3afc761fa40a48a5d30aa656",
+  "primary_target": "complete 0.18um ASIC SoC; FPGA is functional validation",
+  "physical_board_tested": true,
+  "board": "EGo1 / xc7a35tcsg324-1",
+  "clock_hz": 10000000,
+  "jtag_clock_hz": 100000,
+  "jtag_adapter": "external FT232H via J5",
+  "cpu_rf_implementation": "FPGA-only LUTRAM LVT; ASIC original register file unchanged",
+  "cnn_mapping": "FPGA DSP constraint; shared RTL unchanged",
+  "sram": "two logical 8KiB single-port banks; four RAMB36 on FPGA",
+  "bit_sha256": "9bd3b176981fc5c153d47acc02f1509c66dcc5fa9132b0a6e14ba6ac5a37082a",
+  "mcs_sha256": "86886fa4c2c64d355b3e6157800fd831d9d7b8027f01af4a36ba41f7a97491fd",
+  "qspi_flash_program_verify_passed": true,
+  "operator_power_cycle_confirmed_before_test": true,
+  "access_policy": "halt CPU before PC memory reads/writes, resume afterwards; NPU does not halt with CPU",
+  "unhalted_sba_access_validated": false,
+  "running_access_issue": {
+    "observed": "OpenOCD high-level read_memory/write_memory failed while CPU running",
+    "root_cause_confirmed": false,
+    "correction": "SBA already has an independent XBAR ingress. Shared SRAM or one outstanding request does not establish a hardware defect. A raw DMI/SBA versus OpenOCD comparison and failing-cycle evidence are still needed.",
+    "poll_off_alone_did_not_resolve": true,
+    "reset_delay_necessity_established": false
+  },
+  "openocd_version": "Open On-Chip Debugger 0.12.0+dev-04406-g10b7a647d (2026-10-17-09:07)",
+  "total_frames_checked": 2021,
+  "total_ndmreset_boot_checks": 23,
+  "unique_golden_inputs": 10,
+  "sample_seed": 20261113,
+  "checks": [
+    "full 16KiB firmware/model upload and readback per ndmreset boot",
+    "real CPU/NPU inference; all ten final integer logits exactly equal bundled golden",
+    "CPU argmax checked; continuous packet and mailbox argmax checked",
+    "continuous READY/DONE sequence and alternating input slots",
+    "terminal firmware PASS at each boot; errors stop test, no automatic retry"
+  ],
+  "runs": [
+    {
+      "name": "smoke-100khz",
+      "passed": true,
+      "frames_checked": 1,
+      "ndmreset_boot_checks": 1,
+      "evidence": {
+        "result.json": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/smoke-100khz/result.json",
+        "frames.jsonl": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/smoke-100khz/frames.jsonl"
+      },
+      "sha256": {
+        "result.json": "d50c7ee9af5308212e490168f2e5dabe96c519c234a933c58ed177585cb93e06",
+        "frames.jsonl": "a8b475ba801ed54328819b522a733ec6322d9b53b2b95e27cef6caa5149e053f"
+      }
+    },
+    {
+      "name": "reload-100khz",
+      "passed": true,
+      "frames_checked": 20,
+      "ndmreset_boot_checks": 20,
+      "evidence": {
+        "result.json": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/reload-100khz/result.json",
+        "frames.jsonl": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/reload-100khz/frames.jsonl"
+      },
+      "sha256": {
+        "result.json": "25e6d5ac3eb6d5dba18b90bcfb35afffb442b224a1270d82e5e0d0bf5d04d860",
+        "frames.jsonl": "c1dbad533eb83c5fdf53a68ca546bc0c653c4496f4603c346e398c1110097bb2"
+      }
+    },
+    {
+      "name": "continuous-100khz-v2",
+      "passed": true,
+      "frames_checked": 2000,
+      "ndmreset_boot_checks": 2,
+      "evidence": {
+        "result.json": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/continuous-100khz-v2/result.json",
+        "frames.jsonl": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/continuous-100khz-v2/frames.jsonl"
+      },
+      "sha256": {
+        "result.json": "fd422bf742b3b6c4e99225f45682b4626a942e1065e921e2242600c247a0aae1",
+        "frames.jsonl": "f8cf4bd1f259eda0710129cbb798aff5a173ddf7c603999c0eef84abdba93997"
+      },
+      "frames_per_boot": 1000,
+      "sequences_and_alternating_slots_verified": true,
+      "sample_frequency": {
+        "0": 195,
+        "1": 201,
+        "2": 221,
+        "3": 199,
+        "4": 192,
+        "5": 204,
+        "6": 212,
+        "7": 182,
+        "8": 201,
+        "9": 193
+      }
+    }
+  ],
+  "failed_attempts_preserved": [
+    {
+      "evidence": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/continuous-100khz/result.json",
+      "sha256": "b3a1aa596b55771e83807edfdfb64d4301f3780d0eb73fbf6fed5d996f663490",
+      "error": "RuntimeError: ERR failed to write memory",
+      "frames_checked": 0
+    },
+    {
+      "evidence": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/smoke-live/result.json",
+      "sha256": "c9009252398f0009fdf7cf3d5ce44529acb5bd058ca9d3f5b17adb4b6295b990",
+      "error": "RuntimeError: ERR failed to read memory",
+      "frames_checked": 0
+    },
+    {
+      "evidence": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/smoke-live2/result.json",
+      "sha256": "c9009252398f0009fdf7cf3d5ce44529acb5bd058ca9d3f5b17adb4b6295b990",
+      "error": "RuntimeError: ERR failed to read memory",
+      "frames_checked": 0
+    },
+    {
+      "evidence": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/smoke-live4/result.json",
+      "sha256": "2b8e999a50c0295db9f24f2ac07046a69a2e3abd1830c90f9f05e92a3847be13",
+      "error": "TimeoutError: timed out",
+      "frames_checked": 0
+    },
+    {
+      "evidence": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/smoke-live5/result.json",
+      "sha256": "c9009252398f0009fdf7cf3d5ce44529acb5bd058ca9d3f5b17adb4b6295b990",
+      "error": "RuntimeError: ERR failed to read memory",
+      "frames_checked": 0
+    },
+    {
+      "evidence": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/smoke-live6/result.json",
+      "sha256": "c9009252398f0009fdf7cf3d5ce44529acb5bd058ca9d3f5b17adb4b6295b990",
+      "error": "RuntimeError: ERR failed to read memory",
+      "frames_checked": 0
+    },
+    {
+      "evidence": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/smoke-live7/result.json",
+      "sha256": "c9009252398f0009fdf7cf3d5ce44529acb5bd058ca9d3f5b17adb4b6295b990",
+      "error": "RuntimeError: ERR failed to read memory",
+      "frames_checked": 0
+    }
+  ],
+  "tested_runner": {
+    "evidence": "npu/fpga/ego1/versions/ego1-10mhz-20261114/results/validated_jtag_validation.py",
+    "sha256": "4449e37f9dfdf8373bdae88ce009bdfe24870b0da4192966c2b2cf4478385810",
+    "current_runner_difference": "comments and docstring only; executable Python AST verified identical"
+  },
+  "shared_asic_rtl_changed_for_board_access_workaround": false,
+  "not_covered": [
+    "CPU running continuously during direct PC SBA access",
+    "repeated physical power interruption",
+    "USB disconnect/reconnect fault recovery",
+    "random reset at every compute phase",
+    "full MNIST dataset or arbitrary operator workloads",
+    "ASIC physical/electrical or PDK timing signoff"
+  ],
+  "latency_note": "host_roundtrip_s includes JTAG transfers and CPU debug control; it is not pure NPU latency",
+  "published_branch": "fpga/ego1-board-20261114-afb74fd",
+  "publication_tag": "ego1-board-10mhz-20261114",
+  "hardware_source_commit": "03e28704f6200269ef58e75b5133a30abcb01c24",
+  "source_manifest_sha256": "71943a2b1324224d3ba6a2e65b82b45be6afbd43b2bcbbeb1296bd23b90bcbef",
+  "frozen_version_directory": "npu/fpga/ego1/versions/ego1-10mhz-20261114"
+}

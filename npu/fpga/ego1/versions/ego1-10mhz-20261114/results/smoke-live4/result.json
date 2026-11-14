@@ -1,0 +1,12 @@
+{
+  "passed": false,
+  "scope": "physical board via external JTAG/SBA; set only after execution",
+  "mode": "smoke",
+  "seed": 20261113,
+  "boots_requested": 1,
+  "frames_checked": 0,
+  "boot_checks": 0,
+  "manifest_sha256": "d1b261e53d83b35ef6d600577c406ebb973a32eeb0c17096d06bc7b8ba821c79",
+  "openocd_version": "Open On-Chip Debugger 0.12.0+dev-04406-g10b7a647d (2026-10-17-09:07)",
+  "error": "TimeoutError: timed out"
+}

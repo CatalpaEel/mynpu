@@ -16,7 +16,7 @@ PASS, FAIL = 0x600D0001, 0xBAD00001
 
 
 class OpenOCD:
-    def __init__(self, host="127.0.0.1", port=6666, timeout=120):
+    def __init__(self, host="127.0.0.1", port=6666, timeout=600):
         if host not in ("127.0.0.1", "localhost", "::1"):
             raise ValueError("Use a local OpenOCD endpoint or an SSH tunnel")
         self.sock = socket.create_connection((host, port), timeout)
@@ -57,6 +57,9 @@ class OpenOCD:
         self.command("riscv dmi_write 0x10 3; sleep 10")
         self.command("riscv dmi_write 0x10 0x80000001; sleep 10; halt")
         self.command("riscv set_mem_access sysbus")
+        # Conservative host delay retained from board bring-up. Its necessity
+        # and the cause of running-access failures have not been established.
+        time.sleep(0.5)
         if self.read(CONTROL)[0] != 0 or self.read(RESULT)[0] != 0:
             raise RuntimeError("System reset failed to clear RUN/result")
         capabilities = {0x40000000: 0x4E505532, 0x40000040: 0x00020002,
@@ -74,7 +77,9 @@ class OpenOCD:
             raise RuntimeError("Stale result did not clear")
         self.write(ENTRY, [entry])
         self.write(CONTROL, [1])
-        self.command("resume; poll on")
+        # Use explicit target control throughout this board test. Disabling
+        # background polling alone did not resolve running-access failures.
+        self.command("resume; poll off")
 
     def close(self):
         self.sock.close()
@@ -94,32 +99,59 @@ def validate_assets(folder):
     return manifest
 
 
-def upload(io, address, payload, chunk_words=64, verify=True):
+def upload(io, address, payload, chunk_words=64, verify=True, halt_cpu=False):
     if len(payload) % 4:
         raise ValueError("Payload must contain whole words")
     words = struct.unpack(f"<{len(payload)//4}I", payload)
     for i in range(0, len(words), chunk_words):
         block = list(words[i:i + chunk_words])
+        if halt_cpu:
+            io.command("halt")
+            time.sleep(0.005)
         io.write(address + i * 4, block)
-        if verify and io.read(address + i * 4, len(block)) != block:
+        readback = io.read(address + i * 4, len(block))
+        if halt_cpu:
+            io.command("resume")
+        if verify and readback != block:
             raise RuntimeError(f"SRAM readback mismatch at {address + i*4:#x}")
 
 
-def wait_value(io, address, expected, timeout):
+def halted_write(io, address, words):
+    io.command("halt")
+    time.sleep(0.005)
+    try:
+        io.write(address, words)
+    finally:
+        io.command("resume")
+
+
+def halted_read(io, address, count=1, resume=True):
+    """Use the board-tested halt/read/resume workaround; root cause is open."""
+    io.command("halt")
+    time.sleep(0.005)
+    try:
+        return io.read(address, count)
+    finally:
+        if resume:
+            io.command("resume")
+
+
+def wait_value(io, address, expected, timeout, halt_cpu=False):
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
-        value = io.read(address)[0]
+        value = (halted_read(io, address)[0] if halt_cpu else io.read(address)[0])
         if value == expected:
             return
         if address == RESULT and value != 0:
             raise RuntimeError(f"Firmware failed: {value:#x}")
         if address != RESULT:
-            status = io.read(RESULT)[0]
+            status = (halted_read(io, RESULT)[0] if halt_cpu else io.read(RESULT)[0])
             if status != 0:
                 # DONE can change between the two SBA reads, especially on the
                 # final frame. Re-read ownership before treating terminal PASS
                 # as an early exit.
-                if status == PASS and io.read(address)[0] == expected:
+                reread = (halted_read(io, address)[0] if halt_cpu else io.read(address)[0])
+                if status == PASS and reread == expected:
                     return
                 raise RuntimeError(f"Firmware ended before expected sequence: {status:#x}")
             if value > expected:
@@ -140,9 +172,10 @@ def single(io, folder, manifest, sample, timeout):
     io.reset()
     upload(io, SRAM, (folder / f"sram{sample}.bin").read_bytes())
     io.start(manifest["entry"])
-    wait_value(io, RESULT, PASS, timeout)
-    prediction = check_output(folder, sample, io.read(manifest["single_output"], 3))
-    if io.read(0x80001F00)[0] != prediction:
+    wait_value(io, RESULT, PASS, timeout, halt_cpu=True)
+    words = halted_read(io, manifest["single_output"], 3, resume=False)
+    prediction = check_output(folder, sample, words)
+    if halted_read(io, 0x80001F00, resume=False)[0] != prediction:
         raise RuntimeError("CPU argmax mismatch")
     return prediction
 
@@ -161,22 +194,24 @@ def continuous(io, folder, manifest, runs, timeout, rng, record):
         seq = frame + 1
         # Only reuse a slot after its previous output was consumed. READY is
         # published last; DONE is the CPU's commit of the complete output packet.
-        io.write(stream["output_packets"] + slot * 16, [0xDEADC0DE] * 4)
+        halted_write(io, stream["output_packets"] + slot * 16, [0xDEADC0DE] * 4)
         payload = (folder / f"input{sample}.bin").read_bytes()
-        upload(io, stream["input_slots"][slot], payload)
+        upload(io, stream["input_slots"][slot], payload, halt_cpu=True)
         time.sleep(rng.uniform(0, 0.01))
         began = time.monotonic()
-        io.write(mail + slot * 4, [seq])
-        wait_value(io, mail + 8 + slot * 4, seq, timeout)
-        words = io.read(stream["output_packets"] + slot * 16, 4)
+        halted_write(io, mail + slot * 4, [seq])
+        wait_value(io, mail + 8 + slot * 4, seq, timeout, halt_cpu=True)
+        words = halted_read(io, stream["output_packets"] + slot * 16, 4, resume=False)
         prediction = check_output(folder, sample, words)
-        if words[3] != prediction or io.read(mail + 16 + slot * 4)[0] != prediction:
+        argmax = halted_read(io, mail + 16 + slot * 4, resume=False)[0]
+        if words[3] != prediction or argmax != prediction:
             raise RuntimeError("CPU packet/mailbox argmax mismatch")
-        if io.read(mail + 8 + slot * 4)[0] != seq:
+        if halted_read(io, mail + 8 + slot * 4, resume=False)[0] != seq:
             raise RuntimeError("DONE sequence changed while reading output")
+        io.command("resume")
         record({"frame": frame, "sample": sample, "slot": slot, "sequence": seq,
                 "prediction": prediction, "host_roundtrip_s": time.monotonic() - began})
-    wait_value(io, RESULT, PASS, timeout)
+    wait_value(io, RESULT, PASS, timeout, halt_cpu=True)
 
 
 def main():

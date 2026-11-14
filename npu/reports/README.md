@@ -4,6 +4,11 @@
 
 ## 当前采用的入口
 
+本 FPGA 分支另有 [2026-11-14 实体板测记录](ego1_board_validation_20261114.json)：
+固定基线 `afb74fd`，10MHz系统/100kHz JTAG，2021次推理通过，使用CPU暂停/恢复流程。
+构建来源与可复用镜像见[固定版本](../fpga/ego1/versions/ego1-10mhz-20261114/README.md)。
+该结论不自动适用于后续主分支；CPU运行中的直接SBA访问仍未验证通过。
+
 | 报告 | 适用范围 |
 | --- | --- |
 | [rf1r1w-validation.json](rf1r1w-validation.json) | RF功能、21,008周期MNIST及综合2.569286mm²；内部“未跑PNR”是当时快照，后续见r3。 |

@@ -1,0 +1,29 @@
+{
+  "input_slots": [
+    2147488608,
+    2147490176
+  ],
+  "scratch": 2147489392,
+  "output_packets": 2147490960,
+  "mailbox": 2147491744,
+  "descriptor": 2147486976,
+  "raw_result_regfile_words": 32,
+  "rf_bank_words": 32,
+  "layer_destinations": [
+    2147489392,
+    2147488608,
+    2147489392,
+    2147500032,
+    2147500104,
+    2147488608
+  ],
+  "conv_vector_stream_path": false,
+  "matrix_outer_rows": 4,
+  "matrix_outer_cols": 4,
+  "fc_execution_unit": "matrix",
+  "fc_raw_base": 2147500248,
+  "xbar_cache_data_bytes": 0,
+  "setup_writes": 0,
+  "firmware_bytes": 4864,
+  "instructions": 650
+}

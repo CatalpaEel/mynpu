@@ -1,6 +1,11 @@
 # EGo1 板级 Vivado 工程
 
-本地上板验证分支 `fpga/ego1-asic-validation` 的新增连续推理、重载和 ASIC/FPGA 双后端测试见
+已发布上板分支：`fpga/ego1-board-20261114-afb74fd`。
+**本次实板验证的固定版本见 [ego1-10mhz-20261114](versions/ego1-10mhz-20261114/README.md)**，
+包含实际构建的源码快照、bit/MCS、配套输入/程序和原始测试记录。
+SoC 基线为 `afb74fd`，冻结硬件源码对应 `03e2870`；不代表后续 `main` 已通过本次板测。
+
+原本地工作分支 `fpga/ego1-asic-validation` 的连续推理、重载和 ASIC/FPGA 双后端测试见
 [上板验证操作说明](VALIDATION.md)。本机Vivado 2023.2已实际执行完整SoC构建。原始RTL默认50MHz优化后25,077 LUT，
 中等面积策略在25MHz和10MHz下均为22,431 LUT，超出XC7A35T的20,800 LUT。
 10MHz FPGA专用CPU寄存器堆和CNN DSP映射已经生成可下载镜像，板测包见VALIDATION.md。
@@ -18,7 +23,9 @@ MMCM/BUFG 在 VCS 中使用功能替身，不代表真实 FPGA 时序或硬件�
 
 ASIC SRAM和FPGA BRAM两后端已各通过200帧、两次启动的JTAG CPU-in-loop仿真，
 每帧核对全部十个整数输出。FPGA 25MHz和10MHz也分别通过20帧仿真。
-10MHz版本已完成布局布线、默认DRC和时序检查，实体上板仍待执行。资源结果和失败证据见`npu/reports/ego1_validation_preparation.json`。
+10MHz版本已完成布局布线、默认DRC和时序检查，实体板在100kHz JTAG下通过2021次推理，
+采用PC内存访问前暂停CPU、访问后恢复的流程；运行中直接访问的异常根因仍未确定。
+资源结果和失败证据见`npu/reports/ego1_validation_preparation.json`。
 
 ## 构建到上板前
 
@@ -83,7 +90,10 @@ LED5=软件测试完成，LED6=测试成功，LED7=0。此处 LED4 是活动指�
 RESET 为板级 POR；Debug Module 的 ndmreset 不重新锁定 MMCM。
 所有外部信号沿用 LVCMOS33。TCK 按最高 1 MHz 约束，实际连接先使用 10 kHz。
 
-## JTAG 推理（留待实体上板后执行）
+## JTAG 推理
+
+已实板验证的入口是版本目录内的 `npu/fpga/ego1/jtag_validation.py`，操作见版本说明。
+下面的旧 `load_mnist.tcl` 入口未参与本次2021帧板测，不等同于已验证的暂停/恢复流程。
 
 板卡经原配置 JTAG 下载 `.bit` 后，CPU 在 bootstrap WFI 等待；没有把 MNIST 程序固化进 BRAM。
 FT232H 的 AD0/1/2/3 分别接 TCK/TDI/TDO/TMS，接公共 GND，沿用旧板接线。

@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 256, in <module>
+    main()
+    ~~~~^^
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 237, in main
+    continuous(io, args.assets, manifest, args.runs, args.timeout, rng,
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               lambda item: record(dict(item, boot=boot)))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 184, in continuous
+    io.write(stream["output_packets"] + slot * 16, [0xDEADC0DE] * 4)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 50, in write
+    self.command(f"write_memory {address:#x} 32 {{" + " ".join(hex(w) for w in words) + "}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 36, in command
+    raise RuntimeError(response)
+RuntimeError: ERR failed to write memory

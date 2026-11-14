@@ -1,0 +1,4 @@
+Vivado 2023.2; xc7a35tcsg324-1; 10 MHz
+setup_slack_ns=48.244
+hold_slack_ns=0.019
+default_resource_drc_restored=1

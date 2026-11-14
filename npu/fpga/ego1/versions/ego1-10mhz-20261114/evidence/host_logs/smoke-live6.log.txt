@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 238, in <module>
+    main()
+    ~~~~^^
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 223, in main
+    prediction = single(io, args.assets, manifest, sample, args.timeout)
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 147, in single
+    wait_value(io, RESULT, PASS, timeout)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 115, in wait_value
+    value = io.read(address)[0]
+            ~~~~~~~^^^^^^^^^
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 42, in read
+    result = [int(x, 0) for x in self.command(f"read_memory {address:#x} 32 {count}").split()]
+                                 ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-latest-review-20261111/npu/build/ego1-board-kit-10m-cpurf-dsp-20261114/npu/fpga/ego1/jtag_validation.py", line 36, in command
+    raise RuntimeError(response)
+RuntimeError: ERR failed to read memory
