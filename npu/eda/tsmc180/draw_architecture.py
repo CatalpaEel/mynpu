@@ -113,7 +113,7 @@ box(
     1120,
     190,
     "控制与任务入口  ·  CPU经XBAR译码访问MMIO",
-    "独立IRQ与完成票据；8bit EV01：队头WAIT / 完成SIGNAL\n共享程序 / 几何 / 量化可运行中改写；配置时机由软件负责\nJTAG SBA装载程序/输入；保留测试host；9信号PAD接口",
+    "独立IRQ与完成票据；8bit EV01：队头WAIT / 完成SIGNAL\n共享程序 / 几何 / 量化可运行中改写；配置时机由软件负责\nJTAG SBA装载程序/输入；仅保留JTAG外部访问；9信号PAD接口",
     col="#c084fc",
     size=24,
 )
@@ -195,7 +195,7 @@ box(
     2130,
     175,
     "数据通路入口  ·  6个普通master + 4条流通道 + RF gather / sink",
-    "M0 CPU数据  |  M1 CNN  |  M2 Vector  |  M3 Host / JTAG SBA共享  |  M4 CPU取指  |  M5 Matrix\nCNN / Matrix / Vector共9个逻辑gather槽，共享8个RF物理bank。\n本图控制箭头表示逻辑关系；实际CPU配置读写也经过XBAR。CNN / Matrix可直连QT01，量化输入不经过XBAR。",
+    "M0 CPU数据  |  M1 CNN  |  M2 Vector  |  M3 JTAG SBA  |  M4 CPU取指  |  M5 Matrix\nCNN / Matrix / Vector共9个逻辑gather槽，共享8个RF物理bank。\n本图控制箭头表示逻辑关系；实际CPU配置读写也经过XBAR。CNN / Matrix可直连QT01，量化输入不经过XBAR。",
     col="#60a5fa",
     size=24,
 )

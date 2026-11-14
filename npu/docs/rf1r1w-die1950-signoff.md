@@ -1,6 +1,12 @@
+> 本报告为加入GPIO8前的冻结物理基线，只有9个信号PAD。GPIO版本为17个信号PAD，当前仅完成核心/封装综合、功能验证及初始floorplan，见[GPIO8报告](gpio8.md)。不要将本页时序或签核结论用于GPIO版。
+
 # RF 1R1W：1950 µm 完整后端与最终检查
 
 2026-11-10。本轮已对当前RF 1R1W版本完成全芯片布局布线、物理ECO、Seal Ring、Dummy Fill、最终DRC、LVS/ERC、天线、Wire Bond PAD检查和归档。最终版本为 **r3**。原始严格LVS的IO电阻参数偏差和ERC原库/外圈残项保留待评审，不能记为正式投片签核全部通过。
+
+完整步骤、历史参数搜索、hold修复及问题台账见[详细实现复盘](backend-rf1r1w-r3-full-process.md)。
+
+注意：Lab 5包含项目私有OA IO单元的PIMP右扩0.29µm修补以消除CO.R.4；共享PDK未修改，但不能表述为最终IO几何完全不变，详见复盘第10.5节。
 
 ## 源码版本核对
 
@@ -32,6 +38,18 @@
 计算规模、RF容量、指令和固件不变：Matrix为4×4外积，CNN为3×3 DOT9，Vector为INT32/4路INT8 SIMD；RF总256B、8个物理bank各1R1W；任务队列4/4/4，4条数据流FIFO各8 words。RTL性能和RF端口对照见[RF 1R1W实现报告](rf1r1w.md)。
 
 上述时序为TT单角、cap table RC、OCV/CPPR的Innovus布线后分析，系统周期20ns、JTAG周期100ns。未执行Dummy后PEX/STA或多角、IR/EM签核。布线后功能回归使用实际标准单元、IO和SRAM模型，10MHz JTAG、零延迟、不回标SDF。
+
+## 当前模块染色分布
+
+以下从最终r3的`14_exported.enc.dat`导出全部112,509个实例的实际坐标与单元边界，按保留层次前缀着色。计算核、Stream、RF与XBAR分开，非示意框图；图中不绘制金属走线。
+
+![当前r3全芯片模块分布](images/rf1r1w-r3-module-map-die.png)
+
+[核心区放大图](images/rf1r1w-r3-module-map-core.png) · [分组统计与输入哈希](images/rf1r1w-r3-module-map.source.json)
+
+导出的标准单元为80,778个，SRAM为2个，core filler为31,407个，IO/Bond/Corner/IO filler为322个。
+按实例边界累计的核心非filler面积为2.632349mm²，与最终PNR报告一致。外围IO/Bond边界可能重叠，不能把该组矩形面积直接当作独立芯片占地。
+颜色只表示实例归属，不表示该模块对附近全部布线、面积或功耗的独占；无法从保留层次明确归属的单元单列Other/physical support。
 
 ## Useful skew
 
@@ -105,7 +123,7 @@ Seal Ring由7844个原库边/角实例拼接，实际bbox `(-15,-15)–(1965,196
 | LVS源CDL | 上述目录`cdl/mynpu_asic_top.cdl` |
 | 最终规则与原始报告 | 上述目录`rules/`、`drc_post/`、`lvs/`、`lvs_strict/`、`antenna/`、`wb/` |
 | 验证汇总 | `mynpu-softpe/npu/reports/rf1r1w_die1950_fullchip_validation.json`及`lab5_rf1r1w_die1950_validation.json` |
-| 修复前诊断 | 同目录`lab5_rf1r1w_die1950_firstpass_validation.json`、`lab5_rf1r1w_die1950_r2_validation.json` |
+| 修复前诊断 | 工作区`eda-runs/20261111-historical-report-cleanup/`内对应firstpass/r2 JSON，以及原始父运行目录 |
 | 交付归档 | 最终Lab 5目录`deliverables/mynpu_rf1r1w_die1950_design_and_reports.tar.gz`及`SHA256SUMS` |
 
 归档包含最终设计、公开RTL快照、规则、原始报告、日志、截图和诊断。活动OA库、完整Innovus检查点及外部授权工艺库继续保留在服务器记录路径，不全部放入交付压缩包。CDL引用外部原始SPI/SRAM CDL，迁移需同版工艺环境。

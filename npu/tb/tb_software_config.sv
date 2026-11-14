@@ -1,29 +1,21 @@
 `timescale 1ns / 1ps
 // Real MMIO descriptors and real compute units; no peeking into compute values.
 module tb_software_config;
-  logic clk = 0, rst_n = 0, hreq = 0, hwe = 0;
+  logic clk = 0, rst_n = 0;
   always #10 clk = ~clk;
-  logic [31:0] ha = 0, hd = 0;
-  wire hg, hv, he;
-  wire [31:0] hr;
+  logic tck = 0, tms = 1, tdi = 0;
+  wire tdo;
+  `include "db_jtag_tasks.svh"
+  `include "db_sba_access.svh"
   npu_soc dut (
     .clk_i             (clk),
     .rst_ni            (rst_n),
     .cpu_run_i         (1'b0),
-    .tck_i             (1'b0),
-    .tms_i             (1'b1),
-    .td_i              (1'b0),
-    .td_o              (),
+    .tck_i             (tck),
+    .tms_i             (tms),
+    .td_i              (tdi),
+    .td_o              (tdo),
     .cpu_debug_halted_o(),
-    .host_req_i        (hreq),
-    .host_we_i         (hwe),
-    .host_be_i         (4'hf),
-    .host_addr_i       (ha),
-    .host_wdata_i      (hd),
-    .host_gnt_o        (hg),
-    .host_rvalid_o     (hv),
-    .host_error_o      (he),
-    .host_rdata_o      (hr),
     .irq_o             (),
     .cpu_test_done_o   (),
     .cpu_test_pass_o   ()
@@ -32,23 +24,7 @@ module tb_software_config;
   localparam logic [31:0] INPUT_A=32'h80001400, OUTPUT_D=32'h80001700,
     WEIGHTS=32'h80002000, MATRIX_B=32'h80002020, CHANNEL=32'h80006000;
   task automatic bus(input bit we, input logic [31:0] a, d, output logic [31:0] result);
-    int cycles;
-    @(negedge clk);
-    hreq = 1;
-    hwe = we;
-    ha = a;
-    hd = d;
-    cycles = 0;
-    do begin
-      @(posedge clk);
-      cycles++;
-      if (cycles > 1000) $fatal(1, "host grant timeout %h", a);
-    end while (!hg);
-    @(negedge clk);
-    hreq = 0;
-    if (!hv) @(negedge clk);
-    if (!hv || he) $fatal(1, "host response/error %h", a);
-    result = hr;
+    sba_access(we, a, d, 4'hf, 0, result);
   endtask
   task automatic wr(input logic [31:0] a, d);
     logic [31:0] ignored;
@@ -109,16 +85,8 @@ module tb_software_config;
         'h77c
     };
     foreach (offsets[i]) begin
-      @(negedge clk);
-      hreq = 1;
-      hwe = 1;
-      ha = M + 32'(offsets[i]);
-      hd = 'hffffffff;
-      do @(posedge clk); while (!hg);
-      @(negedge clk);
-      hreq = 0;
-      if (!hv) @(negedge clk);
-      if (!hv || !he) $fatal(1, "observation CSR accepted write %h", ha);
+      logic [31:0] ignored;
+      sba_access(1, M + 32'(offsets[i]), 'hffffffff, 15, 1, ignored);
       checks++;
     end
     expect_word(M + 'h144, 0);
@@ -432,7 +400,7 @@ module tb_software_config;
     $finish;
   end
   initial begin
-    #100000000;
+    #100000000000;
     $fatal(1, "software config timeout");
   end
 endmodule

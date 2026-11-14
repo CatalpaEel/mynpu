@@ -528,9 +528,9 @@ module dm_csrs #(
     sbcs_d.sbaccess128          = 1'b0;
     sbcs_d.sbaccess64           = logic'(BusWidth == 32'd64);
     sbcs_d.sbaccess32           = logic'(BusWidth == 32'd32);
-    sbcs_d.sbaccess16           = 1'b0;
-    sbcs_d.sbaccess8            = 1'b0;
-    sbcs_d.sbaccess             = (BusWidth == 32'd64) ? 3'd3 : 3'd2;
+    sbcs_d.sbaccess16           = 1'b1;
+    sbcs_d.sbaccess8            = 1'b1;
+    // sbaccess is writable; do not overwrite the debugger's selected size.
   end
 
   // output multiplexer

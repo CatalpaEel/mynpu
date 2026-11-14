@@ -1,0 +1,645 @@
+{
+  "date": "2026-11-12",
+  "passed": true,
+  "scope": "GPIO8 RTL/software, TT synthesis, actual GPIO PAD gate tests and initial 1950um IO floorplan. No GPIO-version placement/CTS/routing or Calibre/LVS.",
+  "gpio_bits": 8,
+  "mmio_base": "0x40000800",
+  "direction_bit_one": "output enabled",
+  "reset_direction": 0,
+  "input_synchronizer_stages": 2,
+  "gpio_irq": false,
+  "bus": "Existing XBAR auxiliary MMIO slave, CPU and JTAG SBA, aligned full-word transactions, low eight bits",
+  "registers": {
+    "IN": 0,
+    "OUT": 4,
+    "DIR": 8,
+    "SET": 12,
+    "CLEAR": 16,
+    "TOGGLE": 20,
+    "CAP": 24
+  },
+  "capability_value": "0x00010008",
+  "tests": [
+    {
+      "result": "npu/build/vcs-gpio8-final-gpio-macro/result.json",
+      "sha256": "fa897ea4c1269dc1d64e22a328a1c32b008b2e8bb19969e65ffda07b20e9a78b",
+      "passed": true,
+      "summaries": [
+        "GPIO PASS checks=79 CPU, host, JTAG SBA, actual PAD, direction, masks, resets"
+      ]
+    },
+    {
+      "result": "npu/build/vcs-gpio8-regression-jtag-macro/result.json",
+      "sha256": "34e3033da89fd1304c29a5d323efa856afe814e55cb86aabc1d20ecc0e58448b",
+      "passed": true,
+      "summaries": [
+        "JTAG PASS checks=42"
+      ]
+    },
+    {
+      "result": "npu/build/vcs-gpio8-first-latency/result.json",
+      "sha256": "b32f770254c14b426bcfcdf8eccc03999f498d79dd857957dc2540952cb88457",
+      "passed": true,
+      "summaries": [
+        "SINGLE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=0 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE_INPUT sample=1 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=1 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE_INPUT sample=2 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=2 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE_INPUT sample=3 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=3 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE_INPUT sample=4 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=4 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE_INPUT sample=5 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=5 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE_INPUT sample=6 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=6 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE_INPUT sample=7 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=7 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE_INPUT sample=8 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=8 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE_INPUT sample=9 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "SINGLE sample=9 useful_macs=39330 kernel_cycles=15180 elapsed_cycles=21008 kernel_utilization_pct=28.79 system_utilization_pct=20.80 latency_us_at_50mhz=420.16 PASS",
+        "SINGLE PASS samples=10 checks=120"
+      ]
+    },
+    {
+      "result": "npu/build/gate-gpio8-core-latency/result.json",
+      "sha256": "6b7818a199f095ea7c636dfbe8e130d12a62e463c192db3eebd1d6304be48f64",
+      "passed": true,
+      "summaries": [
+        "GATE_INPUT sample=0 ingress_cycles=392 input_to_classification_cycles=21400 input_to_classification_us_at_50mhz=428.00 PASS",
+        "GATE PASS samples=1 checks=12"
+      ]
+    },
+    {
+      "result": "npu/build/chip-gpio8-chip/result.json",
+      "sha256": "454fcf1906047dad818b0315c144b7e96d17e7ae0d9db595a4a0894f2d20cc94",
+      "passed": true,
+      "summaries": [
+        "GPIO CHIP PASS checks=36 real PAD, bit order, JTAG SBA, CPU"
+      ]
+    },
+    {
+      "result": "npu/build/chip-gpio8-chip-mnist/result.json",
+      "sha256": "9c095bc581f57f32f44b5caee25495d6f92802855090606b69acd1c49b2be586",
+      "passed": true,
+      "summaries": [
+        "CHIP JTAG PASS checks=34"
+      ]
+    },
+    {
+      "result": "npu/build/chip-gpio8-io-connected/result.json",
+      "sha256": "1087cbfb5bf4e903b819aa3623186e3fff3c964772479e09372b152338d4a863",
+      "passed": true,
+      "summaries": [
+        "GPIO CHIP PASS checks=36 real PAD, bit order, JTAG SBA, CPU"
+      ]
+    },
+    {
+      "result": "npu/build/chip-gpio8-io-connected-mnist/result.json",
+      "sha256": "e66a125c8402ae65fb92d79e3a170c6d3e79d01a0a08b8153ea4106cd53e2f6b",
+      "passed": true,
+      "summaries": [
+        "CHIP JTAG PASS checks=34"
+      ]
+    }
+  ],
+  "software_tests": 12,
+  "c_api_syntax_checked": true,
+  "mnist_cycles_per_image": [
+    21008,
+    21008,
+    21008,
+    21008,
+    21008,
+    21008,
+    21008,
+    21008,
+    21008,
+    21008
+  ],
+  "standalone_gpio_synthesis": {
+    "cells": 87,
+    "cell_area_mm2": 0.002362035,
+    "scope": "TT timing-library area, high effort, 18ns, clock gating, excludes PAD and xbar integration"
+  },
+  "core_synthesis": {
+    "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core",
+    "cell_area_mm2": 2.571489575,
+    "includes_sram_macros": 2,
+    "includes_pads": false,
+    "optimize_period_ns": 18,
+    "report_period_ns": 20,
+    "setup_wns_ns": 2.0008,
+    "tns_ns": 0.0,
+    "violating_paths": 0,
+    "effort": "high",
+    "clock_gating": true
+  },
+  "core_area_delta_from_pre_gpio_mm2": 0.002203981000000077,
+  "core_area_delta_percent": 0.08578186111918296,
+  "io_floorplan": {
+    "die_um": [
+      1950,
+      1950
+    ],
+    "signal_pads": 17,
+    "gpio_pads": 8,
+    "power_ground_poc_pads": 28,
+    "native_pads": 45,
+    "bond_pads": 45,
+    "pad_audit": {
+      "scope": "Fixed native PAD coordinate and adjacency audit only; not DRC, ESD, IR/EM or package signoff.",
+      "passed": true,
+      "native_pads": 45,
+      "signal_pads": 17,
+      "gpio_pads": 8,
+      "power_ground_poc_pads": 28,
+      "jtag_left": true,
+      "supply_pairs_per_side": 3,
+      "minimum_native_pad_gap_um": 40,
+      "def_sha256": "bc078db1f56346a94f40c585dad65d01ff404f8c4266c947c7f0097669fddd66",
+      "pads": {
+        "i_pad_right_poc": {
+          "cell": "PVDD2POC",
+          "x_um": 1835.0,
+          "y_um": 1450.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 1450.0
+        },
+        "i_pad_right_vssio": {
+          "cell": "PVSS2CDG",
+          "x_um": 1835.0,
+          "y_um": 1350.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 1350.0
+        },
+        "i_pad_right_vddio": {
+          "cell": "PVDD2CDG",
+          "x_um": 1835.0,
+          "y_um": 1250.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 1250.0
+        },
+        "i_pad_right_vss_2": {
+          "cell": "PVSS1CDG",
+          "x_um": 1835.0,
+          "y_um": 750.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 750.0
+        },
+        "i_pad_right_vdd_2": {
+          "cell": "PVDD1CDG",
+          "x_um": 1835.0,
+          "y_um": 650.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 650.0
+        },
+        "i_pad_right_vss_1": {
+          "cell": "PVSS1CDG",
+          "x_um": 1835.0,
+          "y_um": 360.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 360.0
+        },
+        "i_pad_right_vdd_1": {
+          "cell": "PVDD1CDG",
+          "x_um": 1835.0,
+          "y_um": 260.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 260.0
+        },
+        "i_pad_left_poc": {
+          "cell": "PVDD2POC",
+          "x_um": 0.0,
+          "y_um": 1450.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 1450.0
+        },
+        "i_pad_left_vssio": {
+          "cell": "PVSS2CDG",
+          "x_um": 0.0,
+          "y_um": 1350.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 1350.0
+        },
+        "i_pad_left_vddio": {
+          "cell": "PVDD2CDG",
+          "x_um": 0.0,
+          "y_um": 1250.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 1250.0
+        },
+        "i_pad_left_vss_2": {
+          "cell": "PVSS1CDG",
+          "x_um": 0.0,
+          "y_um": 750.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 750.0
+        },
+        "i_pad_left_vdd_2": {
+          "cell": "PVDD1CDG",
+          "x_um": 0.0,
+          "y_um": 650.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 650.0
+        },
+        "i_pad_left_vss_1": {
+          "cell": "PVSS1CDG",
+          "x_um": 0.0,
+          "y_um": 360.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 360.0
+        },
+        "i_pad_left_vdd_1": {
+          "cell": "PVDD1CDG",
+          "x_um": 0.0,
+          "y_um": 260.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 260.0
+        },
+        "i_pad_bottom_poc": {
+          "cell": "PVDD2POC",
+          "x_um": 1450.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 1450.0
+        },
+        "i_pad_bottom_vssio": {
+          "cell": "PVSS2CDG",
+          "x_um": 1350.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 1350.0
+        },
+        "i_pad_bottom_vddio": {
+          "cell": "PVDD2CDG",
+          "x_um": 1250.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 1250.0
+        },
+        "i_pad_bottom_vss_2": {
+          "cell": "PVSS1CDG",
+          "x_um": 750.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 750.0
+        },
+        "i_pad_bottom_vdd_2": {
+          "cell": "PVDD1CDG",
+          "x_um": 650.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 650.0
+        },
+        "i_pad_bottom_vss_1": {
+          "cell": "PVSS1CDG",
+          "x_um": 360.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 360.0
+        },
+        "i_pad_bottom_vdd_1": {
+          "cell": "PVDD1CDG",
+          "x_um": 260.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 260.0
+        },
+        "i_pad_top_poc": {
+          "cell": "PVDD2POC",
+          "x_um": 1450.0,
+          "y_um": 1835.0,
+          "orientation_def": "S",
+          "side": "top",
+          "offset_um": 1450.0
+        },
+        "i_pad_top_vssio": {
+          "cell": "PVSS2CDG",
+          "x_um": 1350.0,
+          "y_um": 1835.0,
+          "orientation_def": "S",
+          "side": "top",
+          "offset_um": 1350.0
+        },
+        "i_pad_top_vddio": {
+          "cell": "PVDD2CDG",
+          "x_um": 1250.0,
+          "y_um": 1835.0,
+          "orientation_def": "S",
+          "side": "top",
+          "offset_um": 1250.0
+        },
+        "i_pad_top_vss_2": {
+          "cell": "PVSS1CDG",
+          "x_um": 750.0,
+          "y_um": 1835.0,
+          "orientation_def": "S",
+          "side": "top",
+          "offset_um": 750.0
+        },
+        "i_pad_top_vdd_2": {
+          "cell": "PVDD1CDG",
+          "x_um": 650.0,
+          "y_um": 1835.0,
+          "orientation_def": "S",
+          "side": "top",
+          "offset_um": 650.0
+        },
+        "i_pad_top_vss_1": {
+          "cell": "PVSS1CDG",
+          "x_um": 360.0,
+          "y_um": 1835.0,
+          "orientation_def": "S",
+          "side": "top",
+          "offset_um": 360.0
+        },
+        "i_pad_top_vdd_1": {
+          "cell": "PVDD1CDG",
+          "x_um": 260.0,
+          "y_um": 1835.0,
+          "orientation_def": "S",
+          "side": "top",
+          "offset_um": 260.0
+        },
+        "i_pad_cpu_debug_halted_o": {
+          "cell": "PDDW0204CDG",
+          "x_um": 1835.0,
+          "y_um": 460.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 460.0
+        },
+        "i_pad_npu_irq_o": {
+          "cell": "PDDW0204CDG",
+          "x_um": 1600.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 1600.0
+        },
+        "i_pad_boot_ready_i": {
+          "cell": "PDDW0204CDG",
+          "x_um": 460.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 460.0
+        },
+        "i_pad_td_o": {
+          "cell": "PDDW0204CDG",
+          "x_um": 0.0,
+          "y_um": 1150.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 1150.0
+        },
+        "i_pad_td_i": {
+          "cell": "PDDW0204CDG",
+          "x_um": 0.0,
+          "y_um": 1050.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 1050.0
+        },
+        "i_pad_tms_i": {
+          "cell": "PDDW0204CDG",
+          "x_um": 0.0,
+          "y_um": 950.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 950.0
+        },
+        "i_pad_tck_i": {
+          "cell": "PDDW0204CDG",
+          "x_um": 0.0,
+          "y_um": 850.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 850.0
+        },
+        "i_pad_rst_ni": {
+          "cell": "PDDW0204CDG",
+          "x_um": 0.0,
+          "y_um": 1600.0,
+          "orientation_def": "E",
+          "side": "left",
+          "offset_um": 1600.0
+        },
+        "i_pad_clk_i": {
+          "cell": "PDDW0204CDG",
+          "x_um": 1600.0,
+          "y_um": 1835.0,
+          "orientation_def": "S",
+          "side": "top",
+          "offset_um": 1600.0
+        },
+        "i_pad_gpio0": {
+          "cell": "PDDW0204CDG",
+          "x_um": 1835.0,
+          "y_um": 850.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 850.0
+        },
+        "i_pad_gpio1": {
+          "cell": "PDDW0204CDG",
+          "x_um": 1835.0,
+          "y_um": 950.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 950.0
+        },
+        "i_pad_gpio2": {
+          "cell": "PDDW0204CDG",
+          "x_um": 1835.0,
+          "y_um": 1050.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 1050.0
+        },
+        "i_pad_gpio3": {
+          "cell": "PDDW0204CDG",
+          "x_um": 1835.0,
+          "y_um": 1150.0,
+          "orientation_def": "W",
+          "side": "right",
+          "offset_um": 1150.0
+        },
+        "i_pad_gpio4": {
+          "cell": "PDDW0204CDG",
+          "x_um": 850.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 850.0
+        },
+        "i_pad_gpio5": {
+          "cell": "PDDW0204CDG",
+          "x_um": 950.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 950.0
+        },
+        "i_pad_gpio6": {
+          "cell": "PDDW0204CDG",
+          "x_um": 1050.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 1050.0
+        },
+        "i_pad_gpio7": {
+          "cell": "PDDW0204CDG",
+          "x_um": 1150.0,
+          "y_um": 0.0,
+          "orientation_def": "N",
+          "side": "bottom",
+          "offset_um": 1150.0
+        }
+      }
+    }
+  },
+  "additional_native_gpio_pad_bbox_mm2": 0.0552,
+  "source_sha256": {
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv": "3fee39d262ef44bff6ee00b591fe08830e5e35cdd1b9e5eb9eb06da6f6525805",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv": "33d7c06b0fef3ae2c8814b040abe3cdaa23065cf12643de20e8275f44f97abe1",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv": "ae738f408ba2ade41bfcf0488c8f611a2c39b26915191890dac907b8a7a518e5",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv": "afc32fcae21f6cbb834c5ee602a1aaee1b518fc436a86d4fe1b97942473d35c8",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv": "c46075cb09de0e773c91da62d02497673945b7a3e5de176363e5b5e118f82eea",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv": "7eb340f76c76d18f4ac3b6d1d61433c7372118d24f57f83a6ceae82cdbf51c2d",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv": "717fc6e7ec754807440f346d9b8bb930da302fffd294550e30ceae78009f4e87",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv": "0bf54e372850c1af22264711d311d943718dc4c8d918e47cc98e9a8d07461d44",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv": "08cc968a5b26b5a68ad2c548755e6b3b0d07a7ad75a3f11e92bc1bab71eeb7c6",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv": "cff163332b28e84904955e88691f973a47f90a4209b3f0ae0d2afe94f6a49921",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv": "3720278ce00b5591a1a63fe5515528dd4223a35070303e58cf2e48bd0b56c8c1",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv": "51322d03a0479f16a4acb66cccee48003e2e224c02a7d3188cbaea9b2f8b2756",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv": "83d9f70bab3b514062a7a79a581919afd5de466167dfcd08733c773f36ba094a",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv": "fa60eaab03518e8e145a3f0a626bc7945e79265e8322ce874a6c8f6996f0e10b",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv": "0538bf1d829187699085de361d20ab79d04a459b06060a8f04709105f61818dc",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv": "cf047a8b7654f2cb0d36050c41b57cf95bf0a0a21f5dea346d38aa0da57c24fe",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv": "e7e30ce0f0e6f652dcf59e586933cada245018b80f2529da476b4272e86e4380",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv": "5fa2656a11759ff10fd016ed885761c9c379627b9a1b83ddee6e03a35ee9e23f",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv": "ad8a13c8314b9a3c28228db2844466c9d750460d6afa8f6299a7229d80f8dd47",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv": "50d1b4d325694f4e898d5b2f2e7b26a7e631a5abdd1cd283500c900b079275ab",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv": "807cf3fb86fe7060cdb1fa21dfbc843220b09a4d694d23ad4bc1cdd3e7118264",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv": "6eca8d4c2e299adcc498417220478360cc22898ba9037cdad6a1b81e80373c7b",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv": "11035bcbb28447fa5a3e40d5cad4f257e763f75e49664ce8098ab6247a9a57cb",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv": "27931c8004e4d266c6ea02c9d5c19968c67d7e6ab86e57da4088531b13c8c48f",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv": "db90df2f8737aff29d73b3d242dd33aeb6750ae69ae7eb8e118b531180945d7f",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv": "858b172963e17529de0b40a5be6ddfdadfc60bdca967819e4fc558b0ed6d7b87",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv": "6a78a0d77d32e6795f63e5149f77b98320ce504c67c44a2e359c9aea70989224",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv": "e2cec8f3d273748783275c60b1ec89101336608638d7e7783b03dd6b9dbb0345",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv": "6e12f673e05380e34a35c38d8ee8b6878935d96b6f2dfda72c67f8a6e92a6e4e",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv": "1510df315721b370c2d86b1c1d134a3ff6beefba2d072de7a4a611e3ecffb753",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv": "6b646e6aa931f8ab56b85ee27549a422450b456270a54d68a4130329823226b6",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv": "d910cbd0751f38d349e8975de22b43d0a2937f9e905b0d9b82894fd83c53fe8a",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv": "c2a0787c07bcd6c198b6338c4c6ee372b4bce96ec4a4def467ff0ae03da4e43a",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv": "98b246d9ada45a7073d217d5c3bbc86941ee76bb00e7e0edda61d3bbec83728e",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv": "e2d1cc9bc433a093938f2d4e4268c611f9a9bf199101e85114d417ff04597626",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv": "24df51d9cb33f5c8760a8cfbc7931aafc94c2ab0523c7df55b2635e7778af16f",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv": "857962513fc5bd3eb3d6b28c55fdfb15ef53f8ce8a59173a7d583efb8caee66f",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv": "6a0cf2f15c69886ad5497222aa203f6f5b1fdd004b32a4ab87b36a0960ba2254",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv": "2b0a58e5c2f758dbe5f6e8f786c547da5508ce466007517434e2f7d817b758ed",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv": "7a2dbeded21929832b40fc8d068b35b7281c75a63c426feed207127d4da08e4e",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv": "a2fcbe6b783659ebecaf25d105f30c68af9b68c2850b833af64a2cec3ec29262",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv": "66e6078ea3b3acd3ceea4b974c0488d25e02324935532de1f2d39cdc34c875a0",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv": "cd04d46afbf778ff3f1573bdd390784e5461a09b33fd670fa126ae7d3c433e89",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv": "1cf012a83b54472931ad9944e7774e311222641a0aa026229c19467f90bf5448",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv": "2467f6b3c2745e687edad1a0c88ab5267b4ba8642c91e1fc0f282cf4223e5dc3",
+    "npu/rtl/common/npu_addr_pkg.sv": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
+    "npu/rtl/cnn/npu_stream_pkg.sv": "d4c1b89c87098ac9adce72ab60ea9a1d4401d074ffe835fc109ab0f82d8e8d72",
+    "npu/rtl/common/npu_rr_select.sv": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+    "npu/rtl/common/npu_clock_gate.sv": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+    "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+    "npu/rtl/cnn/npu_cnn_mac.sv": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+    "npu/rtl/top/npu_core.sv": "550aa8e94af55bd6011a8273ac3354bf283ab327ca278a3e3f627cccaed27183",
+    "npu/rtl/interconnect/npu_data_regfile.sv": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
+    "npu/rtl/debug/npu_debug_boot.sv": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+    "npu/rtl/debug/npu_jtag_debug.sv": "d2324d487db499ca8b30226f438c1a527f73cba72e6c8762ba4d9237e880b69a",
+    "npu/rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+    "npu/rtl/matrix/npu_matrix_stream.sv": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
+    "npu/rtl/control/npu_mmio.sv": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
+    "npu/rtl/cnn/npu_stream.sv": "292658bd3818c0af4ab0f48bd7168032bd39c7b03d9870a73917713228b4d787",
+    "npu/rtl/cnn/npu_stream_control.sv": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
+    "npu/rtl/cnn/npu_stream_engine.sv": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
+    "npu/rtl/vector/npu_vector.sv": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
+    "npu/rtl/vector/npu_vector_stream.sv": "808debe76f7d6ca9373867aa61f1ca94357bac3adeee2ba75d6cf66d5435b77a",
+    "npu/rtl/interconnect/xbar.sv": "e88aecbc3948c67e8fff294ce32cf09f480ec626000072066dc0afaadb93df05",
+    "npu/rtl/interconnect/xbar_stream.sv": "0a5d25fa9aec9378e5d66fb8840cf41ffd42e837d941220bfdd301bbd2b01a0c",
+    "npu/rtl/interconnect/npu_multi_read.sv": "a6827b272c5169e6b836683a52d76b1239ba41f2b2b37dd865df11cd944b325b",
+    "npu/rtl/quant/npu_shared_quant.sv": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
+    "npu/rtl/common/npu_store_pack.sv": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
+    "npu/rtl/control/npu_gpio.sv": "7618a92516f6fd89eaff3688bb9d5f10a9d09a3e9c3b463573cbae0ab564f2f6",
+    "npu/rtl/top/npu_soc.sv": "7f1ad670b7e35134ff2e5ac5d4777e6f63bdec0c61b4f47d4f214c05be280ef3",
+    "npu/eda/tsmc180/chip_top.sv": "fb51c26e3e4d0bbeeef8199244482d0a2ce2b284e01897476d93bbb923bd24f6",
+    "npu/sw/npu.h": "0da1a35246af6e661a191f30459d0915d8acd6b90b70dabf24296a950182e330"
+  },
+  "evidence_sha256": {
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/source_manifest.json": "b0173a174b56296bc0f7f9b4d475160afa5f93f73fe2fa508a247c6881dfa995",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/library_manifest.json": "cc0fd67453c7fa707abb2ef6d65342eba280c7706fbf70e38bf883a8396fa7b2",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/optimized.v": "4c8b3e6c3d9cc7f29fb4725f44a448e81e0942ad0286839dd4573dc35b4327ff",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/reports/area.rpt": "b1887283ccac9f7f6a1e806acc34545e208da32ed98c55b86f2af11dada0212e",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/reports/qor.rpt": "cf49ce082519f8d45e6dcd653405259f03d50fc6afe51b305551cce49a42d3a1",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-core/reports/timing.rpt": "fc9084592d0b97a61b5d5a19baa917e6f0bfe68bae4e62fda834d57df83ea22e",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-unit/npu_gpio.sv": "7618a92516f6fd89eaff3688bb9d5f10a9d09a3e9c3b463573cbae0ab564f2f6",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-unit/synth.tcl": "e394df47bfc0d894a612b941fe345e8ba7aecfb78f5a2b7e26c68bd5730c67ef",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-unit/area.rpt": "2553cfe5738541cd82e9ad9572763ee3a3e595f7671a4ec5032f2659a23b9b21",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-unit/mapped.v": "b0a964cfa669e3beea0d7c759b5850b5ddc23dff65523482310dddfea5fa8dbe",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/manifest.json": "db0bae99142cdc38d8060ebecc8687d5d7ae4630362f8f286a9117a2c33c7237",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/inputs/chip_top.sv": "fb51c26e3e4d0bbeeef8199244482d0a2ce2b284e01897476d93bbb923bd24f6",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/mynpu/chip_synth/mynpu_asic_top.postsyn.v": "563f329b5f455c68814b826d6dd2eb0e19ebcdd3079b8417b919e59914d7f4c2",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/mynpu/chip_synth/area.rpt": "da3a4f7cc1d3c5df9ba6314e8938f1c4fb2e7afb16853c4e7329d8e22d54d77e",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/mynpu/chip_synth/unresolved.rpt": "06a5ce8fbdf30f7adb6df90fa7d5f5092804d8a97150a3f86e76b1906db6ad86",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/logs/01-gpio8-floorplan-fixed.json": "65a09a218be5c6ada29b3effc363cd2b91d3fdb82b5d16785fb4bb021d01000c",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/mynpu/pnr/outputs/03_io_floorplan.def": "bc078db1f56346a94f40c585dad65d01ff404f8c4266c947c7f0097669fddd66",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/gpio_pad_audit.json": "b0b58e1b0deea0f80f7c346edaa1ae14b5fb5cde48bc2a1f7bf797792ba7db9c",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/gpio8-pad-floorplan.png": "353536127a2bbc60e0d35b0f5bcc424bda6954600ac3663f11792b4b1e9db9ac",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/scripts/export_io_functional.tcl": "84d5dfbe7f22a1eb598d829b1fc981c015c0d4d1de95eda2738536559e180779",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/logs/export_io_functional.log": "4af4bd6a00c60729bf5a70a98b943d8b49bfffb1cc2ba7c2227f1d45701394bd",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261112-gpio8-chip/mynpu/pnr/outputs/io_connected_functional.v": "aec7d212acaee17aad7bf3abda49f58bc9693fe713bf42678475caaa79238e14"
+  },
+  "limitations": [
+    "Full GPIO-version placement/CTS/routing and final DRC/LVS/Calibre not performed.",
+    "Previous r3/paired-pad postroute metrics predate GPIO and cannot be reused as GPIO-version results.",
+    "Asynchronous input byte coherence requires an external stability/handshake protocol.",
+    "Inputs have no configured pulls.",
+    "GPIO has no IRQ or automatic NPU trigger; CPU/DebugModule must access registers.",
+    "The existing Debug Module SBA error-reporting limitation is unchanged.",
+    "EGo1 GPIO headers have not been assigned or implemented."
+  ],
+  "shell_synthesis": {
+    "cell_area_mm2": 2.626775188,
+    "gpio_pads_included": 8,
+    "other_signal_pads_added_later_in_innovus": 9,
+    "scope": "Includes core and eight RTL-instantiated GPIO PADs, not a complete IO-ring area."
+  },
+  "io_inserted_gpio_checks": 36,
+  "io_inserted_jtag_mnist_checks": 34
+}

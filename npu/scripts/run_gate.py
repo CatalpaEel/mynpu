@@ -84,9 +84,9 @@ macro = (
     / "soc_cv32e40p_template_pnr-stu/src/macro/RA1SHD_2048x32M8/RA1SHD_2048x32M8.v"
 )
 files = [a.netlist.resolve() if a.netlist else run / "optimized.v", std, macro, out / "tb_gate.sv"]
-assets = list(a.artifacts_dir.glob("*.hex")) + (
-    [ROOT / "tb/db_jtag_tasks.svh"] if a.suite == "jtag" else []
-)
+assets = list(a.artifacts_dir.glob("*.hex")) + [
+    ROOT / "tb/db_jtag_tasks.svh", ROOT / "tb/db_sba_access.svh"
+]
 assets.append(a.artifacts_dir / "test_meta.svh")
 hashes = {str(f): hashlib.sha256(f.read_bytes()).hexdigest() for f in files + assets}
 cmd = [

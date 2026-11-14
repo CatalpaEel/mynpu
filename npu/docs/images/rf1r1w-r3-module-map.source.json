@@ -1,0 +1,126 @@
+{
+  "scope": "Actual final r3 instance bounding boxes, not an illustrative floorplan. Routing omitted; bbox areas can overlap at IO/bond.",
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3",
+  "checkpoint": "14_exported.enc.dat",
+  "die_box_um": [
+    0.0,
+    0.0,
+    1950.0,
+    1950.0
+  ],
+  "core_box_um": [
+    130.48,
+    129.36,
+    1819.84,
+    1819.84
+  ],
+  "instance_count": 112509,
+  "groups": {
+    "CPU": {
+      "color": "#60a5fa",
+      "label": "CPU",
+      "cells": 9920,
+      "bbox_area_mm2": 0.2594989824000038
+    },
+    "Debug": {
+      "color": "#94a3b8",
+      "label": "JTAG / DM / bootstrap",
+      "cells": 3722,
+      "bbox_area_mm2": 0.08750286719999946
+    },
+    "Matrix": {
+      "color": "#f87171",
+      "label": "Matrix compute",
+      "cells": 10014,
+      "bbox_area_mm2": 0.25338535040001436
+    },
+    "Matrix_Stream": {
+      "color": "#fb923c",
+      "label": "Matrix Stream",
+      "cells": 4527,
+      "bbox_area_mm2": 0.11245790080000054
+    },
+    "CNN": {
+      "color": "#a78bfa",
+      "label": "CNN compute",
+      "cells": 1976,
+      "bbox_area_mm2": 0.0480419519999998
+    },
+    "CNN_Stream": {
+      "color": "#e879f9",
+      "label": "CNN Stream / windows",
+      "cells": 7705,
+      "bbox_area_mm2": 0.18494999039999405
+    },
+    "Vector": {
+      "color": "#4ade80",
+      "label": "Vector ALU",
+      "cells": 4284,
+      "bbox_area_mm2": 0.08492131200000143
+    },
+    "Vector_Stream": {
+      "color": "#2dd4bf",
+      "label": "Vector Stream / registers",
+      "cells": 2366,
+      "bbox_area_mm2": 0.059114540799999324
+    },
+    "Quant": {
+      "color": "#facc15",
+      "label": "Shared quantizer QT01",
+      "cells": 5265,
+      "bbox_area_mm2": 0.15044583680000054
+    },
+    "RF": {
+      "color": "#fef08a",
+      "label": "Shared RF (256 B, 1R1W)",
+      "cells": 8202,
+      "bbox_area_mm2": 0.185507571199982
+    },
+    "XBAR": {
+      "color": "#38bdf8",
+      "label": "XBAR / stream FIFOs",
+      "cells": 5514,
+      "bbox_area_mm2": 0.12917434879999706
+    },
+    "MMIO": {
+      "color": "#818cf8",
+      "label": "MMIO / queues / events",
+      "cells": 7685,
+      "bbox_area_mm2": 0.22766199680000593
+    },
+    "SRAM": {
+      "color": "#c4d6ed",
+      "label": "SRAM macros (2 x 8 KiB)",
+      "cells": 2,
+      "bbox_area_mm2": 0.8028871814999999
+    },
+    "IO": {
+      "color": "#64748b",
+      "label": "IO / bond / corner",
+      "cells": 322,
+      "bbox_area_mm2": 1.006515199999999
+    },
+    "Support": {
+      "color": "#cbd5e1",
+      "label": "Other / physical support",
+      "cells": 9598,
+      "bbox_area_mm2": 0.04679946879999848
+    },
+    "Filler": {
+      "color": "#263242",
+      "label": "Core filler",
+      "cells": 31407,
+      "bbox_area_mm2": 0.20965916160002432
+    }
+  },
+  "sha256": {
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-rf1r1w-module-map/instances.tsv": "6853a8ee6e930d004c39b3cba1c3278dd39a8da5fccf4bc94ca1875e23e3b3d2",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-rf1r1w-module-map/export.tcl": "f91534b632410442cfd71c2e5f8dac91c8681fe5780431ceb1d36f54666de69e",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-rf1r1w-module-map/export.log": "d1796012775659f84c8eabd28b450bcc8d6b64e1264b4a9bf8ac8b98de8f6fd9",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/manifest.json": "55561035029c6a328a95eaf3705c597820b8e30158c6b6c940057917b23dbab9",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/mynpu/pnr/checkpoints/14_exported.enc": "57a7c41ee6fe86f9a87b48641e28e3f56ffd570c4b1a3b7d9649ad02ad144992",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/eda/tsmc180/render_current_module_map.py": "198d8e97df1c839fef602d69dc3e9e27f1fac845858962e791e4719bfa3d9569",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/rf1r1w-r3-module-map-die.png": "022adbe5bfafbbd7b8795569ecdca864c06623c4a91bb25d4d69aa21c108016a",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/rf1r1w-r3-module-map-core.png": "39034e7e77faf8471c90ebc441603a06cdfa4dd53710d66983fc3fef8028b117"
+  }
+}

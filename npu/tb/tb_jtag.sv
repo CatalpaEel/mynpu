@@ -3,9 +3,6 @@ module tb_jtag;
   logic clk = 0, rst_n = 0, tck = 0, tms = 1, tdi = 0;
   always #10 clk = ~clk;
   wire tdo, halted, done, pass;
-  logic hreq = 0, hwe = 0;
-  logic [31:0] ha = 0, hd = 0;
-  wire hg, hv, he;
   wire [31:0] hr;
   npu_soc dut (
     .clk_i             (clk),
@@ -16,26 +13,6 @@ module tb_jtag;
     .td_i              (tdi),
     .td_o              (tdo),
     .cpu_debug_halted_o(halted),
-    .host_req_i        (hreq),
-    .host_we_i         (hwe),
-    .host_be_i         (4'hf),
-    .host_addr_i       (ha),
-    .host_wdata_i      (hd),
-    .host_gnt_o        (hg),
-    .host_rvalid_o     (hv),
-    .host_error_o      (he),
-    .host_rdata_o      (hr),
-
-
-
-
-
-
-
-
-
-
-
 
     .irq_o          (),
     .cpu_test_done_o(done),
@@ -50,8 +27,8 @@ module tb_jtag;
       removed_page_errors++;
   end
 `endif
-  int checks = 0, native_count = 0;
-  bit stop_host = 0;
+  int checks = 0;
+
   task automatic eq(input logic [31:0] got, want, input string label);
     if (got !== want) $fatal(1, "%s got=%h want=%h", label, got, want);
     checks++;
@@ -102,47 +79,6 @@ module tb_jtag;
     dmi_write('h17, 32'h00230000 | regno);
     abstract_wait();
   endtask
-  task automatic host_write(input logic [31:0] a, v);
-    int waited;
-    @(negedge clk);
-    hreq = 1;
-    hwe = 1;
-    ha = a;
-    hd = v;
-    waited = 0;
-    do begin
-      @(posedge clk);
-      waited++;
-      if (waited > 16) $fatal(1, "native host starved");
-    end while (!hg);
-    @(negedge clk);
-    hreq = 0;
-    if (!hv) @(negedge clk);
-    if (!hv || he) $fatal(1, "host response");
-  endtask
-`ifdef NPU_GATE_SIM
-  // SBA has no architectural bus-error input in this DM. Its unused internal
-  // error net may be optimized. Exercise the shared XBAR error through host IO.
-  task automatic host_bad_page(input logic [31:0] a);
-    int waited;
-    @(negedge clk);
-    hreq = 1;
-    hwe = 1;
-    ha = a;
-    hd = 1;
-    waited = 0;
-    do begin
-      @(posedge clk);
-      waited++;
-      if (waited > 16) $fatal(1, "host error probe starved");
-    end while (!hg);
-    @(negedge clk);
-    hreq = 0;
-    if (!hv) @(negedge clk);
-    if (!hv || !he) $fatal(1, "removed page did not return external error %h", a);
-    removed_page_errors++;
-  endtask
-`endif
   logic [40:0] scan;
   logic [31:0] v, pc, ds;
   bit discard;
@@ -184,26 +120,6 @@ module tb_jtag;
     sba_write(32'h80003ffc, 32'hfedcba98);
     sba_read(32'h80003ffc, v);
     eq(v, 32'hfedcba98, "bank1 end");
-    fork
-      begin
-        while (!stop_host) begin
-          host_write(32'h80002100, 32'hbad00000 + native_count);
-          native_count++;
-        end
-      end
-      begin
-        for (int j = 0; j < 8; j++) begin
-          sba_write(32'h80002000, j);
-          sba_read(32'h80002000, v);
-          eq(v, j, "concurrent SBA");
-        end
-        stop_host = 1;
-      end
-    join
-    sba_read(32'h80002100, v);
-    eq(v, 32'hbad00000 + native_count - 1, "native/SBA SRAM visibility");
-    if (native_count < 100) $fatal(1, "insufficient host contention");
-    checks++;
     // SBA autoincrement crosses the physical bank boundary transparently.
     dmi_write('h38, 32'h00050000);
     dmi_write('h39, 32'h80001ffc);
@@ -228,17 +144,16 @@ module tb_jtag;
     idle_ticks(16);
     sba_read(32'h80003ffc, v);
     eq(v, 32'hfedcba98, "SRAM preserved reset");
-    // This DM version has no SBA bus-error input. Observe XBAR's real error
-    // response; do not claim that DMI SBCS reports an unsupported error input.
+    // Probe removed pages through the same SBA transport, including sticky error clear.
     for (int page = 3; page <= 5; page++) begin
-      sba_write(32'h40000000 + (page << 8), 1);
+      dmi_write('h38, 32'h00447000);
+      dmi_write('h39, 32'h40000000 + (page << 8));
+      dmi_write('h3c, 1);
+      dmi_read('h38, v);
+      if (v[21] || v[14:12] != 2) $fatal(1, "SBA missing bus error %h", v);
+      checks++;
     end
-`ifdef NPU_GATE_SIM
-    for (int page = 3; page <= 5; page++) host_bad_page(32'h40000000 + (page << 8));
-    eq(removed_page_errors, 3, "removed DMA pages return host errors");
-`else
-    eq(removed_page_errors, 3, "removed DMA pages rejected by XBAR");
-`endif
+    dmi_write('h38, 32'h00447000);
     // Tiny CPU loop: addi x7,x7,1; jal x0,-4. Inspect and single-step it.
     sba_write(32'h80000080, 32'h00138393);
     sba_write(32'h80000084, 32'hffdff06f);

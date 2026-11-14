@@ -30,6 +30,7 @@ module dm_sba #(
   output logic [BusWidth/8-1:0]  master_be_o,
   input  logic                   master_gnt_i,
   input  logic                   master_r_valid_i,
+  input  logic                   master_r_error_i = 1'b0,
   input  logic [BusWidth-1:0]    master_r_rdata_i,
 
   input  logic [BusWidth-1:0]    sbaddress_i,
@@ -147,7 +148,22 @@ module dm_sba #(
       sberror_valid_o = 1'b1;
       sberror_o       = 3'd3;
     end
-    // further error handling should go here ...
+    // An accepted bus error must terminate SBA and become sticky SBCS.sberror.
+    if (master_r_valid_i && master_r_error_i &&
+        state_q inside {dm::WaitRead, dm::WaitWrite}) begin
+      state_d = dm::Idle;
+      sbaddress_o = sbaddress_i;
+      sberror_valid_o = 1'b1;
+      sberror_o = 3'd2; // bad system-bus address/access
+    end
+    if (state_q inside {dm::Read, dm::Write} &&
+        (sbaccess_i > $clog2(BusWidth/8) ||
+         (sbaddress_i & ((BusWidth'(1) << sbaccess_i) - 1)) != 0)) begin
+      req = 1'b0;
+      state_d = dm::Idle;
+      sberror_valid_o = 1'b1;
+      sberror_o = sbaccess_i > $clog2(BusWidth/8) ? 3'd4 : 3'd3;
+    end
   end
 
   always_ff @(posedge clk_i or negedge rst_ni) begin : p_regs
@@ -159,12 +175,12 @@ module dm_sba #(
   end
 
   assign master_req_o    = req;
-  assign master_add_o    = address[BusWidth-1:0];
+  assign master_add_o    = {address[BusWidth-1:$clog2(BusWidth/8)], {$clog2(BusWidth/8){1'b0}}};
   assign master_we_o     = we;
-  assign master_wdata_o  = sbdata_i[BusWidth-1:0];
+  assign master_wdata_o  = sbdata_i[BusWidth-1:0] << (8 * be_idx);
   assign master_be_o     = be[BusWidth/8-1:0];
   assign gnt             = master_gnt_i;
   assign sbdata_valid_o  = master_r_valid_i;
-  assign sbdata_o        = master_r_rdata_i[BusWidth-1:0];
+  assign sbdata_o        = master_r_rdata_i[BusWidth-1:0] >> (8 * be_idx);
 
 endmodule : dm_sba

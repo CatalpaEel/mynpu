@@ -1,5 +1,5 @@
-// RISC-V debug 0.13 TAP/DTM/DM, reusing the course library unchanged.
-// Host and SBA share one ordered XBAR ingress. DM/TAP reset only on POR.
+// RISC-V debug 0.13 TAP/DTM/DM, based on the course library with SBA bus-error reporting.
+// SBA has its own ordered XBAR ingress. DM/TAP reset only on POR.
 module npu_jtag_debug (
   input logic clk_i,
   rst_ni,
@@ -10,15 +10,6 @@ module npu_jtag_debug (
   system_rst_no,
   debug_req_o,
   input logic hart_unavailable_i,
-  input logic host_req_i,
-  host_we_i,
-  input logic [3:0] host_be_i,
-  input logic [31:0] host_addr_i,
-  host_wdata_i,
-  output logic host_gnt_o,
-  host_rvalid_o,
-  host_error_o,
-  output logic [31:0] host_rdata_o,
   output logic bus_req_o,
   bus_we_o,
   output logic [3:0] bus_be_o,
@@ -42,7 +33,7 @@ module npu_jtag_debug (
   logic sba_req, sba_we, sba_gnt, sba_rvalid;
   logic [3:0] sba_be;
   logic [31:0] sba_addr, sba_wdata, sba_rdata;
-  logic pending, owner_sba, rr, pick_sba, allow, accepted, retire;
+  logic pending, allow, accepted, retire;
   // Never cut an accepted SBA response when ndmreset arrives. New requests
   // stop immediately; at most one finite-latency XBAR transaction is drained.
   rstgen i_reset (
@@ -104,6 +95,7 @@ module npu_jtag_debug (
     .master_be_o     (sba_be),
     .master_gnt_i    (sba_gnt),
     .master_r_valid_i(sba_rvalid),
+    .master_r_error_i(bus_error_i),
     .master_r_rdata_i(sba_rdata),
     .dmi_rst_ni      (rst_ni),
     .dmi_req_valid_i (req_valid),
@@ -113,36 +105,24 @@ module npu_jtag_debug (
     .dmi_resp_ready_i(resp_ready),
     .dmi_resp_o      (dmi_resp)
   );
-  always_comb begin
-    retire = pending && bus_rvalid_i;
-    allow = system_rst_no && !ndmreset && (!pending || retire);
-    pick_sba = sba_req && (!host_req_i || rr);
-    bus_req_o = allow && (host_req_i || sba_req);
-    bus_we_o = pick_sba ? sba_we : host_we_i;
-    bus_be_o = pick_sba ? sba_be : host_be_i;
-    bus_addr_o = pick_sba ? sba_addr : host_addr_i;
-    bus_wdata_o = pick_sba ? sba_wdata : host_wdata_i;
-    accepted = bus_req_o && bus_gnt_i;
-    host_gnt_o = accepted && !pick_sba;
-    sba_gnt = accepted && pick_sba;
-    host_rvalid_o = retire && !owner_sba;
-    sba_rvalid = retire && owner_sba;
-    host_rdata_o = bus_rdata_i;
-    host_error_o = bus_error_i;
-    sba_rdata = bus_rdata_i;
-  end
+  // One outstanding SBA transaction. CPU/NPU use other XBAR master IDs.
+  // The old response may retire on the same edge that accepts a new request.
+  assign retire = pending && bus_rvalid_i;
+  assign allow = system_rst_no && !ndmreset && (!pending || retire);
+  assign bus_req_o = allow && sba_req;
+  assign bus_we_o = sba_we;
+  assign bus_be_o = sba_be;
+  assign bus_addr_o = sba_addr;
+  assign bus_wdata_o = sba_wdata;
+  assign accepted = bus_req_o && bus_gnt_i;
+  assign sba_gnt = accepted;
+  assign sba_rvalid = retire;
+  assign sba_rdata = bus_rdata_i;
   always_ff @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      pending <= 0;
-      owner_sba <= 0;
-      rr <= 0;
-    end else begin
+    if (!rst_ni) pending <= 0;
+    else begin
       if (retire) pending <= 0;
-      if (accepted) begin
-        pending <= 1;
-        owner_sba <= pick_sba;
-        rr <= !pick_sba;
-      end
+      if (accepted) pending <= 1;
     end
   end
 endmodule

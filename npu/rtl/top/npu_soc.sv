@@ -1,4 +1,6 @@
 module npu_soc (
+  input logic [7:0] gpio_i,
+  output logic [7:0] gpio_o, gpio_oe_o,
   input logic clk_i,
   rst_ni,
   cpu_run_i,
@@ -7,15 +9,6 @@ module npu_soc (
   td_i,
   output logic td_o,
   cpu_debug_halted_o,
-  input logic host_req_i,
-  host_we_i,
-  input logic [3:0] host_be_i,
-  input logic [31:0] host_addr_i,
-  host_wdata_i,
-  output logic host_gnt_o,
-  host_rvalid_o,
-  host_error_o,
-  output logic [31:0] host_rdata_o,
   output logic [4:0] irq_o,
   output logic cpu_test_done_o,
   cpu_test_pass_o
@@ -26,7 +19,7 @@ module npu_soc (
   logic [1:0][10:0] sram_addr_o;
   logic [1:0][31:0] sram_wdata_o, sram_rdata_i;
   npu_core i_core (.*);
-  // Two physical SRAM banks, shared by instructions, data and DMA.
+  // Two physical SRAM banks, shared by instructions, data and NPU.
   for (genvar b = 0; b < 2; b++) begin : g_bank
     sram_ff #(
       .AddrWidth(11),

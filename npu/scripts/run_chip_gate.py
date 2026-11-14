@@ -1,4 +1,4 @@
-"""Exercise the nine-signal chip through JTAG only, including SBA-loaded MNIST."""
+"""Exercise chip JTAG/MNIST or GPIO through actual IO and SRAM models."""
 
 import argparse
 import hashlib
@@ -12,6 +12,7 @@ p = argparse.ArgumentParser(description=__doc__)
 p.add_argument("--run", type=Path, required=True)
 p.add_argument("--tag", required=True)
 p.add_argument("--netlist", type=Path)
+p.add_argument("--gpio", action="store_true", help="Check the eight actual GPIO PADs through JTAG and CPU")
 p.add_argument("--shell", action="store_true", help="Check the mapped core plus frozen RTL shell")
 p.add_argument("--artifacts-dir", type=Path)
 a = p.parse_args()
@@ -45,7 +46,8 @@ macro = (
 helper = ROOT / "tb/db_jtag_tasks.svh"
 # 10MHz pin clock matches physical constraints; preserve the shared helper.
 (out / "db_jtag_tasks.svh").write_text(helper.read_text().replace("#20;", "#50;"))
-files += [std, io, macro, ROOT / "tb/tb_chip_jtag.sv"]
+top = "tb_gpio_chip" if a.gpio else "tb_chip_jtag"
+files += [std, io, macro, ROOT / "tb" / (top + ".sv")]
 assets = [helper, out / "db_jtag_tasks.svh", *list(images.glob("*.hex"))]
 hashes = {str(f): sha(f) for f in files + assets}
 cmd = [
@@ -58,7 +60,7 @@ cmd = [
     "+incdir+" + str(out),
     *map(str, files),
     "-top",
-    "tb_chip_jtag",
+    top,
     "-o",
     str(out / "simv"),
     "-Mdir=" + str(out / "csrc"),
@@ -69,7 +71,8 @@ cmd = [
     json.dumps(
         {
             "compile": cmd,
-            "scope": "Native nine external signals only, JTAG at 10MHz; actual library and SRAM models; zero delay, no SDF.",
+            "scope": "JTAG at 10MHz; actual library and SRAM models; zero delay, no SDF.",
+            "gpio_test": a.gpio,
         },
         indent=2,
     )
@@ -89,13 +92,14 @@ text = (out / "run.log").read_text()
 changed = [name for name, h in hashes.items() if sha(name) != h]
 passed = (
     rc == 0
-    and "CHIP JTAG PASS" in text
+    and ("GPIO CHIP PASS" if a.gpio else "CHIP JTAG PASS") in text
     and not re.search("Fatal:|Error-\\[|Warning-\\[STASKW", text)
     and not changed
 )
 j = {
     "passed": passed,
     "shell": a.shell,
+    "gpio_test": a.gpio,
     "sha256": hashes,
     "changed_during_run": changed,
     "jtag_mhz": 10,

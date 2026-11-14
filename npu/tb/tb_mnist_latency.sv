@@ -3,11 +3,6 @@ module tb_mnist_latency;
   logic clk = 0;
   always #10 clk = ~clk;
   logic rst_n = 0, cpu_run = 1;
-  logic hreq = 0, hwe = 0;
-  logic [3:0] hbe = 4'hf;
-  logic [31:0] haddr = 0, hwdata = 0;
-  wire hgnt, hrvalid, herror;
-  wire [31:0] hrdata;
   wire [4:0] irq;
   logic rx_valid = 0, rx_last = 0, tx_ready = 0;
   logic [31:0] rx_data = 0;
@@ -18,66 +13,29 @@ module tb_mnist_latency;
   logic [31:0] boot_image[0:511];
   wire cpu_done, cpu_pass;
   localparam logic [31:0] SRAM = 32'h80000000, MMIO = 32'h40000000;
+  logic tck = 0, tms = 1, tdi = 0;
+  wire tdo;
+  `include "db_jtag_tasks.svh"
+  `include "db_sba_access.svh"
   npu_soc dut (
     .clk_i             (clk),
     .rst_ni            (rst_n),
     .cpu_run_i         (cpu_run),
-    .tck_i             (1'b0),
-    .tms_i             (1'b1),
-    .td_i              (1'b0),
-    .td_o              (),
+    .tck_i             (tck),
+    .tms_i             (tms),
+    .td_i              (tdi),
+    .td_o              (tdo),
     .cpu_debug_halted_o(),
-    .host_req_i        (hreq),
-    .host_we_i         (hwe),
-    .host_be_i         (hbe),
-    .host_addr_i       (haddr),
-    .host_wdata_i      (hwdata),
-    .host_gnt_o        (hgnt),
-
-
-
-
-
-
-
-
-
-
-
-
-    .host_rvalid_o  (hrvalid),
-    .host_error_o   (herror),
-    .host_rdata_o   (hrdata),
     .irq_o          (irq),
     .cpu_test_done_o(cpu_done),
     .cpu_test_pass_o(cpu_pass)
   );
   int checks = 0, transactions = 0, mat_jobs = 0;
-  int max_host_wait = 0;
+
   int rx_aborts = 0, tx_aborts = 0;
   task automatic transfer(input bit wr, input logic [31:0] a, d, input logic [3:0] mask,
                           input bit expected_error, output logic [31:0] result);
-    int waited;
-    @(negedge clk);
-    hreq = 1;
-    hwe = wr;
-    haddr = a;
-    hwdata = d;
-    hbe = mask;
-    waited = 0;
-    do begin
-      @(posedge clk);
-      waited++;
-      if (waited > 16) $fatal(1, "Host starved, addr=%h", a);
-    end while (!hgnt);
-    if (waited > max_host_wait) max_host_wait = waited;
-    @(negedge clk);
-    hreq = 0;
-    if (!hrvalid) @(negedge clk);  // Registered MMIO responds one cycle after SRAM.
-    if (!hrvalid) $fatal(1, "Missing response addr=%h", a);
-    if (herror !== expected_error)
-      $fatal(1, "Bus error addr=%h got=%b expected=%b", a, herror, expected_error);
-    result = hrdata;
+    sba_access(wr, a, d, mask, expected_error, result);
     transactions++;
   endtask
   task automatic wr(input logic [31:0] a, d);
@@ -115,7 +73,7 @@ module tb_mnist_latency;
   logic [7:0] payload[8192];
   logic [7:0] golden[784];
   // Test-only preload; actual pin-level loading is covered by tb_jtag SBA.
-  task automatic host_load(input string filename, input int count, input logic [31:0] destination);
+  task automatic sba_load(input string filename, input int count, input logic [31:0] destination);
     logic [31:0] word, ignored;
     logic [3:0] keep;
     $readmemh(filename, payload, 0, count - 1);
@@ -130,6 +88,7 @@ module tb_mnist_latency;
     end
   endtask
   bit measure = 0;
+  longint launch_at = -1;
   longint elapsed = 0, kernel = 0, macs = 0;
   int jobs = 0, queue_peak = 0, pack_peak = 0;
   int
@@ -150,6 +109,11 @@ module tb_mnist_latency;
   always @(posedge clk) begin
     if (measure) begin
       elapsed++;
+`ifndef NPU_GATE_SIM
+      if (dut.i_core.mmio_req && dut.i_core.mmio_we &&
+          dut.i_core.mmio_addr == 12'h008 && dut.i_core.mmio_wdata[0])
+        launch_at = elapsed;
+`endif
 `ifndef NPU_GATE_SIM
       begin
         int lanes;
@@ -172,7 +136,6 @@ module tb_mnist_latency;
         weight_reads++;
       if(dut.i_core.i_stream.req_o && dut.i_core.i_stream.gnt_i && !dut.i_core.i_stream.we_o && dut.i_core.i_stream.i_engine.load_state==dut.i_core.i_stream.i_engine.AREQ)
         act_reads++;
-
 
       if (int'(dut.i_core.i_stream.i_control.qcount) > queue_peak)
         queue_peak = int'(dut.i_core.i_stream.i_control.qcount);
@@ -215,13 +178,14 @@ module tb_mnist_latency;
       rst_n = 0;
       repeat (5) @(negedge clk);
       rst_n = 1;
-      host_load("boot.hex", PROGRAM_BYTES, SRAM);
-      host_load("params.hex", PARAM_BYTES, SRAM + 'h2000);
+      sba_load("boot.hex", PROGRAM_BYTES, SRAM);
+      sba_load("params.hex", PARAM_BYTES, SRAM + 'h2000);
       wr(SRAM + 'h1f00, 32'hffffffff);
       wr(SRAM + 'h1f04, 0);
       wr(SRAM + 'h1f08, 0);
       wr(SRAM + 'h1f0c, 0);
       elapsed = 0;
+      launch_at = -1;
       kernel = 0;
       macs = 0;
       jobs = 0;
@@ -241,14 +205,14 @@ module tb_mnist_latency;
       gather_distinct_three = 0;
       gather_conflicts = 0;
       measure = 1;
-      host_load($sformatf("input%0d.hex", sample), 784, SRAM + 'h1400);
+      sba_load($sformatf("input%0d.hex", sample), 784, SRAM + 'h1400);
       ingress_cycles = elapsed;
 `ifndef NPU_GATE_SIM
       profile_begin();
 `endif
       wr(MMIO + 8, 1);
       limit = 0;
-      // No host polling, per-layer ACK or competing host traffic during inference.
+      // No sba polling, per-layer ACK or competing sba traffic during inference.
       while (!cpu_done) begin
         @(negedge clk);
         limit++;
@@ -257,6 +221,11 @@ module tb_mnist_latency;
       measure = 0;
       total_cycles = elapsed;
       elapsed -= ingress_cycles;
+`ifndef NPU_GATE_SIM
+      if (launch_at < 0) $fatal(1, "missing CPU start MMIO commit");
+      $display("SBA_LAUNCH sample=%0d command_to_commit_cycles=%0d inference_from_commit_cycles=%0d",
+               sample, launch_at - ingress_cycles, total_cycles - launch_at);
+`endif
 `ifndef NPU_GATE_SIM
       profile_finish(sample, elapsed);
 `endif
@@ -309,7 +278,7 @@ module tb_mnist_latency;
     $finish;
   end
   initial begin
-    #2000000000;
+    #2000000000000;
     $fatal(1, "Global timeout");
   end
 endmodule

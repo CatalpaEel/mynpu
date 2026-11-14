@@ -1,4 +1,4 @@
-"""Freeze a nine-pad chip implementation using the previously proven full flow."""
+"""Freeze a chip with nine control/debug PADs and eight bidirectional GPIO PADs."""
 
 import argparse
 import hashlib
@@ -53,6 +53,9 @@ set_input_delay 0.5 -clock sys_clk [get_ports boot_ready_i]
 set_output_delay 0.5 -clock sys_clk [get_ports {npu_irq_o cpu_debug_halted_o}]
 set_input_delay 0.5 -clock jtag_clk [get_ports {tms_i td_i}]
 set_output_delay 0.5 -clock jtag_clk [get_ports td_o]
+# Asynchronous GPIO inputs stop at the two-stage synchronizer, not CPU data paths.
+set_false_path -from [get_ports {gpio_io[*]}]
+set_output_delay 0.5 -clock sys_clk [get_ports {gpio_io[*]}]
 set_input_transition 0.2 [all_inputs]
 set_load 0.2 [all_outputs]
 set_false_path -from [get_ports rst_ni]
@@ -61,11 +64,13 @@ set_false_path -from [get_ports rst_ni]
 libs = [
     std / "Front_End/timing_power_noise/NLDM/tcb018gbwp7t_270a/tcb018gbwp7ttc.lib",
     macro / "RA1SHD_2048x32M8_tt_1p8_25C_syn.lib",
+    pdk / "tpd018nv_280a/TSMCHOME/digital/Front_End/timing_power_noise/NLDM/tpd018nv_280a/tpd018nvtc.lib",
 ]
 lefs = [
     std / "Back_End/lef/tcb018gbwp7t_270a/lef/tcb018gbwp7t_6lm.lef",
     macro / "RA1SHD_2048x32M8.vclef",
     macro / "RA1SHD_2048x32M8_ant.lef",
+    pdk / "tpd018nv_280a/TSMCHOME/digital/Back_End/lef/tpd018nv_280a/mt_2/6lm/lef/tpd018nv_6lm.lef",
 ]
 listing = lambda xs: "[list " + " ".join("{" + str(f) + "}" for f in xs) + "]"
 out = run / "mynpu/chip_synth"
@@ -76,6 +81,7 @@ read_physical -lef {listing(lefs)}
 read_hdl -sv {listing([run / "inputs/core.v", run / "inputs/chip_top.sv"])}
 elaborate mynpu_asic_top
 {"" if a.remap_core else 'set core_hinst [get_db hinsts *i_soc]; if {[llength $core_hinst] != 1} {error "Expected one mapped core"}; set_db $core_hinst .preserve true'}
+set_db [get_db insts *i_pad_gpio*] .preserve true
 read_sdc {{{run / "scripts/chip.sdc"}}}
 set_db syn_generic_effort low
 set_db syn_map_effort low
@@ -103,9 +109,14 @@ for f in a.artifacts_dir.iterdir():
 manifest = {
     "core_run": str(core),
     "preserve_original_core_mapping": not a.remap_core,
+    "gpio_pins": 8,
+    "pad_experiment": {k: v for k, v in json.loads((old / "pad_plans/jtag_left_paired.json").read_text()).items() if k in {"signal_plan", "paired_supplies_per_side", "poc_offset_um", "jtag_offsets_um"}},
+    "signal_pad_count": 17,
+    "die_um": [1950, 1950],
+    "expected_sealring_outer_um": [1980, 1980],
     "core_manifest_sha256": sha(core / "source_manifest.json"),
     "core_source_manifest": m,
-    "scope": f"2mm x 2mm die with native IO/power/corner/filler/bond pads, nine signal pads. Host and external stream pins not bonded; JTAG SBA retained. RF{m['rf_bank_words']} words/bank, M{m['matrix_queue_depth']}/V{m['vector_queue_depth']}/C{m['cnn_queue_depth']}. Generic vector VPG3, LY01 layouts and EV01 task events.",
+    "scope": f"1950um x 1950um die with native IO/power/corner/filler/bond pads, nine control/debug plus eight bidirectional GPIO signal pads. Host interface removed; external stream pins not bonded; JTAG SBA retained. RF{m['rf_bank_words']} words/bank, M{m['matrix_queue_depth']}/V{m['vector_queue_depth']}/C{m['cnn_queue_depth']}. Generic vector VPG3, LY01 layouts and EV01 task events.",
     "inputs_sha256": {
         str(f.relative_to(run)): sha(f) for f in (run / "inputs").rglob("*") if f.is_file()
     },

@@ -3,11 +3,6 @@ module tb_mnist_stream;
   logic clk = 0;
   always #10 clk = ~clk;
   logic rst_n = 0, cpu_run = 1;
-  logic hreq = 0, hwe = 0;
-  logic [3:0] hbe = 4'hf;
-  logic [31:0] haddr = 0, hwdata = 0;
-  wire hgnt, hrvalid, herror;
-  wire [31:0] hrdata;
   wire [4:0] irq;
   logic rx_valid = 0, rx_last = 0, tx_ready = 0;
   logic [31:0] rx_data = 0;
@@ -18,42 +13,25 @@ module tb_mnist_stream;
   logic [31:0] boot_image[0:511];
   wire cpu_done, cpu_pass;
   localparam logic [31:0] SRAM = 32'h80000000, MMIO = 32'h40000000;
+  logic tck = 0, tms = 1, tdi = 0;
+  wire tdo;
+  `include "db_jtag_tasks.svh"
+  `include "db_sba_access.svh"
   npu_soc dut (
     .clk_i             (clk),
     .rst_ni            (rst_n),
     .cpu_run_i         (cpu_run),
-    .tck_i             (1'b0),
-    .tms_i             (1'b1),
-    .td_i              (1'b0),
-    .td_o              (),
+    .tck_i             (tck),
+    .tms_i             (tms),
+    .td_i              (tdi),
+    .td_o              (tdo),
     .cpu_debug_halted_o(),
-    .host_req_i        (hreq),
-    .host_we_i         (hwe),
-    .host_be_i         (hbe),
-    .host_addr_i       (haddr),
-    .host_wdata_i      (hwdata),
-    .host_gnt_o        (hgnt),
-
-
-
-
-
-
-
-
-
-
-
-
-    .host_rvalid_o  (hrvalid),
-    .host_error_o   (herror),
-    .host_rdata_o   (hrdata),
     .irq_o          (irq),
     .cpu_test_done_o(cpu_done),
     .cpu_test_pass_o(cpu_pass)
   );
   int checks = 0, transactions = 0, mat_jobs = 0;
-  int max_host_wait = 0;
+
   int rx_aborts = 0, tx_aborts = 0;
   always @(posedge clk) begin
     if (rx_abort) rx_aborts++;
@@ -61,27 +39,7 @@ module tb_mnist_stream;
   end
   task automatic transfer(input bit wr, input logic [31:0] a, d, input logic [3:0] mask,
                           input bit expected_error, output logic [31:0] result);
-    int waited;
-    @(negedge clk);
-    hreq = 1;
-    hwe = wr;
-    haddr = a;
-    hwdata = d;
-    hbe = mask;
-    waited = 0;
-    do begin
-      @(posedge clk);
-      waited++;
-      if (waited > 16) $fatal(1, "Host starved, addr=%h", a);
-    end while (!hgnt);
-    if (waited > max_host_wait) max_host_wait = waited;
-    @(negedge clk);
-    hreq = 0;
-    if (!hrvalid) @(negedge clk);  // Registered MMIO responds one cycle after SRAM.
-    if (!hrvalid) $fatal(1, "Missing response addr=%h", a);
-    if (herror !== expected_error)
-      $fatal(1, "Bus error addr=%h got=%b expected=%b", a, herror, expected_error);
-    result = hrdata;
+    sba_access(wr, a, d, mask, expected_error, result);
     transactions++;
   endtask
   task automatic wr(input logic [31:0] a, d);
@@ -284,7 +242,7 @@ module tb_mnist_stream;
     $finish;
   end
   initial begin
-    #20000000000;
+    #20000000000000;
     $fatal(1, "Stream global timeout");
   end
 endmodule

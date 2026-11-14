@@ -1,0 +1,49 @@
+{
+  "baseline": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3",
+  "jtag_side": "left",
+  "jtag_offsets_um": {
+    "tck_i": 850,
+    "tms_i": 950,
+    "td_i": 1050,
+    "td_o": 1150
+  },
+  "paired_supplies_per_side": [
+    [
+      "vdd_1",
+      "vss_1",
+      260,
+      360
+    ],
+    [
+      "vdd_2",
+      "vss_2",
+      650,
+      750
+    ],
+    [
+      "vddio",
+      "vssio",
+      1250,
+      1350
+    ]
+  ],
+  "poc_offset_um": 1450,
+  "signal_plan": "clk_i top 1600 in rst_ni left 1600 in tck_i left 850 in tms_i left 950 in td_i left 1050 in td_o left 1150 out boot_ready_i bottom 460 in npu_irq_o bottom 1600 out cpu_debug_halted_o right 460 out",
+  "status": "Native PNR, timing, core PG, antenna and zero-delay 34-check JTAG/MNIST passed; Calibre/LVS/package/IR-EM not rerun.",
+  "die_um": [
+    1950,
+    1950
+  ],
+  "pad_width_um": 60,
+  "native_pad_radial_depth_um": 115,
+  "native_pad_count": 37,
+  "signal_pad_count": 9,
+  "library_cells": {
+    "core_vdd": "PVDD1CDG",
+    "core_vss": "PVSS1CDG",
+    "io_vdd": "PVDD2CDG",
+    "io_vss": "PVSS2CDG",
+    "poc": "PVDD2POC"
+  },
+  "acceptance": "Pad coordinates and adjacency checked; final timing/DRC/PG/signoff must be checked independently."
+}

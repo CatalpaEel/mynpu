@@ -36,7 +36,7 @@ assets = (
     if a.suite == "latency"
     else []
 )
-files = [run / "optimized.v", lib, macro, tb] + assets
+files = [run / "optimized.v", lib, macro, tb, ROOT / "npu/tb/db_jtag_tasks.svh", ROOT / "npu/tb/db_sba_access.svh"] + assets
 hashes = {str(f): hashlib.sha256(f.read_bytes()).hexdigest() for f in files}
 cmd = [
     "vcs",
@@ -44,6 +44,7 @@ cmd = [
     "-sverilog",
     "+define+NPU_GATE_SIM",
     "+incdir+" + str(a.artifacts_dir.resolve()),
+    "+incdir+" + str(ROOT / "npu/tb"),
     "+nospecify",
     "+notimingcheck",
     "+delay_mode_zero",

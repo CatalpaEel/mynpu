@@ -4,6 +4,8 @@
 module npu_core #(
   parameter bit PARALLEL_UNITS = `NPU_PARALLEL_UNITS
 ) (
+  input logic [7:0] gpio_i,
+  output logic [7:0] gpio_o, gpio_oe_o,
   input logic clk_i,
   rst_ni,
   cpu_run_i,
@@ -13,15 +15,6 @@ module npu_core #(
   output logic td_o,
   cpu_debug_halted_o,
   system_rst_no,
-  input logic host_req_i,
-  host_we_i,
-  input logic [3:0] host_be_i,
-  input logic [31:0] host_addr_i,
-  host_wdata_i,
-  output logic host_gnt_o,
-  host_rvalid_o,
-  host_error_o,
-  output logic [31:0] host_rdata_o,
   output logic [4:0] irq_o,
   output logic cpu_test_done_o,
   cpu_test_pass_o,
@@ -45,9 +38,9 @@ module npu_core #(
   logic [31:0] dm_addr, dm_wdata, dm_rdata, boot_rdata;
   logic [2:0] cpu_reset_count;
   logic boot_wait;
-  logic host_bus_req, host_bus_we;
-  logic [3:0] host_bus_be;
-  logic [31:0] host_bus_addr, host_bus_wdata;
+  logic sba_bus_req, sba_bus_we;
+  logic [3:0] sba_bus_be;
+  logic [31:0] sba_bus_addr, sba_bus_wdata;
   logic [1:0][31:0] cache_hits, cache_misses, bank_accepts;
   logic [5:0][3:0] be;
   logic [5:0][31:0] addr, wdata, rdata;
@@ -77,7 +70,8 @@ module npu_core #(
   assign cnn_gather_valid = all_gather_valid[2:0];
   assign cnn_gather_error = all_gather_error[2:0];
   assign cnn_gather_data = all_gather_data[2:0];
-  logic is_cnn_mmio;
+  logic is_cnn_mmio, is_gpio_mmio, gpio_error;
+  logic [31:0] gpio_rdata;
   logic
       mat_start,
       vec_start,
@@ -99,6 +93,14 @@ module npu_core #(
   logic [4:0] mf;
   logic matrix_precision;
   logic [1:0] matrix_element_log2;
+  // A lightweight slave on the existing XBAR auxiliary/MMIO response path.
+  npu_gpio i_gpio (
+    .clk_i(clk_i), .rst_ni(system_rst_no),
+    .req_i(mmio_req && is_gpio_mmio), .we_i(mmio_we),
+    .addr_i(mmio_addr[7:0]), .wdata_i(mmio_wdata),
+    .rdata_o(gpio_rdata), .error_o(gpio_error),
+    .gpio_i(gpio_i), .gpio_o(gpio_o), .gpio_oe_o(gpio_oe_o)
+  );
   npu_jtag_debug i_debug (
     .clk_i             (clk_i),
     .rst_ni            (rst_ni),
@@ -109,20 +111,12 @@ module npu_core #(
     .system_rst_no     (system_rst_no),
     .debug_req_o       (debug_req),
     .hart_unavailable_i(!cpu_rst_n),
-    .host_req_i        (host_req_i),
-    .host_we_i         (host_we_i),
-    .host_be_i         (host_be_i),
-    .host_addr_i       (host_addr_i),
-    .host_wdata_i      (host_wdata_i),
-    .host_gnt_o        (host_gnt_o),
-    .host_rvalid_o     (host_rvalid_o),
-    .host_error_o      (host_error_o),
-    .host_rdata_o      (host_rdata_o),
-    .bus_req_o         (host_bus_req),
-    .bus_we_o          (host_bus_we),
-    .bus_be_o          (host_bus_be),
-    .bus_addr_o        (host_bus_addr),
-    .bus_wdata_o       (host_bus_wdata),
+
+    .bus_req_o         (sba_bus_req),
+    .bus_we_o          (sba_bus_we),
+    .bus_be_o          (sba_bus_be),
+    .bus_addr_o        (sba_bus_addr),
+    .bus_wdata_o       (sba_bus_wdata),
     .bus_gnt_i         (gnt[3]),
     .bus_rvalid_i      (rvalid[3]),
     .bus_error_i       (bus_error[3]),
@@ -138,12 +132,12 @@ module npu_core #(
     .word_i(dm_addr[5:2]),
     .data_o(boot_rdata)
   );
-  assign req[3] = host_bus_req;
-  assign we[3] = host_bus_we;
-  assign be[3] = host_bus_be;
-  assign addr[3] = host_bus_addr;
-  assign wdata[3] = host_bus_wdata;
-  // Independent masters: 0 CPU data, 1 CNN, 2 Vector, 3 Host/JTAG,
+  assign req[3] = sba_bus_req;
+  assign we[3] = sba_bus_we;
+  assign be[3] = sba_bus_be;
+  assign addr[3] = sba_bus_addr;
+  assign wdata[3] = sba_bus_wdata;
+  // Independent masters: 0 CPU data, 1 CNN, 2 Vector, 3 JTAG SBA,
   // 4 CPU fetch, 5 Matrix. FIFO endpoints support concurrent producer/consumer.
   assign be[1] = cnn_be;
   assign be[5] = matrix_be;
@@ -172,8 +166,9 @@ module npu_core #(
   end
   assign removed_dma_page = mmio_addr[11:8] >= 3 && mmio_addr[11:8] <= 5;
   assign is_quant_mmio = mmio_addr[11:8] == 7;
-  assign mmio_rdata = is_quant_mmio ? quant_rdata : is_cnn_mmio ? cnn_rdata : control_rdata;
-  assign mmio_error = removed_dma_page || (is_quant_mmio ? quant_error : is_cnn_mmio ? cnn_error : control_error);
+  assign is_gpio_mmio = mmio_addr[11:8] == 8;
+  assign mmio_rdata = is_gpio_mmio ? gpio_rdata : is_quant_mmio ? quant_rdata : is_cnn_mmio ? cnn_rdata : control_rdata;
+  assign mmio_error = removed_dma_page || (is_gpio_mmio ? gpio_error : is_quant_mmio ? quant_error : is_cnn_mmio ? cnn_error : control_error);
   assign irq_o[4:3] = 0;
   assign irq_o[2] = cnn_irq;
   assign irq_o[1] = control_irq[1];
@@ -288,7 +283,7 @@ module npu_core #(
     .vec_observe_i     (vector_observe),
     .clk_i             (clk_i),
     .rst_ni            (system_rst_no),
-    .req_i             (mmio_req && !removed_dma_page && !is_cnn_mmio && !is_quant_mmio),
+    .req_i             (mmio_req && !removed_dma_page && !is_cnn_mmio && !is_quant_mmio && !is_gpio_mmio),
     .we_i              (mmio_we),
     .addr_i            (mmio_addr),
     .wdata_i           (mmio_wdata),
@@ -487,8 +482,6 @@ module npu_core #(
     .gather_error_i     (cnn_gather_error),
     .gather_data_i      (cnn_gather_data),
 
-
-
     .clk_i      (clk_i),
     .rst_ni     (system_rst_no),
     .csr_req_i  (mmio_req && is_cnn_mmio),
@@ -591,8 +584,6 @@ module npu_core #(
 
     .program_cfg_i(vector_program_cfg),
     .program_i    (vector_program),
-
-
 
     .be_o    (be[2]),
     .clk_i   (clk_i),

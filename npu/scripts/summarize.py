@@ -26,7 +26,7 @@ for name in ["Slice LUTs", "Slice Registers", "Block RAM Tile", "RAMB36/FIFO*", 
 assert resources["RAMB18"] == 0 and resources["RAMB36/FIFO*"] == 2
 wns = float(re.search(r"Setup\s*:.*?Worst Slack\s+([\d.-]+)ns", timing)[1])
 whs = float(re.search(r"Hold\s*:.*?Worst Slack\s+([\d.-]+)ns", timing)[1])
-counts = re.search(r"ALL PASS checks=(\d+) host_transactions=(\d+) max_host_wait=(\d+)", sim)
+counts = re.search(r"ALL PASS checks=(\d+) sba_transactions=(\d+)", sim)
 sources = [
     p
     for p in root.rglob("*")
@@ -46,8 +46,7 @@ data = {
     "behavioral_simulation": "PASS",
     "synthesis_functional_simulation": "PASS",
     "checks": int(counts[1]),
-    "host_transactions": int(counts[2]),
-    "max_host_wait_cycles": int(counts[3]),
+    "sba_transactions": int(counts[2]),
     "xbar_eight_master_test": "PASS: 128 consecutive transactions, 16 grants per master",
     "dma_cancellation_test": "PASS",
     "storage": "One 8KB SRAM; instructions loaded through external DMA; no ROM/FIFO RAM",

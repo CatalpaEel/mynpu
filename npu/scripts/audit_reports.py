@@ -1,5 +1,6 @@
 """Inventory report scope and compare recorded source hashes; never rewrite evidence."""
 from collections import Counter
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -9,12 +10,15 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / 'npu/reports'
 CURRENT = {
+    'jtag-only-validation.json': 'Current JTAG-only RTL, running CPU/NPU/SBA concurrency, macro and board-wrapper functional simulation; no new PPA or physical board test.',
+    'gpio8-validation.json': 'Current GPIO8 RTL, real PAD tests, core synthesis and initial IO floorplan; not post-route.',
     'rf1r1w-validation.json': 'Current RF functionality, MNIST and synthesis; PNR limitations inside are the original pre-PNR snapshot.',
     'rf1r1w_die1950_fullchip_validation.json': 'Final RF1R1W die1950 r3 PNR; not firstpass/r2.',
     'lab5_rf1r1w_die1950_validation.json': 'Final r3 course checks; ERC and strict PR limitations remain.',
     'ego1_preboard_validation.json': 'Current board functional preparation only; no Vivado implementation or board test.',
     'backend_source_audit.json': 'Source identity audit only; no new PPA measurement.',
 }
+TODAY = datetime.now(timezone.utc).date().isoformat()
 CACHE = {}
 
 def digest(p):
@@ -99,6 +103,12 @@ for name in sorted(set(paths)):
     entry = {'file': p.name, 'sha256': digest(p), 'classification':
              'current-scoped' if p.name in CURRENT else 'historical-snapshot',
              'note': CURRENT.get(p.name, 'Earlier experiment/baseline; not a current whole-design result.')}
+    if (ROOT/'npu/rtl/control/npu_gpio.sv').exists() and p.name in CURRENT and p.name not in {'gpio8-validation.json', 'jtag-only-validation.json'}:
+        entry['classification'] = 'pre-gpio-baseline'
+        entry['note'] = 'Frozen evidence predating GPIO8; cannot certify current full-chip design. ' + entry['note']
+    if p.name == 'gpio8-validation.json':
+        entry['classification'] = 'pre-jtag-only-baseline'
+        entry['note'] = 'Frozen GPIO evidence before external Host removal and SBA error/subword changes; not current RTL PPA.'
     if p.suffix == '.json':
         try:
             obj = json.loads(p.read_text())
@@ -124,6 +134,9 @@ for name in sorted(set(paths)):
                     entry['frozen_design_source_checks'] = file_checks(source['source_sha256'], ROOT)
                     entry['frozen_design_source_counts'] = dict(Counter(c['status'] for c in entry['frozen_design_source_checks']))
                     entry['configuration_matches'] = all(source[k] == v for k, v in json.loads((ROOT/'npu/build_config.json').read_text()).items())
+            if p.name in {'gpio8-validation.json','jtag-only-validation.json'}:
+                entry['frozen_files'] = file_checks(obj['evidence_sha256'], ROOT)
+                entry['frozen_file_counts'] = dict(Counter(c['status'] for c in entry['frozen_files']))
             if p.name == 'ego1_preboard_validation.json':
                 entry['preboard_manifest_check'] = file_checks({obj['source_manifest']:obj['source_manifest_sha256']}, ROOT)
                 snapshot = json.loads((ROOT/obj['source_manifest']).read_text())
@@ -135,22 +148,24 @@ for name in sorted(set(paths)):
         entry['note'] = 'Legacy Vivado 2025.2 OOC report from 2026-10-04; not current FPGA or ASIC implementation.'
     entries.append(entry)
 
-inventory = {'checked_date': '2026-11-11', 'git_commit': subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+inventory = {'checked_date': TODAY, 'git_commit': subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
              'scope': 'Inventory and hash audit, no new simulation or PPA. Source observations can include historical baselines and partial maps; matches do not certify full design identity.',
              'counts': dict(Counter(e['classification'] for e in entries)), 'reports': entries}
 (REPORTS/'report_inventory.json').write_text(json.dumps(inventory,indent=2)+'\n')
-lines = ['# 报告索引与版本审计', '', '2026-11-11。报告是冻结证据，文件名不带日期也不表示当前版本；不修改原报告里的历史数值或当时结论。', '',
+lines = ['# 报告索引与版本审计', '', TODAY + '。报告是冻结证据，文件名不带日期也不表示当前版本；不修改原报告里的历史数值或当时结论。', '',
 '## 当前采用的入口', '', '| 报告 | 适用范围 |', '| --- | --- |']
 labels = {
+ 'jtag-only-validation.json':'当前JTAG-only功能验证：19组运行，含不停机CPU/NPU/SBA竞争、宏模型及EGo1壳层；未重跑PPA/实体板。',
+ 'gpio8-validation.json':'Host删除前GPIO8冻结证据：79项GPIO/36项真实封装GPIO、综合2.571490mm²与45个PAD初始floorplan；无完整PNR。',
  'rf1r1w-validation.json':'RF功能、21,008周期MNIST及综合2.569286mm²；内部“未跑PNR”是当时快照，后续见r3。',
  'rf1r1w_die1950_fullchip_validation.json':'最终r3布局布线；核心非filler 2.632349mm²、50MHz +0.468/+0.018ns。',
  'lab5_rf1r1w_die1950_validation.json':'最终r3课程检查；严格PR/ERC残项保留，非正式投片全部通过。',
  'ego1_preboard_validation.json':'EGo1功能仿真38项；尚无本版Vivado综合/实现/实体板结果。',
  'backend_source_audit.json':'70个ASIC输入、24个项目RTL与默认配置核对。'}
 for name, label in labels.items():
-    lines.append(f'| [{name}]({name}) | {label} |')
+    lines.append(f'| [{name}]({name}) | ' + ('GPIO加入前冻结证据：' if name not in {'gpio8-validation.json','jtag-only-validation.json'} else '') + label + ' |')
 lines += ['', '## 版本判读', '',
-'目录只保留当前版本报告；旧功能引入报告与旧Vivado测量已从工作树移除，历史可从Git查找。',
+'最新RTL为GPIO8＋JTAG-only，已删除Host并补齐SBA错误/子字访问；当前功能结果见jtag-only-validation。GPIO综合及初始floorplan早于本次修改；GPIO加入前的完整r3物理检查也仅是冻结基线，均不代表当前RTL的PPA或签核。',
 '原始当前报告中的对照字段与阶段追踪作为证据保留；首页指标只使用当前最终结果。',
 '审计详细记录每份JSON的已记录源哈希比对，以及最终PNR/Lab5产物完整性。部分哈希一致不等于整份报告对应当前设计；缺少证据时不推断通过。',
 '输入版本一致也不等于检查全部通过：最终Lab5仍保留ERC及严格PR限制。', '',
@@ -158,7 +173,7 @@ lines += ['', '## 版本判读', '',
 '## 全量清单', '', '| 文件 | 定位 | 源哈希观察：一致/不同/缺失 |', '| --- | --- | --- |']
 for e in entries:
     c=e.get('source_hash_counts',{})
-    label='当前范围' if e['classification']=='current-scoped' else '历史快照' if e['classification']=='historical-snapshot' else '解析失败'
+    label='当前范围' if e['classification']=='current-scoped' else '历史快照' if e['classification']=='historical-snapshot' else 'GPIO加入前冻结证据' if e['classification']=='pre-gpio-baseline' else 'Host删除前冻结证据' if e['classification']=='pre-jtag-only-baseline' else '解析失败'
     observation='/'.join(str(c.get(k,0)) for k in ['match','different','missing']) if c else '无可直接比对的源哈希'
     lines.append(f"| [{e['file']}]({e['file']}) | {label} | {observation} |")
 (REPORTS/'README.md').write_text('\n'.join(lines)+'\n')

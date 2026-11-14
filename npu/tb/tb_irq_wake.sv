@@ -1,30 +1,22 @@
 `timescale 1ns / 1ps
 // Real CPU sleeps first. Real unit jobs then complete/fault, waking one source.
 module tb_irq_wake;
-  logic clk = 0, rst_n = 0, hreq = 0, hwe = 0;
+  logic clk = 0, rst_n = 0;
   always #10 clk = ~clk;
-  logic [31:0] ha = 0, hd = 0;
-  wire hg, hv, he;
-  wire [31:0] hr;
   wire [4:0] irq;
+  logic tck = 0, tms = 1, tdi = 0;
+  wire tdo;
+  `include "db_jtag_tasks.svh"
+  `include "db_sba_access.svh"
   npu_soc dut (
     .clk_i             (clk),
     .rst_ni            (rst_n),
     .cpu_run_i         (1'b1),
-    .tck_i             (1'b0),
-    .tms_i             (1'b1),
-    .td_i              (1'b0),
-    .td_o              (),
+    .tck_i             (tck),
+    .tms_i             (tms),
+    .td_i              (tdi),
+    .td_o              (tdo),
     .cpu_debug_halted_o(),
-    .host_req_i        (hreq),
-    .host_we_i         (hwe),
-    .host_be_i         (4'hf),
-    .host_addr_i       (ha),
-    .host_wdata_i      (hd),
-    .host_gnt_o        (hg),
-    .host_rvalid_o     (hv),
-    .host_error_o      (he),
-    .host_rdata_o      (hr),
     .irq_o             (irq),
     .cpu_test_done_o   (),
     .cpu_test_pass_o   ()
@@ -33,23 +25,7 @@ module tb_irq_wake;
   localparam logic [31:0] RF_LAST = npu_addr_pkg::RF_BASE + npu_addr_pkg::RF_BYTES - 4;
   localparam logic [31:0] MAIL = 32'h80001000, A = 32'h80001400, B = 32'h80001404, D = 32'h80001500;
   task automatic bus(input bit we, input logic [31:0] address, value, output logic [31:0] result);
-    int limit;
-    @(negedge clk);
-    hreq = 1;
-    hwe = we;
-    ha = address;
-    hd = value;
-    limit = 0;
-    do begin
-      @(posedge clk);
-      limit++;
-      if (limit > 100) $fatal(1, "host grant timeout");
-    end while (!hg);
-    @(negedge clk);
-    hreq = 0;
-    if (!hv) @(negedge clk);
-    if (!hv || he) $fatal(1, "host response %h", address);
-    result = hr;
+    sba_access(we, address, value, 4'hf, 0, result);
   endtask
   task automatic wr(input logic [31:0] a, d);
     logic [31:0] r;
@@ -161,7 +137,7 @@ module tb_irq_wake;
     for (int f = 0; f < 2; f++) begin
       @(negedge clk);
       rst_n = 0;
-      hreq = 0;
+
       repeat (8) @(negedge clk);
       rst_n = 1;
       repeat (8) @(negedge clk);
@@ -215,7 +191,7 @@ module tb_irq_wake;
     // A pending CNN fault must not wake a CPU enabling only Matrix IRQ16.
     @(negedge clk);
     rst_n = 0;
-    hreq = 0;
+
     repeat (8) @(negedge clk);
     rst_n = 1;
     repeat (8) @(negedge clk);
@@ -255,7 +231,7 @@ module tb_irq_wake;
     $finish;
   end
   initial begin
-    #10000000;
+    #10000000000;
     $fatal(1, "IRQ wake timeout");
   end
 endmodule

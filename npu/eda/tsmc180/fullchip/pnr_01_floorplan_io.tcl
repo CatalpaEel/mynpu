@@ -1,5 +1,5 @@
 # Adapted to the current mynpu design from the Lab 4 procedure.
-# Fixed 2000um die; nine signal pads; two SRAM macros; single TT analysis.
+# Fixed 1950um die; nine signal pads; two SRAM macros; single TT analysis.
 set run_root [file normalize [file join [file dirname [info script]] ..]]
 set out $run_root/mynpu/pnr
 file mkdir $out/checkpoints $out/reports $out/outputs
@@ -19,9 +19,9 @@ setAnalysisMode -analysisType onChipVariation -cppr both
 setDelayCalMode -SIAware false
 puts FLOW_STAGE_OK_CHIP_IMPORT
 # Default to the reference 130um-margin floorplan. Compact ring is an experiment.
-set core_box {130.48 129.36 1869.84 1869.84}
-if {[info exists env(CHIP_COMPACT_CORE)] && $env(CHIP_COMPACT_CORE) eq "1"} {set core_box {122.08 121.52 1877.68 1877.68}}
-floorPlan -site core7T -b [concat {0 0 2000 2000 0 0 2000 2000} $core_box] -noSnapToGrid
+set core_box {130.48 129.36 1819.84 1819.84}
+if {[info exists env(CHIP_COMPACT_CORE)] && $env(CHIP_COMPACT_CORE) eq "1"} {set core_box {122.08 121.52 1827.68 1827.68}}
+floorPlan -site core7T -b [concat {0 0 1950 1950 0 0 1950 1950} $core_box] -noSnapToGrid
 lassign $core_box lx by rx ty
 set macronames [lsort [dbGet [dbGet top.insts.cell.name RA1SHD_2048x32M8 -p2].name]]
 if {[llength $macronames] != 2} {error "Expected two SRAM macros; got $macronames"}
@@ -37,6 +37,13 @@ foreach row $macro_plan {
     placeInstance $name $x $y $orientation -fixed
     addHaloToBlock $left $bottom $right $top $name -snapToSite
 }
+# Remove rows against the full macro outline, not the inset OVERLAP.
+# Leave 0.50um M1 clearance; do not block legal macro signal pin access.
+foreach name $macronames {
+ set box [lindex [dbGet [dbGet top.insts.name $name -p].box] 0]
+ lassign $box mx0 my0 mx1 my1
+ cutRow -area [list [expr {$mx0-0.50}] [expr {$my0-0.50}] [expr {$mx1+0.50}] [expr {$my1+0.50}]]
+}
 set geometry [open $out/reports/floorplan_geometry.rpt w]
 puts $geometry "die [dbGet top.fPlan.box]"
 puts $geometry "core [dbGet top.fPlan.coreBox]"
@@ -48,22 +55,20 @@ close $geometry
 checkFPlan -reportUtil -outFile $out/reports/floorplan_check.rpt
 saveDesign $out/checkpoints/01_core_floorplan.enc
 puts FLOW_STAGE_OK_CHIP_FLOORPLAN
-foreach {name x y ori} {corner_bl 0 0 R0 corner_br 1885 0 MY corner_tl 0 1885 MX corner_tr 1885 1885 R180} {
+foreach {name x y ori} {corner_bl 0 0 R0 corner_br 1835 0 MY corner_tl 0 1835 MX corner_tr 1835 1835 R180} {
     addInst -cell PCORNER -inst $name -loc [list $x $y] -ori $ori -place_status fixed -dontSnapToPlacementGrid
 }
 # port, side, tangential coordinate, direction
 set signal_plan {
-    clk_i top 300 in rst_ni top 1600 in
-    tck_i bottom 250 in tms_i bottom 450 in td_i bottom 1450 in td_o bottom 1700 out
-    boot_ready_i left 300 in npu_irq_o right 300 out cpu_debug_halted_o right 1600 out
+    clk_i top 1600 in rst_ni left 1600 in tck_i left 850 in tms_i left 950 in td_i left 1050 in td_o left 1150 out boot_ready_i bottom 460 in npu_irq_o bottom 1600 out cpu_debug_halted_o right 460 out
 }
 array set side_ori {top R180 bottom R0 left R270 right R90}
 set pad_plan {}
 foreach {port side pos direction} $signal_plan {
     if {$side in {top bottom}} {
-        set x $pos; set y [expr {$side eq "top" ? 1885 : 0}]
+        set x $pos; set y [expr {$side eq "top" ? 1835 : 0}]
     } else {
-        set x [expr {$side eq "right" ? 1885 : 0}]; set y $pos
+        set x [expr {$side eq "right" ? 1835 : 0}]; set y $pos
     }
     set name i_pad_$port
     addInst -cell PDDW0204CDG -inst $name -loc [list $x $y] -ori $side_ori($side) -place_status fixed -dontSnapToPlacementGrid
@@ -98,11 +103,11 @@ foreach {port side pos direction} $signal_plan {
 }
 set supply_terms {}
 foreach side {top bottom left right} {
-    foreach {suffix cell pos} {vss_1 PVSS1CDG 650 vss_2 PVSS1CDG 750 vssio PVSS2CDG 850 vdd_1 PVDD1CDG 950 vdd_2 PVDD1CDG 1050 vddio PVDD2CDG 1150 poc PVDD2POC 1250} {
+    foreach {suffix cell pos} {vdd_1 PVDD1CDG 260 vss_1 PVSS1CDG 360 vdd_2 PVDD1CDG 650 vss_2 PVSS1CDG 750 vddio PVDD2CDG 1250 vssio PVSS2CDG 1350 poc PVDD2POC 1450} {
         if {$side in {top bottom}} {
-            set x $pos; set y [expr {$side eq "top" ? 1885 : 0}]
+            set x $pos; set y [expr {$side eq "top" ? 1835 : 0}]
         } else {
-            set x [expr {$side eq "right" ? 1885 : 0}]; set y $pos
+            set x [expr {$side eq "right" ? 1835 : 0}]; set y $pos
         }
         set name i_pad_${side}_$suffix
         addInst -cell $cell -inst $name -loc [list $x $y] -ori $side_ori($side) -place_status fixed -dontSnapToPlacementGrid
@@ -111,6 +116,9 @@ foreach side {top bottom left right} {
         if {$suffix eq "vssio"} {lappend supply_terms [list $name VSSPST]}
     }
 }
+source $run_root/scripts/gpio_pads.tcl
+place_gpio_pads
+lappend pad_plan {*}[gpio_pad_plan]
 # Register actual IO sides before filling. Preserve all fixed geometry.
 set io_file [open $out/outputs/io_registration.io w]
 puts $io_file "(globals\n version = 3\n io_order = default\n)\n(iopad"
@@ -142,9 +150,9 @@ dict for {name prior} $before {
 foreach row $pad_plan {
     lassign $row name cell side pos
     if {$side in {top bottom}} {
-        set x $pos; set y [expr {$side eq "top" ? 1926.84 : 0}]
+        set x $pos; set y [expr {$side eq "top" ? 1876.84 : 0}]
     } else {
-        set x [expr {$side eq "right" ? 1926.84 : 0}]; set y $pos
+        set x [expr {$side eq "right" ? 1876.84 : 0}]; set y $pos
     }
     addInst -physical -cell PAD60LU_OBV -inst bond_$name -loc [list $x $y] -ori $side_ori($side) -place_status fixed -dontSnapToPlacementGrid
 }
@@ -162,17 +170,18 @@ foreach side {top bottom left right} {
 # External signal labels are placed inside the corresponding bond windows.
 foreach {port side pos direction} $signal_plan {
     if {$side in {top bottom}} {
-        set x [expr {$pos+10}]; set y [expr {$side eq "top" ? 1998 : 1}]
+        set x [expr {$pos+10}]; set y [expr {$side eq "top" ? 1948 : 1}]
     } else {
-        set x [expr {$side eq "right" ? 1998 : 1}]; set y [expr {$pos+10}]
+        set x [expr {$side eq "right" ? 1948 : 1}]; set y [expr {$pos+10}]
     }
     set net [dbGet [dbGet top.terms.name $port -p].net.name]
     createPhysicalPin $port -net $net -layer METAL4 -rect [list $x $y [expr {$x+1}] [expr {$y+1}]]
 }
-createPGPin VDD -net VDD -geom METAL4 960 1998 970 1999
-createPGPin VSS -net VSS -geom METAL4 660 1998 670 1999
-createPGPin VDDPST -net VDDPST -geom METAL4 1160 1998 1170 1999
-createPGPin VSSPST -net VSSPST -geom METAL4 860 1998 870 1999
+label_gpio_pads
+createPGPin VDD -net VDD -geom METAL4 270 1948 280 1949
+createPGPin VSS -net VSS -geom METAL4 370 1948 380 1949
+createPGPin VDDPST -net VDDPST -geom METAL4 1260 1948 1270 1949
+createPGPin VSSPST -net VSSPST -geom METAL4 1360 1948 1370 1949
 saveNetlist $out/outputs/03_io_connected.v -phys
 defOut $out/outputs/03_io_floorplan.def
 saveIoFile -locations -includeCellName $out/outputs/io_registered.io

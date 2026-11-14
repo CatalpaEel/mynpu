@@ -69,14 +69,13 @@ module ego1_soc_top (
   end
 
   // CPU starts in its bootstrap WFI; firmware/data are loaded via JTAG SBA.
-  // Tie off the simulation host port: the board exposes only the external DTM.
+  // The board and simulation both expose only the external JTAG DTM.
+  // GPIO is ASIC-facing for now; no unverified EGo1 header pins assigned.
   npu_soc i_soc (
+    .gpio_i(8'b0), .gpio_o(), .gpio_oe_o(),
     .clk_i(clk_sys), .rst_ni(sys_rst_ni), .cpu_run_i(1'b1),
     .tck_i(tck_i), .tms_i(tms_i), .td_i(td_i), .td_o(td_o),
     .cpu_debug_halted_o(cpu_debug_halted),
-    .host_req_i(1'b0), .host_we_i(1'b0), .host_be_i(4'b0),
-    .host_addr_i(32'b0), .host_wdata_i(32'b0),
-    .host_gnt_o(), .host_rvalid_o(), .host_error_o(), .host_rdata_o(),
     .irq_o(irq), .cpu_test_done_o(test_done), .cpu_test_pass_o(test_pass)
   );
   assign led_o = {1'b0, test_pass, test_done, tck_sync2_q,

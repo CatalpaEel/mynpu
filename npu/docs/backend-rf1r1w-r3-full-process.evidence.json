@@ -1,0 +1,163 @@
+{
+  "documented_revision": "pre-GPIO RF1R1W die1950 r3, 2026-11-10",
+  "audit_date": "2026-11-12",
+  "scope": "Retrospective only; no EDA rerun; current GPIO excluded",
+  "files": [
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w/synth.tcl",
+      "sha256": "5ace7de2ac496e5ca3d326a9e5816b3149316b148c67bceca236edf5f4be319d"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w/synth.sdc",
+      "sha256": "d90e9e5ab10344eb2e134128eb048b1c024bf01f186abf1677aece3dd31b0424"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/manifest.json",
+      "sha256": "55561035029c6a328a95eaf3705c597820b8e30158c6b6c940057917b23dbab9"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/scripts/pnr_01_floorplan_io.tcl",
+      "sha256": "8cd07fa6402d8f85492b5f513a1e7fd3c01f6b61aac58412f8e91f9ee1154bd9"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/scripts/pnr_02_powerplan.tcl",
+      "sha256": "aa1c9f95154304bc610e9c4f98996937ed6577e990b417771eedc8498dfa2998"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/scripts/pnr_03_place.tcl",
+      "sha256": "b84a36bd0581d36b340bb8d0d8e6eab6b58b5379d7b67f8434e4801bdfcbec78"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/scripts/pnr_03a_reclaim.tcl",
+      "sha256": "0f839bf40d4dd04e1d83849f2a2c750dd0f2f14292e3a0603cd861b8ab19285e"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/scripts/pnr_04_cts.tcl",
+      "sha256": "4fe11caeb5bb76fba887856ebcee7d43b659165ac5064fa74131b8d8c40578eb"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/scripts/pnr_04b_holdfix.tcl",
+      "sha256": "42d8035f82be588524c711846afd8e6c5f8c309ee2a4fc1b9f4e3b000b2392b3"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/scripts/pnr_04c_legalize.tcl",
+      "sha256": "4bf99adc9727aa8f8a41e6c610434efae9b05a90037d168df0ae0eb68710781d"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/scripts/pnr_05_route.tcl",
+      "sha256": "f2d67ee98f0d4eee66d66fa705f3ab55a124a1bfa2dc0e97fd46517a7f3fe6ec"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/scripts/pnr_06_finish.tcl",
+      "sha256": "8fd41539cc8816f0481c425aa867092a4cfcad6d6c57a60dd95858333f018f9e"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/scripts/pnr_07_export.tcl",
+      "sha256": "1956bcd9dd88ca0dde9b44557ae0a1b8e83dd89e90b3af5c63b1b2a071525106"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/repairs/export_calibre.tcl",
+      "sha256": "798b0484cfd14b50917ef215fa257f092f38024c8779cae632dcc3832fd150be"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/repairs/export_eco.tcl",
+      "sha256": "c582c5add63dd96ee0879a3d4d24e621dc9610225077fbd28265870f992c0ba3"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/repairs/export_wb.tcl",
+      "sha256": "e814b7e6d56065d571e59834b0674abeeeb58221f9815237f7352ae5a6d864d1"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/repairs/finish_eco.tcl",
+      "sha256": "a5951c40d8abeda6753839a3c31b7dfbb856d3cbe64a31e58bd9106d608098d8"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/repairs/fix_calibre_m2.tcl",
+      "sha256": "5da72bff1c8fc66b55262ff1bfceec3ebee1d181e093fc91ca4184f4e452c8ef"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/repairs/fix_calibre_m2_block.tcl",
+      "sha256": "3bada178b14e6bdfa342ffb9bcade503dfc9c79e6e010bc8fb1a42ef38735612"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/repairs/fix_wb_spacing.tcl",
+      "sha256": "91ecf5deb299117d50ebde55fada32365e74f8dba6921e9e333398b5b36f3041"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/repairs/fix_wb_spacing2.tcl",
+      "sha256": "75536a95cfb0ce313feed99fd54765fdf7878d3d859e872471f18c2be0623ad1"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/repairs/inspect_calibre_m2.tcl",
+      "sha256": "40e55b8c984f39a85444c9e3a0278939b5307cbaee4c0248ade4d5d01fcf903b"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-die1950-fullchip-r3/repairs/repair_pg_boundary_access.tcl",
+      "sha256": "0977a4e8bde2c5775887c1c1a0fd8fb57f72a35abe02e5ea5a2b279b9214f927"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/scripts/run_signoff.py",
+      "sha256": "07402ce554d692af7f5260bf782df243c180a269788668383167ce5039dc2abe"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/scripts/build_layout.il",
+      "sha256": "29a5795965008ae284447d2c7915a1fc43dd40acbe1d10a4b7dd5f0a140a89b6"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/drc_post/summary.rpt",
+      "sha256": "5e8cdca19000d08c54fadcd289a0629369dedbabe3f08f74a5bf2c9011d81595"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/lvs/report.rpt",
+      "sha256": "98f2544691aa67c7214b271bc739f638bbbc3dd1efd0481045db5608ce960363"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/lvs_strict/report.rpt",
+      "sha256": "51b1d7d3dc1303af0ff2e1c3cbfef098990bdcbab1630931e311d31d0119e4ae"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/lvs/erc.summary",
+      "sha256": "d6b56d33e0dc156e4c23a5425a2f7b996dd20c7e4d772c72afbfbd0641b34ee5"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/antenna/summary.rpt",
+      "sha256": "5e096883b945b54f55ef7161eda89132c918a9e64f86ed037e396cf2721f4e87"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/wb/summary.rpt",
+      "sha256": "69b6735f0d70225a0dbb4daf4f9ac146c528968717023b02fd4bcff986b30bd6"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261110-rf1r1w-lab5-die1950-r3/outputs/final_inputs.sha256",
+      "sha256": "d1af6d247b2610658a2bcb8b6712743a93e880fe80d835f82a838adae5e2b1af"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-historical-report-cleanup/area25_area_validation.json",
+      "sha256": "336781e791a9c50571c8cdf5ee53030fafb9929baf61b91a947f92d5088eaf9a"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-historical-report-cleanup/streams_optimized_area_validation.json",
+      "sha256": "a6c8703106777a550dee29298d8f688fc6d4b41c6f52f33e986f9a7a57264c20"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-historical-report-cleanup/area26-all4-validation.json",
+      "sha256": "eda2dd5337a007284ebffd71557cd263771d3c67acdbfa4746fdae973d8c1360"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261107-area25-high-18ns-regaware/synth.tcl",
+      "sha256": "4cd201743dd8af6fb007c4077f8a8028f263667db5ca0c3d45eb840d592f3408"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/reports/rf1r1w-validation.json",
+      "sha256": "af71bd213996eadf19158e84763f3a9b4fc908f27d55b884a68ff3bb1d457ded"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/reports/rf1r1w_die1950_fullchip_validation.json",
+      "sha256": "2b827243a643f401d86226303414fc72f00cbd1e0207357c783a21a09bb04df6"
+    },
+    {
+      "absolute_path": "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/reports/lab5_rf1r1w_die1950_validation.json",
+      "sha256": "5904b2994d341c5b12433511fac0ecd731b36686ed694c04141e2b80d266c933"
+    }
+  ]
+}

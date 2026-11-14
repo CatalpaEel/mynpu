@@ -1,6 +1,8 @@
 # TSMC180 ASIC 流程
 
-当前结果仅使用 **2026-11-10 RF 1R1W、1950µm、最终r3**：
+> 当前RTL已加入[GPIO8](../../docs/gpio8.md)：核心综合2.571490mm²、50MHz setup +2.0008ns，45个native PAD初始floorplan通过。下方r3是加入GPIO前的完整物理基线，不能代表GPIO版本的CTS/布线或签核。
+
+加入GPIO前的完整物理基线为 **2026-11-10 RF 1R1W、1950µm、最终r3**：
 [最终后端报告](../../docs/rf1r1w-die1950-signoff.md)、[布局布线机器报告](../../reports/rf1r1w_die1950_fullchip_validation.json)、[Lab 5机器报告](../../reports/lab5_rf1r1w_die1950_validation.json)。
 
 2026-11-11核对冻结`core_source_manifest.source_sha256`：70个输入文件与工作区一致，其中包含全部24个项目RTL。

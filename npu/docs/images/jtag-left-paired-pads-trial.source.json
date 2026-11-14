@@ -1,0 +1,460 @@
+{
+  "scope": "Current PAD layout physical trial, unchanged ASIC core; native Innovus checks and zero-delay gate test, not Calibre/foundry signoff.",
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads",
+  "checkpoint": "14_exported.enc.dat",
+  "die_um": [
+    1950,
+    1950
+  ],
+  "pad_plan_audit": {
+    "scope": "Fixed native PAD coordinate and adjacency audit only; not DRC, ESD, IR/EM or package signoff.",
+    "passed": true,
+    "native_pads": 37,
+    "signal_pads": 9,
+    "power_ground_poc_pads": 28,
+    "jtag_left": true,
+    "supply_pairs_per_side": 3,
+    "minimum_native_pad_gap_um": 40,
+    "def_sha256": "380a2109f2902acd5d57c414339b6bd6f908fb134480f496bad0831b00211867",
+    "pads": {
+      "i_pad_right_poc": {
+        "cell": "PVDD2POC",
+        "x_um": 1835.0,
+        "y_um": 1450.0,
+        "orientation_def": "W",
+        "side": "right",
+        "offset_um": 1450.0
+      },
+      "i_pad_right_vssio": {
+        "cell": "PVSS2CDG",
+        "x_um": 1835.0,
+        "y_um": 1350.0,
+        "orientation_def": "W",
+        "side": "right",
+        "offset_um": 1350.0
+      },
+      "i_pad_right_vddio": {
+        "cell": "PVDD2CDG",
+        "x_um": 1835.0,
+        "y_um": 1250.0,
+        "orientation_def": "W",
+        "side": "right",
+        "offset_um": 1250.0
+      },
+      "i_pad_right_vss_2": {
+        "cell": "PVSS1CDG",
+        "x_um": 1835.0,
+        "y_um": 750.0,
+        "orientation_def": "W",
+        "side": "right",
+        "offset_um": 750.0
+      },
+      "i_pad_right_vdd_2": {
+        "cell": "PVDD1CDG",
+        "x_um": 1835.0,
+        "y_um": 650.0,
+        "orientation_def": "W",
+        "side": "right",
+        "offset_um": 650.0
+      },
+      "i_pad_right_vss_1": {
+        "cell": "PVSS1CDG",
+        "x_um": 1835.0,
+        "y_um": 360.0,
+        "orientation_def": "W",
+        "side": "right",
+        "offset_um": 360.0
+      },
+      "i_pad_right_vdd_1": {
+        "cell": "PVDD1CDG",
+        "x_um": 1835.0,
+        "y_um": 260.0,
+        "orientation_def": "W",
+        "side": "right",
+        "offset_um": 260.0
+      },
+      "i_pad_left_poc": {
+        "cell": "PVDD2POC",
+        "x_um": 0.0,
+        "y_um": 1450.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 1450.0
+      },
+      "i_pad_left_vssio": {
+        "cell": "PVSS2CDG",
+        "x_um": 0.0,
+        "y_um": 1350.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 1350.0
+      },
+      "i_pad_left_vddio": {
+        "cell": "PVDD2CDG",
+        "x_um": 0.0,
+        "y_um": 1250.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 1250.0
+      },
+      "i_pad_left_vss_2": {
+        "cell": "PVSS1CDG",
+        "x_um": 0.0,
+        "y_um": 750.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 750.0
+      },
+      "i_pad_left_vdd_2": {
+        "cell": "PVDD1CDG",
+        "x_um": 0.0,
+        "y_um": 650.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 650.0
+      },
+      "i_pad_left_vss_1": {
+        "cell": "PVSS1CDG",
+        "x_um": 0.0,
+        "y_um": 360.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 360.0
+      },
+      "i_pad_left_vdd_1": {
+        "cell": "PVDD1CDG",
+        "x_um": 0.0,
+        "y_um": 260.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 260.0
+      },
+      "i_pad_bottom_poc": {
+        "cell": "PVDD2POC",
+        "x_um": 1450.0,
+        "y_um": 0.0,
+        "orientation_def": "N",
+        "side": "bottom",
+        "offset_um": 1450.0
+      },
+      "i_pad_bottom_vssio": {
+        "cell": "PVSS2CDG",
+        "x_um": 1350.0,
+        "y_um": 0.0,
+        "orientation_def": "N",
+        "side": "bottom",
+        "offset_um": 1350.0
+      },
+      "i_pad_bottom_vddio": {
+        "cell": "PVDD2CDG",
+        "x_um": 1250.0,
+        "y_um": 0.0,
+        "orientation_def": "N",
+        "side": "bottom",
+        "offset_um": 1250.0
+      },
+      "i_pad_bottom_vss_2": {
+        "cell": "PVSS1CDG",
+        "x_um": 750.0,
+        "y_um": 0.0,
+        "orientation_def": "N",
+        "side": "bottom",
+        "offset_um": 750.0
+      },
+      "i_pad_bottom_vdd_2": {
+        "cell": "PVDD1CDG",
+        "x_um": 650.0,
+        "y_um": 0.0,
+        "orientation_def": "N",
+        "side": "bottom",
+        "offset_um": 650.0
+      },
+      "i_pad_bottom_vss_1": {
+        "cell": "PVSS1CDG",
+        "x_um": 360.0,
+        "y_um": 0.0,
+        "orientation_def": "N",
+        "side": "bottom",
+        "offset_um": 360.0
+      },
+      "i_pad_bottom_vdd_1": {
+        "cell": "PVDD1CDG",
+        "x_um": 260.0,
+        "y_um": 0.0,
+        "orientation_def": "N",
+        "side": "bottom",
+        "offset_um": 260.0
+      },
+      "i_pad_top_poc": {
+        "cell": "PVDD2POC",
+        "x_um": 1450.0,
+        "y_um": 1835.0,
+        "orientation_def": "S",
+        "side": "top",
+        "offset_um": 1450.0
+      },
+      "i_pad_top_vssio": {
+        "cell": "PVSS2CDG",
+        "x_um": 1350.0,
+        "y_um": 1835.0,
+        "orientation_def": "S",
+        "side": "top",
+        "offset_um": 1350.0
+      },
+      "i_pad_top_vddio": {
+        "cell": "PVDD2CDG",
+        "x_um": 1250.0,
+        "y_um": 1835.0,
+        "orientation_def": "S",
+        "side": "top",
+        "offset_um": 1250.0
+      },
+      "i_pad_top_vss_2": {
+        "cell": "PVSS1CDG",
+        "x_um": 750.0,
+        "y_um": 1835.0,
+        "orientation_def": "S",
+        "side": "top",
+        "offset_um": 750.0
+      },
+      "i_pad_top_vdd_2": {
+        "cell": "PVDD1CDG",
+        "x_um": 650.0,
+        "y_um": 1835.0,
+        "orientation_def": "S",
+        "side": "top",
+        "offset_um": 650.0
+      },
+      "i_pad_top_vss_1": {
+        "cell": "PVSS1CDG",
+        "x_um": 360.0,
+        "y_um": 1835.0,
+        "orientation_def": "S",
+        "side": "top",
+        "offset_um": 360.0
+      },
+      "i_pad_top_vdd_1": {
+        "cell": "PVDD1CDG",
+        "x_um": 260.0,
+        "y_um": 1835.0,
+        "orientation_def": "S",
+        "side": "top",
+        "offset_um": 260.0
+      },
+      "i_pad_cpu_debug_halted_o": {
+        "cell": "PDDW0204CDG",
+        "x_um": 1835.0,
+        "y_um": 460.0,
+        "orientation_def": "W",
+        "side": "right",
+        "offset_um": 460.0
+      },
+      "i_pad_npu_irq_o": {
+        "cell": "PDDW0204CDG",
+        "x_um": 1600.0,
+        "y_um": 0.0,
+        "orientation_def": "N",
+        "side": "bottom",
+        "offset_um": 1600.0
+      },
+      "i_pad_boot_ready_i": {
+        "cell": "PDDW0204CDG",
+        "x_um": 460.0,
+        "y_um": 0.0,
+        "orientation_def": "N",
+        "side": "bottom",
+        "offset_um": 460.0
+      },
+      "i_pad_td_o": {
+        "cell": "PDDW0204CDG",
+        "x_um": 0.0,
+        "y_um": 1150.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 1150.0
+      },
+      "i_pad_td_i": {
+        "cell": "PDDW0204CDG",
+        "x_um": 0.0,
+        "y_um": 1050.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 1050.0
+      },
+      "i_pad_tms_i": {
+        "cell": "PDDW0204CDG",
+        "x_um": 0.0,
+        "y_um": 950.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 950.0
+      },
+      "i_pad_tck_i": {
+        "cell": "PDDW0204CDG",
+        "x_um": 0.0,
+        "y_um": 850.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 850.0
+      },
+      "i_pad_rst_ni": {
+        "cell": "PDDW0204CDG",
+        "x_um": 0.0,
+        "y_um": 1600.0,
+        "orientation_def": "E",
+        "side": "left",
+        "offset_um": 1600.0
+      },
+      "i_pad_clk_i": {
+        "cell": "PDDW0204CDG",
+        "x_um": 1600.0,
+        "y_um": 1835.0,
+        "orientation_def": "S",
+        "side": "top",
+        "offset_um": 1600.0
+      }
+    }
+  },
+  "core_nonfiller_area_mm2": 2.6339276487,
+  "timing": {
+    "setup": {
+      "wns_ns": 0.342,
+      "report": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/mynpu/pnr/reports/paired_final_setup/mynpu_asic_top_postRoute.summary.gz",
+      "sha256": "d54a6de0503d3e9a034c69973bc81fa67f11e4116bc3c82039d205ed40f0c952"
+    },
+    "hold": {
+      "wns_ns": 0.011,
+      "report": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/mynpu/pnr/reports/paired_final_hold/mynpu_asic_top_postRoute_hold.summary.gz",
+      "sha256": "4e000450d2cc05d97780d7b12b61af2963a233f1cf0a7d4aae6c027ddbf9059d"
+    }
+  },
+  "native_drc": 0,
+  "core_vdd_vss_connectivity_problems": 0,
+  "native_antenna": 0,
+  "native_io_rail_no_routing_notices": 2,
+  "jtag_mnist_gate_checks": 34,
+  "jtag_mhz": 10,
+  "sdf": false,
+  "calibre_rerun": false,
+  "lvs_rerun": false,
+  "mapped_core_matches_r3": true,
+  "placement_footprints": {
+    "standard_count": 80974.0,
+    "standard_area_um2": 1831040.4672,
+    "sram_count": 2.0,
+    "sram_area_um2": 802887.1815,
+    "fillers_count": 32124.0,
+    "fillers_area_um2": 208142.2784,
+    "io_other_count": 322.0,
+    "io_other_area_um2": 1006515.2
+  },
+  "same_endpoint_pad_distance_estimate": {
+    "objective": "Fixed constrained left-side JTAG and paired-supply plan; no claim of global wirelength optimality. Cost uses same placed endpoints and approximate core-facing PAD centers, not routed wirelength.",
+    "before_cost_um": 1686674.365,
+    "after_cost_um": 1932654.205,
+    "assignment": {
+      "clk_i": [
+        "top",
+        1600.0
+      ],
+      "rst_ni": [
+        "left",
+        1600.0
+      ],
+      "tck_i": [
+        "left",
+        850.0
+      ],
+      "tms_i": [
+        "left",
+        950.0
+      ],
+      "td_i": [
+        "left",
+        1050.0
+      ],
+      "td_o": [
+        "left",
+        1150.0
+      ],
+      "boot_ready_i": [
+        "bottom",
+        460.0
+      ],
+      "npu_irq_o": [
+        "bottom",
+        1600.0
+      ],
+      "cpu_debug_halted_o": [
+        "right",
+        460.0
+      ]
+    },
+    "terminals_per_signal": {
+      "clk_i": 1462,
+      "rst_ni": 31,
+      "tck_i": 19,
+      "tms_i": 9,
+      "td_i": 5,
+      "td_o": 1,
+      "boot_ready_i": 1,
+      "npu_irq_o": 1,
+      "cpu_debug_halted_o": 1
+    },
+    "per_signal_cost_um": {
+      "clk_i": {
+        "baseline": 1644388.365,
+        "trial": 1901613.565
+      },
+      "rst_ni": {
+        "baseline": 19655.8,
+        "trial": 25855.8
+      },
+      "tck_i": {
+        "baseline": 9222.76,
+        "trial": 1929.88
+      },
+      "tms_i": {
+        "baseline": 5473.96,
+        "trial": 311.2399999999999
+      },
+      "td_i": {
+        "baseline": 3666.84,
+        "trial": 604.28
+      },
+      "td_o": {
+        "baseline": 2318.6,
+        "trial": 191.39999999999998
+      },
+      "boot_ready_i": {
+        "baseline": 493.15999999999997,
+        "trial": 493.15999999999997
+      },
+      "npu_irq_o": {
+        "baseline": 860.8399999999999,
+        "trial": 1060.84
+      },
+      "cpu_debug_halted_o": {
+        "baseline": 594.04,
+        "trial": 594.04
+      }
+    }
+  },
+  "sha256": {
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/manifest.json": "2c8db02c74f6ef53aad2fe9fcee75623c429a26b6e4c1c0e14600eba5c3c79a2",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/inputs/core.v": "1615d592f4d6f4bc7715b7573d785a3d9dc86046a2f8f34e1f6554d88e5627b3",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/mynpu/pnr/outputs/final/mynpu_asic_top.def": "380a2109f2902acd5d57c414339b6bd6f908fb134480f496bad0831b00211867",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/mynpu/pnr/outputs/final/mynpu_asic_top.hier_postpnr.v": "b6ce5645afc6455b4897d5587571cb0d688b3fc2620751a6aabe72a7d5d657f2",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/mynpu/pnr/outputs/final/mynpu_asic_top.gds.gz": "41022adee4a731685a1bc99909c641330c843d2cedba542737c94268e4fb0036",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/mynpu/pnr/reports/13_paired_labels_drc.rpt": "ca736c433aa47db32e6612365ce5d39efa0ab8f3b1588c100a5be8f156c708c3",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/mynpu/pnr/reports/13_paired_labels_pg.rpt": "d18004ececafd0a57754ec9d91a756c71d5d9522927dc621328df25df1451ee1",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/mynpu/pnr/reports/13_paired_labels_signal.rpt": "2ee709894dbd247da098e3fdeda58211b8dd52ed50869c163ae2d90b2c004af6",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/mynpu/pnr/reports/13_paired_labels_antenna.rpt": "c5a5907e9600b5eeb7d9b7cacc394c78ae97f40f5edf2cc1f0617a00a64a240d",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/mynpu/pnr/reports/13_implemented_footprint.rpt": "cf02a8f01e55f6aaa4f66d412432eb528aeb432e0bde555195c35b351bfc95f8",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/scripts/06-paired-labels-executed.tcl": "0216d5620e44c5c23d78a3d43c5897a23cd5b93b11e59a11c078884243e7695d",
+    "/home/s2400012841/chip-fullstack-2026/eda-runs/20261111-jtag-left-paired-pads/scripts/07-paired-final-executed.tcl": "360915aec68861e384cf8e153d4204b35148fc2b4945fd3e4c1a5f6d66417ecf",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/build/chip-paired-pads-routed/result.json": "7364232e88fcdd670c5228f9b56942bc16591d3662ba0753ee91b4dc70aa27a9",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/docs/images/jtag-left-paired-pads-trial.png": "e09a82c7024a496ff82c8f10f059b0dbabcb78d9f76a3cd204f57da7563549b1",
+    "/home/s2400012841/chip-fullstack-2026/mynpu-softpe/npu/eda/tsmc180/fullchip/pad_plans/jtag_left_paired.json": "2ab193380c0d33d57e9a964212040171f8db4b0010bb345cfe14a18bd2bc0bfe"
+  }
+}

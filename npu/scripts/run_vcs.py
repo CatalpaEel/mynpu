@@ -10,6 +10,7 @@ p = argparse.ArgumentParser()
 p.add_argument(
     "--suite",
     choices=[
+        "gpio",
         "irqcontrol",
         "addressranges",
         "sramuncached",
@@ -33,6 +34,7 @@ p.add_argument(
         "sharedquant",
         "ops",
         "jtag",
+        "jtagrunning",
         "quantlayers",
         "soc",
         "xbarstream",
@@ -109,6 +111,7 @@ subprocess.run(["/usr/bin/python3.12", str(ROOT / "scripts/gen_sources.py")], ch
 files = [Path(s) for s in (ROOT / "build/sources.f").read_text().splitlines()]
 assert files, "Generated source list is empty"
 tops = {
+    "gpio": "tb_gpio",
     "irqcontrol": "tb_irq_control",
     "softcfg": "tb_software_config",
     "quantsync": "tb_quant_sync",
@@ -127,6 +130,7 @@ tops = {
     "workloadcpu": "tb_workloads",
     "ops": "tb_ops",
     "jtag": "tb_jtag",
+    "jtagrunning": "tb_jtag_running",
     "quantlayers": "tb_quant_layers",
     "soc": "tb_npu_soc",
     "xbarstream": "tb_xbar_stream",
@@ -247,6 +251,8 @@ if any(f.name in ["npu_data_regfile.sv", "xbar_stream.sv", "xbar.sv"] for f in f
         files.append(helper)
 if a.macro:
     if a.suite not in [
+        "jtagrunning",
+        "gpio",
         "irqwake",
         "softcfg",
         "sharedoperands",
@@ -292,10 +298,13 @@ assets = (
     if a.suite in ["jtag", "quantlayers", "layers", "blocking", "latency", "stream", "soc"]
     else []
 )
+if a.suite == "gpio":
+    files.append(Path("/home/almalinux/tsmc180/tpd018nv_280a/TSMCHOME/digital/Front_End/verilog/tpd018nv_260a/tpd018nv.v"))
+
 tracked = (
     files
     + [tb]
-    + ([ROOT / "tb/db_jtag_tasks.svh"] if a.suite == "jtag" else [])
+    + [ROOT / "tb/db_jtag_tasks.svh", ROOT / "tb/db_sba_access.svh"]
     + ([ROOT / "tb/mnist_profile.svh"] if a.suite in ["latency", "blocking"] else [])
     + list(inc.glob("*"))
     + assets
@@ -455,6 +464,7 @@ with (out / "run-launcher.log").open("w") as f:
     r = subprocess.run(cmd, cwd=cwd, stdout=f, stderr=subprocess.STDOUT)
 text = (out / "run.log").read_text()
 markers = {
+    "gpio": "GPIO PASS",
     "irqcontrol": "IRQ CONTROL PASS",
     "softcfg": "SOFTWARE CONFIG PASS",
     "quantsync": "QUANT SYNC PASS",
@@ -473,6 +483,7 @@ markers = {
     "workloadcpu": "GENERAL CPU PASS",
     "ops": "OPERATORS PASS",
     "jtag": "JTAG PASS",
+    "jtagrunning": "JTAG RUNNING PASS",
     "quantlayers": "QUANT LAYERS PASS",
     "soc": "ALL PASS",
     "xbarstream": "XBAR STREAM PASS",

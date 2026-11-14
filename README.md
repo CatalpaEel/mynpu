@@ -1,5 +1,7 @@
 # mynpu
 
+> 外部Host接口已删除，SoC仿真与板级访问统一走[JTAG Debug Module SBA](npu/docs/jtag.md)。保留[GPIO8](npu/docs/gpio8.md)。完整后端与模块分布图为加入GPIO前的冻结版本；GPIO加入时、Host删除前的综合2.571490mm²及初始floorplan也是历史基线，不代表本次改动已完成物理验证。
+
 基于 CV32E40P 的整数 NPU，使用独立 Matrix、CNN、Vector 计算单元和软件任务调度。
 本文描述当前默认设计；配置来源为 [build_config.json](npu/build_config.json)，接口以 RTL 和软件头文件为准。
 
@@ -22,6 +24,8 @@ flowchart LR
  X <--> S[2×8 KiB SRAM]
  X <--> R[256 B RF：8 bank，各1R1W]
  X <--> F[4条流FIFO，各8×32bit]
+ X <--> G[GPIO8 MMIO]
+ G <--> GP[8个双向IO PAD]
 ```
 
 - Matrix：INT8/INT16 输入、INT32 累加；CNN：U8×I8 DOT9、INT32 累加。
@@ -36,7 +40,7 @@ flowchart LR
 软件支持 GEMM、批量 GEMM、逐元素运算、步长/广播、转置、归约及3×3卷积组合。
 高级 API 的布局覆盖范围和调度代价见[软件任务层](npu/docs/general-workloads.md)，硬件布局与事件见[LY01 / EV01](npu/docs/layout-events.md)。
 
-当前记录的默认 MNIST 为 **21,008周期/张**，不含 JTAG 下载时间；RF 1R1W 改动未改变该周期。
+JTAG-only回归的MNIST为**21,005周期/张（从CPU启动MMIO提交计时）**；包含串行启动命令阶段为21,728周期，其中723周期发生在提交前。历史21,008周期使用旧Host测试口的启动计时口径，不能把两者差异视为计算优化。输入下载单独统计，不计入上述推理时间。
 这是一项回归负载，不能代表所有算子组合的吞吐。[RF功能与性能证据](npu/docs/rf1r1w.md)。
 
 从仓库根目录运行，VCS 回归需要相应工具和许可证；每次使用新的 `--tag`：
@@ -49,9 +53,9 @@ python3.12 npu/scripts/run_vcs.py --suite jtag --tag my_jtag
 python3.12 npu/scripts/run_vcs.py --suite workloadcpu --tag my_workloads
 ```
 
-## ASIC 后端结果
+## ASIC 完整后端结果（GPIO加入前）
 
-最新冻结版本为 **RF 1R1W，1950µm，r3，2026-11-10**：
+已有完整物理验证的冻结版本为 **RF 1R1W，1950µm，r3，2026-11-10**：
 
 | 指标 | 结果与口径 |
 | --- | --- |
