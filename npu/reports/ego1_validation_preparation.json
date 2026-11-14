@@ -294,8 +294,10 @@
       "cnn_dsp_requested": true,
       "preplacement_lut_estimate_check_deferred": true,
       "postplacement_and_final_default_drc_mandatory": true,
-      "status": "running",
-      "bitstream_generated": false
+      "status": "completed",
+      "status_detail": "implementation_passed, bitstream and mcs generated",
+      "status_artifact": "npu/build/ego1-cpurf-dsp-medium8-10m-20261114/implementation_pass.txt",
+      "bitstream_generated": true
     }
   ],
   "rf_mapping_probe": {
