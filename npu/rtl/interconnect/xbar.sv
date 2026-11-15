@@ -150,6 +150,11 @@ module xbar #(
   logic [NUM_MASTERS-1:0] auxiliary_candidates;
   logic [1:0] memory_found;
   logic auxiliary_found;
+  logic [1:0][NUM_MASTERS-1:0] memory_pick;
+  logic [NUM_MASTERS-1:0] auxiliary_pick;
+  logic [31:0] auxiliary_addr, auxiliary_wdata;
+  logic [3:0] auxiliary_be;
+  logic auxiliary_we;
   for (genvar m = 0; m < NUM_MASTERS; m++) begin : g_request_decode
     wire memory_address = is_mem(addr_i[m]);
     wire stream_address = is_stream_address(addr_i[m]) && addr_i[m][1:0] == 0;
@@ -165,7 +170,7 @@ module xbar #(
     ) i_select (
       .req_i  (memory_candidates[b]),
       .first_i(rr[b]),
-      .grant_o(),
+      .grant_o(memory_pick[b]),
       .valid_o(memory_found[b]),
       .index_o(sel[b])
     );
@@ -176,7 +181,7 @@ module xbar #(
   ) i_auxiliary_select (
     .req_i  (auxiliary_candidates),
     .first_i(aux_rr),
-    .grant_o(),
+    .grant_o(auxiliary_pick),
     .valid_o(auxiliary_found),
     .index_o(aux_sel)
   );
@@ -191,36 +196,55 @@ module xbar #(
     mem_addr_o = 0;
     mem_wdata_o = 0;
     found = 0;
+    // One-hot request payloads avoid a binary wide mux after the arbiter.
+    // Payloads are don't-care without a grant; all valid transfers are unchanged.
     for (int b = 0; b < 2; b++) begin
-      // Only an outstanding auxiliary response blocks its owner.
       found[b] = memory_found[b] && rst_ni;
-      if (found[b]) gnt_o[sel[b]] = 1;
       mem_req_o[b] = found[b];
-      mem_wen_o[b] = be_i[sel[b]] & {4{we_i[sel[b]]}};
-      mem_addr_o[b] = addr_i[sel[b]][12:2];
-      mem_wdata_o[b] = wdata_i[sel[b]];
-      if (valid_q[b]) begin
-        rvalid_o[owner[b]] = 1;
-        rdata_o[owner[b]] = read_q[b] ? mem_rdata_i[b] : 0;
+      for (int m = 0; m < NUM_MASTERS; m++) begin
+        gnt_o[m] |= found[b] && memory_pick[b][m];
+        mem_wen_o[b] |= be_i[m] & {4{memory_pick[b][m] && we_i[m]}};
+        mem_addr_o[b] |= addr_i[m][12:2] & {11{memory_pick[b][m]}};
+        mem_wdata_o[b] |= wdata_i[m] & {32{memory_pick[b][m]}};
       end
     end
+    auxiliary_addr = 0;
+    auxiliary_wdata = 0;
+    auxiliary_be = 0;
+    auxiliary_we = 0;
+    for (int m = 0; m < NUM_MASTERS; m++) begin
+      auxiliary_addr |= addr_i[m] & {32{auxiliary_pick[m]}};
+      auxiliary_wdata |= wdata_i[m] & {32{auxiliary_pick[m]}};
+      auxiliary_be |= be_i[m] & {4{auxiliary_pick[m]}};
+      auxiliary_we |= we_i[m] && auxiliary_pick[m];
+    end
     aux_found = auxiliary_found && rst_ni && !aux_pending;
-    aux_mmio=addr_i[aux_sel][31:12]==20'h40000 && addr_i[aux_sel][1:0]==0 &&
-    (aux_sel==0 || aux_sel==3) && (!we_i[aux_sel] || be_i[aux_sel]==15);
-    aux_dm=addr_i[aux_sel][31:12]==0 && addr_i[aux_sel][1:0]==0 && (aux_sel==0 || aux_sel==3 || aux_sel==4);
-    aux_boot=addr_i[aux_sel]>=32'h00010000 && addr_i[aux_sel]<32'h00010040 &&
-    addr_i[aux_sel][1:0]==0 && !we_i[aux_sel] && (aux_sel==0 || aux_sel==3 || aux_sel==4);
+    aux_mmio=auxiliary_addr[31:12]==20'h40000 && auxiliary_addr[1:0]==0 &&
+    (aux_sel==0 || aux_sel==3) && (!auxiliary_we || auxiliary_be==15);
+    aux_dm=auxiliary_addr[31:12]==0 && auxiliary_addr[1:0]==0 && (aux_sel==0 || aux_sel==3 || aux_sel==4);
+    aux_boot=auxiliary_addr>=32'h00010000 && auxiliary_addr<32'h00010040 &&
+    auxiliary_addr[1:0]==0 && !auxiliary_we && (aux_sel==0 || aux_sel==3 || aux_sel==4);
     dm_req_o = aux_found && aux_dm;
-    dm_we_o = we_i[aux_sel];
-    dm_be_o = be_i[aux_sel];
-    dm_addr_o = addr_i[aux_sel];
-    dm_wdata_o = wdata_i[aux_sel];
-    if (aux_found) gnt_o[aux_sel] = 1;
+    dm_we_o = auxiliary_we;
+    dm_be_o = auxiliary_be;
+    dm_addr_o = auxiliary_addr;
+    dm_wdata_o = auxiliary_wdata;
+    gnt_o |= auxiliary_pick & {NUM_MASTERS{aux_found}};
     mmio_req_o = aux_pending && rst_ni;
-    if (aux_valid) begin
-      rvalid_o[aux_owner] = 1;
-      error_o[aux_owner] = aux_error;
-      rdata_o[aux_owner] = aux_dm_q ? dm_rdata_i : aux_data;
+    // Route responses to fixed master lanes. Keep the original priority:
+    // RF < FIFO < SRAM bank0 < SRAM bank1 < auxiliary response.
+    for (int m = 0; m < NUM_MASTERS; m++) begin
+      for (int b = 0; b < 2; b++) begin
+        if (valid_q[b] && owner[b] == ID_W'(m)) begin
+          rvalid_o[m] = 1;
+          rdata_o[m] = read_q[b] ? mem_rdata_i[b] : 0;
+        end
+      end
+      if (aux_valid && aux_owner == ID_W'(m)) begin
+        rvalid_o[m] = 1;
+        error_o[m] = aux_error;
+        rdata_o[m] = aux_dm_q ? dm_rdata_i : aux_data;
+      end
     end
   end
   always_ff @(posedge clk_i or negedge rst_ni) begin
@@ -272,9 +296,9 @@ module xbar #(
         aux_data <= aux_boot ? boot_rdata_i : 32'hdeadbeef;
         if (aux_mmio) begin
           aux_pending <= 1;
-          mmio_we_o <= we_i[aux_sel];
-          mmio_addr_o <= addr_i[aux_sel][11:0];
-          mmio_wdata_o <= wdata_i[aux_sel];
+          mmio_we_o <= auxiliary_we;
+          mmio_addr_o <= auxiliary_addr[11:0];
+          mmio_wdata_o <= auxiliary_wdata;
         end
       end
     end

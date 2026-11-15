@@ -1,0 +1,85 @@
+{
+  "scope": "FPGA synthesis and opt_design; not placed or routed",
+  "base_commit": "ba2367765969da6ffaded5741dc1ffce57fd70a9",
+  "part": "xc7a35tcsg324-1",
+  "clock_mhz": 10,
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261114-ego1-main-ba23677-onehot-fifo-v2",
+  "configuration": [
+    "area-medium",
+    "cpu-rf-lutram",
+    "cnn-dsp"
+  ],
+  "resource_check_disabled": false,
+  "resources": {
+    "baseline_opt": {
+      "lut": 20956,
+      "ff": 14196,
+      "lutram": 136
+    },
+    "onehot_opt": {
+      "lut": 20890,
+      "ff": 14193,
+      "lutram": 136
+    },
+    "final_synth": {
+      "lut": 20919,
+      "ff": 13169
+    },
+    "final_opt": {
+      "lut": 20573,
+      "logic_lut": 20341,
+      "lutram": 232,
+      "ff": 13169,
+      "ramb36": 4,
+      "dsp": 58
+    }
+  },
+  "validation": [
+    {
+      "suite": "jtagrunning",
+      "passed": true,
+      "result": "npu/build/vcs-lutopt-fifo-final-jtagrunning/result.json"
+    },
+    {
+      "suite": "latency",
+      "passed": true,
+      "result": "npu/build/vcs-lutopt-fifo-final-latency/result.json"
+    },
+    {
+      "suite": "sharedoperands",
+      "passed": true,
+      "result": "npu/build/vcs-lutopt-fifo-final-sharedoperands/result.json"
+    },
+    {
+      "suite": "unitroutes",
+      "passed": true,
+      "result": "npu/build/vcs-lutopt-fifo-final-unitroutes/result.json"
+    },
+    {
+      "suite": "xbarconcurrent",
+      "passed": true,
+      "result": "npu/build/vcs-lutopt-fifo-xbarconcurrent/result.json"
+    },
+    {
+      "suite": "xbarstream",
+      "passed": true,
+      "result": "npu/build/vcs-lutopt-fifo-xbarstream/result.json"
+    }
+  ],
+  "rtl_sha256": {
+    "npu/rtl/interconnect/xbar.sv": "56ddd8c8e5dc450c0376c2bf5eb239416b4c3f8e9cbcfd87d65f73ca3fae5067",
+    "npu/rtl/interconnect/xbar_stream.sv": "7130b04866115782928cd4d5ba94d91e5aa990394e2a559e2513735fe4ee4b34",
+    "npu/rtl/interconnect/npu_multi_read.sv": "f99b25b6f2004093ea6c681548f2afcf3f7edee8116bd3c53637f4508f9b1342"
+  },
+  "asic_isolated_cell_area_um2": {
+    "xbar_baseline": 318251.315,
+    "xbar_onehot": 318444.493,
+    "fifo_baseline": 87783.853,
+    "fifo_final": 87731.168
+  },
+  "limitations": [
+    "No current placed/routed timing or bitstream",
+    "ASIC figures are isolated module probes, not full-chip PPA",
+    "Default opt DRC has warnings; no Error severity entries"
+  ]
+}

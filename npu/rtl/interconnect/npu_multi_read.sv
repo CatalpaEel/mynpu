@@ -94,9 +94,15 @@ module npu_multi_read #(
       end
       if (pending && rvalid_i) begin
         pending <= 0;
-        received[owner] <= 1;
-        data_o[owner] <= rdata_i;
-        error_o[owner] <= error_i;
+        // Decode the small owner tag before the wide response registers.
+        // Static lanes avoid a packed-array variable-write mux over 96 bits.
+        for (int p = 0; p < 3; p++) begin
+          if (owner == 2'(p)) begin
+            received[p] <= 1;
+            data_o[p] <= rdata_i;
+            error_o[p] <= error_i;
+          end
+        end
       end
       // The old response uses old owner; a new grant replaces the pending tag.
       if (req_o && gnt_i) begin

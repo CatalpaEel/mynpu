@@ -20,7 +20,7 @@ module xbar_stream #(
   output logic [MASTERS-1:0][31:0] rdata_o
 );
   import npu_addr_pkg::*;
-  logic [31:0] data[CHANNELS][DEPTH];
+  logic [CHANNELS-1:0][31:0] stored_head;
   logic [PW-1:0] head[CHANNELS], tail[CHANNELS];
   logic [PW:0] count[CHANNELS];
   logic [ID_W-1:0] read_rr[CHANNELS], write_rr[CHANNELS], reader[CHANNELS], writer[CHANNELS];
@@ -62,6 +62,17 @@ module xbar_stream #(
       .index_o(writer[c])
     );
   end
+  // Payload bits are not reset: count/head/tail own validity. A separate
+  // synchronous write process permits FPGA distributed-RAM inference while
+  // preserving the ASIC flop implementation and same-edge read-before-write.
+  for (genvar c = 0; c < CHANNELS; c++) begin : g_payload
+`ifdef NPU_FPGA_TEST
+    (* ram_style = "distributed" *)
+`endif
+    logic [31:0] words[DEPTH];
+    assign stored_head[c] = words[head[c]];
+    always_ff @(posedge clk_i) if (rst_ni && push[c]) words[tail[c]] <= write_word[c];
+  end
   always_comb begin
     gnt_o = 0;
     next_data = 0;
@@ -77,7 +88,7 @@ module xbar_stream #(
       pop[c] = rst_ni && count[c] != 0 && read_found[c];
       push[c] = rst_ni && (count[c] < DEPTH || pop[c]) && write_found[c];
       if (count[c] == 0 && push[c] && read_found[c]) pop[c] = 1;
-      payload = count[c] == 0 ? write_word[c] : data[c][head[c]];
+      payload = count[c] == 0 ? write_word[c] : stored_head[c];
       for (int m = 0; m < MASTERS; m++) begin
         gnt_o[m] |= (pop[c] && read_pick[c][m]) || (push[c] && write_pick[c][m]);
         next_data[m] |= payload & {32{pop[c] && read_pick[c][m]}};
@@ -111,7 +122,6 @@ module xbar_stream #(
           read_rr[c] <= reader[c] == ID_W'(MASTERS - 1) ? 0 : reader[c] + 1'b1;
         end
         if (push[c]) begin
-          data[c][tail[c]] <= write_word[c];
           tail[c] <= tail[c] + 1'b1;
           write_rr[c] <= writer[c] == ID_W'(MASTERS - 1) ? 0 : writer[c] + 1'b1;
         end

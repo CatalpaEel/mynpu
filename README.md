@@ -1,6 +1,6 @@
 # mynpu
 
-> 外部Host接口已删除，SoC仿真与板级访问统一走[JTAG Debug Module SBA](npu/docs/jtag.md)。当前main不包含GPIO；完整r3后端是接口改动前的冻结基线，本次尚未重跑PPA或实体板验证。
+> 外部Host接口已删除，SoC仿真与板级访问统一走[JTAG Debug Module SBA](npu/docs/jtag.md)。当前main不包含GPIO；完整r3后端是接口改动前的冻结基线，ASIC后端和实体板未重验；当前FPGA已完成布局布线并生成bitstream：10MHz、19,925 LUT（95.79%），时序通过，尚未实板验证，见[EGo1实现结果](npu/fpga/ego1/BITSTREAM-20261115.md)。
 
 基于 CV32E40P 的整数 NPU，使用独立 Matrix、CNN、Vector 计算单元和软件任务调度。
 本文描述当前默认设计；配置来源为 [build_config.json](npu/build_config.json)，接口以 RTL 和软件头文件为准。

@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-15",
+  "base_commit": "ba2367765969da6ffaded5741dc1ffce57fd70a9",
+  "rtl": "local LUT optimization; same frozen manifest as 20261114 FIFO v2",
+  "tool": "Vivado 2025.2",
+  "part": "xc7a35tcsg324-1",
+  "system_mhz": 10,
+  "stage": "bitstream_generated",
+  "board_tested": false,
+  "resources": {
+    "lut": 19925,
+    "ff": 13169,
+    "dsp": 58,
+    "ramb36": 4
+  },
+  "timing_ns": {
+    "setup_wns": 45.659,
+    "hold_whs": 0.018,
+    "tns": 0,
+    "ths": 0
+  },
+  "fully_routed_nets": 33890,
+  "routing_errors": 0,
+  "default_lut_check_enabled": true,
+  "drc_error_or_critical": 0,
+  "drc_warnings_remaining": true,
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261114-ego1-main-ba23677-onehot-fifo-v2",
+  "artifacts": {
+    "ego1_mynpu.bit": {
+      "sha256": "1aca77d5e2d0326bcbe350122bc8cc2b057850914f103cd3f001811debf523fc",
+      "size_bytes": 2192136
+    },
+    "ego1_mynpu.mcs": {
+      "sha256": "0d4f6ab8766bb77858700d1325581ce5444ef333cbcf0f24603a268ab50c3b94",
+      "size_bytes": 6028592
+    },
+    "ego1_routed.dcp": {
+      "sha256": "a7368cb3343a3da099a3b900a82acfd74df2c80eac6278e9ce004006d6c27fba",
+      "size_bytes": 14368492
+    },
+    "implementation_pass.txt": {
+      "sha256": "b98ceead93ffd513c26c215a29e9546b692cb127ef6f9ae71e42e66da5431776",
+      "size_bytes": 113
+    },
+    "resume_bitstream.tcl": {
+      "sha256": "844a34f95406fbca206299ad1611ee004cf14e25d075fc62edda17dd5ed1a418",
+      "size_bytes": 2163
+    }
+  }
+}
