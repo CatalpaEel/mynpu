@@ -14,7 +14,8 @@ set device [lindex $devices 0]
 current_hw_device $device
 refresh_hw_device $device
 set parts [get_cfgmem_parts n25q64-3.3v-spi-x1_x2_x4]
-if {[llength $parts] != 1} {error "EGo1 N25Q64 configuration memory part unavailable"}
+# Vivado may return several entries with the same part name.
+if {[llength $parts] == 0} {error "EGo1 N25Q64 configuration memory part unavailable"}
 set cfg [create_hw_cfgmem -hw_device $device -mem_dev [lindex $parts 0]]
 set_property PROGRAM.FILES [list $mcs] $cfg
 set_property PROGRAM.ADDRESS_RANGE {use_file} $cfg
