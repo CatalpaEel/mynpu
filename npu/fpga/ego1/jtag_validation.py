@@ -61,6 +61,7 @@ class OpenOCD:
         self.command("riscv dmi_write 0x10 3; sleep 10")
         self.command("riscv dmi_write 0x10 0x80000001; sleep 10; halt")
         self.command("riscv set_mem_access sysbus")
+        self.command("riscv virt2phys_mode off")
         # Conservative host delay retained from board bring-up. Its necessity
         # and the cause of running-access failures have not been established.
         time.sleep(0.5)
@@ -272,6 +273,7 @@ def main():
     result = {"passed": False, "scope": "physical board via external JTAG/SBA; set only after execution",
               "mode": args.mode, "cpu_access": args.cpu_access,
               "memory_access": "OpenOCD sysbus only", "seed": args.seed, "boots_requested": args.boots,
+              "address_translation": "off; physical addresses",
               "frames_checked": 0, "boot_checks": 0,
               "manifest_sha256": hashlib.sha256((args.assets / "manifest.json").read_bytes()).hexdigest()}
     io = None

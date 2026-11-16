@@ -25,6 +25,22 @@ class Memory:
 
 
 class ValidationTests(unittest.TestCase):
+    def test_physical_sysbus_configured_before_reset_memory_reads(self):
+        io = object.__new__(OpenOCD)
+        io.command = Mock()
+        capabilities = {0x40000000:0x4E505532,0x40000040:0x00020002,
+                        0x40000050:0x00020020,0x40000058:0x56504733,
+                        0x40000060:0x00040008,0x4000006C:0x00040404,
+                        0x40000070:0x00070000,0x40000654:0x53443935}
+        def read(address):
+            commands = [c.args[0] for c in io.command.call_args_list]
+            self.assertIn('riscv set_mem_access sysbus', commands)
+            self.assertIn('riscv virt2phys_mode off', commands)
+            return [capabilities.get(address,0)]
+        io.read = read
+        with patch('jtag_validation.time.sleep'):
+            io.reset()
+
     def test_running_memory_access_has_no_cpu_control(self):
         # Memory intentionally has no command(): a hidden halt/resume fails.
         io = Memory()
