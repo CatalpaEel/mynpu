@@ -1,4 +1,6 @@
-> 最新实现：当前本地LUT优化版已完成Vivado 2025.2布局布线并生成bitstream，10MHz下19925 LUT（95.79%），setup +45.659ns、hold +0.018ns；详见[实现结果](BITSTREAM-20261115.md)。尚未实板验证。
+> 本工作树正在准备 `53655b5` 的不暂停CPU板测，见[SBA-BOARD-20261115.md](SBA-BOARD-20261115.md)。本机2023.2镜像为20048 LUT，10MHz setup +45.764ns/hold +0.030ns；实体结果待执行。
+>
+> 上游2025.2实现：19925 LUT，setup +45.659ns、hold +0.018ns；详见[上游实现结果](BITSTREAM-20261115.md)。这是另一份镜像及工具运行记录。
 
 > 本地集成说明（2026-11-14）：开发代码已合入无GPIO、无Host的JTAG-only主线。`versions/ego1-10mhz-20261114`是旧`afb74fd`硬件/板测的冻结归档，其旧Host端口只存在于归档源码，不参与当前编译；不能将归档镜像当成合并后设计的bitstream。
 > 当前服务器已安装Vivado 2025.2，推荐用`~/tools/bin/vivado`兼容启动器；下面历史板测使用Vivado 2023.2。新的合并验证见[集成报告](MERGE-20261114.md)。

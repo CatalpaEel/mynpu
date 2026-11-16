@@ -14,7 +14,9 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def package(build, assets, out):
+def package(build, assets, out, cpu_access="halt"):
+    if cpu_access not in ("halt", "running"):
+        raise ValueError("Unknown CPU access policy")
     # Refuse to issue a usable-looking kit for an unbuilt/overfull FPGA design.
     needed = ('implementation_pass.txt', 'ego1_mynpu.bit', 'ego1_mynpu.mcs',
               'source_manifest.json', 'reports/timing_routed.rpt',
@@ -34,28 +36,33 @@ def package(build, assets, out):
             raise ValueError(f'Build and validation chip RTL differ: {name}')
     out.mkdir(parents=True, exist_ok=False)
     shutil.copytree(assets, out/'assets')
-    for name in ('ego1_mynpu.bit','ego1_mynpu.mcs','implementation_pass.txt'):
+    for name in ('ego1_mynpu.bit','ego1_mynpu.mcs','implementation_pass.txt','source_manifest.json'):
         shutil.copy2(build/name,out/name)
+    if (build/'source_origin.json').is_file():
+        shutil.copy2(build/'source_origin.json',out/'source_origin.json')
     scripts=out/'npu/fpga/ego1'
     scripts.mkdir(parents=True)
-    for name in ('jtag_validation.py','start_openocd.sh','program_fpga.tcl','ft232h.cfg'):
+    for name in ('jtag_validation.py','start_openocd.sh','program_fpga.tcl','program_flash.tcl','ft232h.cfg'):
         shutil.copy2(HERE/name,scripts/name)
     (out/'npu/debug').mkdir()
     shutil.copy2(HERE.parents[1]/'debug/target.cfg',out/'npu/debug/target.cfg')
     (out/'README.txt').write_text(
         f'EGo1 / xc7a35tcsg324-1 / {snapshot["clock_hz"]}Hz / ASIC architecture validation\n'
         f'FPGA CPU RF implementation: {snapshot.get("cpu_rf_implementation", "flipflop")}\n'
+        f'PC runtime memory access policy: {cpu_access}; no automatic fallback.\n'
         '1. Program ego1_mynpu.bit via the board configuration USB (Vivado Hardware Manager).\n'
         '2. Connect the external FT232H J5 chain and attach it to WSL.\n'
         '3. In WSL, cd to this kit and run: bash npu/fpga/ego1/start_openocd.sh\n'
         '4. In another WSL terminal in this kit:\n'
-        'python3 npu/fpga/ego1/jtag_validation.py --assets assets --mode smoke --out results/smoke\n'
-        'python3 npu/fpga/ego1/jtag_validation.py --assets assets --mode reload --boots 20 --out results/reload\n'
-        'python3 npu/fpga/ego1/jtag_validation.py --assets assets --mode continuous --runs 1000 --boots 2 --out results/continuous\n'
+        f'python3 npu/fpga/ego1/jtag_validation.py --assets assets --cpu-access {cpu_access} --mode smoke --timeout 120 --out results/smoke\n'
+        f'python3 npu/fpga/ego1/jtag_validation.py --assets assets --cpu-access {cpu_access} --mode reload --boots 20 --timeout 120 --out results/reload\n'
+        f'python3 npu/fpga/ego1/jtag_validation.py --assets assets --cpu-access {cpu_access} --mode continuous --runs 1000 --boots 2 --timeout 120 --out results/continuous\n'
         'All result directories must be new. Preserve failed logs. Do not use old architecture bitstreams.\n'
         'A kit is not proof of physical-board testing; inspect result.json after execution.\n')
     (out/'kit_manifest.json').write_text(json.dumps({
         'part':manifest['part'],'physical_board_tested':False,
+        'cpu_access':cpu_access,
+        'hardware_source_manifest_sha256':digest(build/'source_manifest.json'),
         'cpu_rf_implementation':snapshot.get('cpu_rf_implementation','flipflop'),
         'sha256':{p.relative_to(out).as_posix():digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
     },indent=2)+'\n')
@@ -67,5 +74,6 @@ if __name__=='__main__':
     p.add_argument('--build',type=Path,required=True)
     p.add_argument('--assets',type=Path,required=True)
     p.add_argument('--out',type=Path,required=True)
+    p.add_argument('--cpu-access',choices=('halt','running'),default='halt')
     a=p.parse_args()
-    package(a.build.resolve(),a.assets.resolve(),a.out.resolve())
+    package(a.build.resolve(),a.assets.resolve(),a.out.resolve(),a.cpu_access)

@@ -8,7 +8,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 from jtag_validation import (OpenOCD, PASS, FAIL, RESULT, check_output, upload,
-                             validate_assets, wait_value)
+                             validate_assets, wait_value, runtime_read, runtime_write)
 
 
 class Memory:
@@ -25,6 +25,30 @@ class Memory:
 
 
 class ValidationTests(unittest.TestCase):
+    def test_running_memory_access_has_no_cpu_control(self):
+        # Memory intentionally has no command(): a hidden halt/resume fails.
+        io = Memory()
+        runtime_write(io, 0x80001000, [0x11223344], "running")
+        self.assertEqual(runtime_read(io, 0x80001000, cpu_access="running"), [0x11223344])
+        upload(io, 0x80001004, b'\x55\x66\x77\x88', halt_cpu=False)
+        self.assertEqual(io.read(0x80001004), [0x88776655])
+
+    def test_running_phase_rejects_explicit_debug_control(self):
+        io = object.__new__(OpenOCD)
+        io.running_access_active = True
+        for command in ('halt', 'resume; poll off', 'reset halt', 'riscv dmi_write 0x10 3'):
+            with self.assertRaisesRegex(RuntimeError, 'forbidden'):
+                io.command(command)
+
+    def test_running_state_checks_dmstatus(self):
+        io = object.__new__(OpenOCD)
+        io.command = Mock(return_value='0xc82')
+        io.assert_running()
+        for status in ('0x382', '0x3082', '0x82'):
+            io.command.return_value = status
+            with self.assertRaisesRegex(RuntimeError, 'not running'):
+                io.assert_running()
+
     def test_full_upload_and_bank_boundary(self):
         io = Memory()
         payload = bytes(range(256))*64

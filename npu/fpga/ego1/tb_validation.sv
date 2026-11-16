@@ -3,9 +3,13 @@
 // No internal forcing or simulation host backdoor is used.
 module tb_validation;
   parameter integer FRAMES = 20, BOOTS = 2, BOARD_MHZ = 50;
+  parameter integer RUNNING_ACCESS = 0;
+  bit runtime_active = 0;
+  int running_sba_grants = 0, running_overlap = 0, running_fetch = 0, running_npu = 0;
   logic clk = 0, rst_n = 0, tck = 0, tms = 1, tdi = 0;
   wire tdo, halted;
 `ifdef VALIDATION_ASIC
+`define VALIDATION_CORE dut.i_core
   always #(500.0/BOARD_MHZ) clk = ~clk;
   npu_soc dut (
     .clk_i(clk), .rst_ni(rst_n), .cpu_run_i(1'b1),
@@ -14,6 +18,7 @@ module tb_validation;
     .irq_o(), .cpu_test_done_o(), .cpu_test_pass_o()
   );
 `else
+`define VALIDATION_CORE dut.i_soc.i_core
   always #5 clk = ~clk;
   wire [7:0] leds;
   assign halted = leds[3];
@@ -26,6 +31,21 @@ module tb_validation;
     if(dut.sys_rst_ni)previous_clock_edge=$time;else previous_clock_edge=0;
   end
 `endif
+  always @(posedge `VALIDATION_CORE.clk_i) begin
+    if (RUNNING_ACCESS && runtime_active) begin
+      if (halted) $fatal(1,"CPU halted during running-access inference");
+      if (`VALIDATION_CORE.req[3] && `VALIDATION_CORE.gnt[3]) begin
+        running_sba_grants++;
+        if (`VALIDATION_CORE.req[0] || `VALIDATION_CORE.req[4] ||
+            `VALIDATION_CORE.req[1] || `VALIDATION_CORE.req[2] || `VALIDATION_CORE.req[5])
+          running_overlap++;
+      end
+      if (`VALIDATION_CORE.req[4] && `VALIDATION_CORE.gnt[4]) running_fetch++;
+      if ((`VALIDATION_CORE.req[1] && `VALIDATION_CORE.gnt[1]) ||
+          (`VALIDATION_CORE.req[2] && `VALIDATION_CORE.gnt[2]) ||
+          (`VALIDATION_CORE.req[5] && `VALIDATION_CORE.gnt[5])) running_npu++;
+    end
+  end
   `include "db_jtag_tasks.svh"
   `include "test_meta.svh"
   localparam logic [31:0] MAIL = 32'h80001fa0, PACKETS = 32'h80001c90;
@@ -129,13 +149,14 @@ module tb_validation;
       sba_write(32'h4000000c,32'h80000080);
       sba_write(32'h40000008,1);
       resume_cpu();
+      runtime_active = 1;
       for(int frame=0;frame<FRAMES;frame++)begin
         sample=(frame*7+boot)%10; slot=frame%2;
         supply_input(sample,slot);
         sba_write(MAIL+slot*4,frame+1);
         // CPU halt does not halt the accelerators. Completion must remain
         // observable when the CPU resumes its ticket/IRQ/WFI waiting code.
-        if(frame==1)begin halt_cpu();idle_ticks(37);resume_cpu();end
+        if(frame==1 && !RUNNING_ACCESS)begin halt_cpu();idle_ticks(37);resume_cpu();end
         for(int poll=0;poll<200;poll++)begin
           sba_read(MAIL+8+slot*4,value);
           if(value==frame+1)break;
@@ -167,6 +188,7 @@ module tb_validation;
       sba_read(32'h40000004,value);eq(value,32'h600d0001,"whole batch success");
       sba_read(32'h40000128,value);eq(value,13*FRAMES,"Matrix completed tickets across frames");
       sba_read(32'h4000065c,value);eq(value,STREAM_TASKS*FRAMES,"CNN completed tickets across frames");
+      runtime_active = 0;
       // POR also resets the TAP. Exercise a fresh IDCODE/DM activation on the
       // next round, rather than silently reusing a stale debug session.
       if(boot+1<BOOTS)begin
@@ -181,8 +203,15 @@ module tb_validation;
     // System reset after a successful batch must clear stale success, while
     // SRAM persists. A new image must be loaded before starting another run.
     system_reset();
+    if (RUNNING_ACCESS) begin
+      if (running_sba_grants == 0 || running_overlap == 0 || running_fetch == 0 || running_npu == 0)
+        $fatal(1,"Insufficient running-access coverage");
+      $display("RUNNING ACCESS PASS sba=%0d overlap=%0d fetch=%0d npu=%0d",
+               running_sba_grants,running_overlap,running_fetch,running_npu);
+    end
     $display("EGO1 STRESS PASS frames=%0d boots=%0d checks=%0d",checked_frames,BOOTS,checks);
     $finish;
   end
   initial begin #2000000000;$fatal(1,"global timeout");end
 endmodule
+`undef VALIDATION_CORE
