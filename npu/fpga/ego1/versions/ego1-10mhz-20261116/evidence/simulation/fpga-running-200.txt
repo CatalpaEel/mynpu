@@ -1,0 +1,236 @@
+Chronologic VCS simulator copyright 1991-2020
+Contains Synopsys proprietary information.
+Compiler version Q-2020.03-SP2-7_Full64; Runtime version Q-2020.03-SP2-7_Full64;  Nov 16 06:55 2026
+
+Warning-[RT-NCMUCS] No condition matches in statement
+/home/almalinux/ego1-sba-53655b5-20261115/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv, 419
+  No condition matches in 'unique case' statement. 'default' specification is 
+  missing, inside 
+  tb_validation.dut.i_soc.i_core.i_cpu.core_i.load_store_unit_i, at time 0ps.
+
+
+Warning-[RT-NCMUCS] No condition matches in statement
+/home/almalinux/ego1-sba-53655b5-20261115/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv, 419
+  No condition matches in 'unique case' statement. 'default' specification is 
+  missing, inside 
+  tb_validation.dut.i_soc.i_core.i_cpu.core_i.load_store_unit_i, at time 0ps.
+
+
+Warning-[RT-NCMUCS] No condition matches in statement
+/home/almalinux/ego1-sba-53655b5-20261115/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv, 419
+  No condition matches in 'unique case' statement. 'default' specification is 
+  missing, inside 
+  tb_validation.dut.i_soc.i_core.i_cpu.core_i.load_store_unit_i, at time 0ps.
+
+VALIDATION IMAGE full 16KiB upload/readback PASS
+VALIDATION FRAME boot=0 frame=0 sample=0 PASS
+VALIDATION FRAME boot=0 frame=1 sample=7 PASS
+VALIDATION FRAME boot=0 frame=2 sample=4 PASS
+VALIDATION FRAME boot=0 frame=3 sample=1 PASS
+VALIDATION FRAME boot=0 frame=4 sample=8 PASS
+VALIDATION FRAME boot=0 frame=5 sample=5 PASS
+VALIDATION FRAME boot=0 frame=6 sample=2 PASS
+VALIDATION FRAME boot=0 frame=7 sample=9 PASS
+VALIDATION FRAME boot=0 frame=8 sample=6 PASS
+VALIDATION FRAME boot=0 frame=9 sample=3 PASS
+VALIDATION FRAME boot=0 frame=10 sample=0 PASS
+VALIDATION FRAME boot=0 frame=11 sample=7 PASS
+VALIDATION FRAME boot=0 frame=12 sample=4 PASS
+VALIDATION FRAME boot=0 frame=13 sample=1 PASS
+VALIDATION FRAME boot=0 frame=14 sample=8 PASS
+VALIDATION FRAME boot=0 frame=15 sample=5 PASS
+VALIDATION FRAME boot=0 frame=16 sample=2 PASS
+VALIDATION FRAME boot=0 frame=17 sample=9 PASS
+VALIDATION FRAME boot=0 frame=18 sample=6 PASS
+VALIDATION FRAME boot=0 frame=19 sample=3 PASS
+VALIDATION FRAME boot=0 frame=20 sample=0 PASS
+VALIDATION FRAME boot=0 frame=21 sample=7 PASS
+VALIDATION FRAME boot=0 frame=22 sample=4 PASS
+VALIDATION FRAME boot=0 frame=23 sample=1 PASS
+VALIDATION FRAME boot=0 frame=24 sample=8 PASS
+VALIDATION FRAME boot=0 frame=25 sample=5 PASS
+VALIDATION FRAME boot=0 frame=26 sample=2 PASS
+VALIDATION FRAME boot=0 frame=27 sample=9 PASS
+VALIDATION FRAME boot=0 frame=28 sample=6 PASS
+VALIDATION FRAME boot=0 frame=29 sample=3 PASS
+VALIDATION FRAME boot=0 frame=30 sample=0 PASS
+VALIDATION FRAME boot=0 frame=31 sample=7 PASS
+VALIDATION FRAME boot=0 frame=32 sample=4 PASS
+VALIDATION FRAME boot=0 frame=33 sample=1 PASS
+VALIDATION FRAME boot=0 frame=34 sample=8 PASS
+VALIDATION FRAME boot=0 frame=35 sample=5 PASS
+VALIDATION FRAME boot=0 frame=36 sample=2 PASS
+VALIDATION FRAME boot=0 frame=37 sample=9 PASS
+VALIDATION FRAME boot=0 frame=38 sample=6 PASS
+VALIDATION FRAME boot=0 frame=39 sample=3 PASS
+VALIDATION FRAME boot=0 frame=40 sample=0 PASS
+VALIDATION FRAME boot=0 frame=41 sample=7 PASS
+VALIDATION FRAME boot=0 frame=42 sample=4 PASS
+VALIDATION FRAME boot=0 frame=43 sample=1 PASS
+VALIDATION FRAME boot=0 frame=44 sample=8 PASS
+VALIDATION FRAME boot=0 frame=45 sample=5 PASS
+VALIDATION FRAME boot=0 frame=46 sample=2 PASS
+VALIDATION FRAME boot=0 frame=47 sample=9 PASS
+VALIDATION FRAME boot=0 frame=48 sample=6 PASS
+VALIDATION FRAME boot=0 frame=49 sample=3 PASS
+VALIDATION FRAME boot=0 frame=50 sample=0 PASS
+VALIDATION FRAME boot=0 frame=51 sample=7 PASS
+VALIDATION FRAME boot=0 frame=52 sample=4 PASS
+VALIDATION FRAME boot=0 frame=53 sample=1 PASS
+VALIDATION FRAME boot=0 frame=54 sample=8 PASS
+VALIDATION FRAME boot=0 frame=55 sample=5 PASS
+VALIDATION FRAME boot=0 frame=56 sample=2 PASS
+VALIDATION FRAME boot=0 frame=57 sample=9 PASS
+VALIDATION FRAME boot=0 frame=58 sample=6 PASS
+VALIDATION FRAME boot=0 frame=59 sample=3 PASS
+VALIDATION FRAME boot=0 frame=60 sample=0 PASS
+VALIDATION FRAME boot=0 frame=61 sample=7 PASS
+VALIDATION FRAME boot=0 frame=62 sample=4 PASS
+VALIDATION FRAME boot=0 frame=63 sample=1 PASS
+VALIDATION FRAME boot=0 frame=64 sample=8 PASS
+VALIDATION FRAME boot=0 frame=65 sample=5 PASS
+VALIDATION FRAME boot=0 frame=66 sample=2 PASS
+VALIDATION FRAME boot=0 frame=67 sample=9 PASS
+VALIDATION FRAME boot=0 frame=68 sample=6 PASS
+VALIDATION FRAME boot=0 frame=69 sample=3 PASS
+VALIDATION FRAME boot=0 frame=70 sample=0 PASS
+VALIDATION FRAME boot=0 frame=71 sample=7 PASS
+VALIDATION FRAME boot=0 frame=72 sample=4 PASS
+VALIDATION FRAME boot=0 frame=73 sample=1 PASS
+VALIDATION FRAME boot=0 frame=74 sample=8 PASS
+VALIDATION FRAME boot=0 frame=75 sample=5 PASS
+VALIDATION FRAME boot=0 frame=76 sample=2 PASS
+VALIDATION FRAME boot=0 frame=77 sample=9 PASS
+VALIDATION FRAME boot=0 frame=78 sample=6 PASS
+VALIDATION FRAME boot=0 frame=79 sample=3 PASS
+VALIDATION FRAME boot=0 frame=80 sample=0 PASS
+VALIDATION FRAME boot=0 frame=81 sample=7 PASS
+VALIDATION FRAME boot=0 frame=82 sample=4 PASS
+VALIDATION FRAME boot=0 frame=83 sample=1 PASS
+VALIDATION FRAME boot=0 frame=84 sample=8 PASS
+VALIDATION FRAME boot=0 frame=85 sample=5 PASS
+VALIDATION FRAME boot=0 frame=86 sample=2 PASS
+VALIDATION FRAME boot=0 frame=87 sample=9 PASS
+VALIDATION FRAME boot=0 frame=88 sample=6 PASS
+VALIDATION FRAME boot=0 frame=89 sample=3 PASS
+VALIDATION FRAME boot=0 frame=90 sample=0 PASS
+VALIDATION FRAME boot=0 frame=91 sample=7 PASS
+VALIDATION FRAME boot=0 frame=92 sample=4 PASS
+VALIDATION FRAME boot=0 frame=93 sample=1 PASS
+VALIDATION FRAME boot=0 frame=94 sample=8 PASS
+VALIDATION FRAME boot=0 frame=95 sample=5 PASS
+VALIDATION FRAME boot=0 frame=96 sample=2 PASS
+VALIDATION FRAME boot=0 frame=97 sample=9 PASS
+VALIDATION FRAME boot=0 frame=98 sample=6 PASS
+VALIDATION final DONE/status race resolved
+VALIDATION FRAME boot=0 frame=99 sample=3 PASS
+VALIDATION IMAGE full 16KiB upload/readback PASS
+VALIDATION FRAME boot=1 frame=0 sample=1 PASS
+VALIDATION FRAME boot=1 frame=1 sample=8 PASS
+VALIDATION FRAME boot=1 frame=2 sample=5 PASS
+VALIDATION FRAME boot=1 frame=3 sample=2 PASS
+VALIDATION FRAME boot=1 frame=4 sample=9 PASS
+VALIDATION FRAME boot=1 frame=5 sample=6 PASS
+VALIDATION FRAME boot=1 frame=6 sample=3 PASS
+VALIDATION FRAME boot=1 frame=7 sample=0 PASS
+VALIDATION FRAME boot=1 frame=8 sample=7 PASS
+VALIDATION FRAME boot=1 frame=9 sample=4 PASS
+VALIDATION FRAME boot=1 frame=10 sample=1 PASS
+VALIDATION FRAME boot=1 frame=11 sample=8 PASS
+VALIDATION FRAME boot=1 frame=12 sample=5 PASS
+VALIDATION FRAME boot=1 frame=13 sample=2 PASS
+VALIDATION FRAME boot=1 frame=14 sample=9 PASS
+VALIDATION FRAME boot=1 frame=15 sample=6 PASS
+VALIDATION FRAME boot=1 frame=16 sample=3 PASS
+VALIDATION FRAME boot=1 frame=17 sample=0 PASS
+VALIDATION FRAME boot=1 frame=18 sample=7 PASS
+VALIDATION FRAME boot=1 frame=19 sample=4 PASS
+VALIDATION FRAME boot=1 frame=20 sample=1 PASS
+VALIDATION FRAME boot=1 frame=21 sample=8 PASS
+VALIDATION FRAME boot=1 frame=22 sample=5 PASS
+VALIDATION FRAME boot=1 frame=23 sample=2 PASS
+VALIDATION FRAME boot=1 frame=24 sample=9 PASS
+VALIDATION FRAME boot=1 frame=25 sample=6 PASS
+VALIDATION FRAME boot=1 frame=26 sample=3 PASS
+VALIDATION FRAME boot=1 frame=27 sample=0 PASS
+VALIDATION FRAME boot=1 frame=28 sample=7 PASS
+VALIDATION FRAME boot=1 frame=29 sample=4 PASS
+VALIDATION FRAME boot=1 frame=30 sample=1 PASS
+VALIDATION FRAME boot=1 frame=31 sample=8 PASS
+VALIDATION FRAME boot=1 frame=32 sample=5 PASS
+VALIDATION FRAME boot=1 frame=33 sample=2 PASS
+VALIDATION FRAME boot=1 frame=34 sample=9 PASS
+VALIDATION FRAME boot=1 frame=35 sample=6 PASS
+VALIDATION FRAME boot=1 frame=36 sample=3 PASS
+VALIDATION FRAME boot=1 frame=37 sample=0 PASS
+VALIDATION FRAME boot=1 frame=38 sample=7 PASS
+VALIDATION FRAME boot=1 frame=39 sample=4 PASS
+VALIDATION FRAME boot=1 frame=40 sample=1 PASS
+VALIDATION FRAME boot=1 frame=41 sample=8 PASS
+VALIDATION FRAME boot=1 frame=42 sample=5 PASS
+VALIDATION FRAME boot=1 frame=43 sample=2 PASS
+VALIDATION FRAME boot=1 frame=44 sample=9 PASS
+VALIDATION FRAME boot=1 frame=45 sample=6 PASS
+VALIDATION FRAME boot=1 frame=46 sample=3 PASS
+VALIDATION FRAME boot=1 frame=47 sample=0 PASS
+VALIDATION FRAME boot=1 frame=48 sample=7 PASS
+VALIDATION FRAME boot=1 frame=49 sample=4 PASS
+VALIDATION FRAME boot=1 frame=50 sample=1 PASS
+VALIDATION FRAME boot=1 frame=51 sample=8 PASS
+VALIDATION FRAME boot=1 frame=52 sample=5 PASS
+VALIDATION FRAME boot=1 frame=53 sample=2 PASS
+VALIDATION FRAME boot=1 frame=54 sample=9 PASS
+VALIDATION FRAME boot=1 frame=55 sample=6 PASS
+VALIDATION FRAME boot=1 frame=56 sample=3 PASS
+VALIDATION FRAME boot=1 frame=57 sample=0 PASS
+VALIDATION FRAME boot=1 frame=58 sample=7 PASS
+VALIDATION FRAME boot=1 frame=59 sample=4 PASS
+VALIDATION FRAME boot=1 frame=60 sample=1 PASS
+VALIDATION FRAME boot=1 frame=61 sample=8 PASS
+VALIDATION FRAME boot=1 frame=62 sample=5 PASS
+VALIDATION FRAME boot=1 frame=63 sample=2 PASS
+VALIDATION FRAME boot=1 frame=64 sample=9 PASS
+VALIDATION FRAME boot=1 frame=65 sample=6 PASS
+VALIDATION FRAME boot=1 frame=66 sample=3 PASS
+VALIDATION FRAME boot=1 frame=67 sample=0 PASS
+VALIDATION FRAME boot=1 frame=68 sample=7 PASS
+VALIDATION FRAME boot=1 frame=69 sample=4 PASS
+VALIDATION FRAME boot=1 frame=70 sample=1 PASS
+VALIDATION FRAME boot=1 frame=71 sample=8 PASS
+VALIDATION FRAME boot=1 frame=72 sample=5 PASS
+VALIDATION FRAME boot=1 frame=73 sample=2 PASS
+VALIDATION FRAME boot=1 frame=74 sample=9 PASS
+VALIDATION FRAME boot=1 frame=75 sample=6 PASS
+VALIDATION FRAME boot=1 frame=76 sample=3 PASS
+VALIDATION FRAME boot=1 frame=77 sample=0 PASS
+VALIDATION FRAME boot=1 frame=78 sample=7 PASS
+VALIDATION FRAME boot=1 frame=79 sample=4 PASS
+VALIDATION FRAME boot=1 frame=80 sample=1 PASS
+VALIDATION FRAME boot=1 frame=81 sample=8 PASS
+VALIDATION FRAME boot=1 frame=82 sample=5 PASS
+VALIDATION FRAME boot=1 frame=83 sample=2 PASS
+VALIDATION FRAME boot=1 frame=84 sample=9 PASS
+VALIDATION FRAME boot=1 frame=85 sample=6 PASS
+VALIDATION FRAME boot=1 frame=86 sample=3 PASS
+VALIDATION FRAME boot=1 frame=87 sample=0 PASS
+VALIDATION FRAME boot=1 frame=88 sample=7 PASS
+VALIDATION FRAME boot=1 frame=89 sample=4 PASS
+VALIDATION FRAME boot=1 frame=90 sample=1 PASS
+VALIDATION FRAME boot=1 frame=91 sample=8 PASS
+VALIDATION FRAME boot=1 frame=92 sample=5 PASS
+VALIDATION FRAME boot=1 frame=93 sample=2 PASS
+VALIDATION FRAME boot=1 frame=94 sample=9 PASS
+VALIDATION FRAME boot=1 frame=95 sample=6 PASS
+VALIDATION FRAME boot=1 frame=96 sample=3 PASS
+VALIDATION FRAME boot=1 frame=97 sample=0 PASS
+VALIDATION FRAME boot=1 frame=98 sample=7 PASS
+VALIDATION final DONE/status race resolved
+VALIDATION FRAME boot=1 frame=99 sample=4 PASS
+RUNNING ACCESS PASS sba=57806 overlap=53934 fetch=3985536 npu=1766400
+EGO1 STRESS PASS frames=200 boots=2 checks=11006
+$finish called from file "/home/almalinux/ego1-sba-53655b5-20261115/npu/fpga/ego1/tb_validation.sv", line 213.
+$finish at simulation time         818694125000
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 818694125000 ps
+CPU Time:    291.820 seconds;       Data structure size:   0.1Mb
+Mon Nov 16 07:00:27 2026

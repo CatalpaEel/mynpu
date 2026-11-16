@@ -1,0 +1,98 @@
+{
+  "client_date": "2026-11-16",
+  "hardware_base_commit": "53655b5aff75b21021c3aadcd66d0d57b9c2e52e",
+  "validation_commit": "3ff5e7af03d91fa6a6e6fd26368334b1b1e8088d",
+  "part": "xc7a35tcsg324-1",
+  "clock_hz": 10000000,
+  "status": "passed",
+  "flash_part": "n25q64-3.3v-spi-x1_x2_x4",
+  "bit_sha256": "da0d5d534a868326fdc14be013a6d52419a6a17a0295f0c044edd7e266ad9188",
+  "mcs_sha256": "3e5cc76e561c0ff8c4103da508804efec9fa43ae49397cae4a594b05c1c04dc8",
+  "flash_script_sha256": "2dad58ebbb785690190c0636cb70a610c5f06903530997bba256b228669e937e",
+  "attempts": [
+    {
+      "log": "flash-program.log",
+      "passed": false,
+      "erase_started": false,
+      "error": "Overstrict uniqueness check: Vivado returns seven entries for the same N25Q64 name; check changed to nonempty list.",
+      "sha256": "4a6a53e9ebee8c1276e70082580535dfcb0ef48caa82e58ee7bc53b156e9bc4f"
+    },
+    {
+      "log": "flash-program-attempt2.log",
+      "passed": true,
+      "status": "complete",
+      "sha256": "9fa3cd5c3edcd8ee2646abb3575af658338fe63d25f425f6907e009c3ccc337b"
+    }
+  ],
+  "flash_program_verify_passed": true,
+  "new_image_inference_tested": true,
+  "usb_configuration_interface": "0403:6010 / onboard FT2232 / 1234-tulA",
+  "external_jtag_interface": "0403:6014 FT232H at busid 2-4",
+  "power_cycle_confirmed": true,
+  "cpu_access_policy": "running; no halt fallback",
+  "running_access_diagnosis": "running-sba-diagnosis.json",
+  "initial_smoke_failed": "smoke-running-100khz/result.json",
+  "diagnosis_no_cpu_halt_or_reset": true,
+  "pc_fix": "riscv virt2phys_mode off",
+  "root_cause_confirmed_for_reproduced_error": true,
+  "root_cause": "OpenOCD SW virtual-to-physical translation attempts to read priv while hart runs; fails before SBA",
+  "physical_address_smoke_passed": true,
+  "host_runner_sha256": "e8ef1216cb326f31aafb90c9bf0e207aef417334603b8a2ef162c843dbc00a3e",
+  "target_cfg_sha256": "79040f98dd8cc1b7af90471a1e1044fc14092a944616187557cf835e2aab7f9a",
+  "pc_fix_commit": "824c10936f69630703b66bec36434da1b9bcaabd",
+  "reload_passed": true,
+  "reload_boots_checked": 20,
+  "root_cause_evidence": "npu/reports/ego1_board_20261116/running-sba-diagnosis.json",
+  "continuous_pressure_test_passed": true,
+  "total_frames_checked": 2021,
+  "total_ndmreset_boot_checks": 23,
+  "successful_runs": [
+    {
+      "mode": "smoke",
+      "frames": 1,
+      "boots": 1,
+      "evidence": "smoke-after-fix-result.json",
+      "sha256": "349e832061e99acf9aba3d3dc49e4c7829b488e776ee126bca08c649d64e5a83"
+    },
+    {
+      "mode": "reload",
+      "frames": 20,
+      "boots": 20,
+      "evidence": "reload-result.json",
+      "sha256": "4ae2c8b938a5f30660d322b9cd6b264f2119fa5d07fa4834c1ff45ebc4421dd9"
+    },
+    {
+      "mode": "continuous",
+      "frames": 2000,
+      "boots": 2,
+      "evidence": "continuous-result.json",
+      "sha256": "089764f611522770ab778a033ad66ad99feebaed9be79ec7af62fd6cad3f68e9",
+      "sample_frequency": {
+        "0": 195,
+        "1": 201,
+        "2": 221,
+        "3": 199,
+        "4": 192,
+        "5": 204,
+        "6": 212,
+        "7": 182,
+        "8": 201,
+        "9": 193
+      },
+      "sequences_and_alternating_slots_verified": true
+    }
+  ],
+  "postcheck": {
+    "passed": true,
+    "no_cpu_halt_or_reset": true,
+    "last_batch_frames": 1000,
+    "dmstatus": "0x30c82",
+    "result": "0x600d0001",
+    "matrix_completed": 13000,
+    "cnn_completed": 212000,
+    "expected_matrix_completed": 13000,
+    "expected_cnn_completed": 212000,
+    "sbcs": "0x20150407"
+  },
+  "validation_report": "npu/reports/ego1_board_20261116/validation.json"
+}

@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/riscv/riscv-openocd.git",
+  "commit": "10b7a647da03cb64fd25db76261712c388ad6468",
+  "source": "src/target/riscv/riscv.c",
+  "sha256": "30d5fbc388862a4f17f7f0a6c957265ddf3c5b729dfb189f7bf4b746111c79e9",
+  "default_mode": "sw",
+  "default_mode_line": 5955,
+  "mmu_register_read_lines": [
+    3016,
+    3020,
+    3025,
+    3026
+  ],
+  "access_translation_call_line": 3431,
+  "physical_mode_command": "riscv virt2phys_mode off",
+  "evidence": "running-sba-diagnosis.json",
+  "scope": "root cause of the reproduced Failed to read priv register error; not a universal hardware correctness claim"
+}

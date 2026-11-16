@@ -1,4 +1,4 @@
-> 本工作树已完成 `53655b5` 的实体板验证：10MHz系统、100kHz JTAG、2021次推理全部通过，运行阶段不暂停CPU。实板priv错误已定位并修正为OpenOCD物理地址访问，见[SBA-RUNNING-20261116.md](SBA-RUNNING-20261116.md)。本机2023.2镜像为20048 LUT，setup +45.764ns/hold +0.030ns。
+> 当前已验证的固定版本为 [ego1-10mhz-20261116](versions/ego1-10mhz-20261116/README.md)：硬件 `53655b5`，10MHz系统、100kHz JTAG、2021次实板推理全部通过，运行阶段不暂停CPU。源码、bit/MCS及配套程序均在版本目录，标签为 `ego1-board-running-10mhz-20261116`。实板priv错误已修正为OpenOCD物理地址访问，见[SBA-RUNNING-20261116.md](SBA-RUNNING-20261116.md)。本次2023.2镜像为20048 LUT，setup +45.764ns/hold +0.030ns。
 >
 > 上游2025.2实现：19925 LUT，setup +45.659ns、hold +0.018ns；详见[上游实现结果](BITSTREAM-20261115.md)。这是另一份镜像及工具运行记录。
 
@@ -7,8 +7,8 @@
 
 # EGo1 板级 Vivado 工程
 
-已发布上板分支：`fpga/ego1-board-20261114-afb74fd`。
-**本次实板验证的固定版本见 [ego1-10mhz-20261114](versions/ego1-10mhz-20261114/README.md)**，
+历史上板分支：`fpga/ego1-board-20261114-afb74fd`。
+**2026-11-14历史实板验证的固定版本见 [ego1-10mhz-20261114](versions/ego1-10mhz-20261114/README.md)**，
 包含实际构建的源码快照、bit/MCS、配套输入/程序和原始测试记录。
 SoC 基线为 `afb74fd`，冻结硬件源码对应 `03e2870`；不代表后续 `main` 已通过本次板测。
 

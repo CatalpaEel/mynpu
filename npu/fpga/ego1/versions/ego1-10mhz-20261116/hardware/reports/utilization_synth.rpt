@@ -1,0 +1,104 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
+| Date         : Sun Nov 15 22:54:14 2026
+| Host         : LAPTOP-L4U4N8ER running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-53655b5-10m-20261115/reports/utilization_synth.rpt
+| Design       : ego1_soc_top
+| Device       : xc7a35tcsg324-1
+| Speed File   : -1
+| Design State : Synthesized
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++---------------------------------------------+--------------------------------+------------+------------+---------+------+-------+--------+--------+------------+
+|                   Instance                  |             Module             | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs  | RAMB36 | RAMB18 | DSP Blocks |
++---------------------------------------------+--------------------------------+------------+------------+---------+------+-------+--------+--------+------------+
+| ego1_soc_top                                |                          (top) |      21015 |      20783 |     232 |    0 | 13167 |      4 |      0 |         56 |
+|   (ego1_soc_top)                            |                          (top) |          5 |          5 |       0 |    0 |    33 |      0 |      0 |          0 |
+|   i_soc                                     |                        npu_soc |      21010 |      20778 |     232 |    0 | 13134 |      4 |      0 |         56 |
+|     g_bank[0].i_sram                        |                        sram_ff |          0 |          0 |       0 |    0 |     0 |      2 |      0 |          0 |
+|     g_bank[1].i_sram                        |                      sram_ff_0 |          0 |          0 |       0 |    0 |     0 |      2 |      0 |          0 |
+|     i_core                                  |                       npu_core |      21010 |      20778 |     232 |    0 | 13134 |      0 |      0 |         56 |
+|       (i_core)                              |                       npu_core |        125 |         29 |      96 |    0 |     4 |      0 |      0 |          0 |
+|       i_boot                                |                 npu_debug_boot |          8 |          8 |       0 |    0 |     0 |      0 |      0 |          0 |
+|       i_cnn                                 |                        npu_cnn |        113 |        113 |       0 |    0 |     1 |      0 |      0 |         22 |
+|         i_mac                               |                    npu_cnn_mac |        113 |        113 |       0 |    0 |     1 |      0 |      0 |         22 |
+|       i_cpu                                 |                   cv32e40p_top |       3098 |       3098 |       0 |    0 |  1187 |      0 |      0 |          5 |
+|         core_i                              |                  cv32e40p_core |       3098 |       3098 |       0 |    0 |  1187 |      0 |      0 |          5 |
+|           (core_i)                          |                  cv32e40p_core |          5 |          5 |       0 |    0 |     0 |      0 |      0 |          0 |
+|           cs_registers_i                    |          cv32e40p_cs_registers |         80 |         80 |       0 |    0 |   461 |      0 |      0 |          0 |
+|           ex_stage_i                        |              cv32e40p_ex_stage |        233 |        233 |       0 |    0 |   120 |      0 |      0 |          5 |
+|             (ex_stage_i)                    |              cv32e40p_ex_stage |         20 |         20 |       0 |    0 |     6 |      0 |      0 |          1 |
+|             alu_i                           |                   cv32e40p_alu |        146 |        146 |       0 |    0 |   108 |      0 |      0 |          0 |
+|               alu_div_i                     |               cv32e40p_alu_div |        146 |        146 |       0 |    0 |   108 |      0 |      0 |          0 |
+|             mult_i                          |                  cv32e40p_mult |         67 |         67 |       0 |    0 |     6 |      0 |      0 |          4 |
+|           id_stage_i                        |              cv32e40p_id_stage |       1942 |       1942 |       0 |    0 |   317 |      0 |      0 |          0 |
+|             (id_stage_i)                    |              cv32e40p_id_stage |       1555 |       1555 |       0 |    0 |   238 |      0 |      0 |          0 |
+|             controller_i                    |            cv32e40p_controller |        206 |        206 |       0 |    0 |    13 |      0 |      0 |          0 |
+|             int_controller_i                |        cv32e40p_int_controller |         51 |         51 |       0 |    0 |     4 |      0 |      0 |          0 |
+|             register_file_i                 |         cv32e40p_register_file |        130 |        130 |       0 |    0 |    62 |      0 |      0 |          0 |
+|           if_stage_i                        |              cv32e40p_if_stage |        812 |        812 |       0 |    0 |   248 |      0 |      0 |          0 |
+|             (if_stage_i)                    |              cv32e40p_if_stage |        442 |        442 |       0 |    0 |    65 |      0 |      0 |          0 |
+|             aligner_i                       |               cv32e40p_aligner |         93 |         93 |       0 |    0 |    49 |      0 |      0 |          0 |
+|             prefetch_buffer_i               |       cv32e40p_prefetch_buffer |        277 |        277 |       0 |    0 |   134 |      0 |      0 |          0 |
+|               fifo_i                        |                  cv32e40p_fifo |        174 |        174 |       0 |    0 |    68 |      0 |      0 |          0 |
+|               instruction_obi_i             |         cv32e40p_obi_interface |         58 |         58 |       0 |    0 |    31 |      0 |      0 |          0 |
+|               prefetch_controller_i         |   cv32e40p_prefetch_controller |         45 |         45 |       0 |    0 |    35 |      0 |      0 |          0 |
+|           load_store_unit_i                 |       cv32e40p_load_store_unit |         57 |         57 |       0 |    0 |    40 |      0 |      0 |          0 |
+|           sleep_unit_i                      |            cv32e40p_sleep_unit |          0 |          0 |       0 |    0 |     1 |      0 |      0 |          0 |
+|       i_debug                               |                 npu_jtag_debug |        987 |        987 |       0 |    0 |  1028 |      0 |      0 |          0 |
+|         (i_debug)                           |                 npu_jtag_debug |          1 |          1 |       0 |    0 |     1 |      0 |      0 |          0 |
+|         i_dm                                |                         dm_top |        522 |        522 |       0 |    0 |   681 |      0 |      0 |          0 |
+|           i_dm_csrs                         |                        dm_csrs |        441 |        441 |       0 |    0 |   603 |      0 |      0 |          0 |
+|             (i_dm_csrs)                     |                        dm_csrs |        302 |        302 |       0 |    0 |   535 |      0 |      0 |          0 |
+|             i_fifo                          |                        fifo_v2 |        139 |        139 |       0 |    0 |    68 |      0 |      0 |          0 |
+|               i_fifo_v3                     |                        fifo_v3 |        139 |        139 |       0 |    0 |    68 |      0 |      0 |          0 |
+|           i_dm_mem                          |                         dm_mem |         65 |         65 |       0 |    0 |    75 |      0 |      0 |          0 |
+|             (i_dm_mem)                      |                         dm_mem |          8 |          8 |       0 |    0 |    70 |      0 |      0 |          0 |
+|             gen_rom_snd_scratch.i_debug_rom |                      debug_rom |         57 |         57 |       0 |    0 |     5 |      0 |      0 |          0 |
+|           i_dm_sba                          |                         dm_sba |         16 |         16 |       0 |    0 |     3 |      0 |      0 |          0 |
+|         i_dtm                               |                       dmi_jtag |        450 |        450 |       0 |    0 |   342 |      0 |      0 |          0 |
+|           (i_dtm)                           |                       dmi_jtag |          2 |          2 |       0 |    0 |    86 |      0 |      0 |          0 |
+|           i_dmi_cdc                         |                        dmi_cdc |        313 |        313 |       0 |    0 |   164 |      0 |      0 |          0 |
+|             i_cdc_req                       |                     cdc_2phase |        273 |        273 |       0 |    0 |    89 |      0 |      0 |          0 |
+|               i_dst                         |                 cdc_2phase_dst |        270 |        270 |       0 |    0 |    45 |      0 |      0 |          0 |
+|               i_src                         |                 cdc_2phase_src |          3 |          3 |       0 |    0 |    44 |      0 |      0 |          0 |
+|             i_cdc_resp                      |     cdc_2phase__parameterized0 |         40 |         40 |       0 |    0 |    75 |      0 |      0 |          0 |
+|               i_dst                         | cdc_2phase_dst__parameterized0 |         36 |         36 |       0 |    0 |    38 |      0 |      0 |          0 |
+|               i_src                         | cdc_2phase_src__parameterized0 |          4 |          4 |       0 |    0 |    37 |      0 |      0 |          0 |
+|           i_dmi_jtag_tap                    |                   dmi_jtag_tap |        135 |        135 |       0 |    0 |    92 |      0 |      0 |          0 |
+|         i_reset                             |                         rstgen |         14 |         14 |       0 |    0 |     4 |      0 |      0 |          0 |
+|           i_rstgen_bypass                   |                  rstgen_bypass |         14 |         14 |       0 |    0 |     4 |      0 |      0 |          0 |
+|       i_matmul                              |                     npu_matmul |        671 |        671 |       0 |    0 |   517 |      0 |      0 |         16 |
+|       i_matrix_stream                       |              npu_matrix_stream |       1913 |       1913 |       0 |    0 |  1000 |      0 |      0 |          0 |
+|         (i_matrix_stream)                   |              npu_matrix_stream |       1300 |       1300 |       0 |    0 |   774 |      0 |      0 |          0 |
+|         i_operand_read                      |               npu_multi_read_1 |        480 |        480 |       0 |    0 |   155 |      0 |      0 |          0 |
+|         i_write_pack                        |               npu_store_pack_2 |        133 |        133 |       0 |    0 |    71 |      0 |      0 |          0 |
+|       i_mmio                                |                       npu_mmio |       1798 |       1798 |       0 |    0 |  3064 |      0 |      0 |          3 |
+|       i_quant                               |               npu_shared_quant |       1105 |       1105 |       0 |    0 |  1299 |      0 |      0 |          4 |
+|       i_stream                              |                     npu_stream |       2237 |       2197 |      40 |    0 |  1467 |      0 |      0 |          1 |
+|         (i_stream)                          |                     npu_stream |          1 |          1 |       0 |    0 |     0 |      0 |      0 |          0 |
+|         i_control                           |             npu_stream_control |        322 |        282 |      40 |    0 |   429 |      0 |      0 |          0 |
+|         i_engine                            |              npu_stream_engine |       1914 |       1914 |       0 |    0 |  1038 |      0 |      0 |          1 |
+|           (i_engine)                        |              npu_stream_engine |       1678 |       1678 |       0 |    0 |   967 |      0 |      0 |          1 |
+|           i_write_pack                      |                 npu_store_pack |        236 |        236 |       0 |    0 |    71 |      0 |      0 |          0 |
+|       i_vector                              |                     npu_vector |        452 |        452 |       0 |    0 |     0 |      0 |      0 |          5 |
+|       i_vector_stream                       |              npu_vector_stream |       2008 |       2008 |       0 |    0 |   605 |      0 |      0 |          0 |
+|         (i_vector_stream)                   |              npu_vector_stream |        663 |        663 |       0 |    0 |   463 |      0 |      0 |          0 |
+|         i_operand_read                      |                 npu_multi_read |       1345 |       1345 |       0 |    0 |   142 |      0 |      0 |          0 |
+|       i_xbar                                |                           xbar |       6543 |       6447 |      96 |    0 |  2962 |      0 |      0 |          0 |
+|         (i_xbar)                            |                           xbar |       2926 |       2926 |       0 |    0 |   250 |      0 |      0 |          0 |
+|         i_regfile                           |               npu_data_regfile |       2862 |       2862 |       0 |    0 |  2450 |      0 |      0 |          0 |
+|         i_stream_routes                     |                    xbar_stream |        755 |        659 |      96 |    0 |   262 |      0 |      0 |          0 |
++---------------------------------------------+--------------------------------+------------+------------+---------+------+-------+--------+--------+------------+
+
+

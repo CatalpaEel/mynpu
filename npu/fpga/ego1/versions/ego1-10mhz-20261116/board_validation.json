@@ -1,0 +1,85 @@
+{
+  "client_date": "2026-11-16",
+  "hardware_commit": "53655b5aff75b21021c3aadcd66d0d57b9c2e52e",
+  "pc_address_fix_commit": "824c109",
+  "clock_hz": 10000000,
+  "jtag_clock_hz": 100000,
+  "physical_board_tested": true,
+  "cpu_access_policy": "running after initial reset/load; explicit runtime halt/resume forbidden",
+  "root_cause_confirmed_for_reproduced_error": true,
+  "root_cause": "OpenOCD default SW address translation tries reading priv while hart is running, before the SBA memory transfer",
+  "fix": "riscv virt2phys_mode off; keep sysbus memory access",
+  "firmware_or_chip_rtl_changed_for_fix": false,
+  "bit_sha256": "da0d5d534a868326fdc14be013a6d52419a6a17a0295f0c044edd7e266ad9188",
+  "mcs_sha256": "3e5cc76e561c0ff8c4103da508804efec9fa43ae49397cae4a594b05c1c04dc8",
+  "ab_evidence": {
+    "file": "evidence/board/running-sba-diagnosis.json",
+    "sha256": "8aba6cf0f567c7b0e0be207c23857a279a15f4b8f0d10534cab2b92dd28dde6c"
+  },
+  "successful_runs": [
+    {
+      "mode": "smoke",
+      "frames": 1,
+      "boots": 1,
+      "evidence": "evidence/board/smoke-after-fix-result.json",
+      "sha256": "349e832061e99acf9aba3d3dc49e4c7829b488e776ee126bca08c649d64e5a83"
+    },
+    {
+      "mode": "reload",
+      "frames": 20,
+      "boots": 20,
+      "evidence": "evidence/board/reload-result.json",
+      "sha256": "4ae2c8b938a5f30660d322b9cd6b264f2119fa5d07fa4834c1ff45ebc4421dd9"
+    },
+    {
+      "mode": "continuous",
+      "frames": 2000,
+      "boots": 2,
+      "evidence": "evidence/board/continuous-result.json",
+      "sha256": "089764f611522770ab778a033ad66ad99feebaed9be79ec7af62fd6cad3f68e9",
+      "sample_frequency": {
+        "0": 195,
+        "1": 201,
+        "2": 221,
+        "3": 199,
+        "4": 192,
+        "5": 204,
+        "6": 212,
+        "7": 182,
+        "8": 201,
+        "9": 193
+      },
+      "sequences_and_alternating_slots_verified": true
+    }
+  ],
+  "status": "passed",
+  "preserved_failure": "evidence/board/smoke-before-fix-result.json",
+  "limitations": [
+    "Ten fixed golden inputs in randomized order, not full MNIST",
+    "DMSTATUS is sampled on board; per-cycle no-halt assertion is from prior ASIC/FPGA SoC simulation",
+    "Root-cause conclusion is for the reproduced priv error; not a proof of all possible bus/board faults",
+    "Host protocol timing is not pure NPU inference latency"
+  ],
+  "total_frames_checked": 2021,
+  "total_ndmreset_boot_checks": 23,
+  "continuous_frames_per_boot": 1000,
+  "continuous_boots": 2,
+  "postcheck": {
+    "passed": true,
+    "no_cpu_halt_or_reset": true,
+    "last_batch_frames": 1000,
+    "dmstatus": "0x30c82",
+    "result": "0x600d0001",
+    "matrix_completed": 13000,
+    "cnn_completed": 212000,
+    "expected_matrix_completed": 13000,
+    "expected_cnn_completed": 212000,
+    "sbcs": "0x20150407"
+  },
+  "openocd_log_local_path": "npu/build/board-run-53655b5-20261116/openocd-100khz-attempt2.log",
+  "openocd_log_sha256": "487843293631f3810e73bff1adfa1bd0820fe4cdd24617ab1bec4703038f7384",
+  "host_runner_sha256": "e8ef1216cb326f31aafb90c9bf0e207aef417334603b8a2ef162c843dbc00a3e",
+  "target_cfg_sha256": "79040f98dd8cc1b7af90471a1e1044fc14092a944616187557cf835e2aab7f9a",
+  "shared_asic_rtl_unchanged_from_hardware_base": true,
+  "evidence_directory": "evidence/board"
+}
