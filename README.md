@@ -1,8 +1,8 @@
 # mynpu
 
-本地上板准备分支：`fpga/ego1-sba-validation-20261115`，硬件固定为 `53655b5`。
-已重新生成本机 Vivado 2023.2 的10MHz镜像，配套不暂停CPU的PC测试入口。
-本轮状态、仿真与接板步骤见[SBA运行态上板准备](npu/fpga/ego1/SBA-BOARD-20261115.md)。
+本地运行态板测分支：`fpga/ego1-sba-validation-20261115`，硬件固定为 `53655b5`。
+本机 Vivado 2023.2 的10MHz镜像已实板通过2021次推理，运行阶段不暂停CPU。
+实板priv错误已定位为OpenOCD地址翻译设置，修正仅涉及PC端；见[运行态板测记录](npu/fpga/ego1/SBA-RUNNING-20261116.md)。
 以下2025.2实现及20261114实板记录均为各自历史运行，不混用于本轮结论。
 
 > 外部Host接口已删除，SoC仿真与板级访问统一走[JTAG Debug Module SBA](npu/docs/jtag.md)。当前main不包含GPIO；完整r3后端是接口改动前的冻结基线，ASIC后端和实体板未重验；当前FPGA已完成布局布线并生成bitstream：10MHz、19,925 LUT（95.79%），时序通过，尚未实板验证，见[EGo1实现结果](npu/fpga/ego1/BITSTREAM-20261115.md)。

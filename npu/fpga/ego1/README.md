@@ -1,4 +1,4 @@
-> 本工作树正在准备 `53655b5` 的不暂停CPU板测，见[SBA-BOARD-20261115.md](SBA-BOARD-20261115.md)。本机2023.2镜像为20048 LUT，10MHz setup +45.764ns/hold +0.030ns；实体结果待执行。
+> 本工作树已完成 `53655b5` 的实体板验证：10MHz系统、100kHz JTAG、2021次推理全部通过，运行阶段不暂停CPU。实板priv错误已定位并修正为OpenOCD物理地址访问，见[SBA-RUNNING-20261116.md](SBA-RUNNING-20261116.md)。本机2023.2镜像为20048 LUT，setup +45.764ns/hold +0.030ns。
 >
 > 上游2025.2实现：19925 LUT，setup +45.659ns、hold +0.018ns；详见[上游实现结果](BITSTREAM-20261115.md)。这是另一份镜像及工具运行记录。
 

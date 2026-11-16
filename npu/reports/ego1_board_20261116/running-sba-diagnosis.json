@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "no_cpu_halt_or_reset": true,
+  "openocd_version": "Open On-Chip Debugger 0.12.0+dev-04406-g10b7a647d (2026-10-17-09:07)",
+  "initial_dmstatus": "0x30c82",
+  "initial_sbcs": "0x20050407",
+  "initial_virt2phys_mode": "sw",
+  "raw_result": "0x600d0001",
+  "raw_logits": [
+    96,
+    41,
+    59,
+    56,
+    51,
+    59,
+    73,
+    56,
+    54,
+    73
+  ],
+  "expected_logits": [
+    96,
+    41,
+    59,
+    56,
+    51,
+    59,
+    73,
+    56,
+    54,
+    73
+  ],
+  "ab_tests": [
+    {
+      "mode": "sw",
+      "dmstatus_before": "0x30c82",
+      "read_passed": false,
+      "error": "ERR failed to read memory",
+      "dmstatus_after": "0x30c82"
+    },
+    {
+      "mode": "off",
+      "dmstatus_before": "0x30c82",
+      "value": "0x600d0001",
+      "read_passed": true,
+      "dmstatus_after": "0x30c82"
+    },
+    {
+      "mode": "sw",
+      "dmstatus_before": "0x30c82",
+      "read_passed": false,
+      "error": "ERR failed to read memory",
+      "dmstatus_after": "0x30c82"
+    },
+    {
+      "mode": "off",
+      "dmstatus_before": "0x30c82",
+      "value": "0x600d0001",
+      "read_passed": true,
+      "dmstatus_after": "0x30c82"
+    }
+  ],
+  "final_dmstatus": "0x30c82"
+}

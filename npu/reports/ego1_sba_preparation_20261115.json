@@ -125,5 +125,7 @@
     "npu/fpga/ego1/simulate_validation.py": "8064151392503c8613c338841b64d2c0e4e8b234b8d2e5d9c1e97075297100de",
     "npu/fpga/ego1/tb_validation.sv": "a73b35918689e71701574595a30f191ba68d979ba29378317a126cf79c9b82c8"
   },
-  "upstream_main_rechecked": "53655b5aff75b21021c3aadcd66d0d57b9c2e52e"
+  "upstream_main_rechecked": "53655b5aff75b21021c3aadcd66d0d57b9c2e52e",
+  "followup_board_validation": "npu/reports/ego1_board_20261116/validation.json",
+  "followup_status": "2026-11-16: 2021 physical-board inferences passed with CPU running and OpenOCD physical addressing"
 }
