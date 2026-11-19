@@ -1,12 +1,12 @@
 {
   "checked_date": "2026-11-19",
-  "git_commit": "53655b5aff75b21021c3aadcd66d0d57b9c2e52e",
+  "git_commit": "eed4eab7ce61b8c1e01d878a96539c79f5e26c56",
   "scope": "Inventory and hash audit, no new simulation or PPA. Source observations can include historical baselines and partial maps; matches do not certify full design identity.",
   "counts": {
     "current-supporting-evidence": 24,
     "current-scoped": 3,
     "pre-jtag-only-baseline": 5,
-    "historical-snapshot": 17,
+    "historical-snapshot": 60,
     "pre-ego1-merge-baseline": 1
   },
   "reports": [
@@ -1180,6 +1180,384 @@
       ]
     },
     {
+      "file": "ego1_board_20261116/.gitattributes",
+      "sha256": "ffe82f3c5b968ed009c2577fa38f32c83be167799ee565d40a18e3440c57b342",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "* -text -whitespace"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/board_status.json",
+      "sha256": "86e1856e8dfa90a6e6a3b50e3c5fd5dfc35f345c85a295ae62b075f62dd3c0f8",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
+      "file": "ego1_board_20261116/continuous-frames.jsonl",
+      "sha256": "55b33931d76fa8af97d3a5ff211e557cf1300c7438273cfffbbe4eed34a2de0a",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "{\"frame\": 0, \"sample\": 2, \"slot\": 0, \"sequence\": 1, \"prediction\": 2, \"host_roundtrip_s\": 0.04741991599996709, \"boot\": 0}",
+        "{\"frame\": 1, \"sample\": 2, \"slot\": 1, \"sequence\": 2, \"prediction\": 2, \"host_roundtrip_s\": 0.04692206900006113, \"boot\": 0}",
+        "{\"frame\": 2, \"sample\": 0, \"slot\": 0, \"sequence\": 3, \"prediction\": 0, \"host_roundtrip_s\": 0.04489189299999907, \"boot\": 0}",
+        "{\"frame\": 3, \"sample\": 8, \"slot\": 1, \"sequence\": 4, \"prediction\": 8, \"host_roundtrip_s\": 0.04545252100001562, \"boot\": 0}",
+        "{\"frame\": 4, \"sample\": 0, \"slot\": 0, \"sequence\": 5, \"prediction\": 0, \"host_roundtrip_s\": 0.04649763099996562, \"boot\": 0}",
+        "{\"frame\": 5, \"sample\": 8, \"slot\": 1, \"sequence\": 6, \"prediction\": 8, \"host_roundtrip_s\": 0.04522692700004427, \"boot\": 0}",
+        "{\"frame\": 6, \"sample\": 4, \"slot\": 0, \"sequence\": 7, \"prediction\": 4, \"host_roundtrip_s\": 0.045808578999981364, \"boot\": 0}",
+        "{\"frame\": 7, \"sample\": 7, \"slot\": 1, \"sequence\": 8, \"prediction\": 7, \"host_roundtrip_s\": 0.04340971999999965, \"boot\": 0}",
+        "{\"frame\": 8, \"sample\": 4, \"slot\": 0, \"sequence\": 9, \"prediction\": 4, \"host_roundtrip_s\": 0.0488785340000959, \"boot\": 0}",
+        "{\"frame\": 9, \"sample\": 6, \"slot\": 1, \"sequence\": 10, \"prediction\": 6, \"host_roundtrip_s\": 0.0439191310000524, \"boot\": 0}",
+        "{\"frame\": 10, \"sample\": 0, \"slot\": 0, \"sequence\": 11, \"prediction\": 0, \"host_roundtrip_s\": 0.04500712300000487, \"boot\": 0}",
+        "{\"frame\": 11, \"sample\": 6, \"slot\": 1, \"sequence\": 12, \"prediction\": 6, \"host_roundtrip_s\": 0.046870277000039096, \"boot\": 0}"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/continuous-result.json",
+      "sha256": "089764f611522770ab778a033ad66ad99feebaed9be79ec7af62fd6cad3f68e9",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
+      "file": "ego1_board_20261116/continuous-stdout.txt",
+      "sha256": "3dccbb59f44a71886731cec10900f3f71a8bd0cf812ff30c6c2ce3e5ea1fb80f",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Checked 10 frames",
+        "Checked 20 frames",
+        "Checked 30 frames",
+        "Checked 40 frames",
+        "Checked 50 frames",
+        "Checked 60 frames",
+        "Checked 70 frames",
+        "Checked 80 frames",
+        "Checked 90 frames",
+        "Checked 100 frames",
+        "Checked 110 frames",
+        "Checked 120 frames"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/diagnose_running_sba.py",
+      "sha256": "449b587dfc76e193dd9fdea294744cc2592e00c10ca6856e9fa4feaf71f90f6f",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "import sys,json,time,struct",
+        "from pathlib import Path",
+        "root=Path(__file__).resolve().parents[2]",
+        "sys.path.insert(0,str(root/'fpga/ego1'))",
+        "from jtag_validation import OpenOCD,RESULT,PASS",
+        "out=Path(__file__).with_name('running-sba-diagnosis.json')",
+        "assert not out.exists()",
+        "io=OpenOCD();io.running_access_active=True",
+        "report={'passed':False,'no_cpu_halt_or_reset':True,'openocd_version':io.command('version')}",
+        "def dmi_read(a):return int(io.command(f'riscv dmi_read {a:#x}'),0)",
+        "def dmi_write(a,d):io.command(f'riscv dmi_write {a:#x} {d:#x}')",
+        "def wait_sba():"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/flash-attempt1.txt",
+      "sha256": "4a6a53e9ebee8c1276e70082580535dfcb0ef48caa82e58ee7bc53b156e9bc4f",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "#-----------------------------------------------------------",
+        "# Vivado v2023.2 (64-bit)",
+        "# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023",
+        "# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023",
+        "# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023",
+        "# Start of session at: Mon Nov 16 01:25:18 2026",
+        "# Process ID: 1856",
+        "# Current directory: C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115",
+        "# Command line: vivado.exe -mode batch -nojournal -log npu/build/board-run-53655b5-20261116/flash-program.log -source npu/fpga/ego1/program_flash.tcl -tclargs C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-board-kit-53655b5-20261115/ego1_mynpu.mcs",
+        "# Log file: C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/board-run-53655b5-20261116/flash-program.log",
+        "# Journal file: ",
+        "# Running On: LAPTOP-L4U4N8ER, OS: Windows, CPU Frequency: 3302 MHz, CPU Physical cores: 8, Host memory: 33804 MB"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/flash-attempt2.txt",
+      "sha256": "9fa3cd5c3edcd8ee2646abb3575af658338fe63d25f425f6907e009c3ccc337b",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "#-----------------------------------------------------------",
+        "# Vivado v2023.2 (64-bit)",
+        "# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023",
+        "# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023",
+        "# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023",
+        "# Start of session at: Mon Nov 16 01:27:16 2026",
+        "# Process ID: 28204",
+        "# Current directory: C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115",
+        "# Command line: vivado.exe -mode batch -nojournal -log npu/build/board-run-53655b5-20261116/flash-program-attempt2.log -source npu/fpga/ego1/program_flash.tcl -tclargs C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-board-kit-53655b5-20261115/ego1_mynpu.mcs",
+        "# Log file: C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/board-run-53655b5-20261116/flash-program-attempt2.log",
+        "# Journal file: ",
+        "# Running On: LAPTOP-L4U4N8ER, OS: Windows, CPU Frequency: 3302 MHz, CPU Physical cores: 8, Host memory: 33804 MB"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/openocd-events.txt",
+      "sha256": "96ca0225abb33978ef4817ff5da0118c3845699183ee1b343270fc01735ac027",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "adapter speed: 100 kHz",
+        "Info : JTAG tap: mynpu.cpu tap/device found: 0x00000001 (mfg: 0x000 (<invalid>), part: 0x0000, ver: 0x0)",
+        "Info : [mynpu.cpu] datacount=2 progbufsize=8",
+        "Info : [mynpu.cpu] Examined RISC-V core",
+        "Info : [mynpu.cpu]  XLEN=32, misa=0x40001104",
+        "Info : [mynpu.cpu] Examination succeed",
+        "Info : [mynpu.cpu] starting gdb server on 3333",
+        "Info : [mynpu.cpu] Hart unexpectedly reset!",
+        "Error: [mynpu.cpu] Failed to read priv register.",
+        "Error: [mynpu.cpu] Failed to read priv register.",
+        "Error: [mynpu.cpu] Failed to read priv register.",
+        "Info : [mynpu.cpu] Hart unexpectedly reset!"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/openocd-source-audit.json",
+      "sha256": "c19e2ae45724f0b613035929ee43b937bc98d6ec1ffdff2983113e456fabc364",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
+      "file": "ego1_board_20261116/postcheck-running.json",
+      "sha256": "83cbd4d0494fb88fe79d419da041071bf5684d3a956b583d643450d29bc94152",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
+      "file": "ego1_board_20261116/postcheck_running.py",
+      "sha256": "7a667012b8b2ab624934eaaffe48cfd4cb59e36858a0fd721699e2a1f11611f3",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "import sys,json,re,time",
+        "from pathlib import Path",
+        "run=Path(__file__).resolve().parent",
+        "result=json.loads((run/'continuous-running-physical-100khz/result.json').read_text())",
+        "assert result['passed'] and result['frames_checked']==2000",
+        "npu=run.parents[1]",
+        "sys.path.insert(0,str(npu/'fpga/ego1'))",
+        "from jtag_validation import OpenOCD,PASS,RESULT",
+        "meta=(npu/'build/ego1-sba-board-kit-53655b5-20261115/assets/test_meta.svh').read_text()",
+        "cnn=int(re.search(r'STREAM_TASKS=(\\d+)',meta)[1])",
+        "matrix=int(re.search(r'NPU_EXPECTED_MATRIX_JOBS (\\d+)',meta)[1])",
+        "io=OpenOCD();io.running_access_active=True"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/query_flash_parts.tcl",
+      "sha256": "5d710fc8fed091ee90c7740debef09ea3e8aa9b69d6b2df33f1dcf65ac98bd60",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "set parts [get_cfgmem_parts n25q64-3.3v-spi-x1_x2_x4]",
+        "puts \"PART_COUNT=[llength $parts]\"",
+        "foreach p $parts {puts \"PART=$p\"}"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/reload-frames.jsonl",
+      "sha256": "c1dbad533eb83c5fdf53a68ca546bc0c653c4496f4603c346e398c1110097bb2",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "{\"boot\": 0, \"sample\": 0, \"prediction\": 0}",
+        "{\"boot\": 1, \"sample\": 1, \"prediction\": 1}",
+        "{\"boot\": 2, \"sample\": 2, \"prediction\": 2}",
+        "{\"boot\": 3, \"sample\": 3, \"prediction\": 3}",
+        "{\"boot\": 4, \"sample\": 4, \"prediction\": 4}",
+        "{\"boot\": 5, \"sample\": 5, \"prediction\": 5}",
+        "{\"boot\": 6, \"sample\": 6, \"prediction\": 6}",
+        "{\"boot\": 7, \"sample\": 7, \"prediction\": 7}",
+        "{\"boot\": 8, \"sample\": 8, \"prediction\": 8}",
+        "{\"boot\": 9, \"sample\": 9, \"prediction\": 9}",
+        "{\"boot\": 10, \"sample\": 0, \"prediction\": 0}",
+        "{\"boot\": 11, \"sample\": 1, \"prediction\": 1}"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/reload-result.json",
+      "sha256": "4ae2c8b938a5f30660d322b9cd6b264f2119fa5d07fa4834c1ff45ebc4421dd9",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
+      "file": "ego1_board_20261116/reload-stdout.txt",
+      "sha256": "dafe1bdbff14abb545675bb547d898b5e46dcb4f3beae64e32425abd6cbb43bc",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Checked 10 frames",
+        "Checked 20 frames",
+        "EGO1 VALIDATION PASS: 20 frames, 20 boots"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/runner-before-physical-address-fix.py",
+      "sha256": "18cd2672fce8aab1825666c9a425cef1b490340a1bdbbbadf26ae13146691ec3",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "\"\"\"Exercise the real CPU/NPU through OpenOCD Tcl RPC and aligned 32-bit SBA.",
+        "",
+        "Uses only the standard library. Start OpenOCD separately; never programs the FPGA.",
+        "\"\"\"",
+        "import argparse",
+        "import hashlib",
+        "import json",
+        "from pathlib import Path",
+        "import random",
+        "import re",
+        "import socket",
+        "import struct"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/runner-physical-address-fix.py",
+      "sha256": "e8ef1216cb326f31aafb90c9bf0e207aef417334603b8a2ef162c843dbc00a3e",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "\"\"\"Exercise the real CPU/NPU through OpenOCD Tcl RPC and aligned 32-bit SBA.",
+        "",
+        "Uses only the standard library. Start OpenOCD separately; never programs the FPGA.",
+        "\"\"\"",
+        "import argparse",
+        "import hashlib",
+        "import json",
+        "from pathlib import Path",
+        "import random",
+        "import re",
+        "import socket",
+        "import struct"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/running-sba-diagnosis.json",
+      "sha256": "8aba6cf0f567c7b0e0be207c23857a279a15f4b8f0d10534cab2b92dd28dde6c",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
+      "file": "ego1_board_20261116/smoke-after-fix-frames.jsonl",
+      "sha256": "a8b475ba801ed54328819b522a733ec6322d9b53b2b95e27cef6caa5149e053f",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "{\"boot\": 0, \"sample\": 0, \"prediction\": 0}"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/smoke-after-fix-result.json",
+      "sha256": "349e832061e99acf9aba3d3dc49e4c7829b488e776ee126bca08c649d64e5a83",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
+      "file": "ego1_board_20261116/smoke-after-fix-stdout.txt",
+      "sha256": "19715986839d212e61f6efc985fcb42c02ffe147ccf3821aa3bea5c7cda68898",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "EGO1 VALIDATION PASS: 1 frames, 1 boots"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/smoke-before-fix-result.json",
+      "sha256": "e3237500368bd7cf987cda8d9c9c850c394000ea0a8dd45bb94c2ccccb7bd234",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
+      "file": "ego1_board_20261116/smoke-before-fix.txt",
+      "sha256": "5435d438afec25211cd95f5aa58a37e726fc7b5417a7a08ef8d8b817bb208adf",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Traceback (most recent call last):",
+        "  File \"/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-board-kit-53655b5-20261115/npu/fpga/ego1/jtag_validation.py\", line 309, in <module>",
+        "    main()",
+        "    ~~~~^^",
+        "  File \"/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-board-kit-53655b5-20261115/npu/fpga/ego1/jtag_validation.py\", line 294, in main",
+        "    prediction = single(io, args.assets, manifest, sample, args.timeout, args.cpu_access)",
+        "  File \"/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-board-kit-53655b5-20261115/npu/fpga/ego1/jtag_validation.py\", line 201, in single",
+        "    wait_value(io, RESULT, PASS, timeout, halt_cpu=cpu_access == \"halt\")",
+        "    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "  File \"/mnt/c/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-board-kit-53655b5-20261115/npu/fpga/ego1/jtag_validation.py\", line 152, in wait_value",
+        "    value = (halted_read(io, address)[0] if halt_cpu else io.read(address)[0])",
+        "                                                          ~~~~~~~^^^^^^^^^"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/target-before-physical-address-fix.cfg",
+      "sha256": "68ee5d748d145f5e17779606f68d12190b73438931b94a8cb6ce399dd6dd141b",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "# Source after an adapter-specific cfg. No separate TRST/SRST top-level pins.",
+        "transport select jtag",
+        "adapter speed 10",
+        "reset_config none",
+        "jtag newtap mynpu cpu -irlen 5 -expected-id 0x00000001",
+        "target create mynpu.cpu riscv -chain-position mynpu.cpu -coreid 0",
+        "riscv set_command_timeout_sec 600",
+        "# SBA advertises aligned 32-bit access. Use aligned 32-bit memory transfers.",
+        "riscv set_mem_access sysbus progbuf"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/target-physical-address-fix.cfg",
+      "sha256": "79040f98dd8cc1b7af90471a1e1044fc14092a944616187557cf835e2aab7f9a",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "# Source after an adapter-specific cfg. No separate TRST/SRST top-level pins.",
+        "transport select jtag",
+        "adapter speed 10",
+        "reset_config none",
+        "jtag newtap mynpu cpu -irlen 5 -expected-id 0x00000001",
+        "target create mynpu.cpu riscv -chain-position mynpu.cpu -coreid 0",
+        "riscv set_command_timeout_sec 600",
+        "# SBA advertises aligned 32-bit access. Use aligned 32-bit memory transfers.",
+        "riscv set_mem_access sysbus progbuf",
+        "# Bare-metal SRAM/MMIO addresses are physical. SW translation reads CPU",
+        "# privilege registers and fails while the hart is running, before SBA access.",
+        "riscv virt2phys_mode off"
+      ]
+    },
+    {
+      "file": "ego1_board_20261116/validation.json",
+      "sha256": "834bb06bf06f3f98289c837b1d2207b436c1d687e684c6028d9373360a3ab3d5",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
       "file": "ego1_board_validation_20261114.json",
       "sha256": "305c769f01e153654da5f3b533715ea2e930f08e3fc8253bebe4dfde786d7e0d",
       "classification": "historical-snapshot",
@@ -1735,8 +2113,8 @@
         {
           "source": "npu/fpga/ego1/tb_validation.sv",
           "recorded_sha256": "0ab729dee81b2e5a3a9a301c0d1d715de0e214960f5777e15011649ca75744b7",
-          "current_sha256": "0ab729dee81b2e5a3a9a301c0d1d715de0e214960f5777e15011649ca75744b7",
-          "status": "match"
+          "current_sha256": "5a60b453b0ce4dcea698702083b1a43295feb2647e105c539804a6208c830f07",
+          "status": "different"
         },
         {
           "source": "npu/tb/db_jtag_tasks.svh",
@@ -1759,8 +2137,8 @@
         {
           "source": "npu/fpga/ego1/simulate_validation.py",
           "recorded_sha256": "3934b97e9fc3525163558dc9a12e71ffad4c446073d4c2b5324ad771125ef9cd",
-          "current_sha256": "3934b97e9fc3525163558dc9a12e71ffad4c446073d4c2b5324ad771125ef9cd",
-          "status": "match"
+          "current_sha256": "d04fbb93255c0aca724573d3bac6cc47bb74a4cf92a268b36dfd4c1ab55812ed",
+          "status": "different"
         },
         {
           "source": "npu/fpga/ego1/prepare_validation.py",
@@ -1771,8 +2149,8 @@
         {
           "source": "npu/fpga/ego1/test_validation.py",
           "recorded_sha256": "ba450e1127da8919b35ad087ca612511e7f9006e5dcfacb33755235084467403",
-          "current_sha256": "ba450e1127da8919b35ad087ca612511e7f9006e5dcfacb33755235084467403",
-          "status": "match"
+          "current_sha256": "2473c74d92468c0f32ef3efd720415a4d7258362c6fc9a245cd6e485455d308e",
+          "status": "different"
         },
         {
           "source": "npu/fpga/ego1/verify_board_bundle.py",
@@ -1783,14 +2161,14 @@
         {
           "source": "npu/fpga/ego1/jtag_validation.py",
           "recorded_sha256": "0b027fff258721cf318e64d262ea82c44ac5fd5388d792b2660abc0255633c91",
-          "current_sha256": "0b027fff258721cf318e64d262ea82c44ac5fd5388d792b2660abc0255633c91",
-          "status": "match"
+          "current_sha256": "8a4051b0a5c9309067b301d10e263cf870a77df7406446808b200b5f47ed3f8e",
+          "status": "different"
         },
         {
           "source": "npu/fpga/ego1/package_validation.py",
           "recorded_sha256": "2d34c6118aa07ebfe16c5e03b87de5ebcdc07f1211fb1176edbab5ee74ce3ba9",
-          "current_sha256": "2d34c6118aa07ebfe16c5e03b87de5ebcdc07f1211fb1176edbab5ee74ce3ba9",
-          "status": "match"
+          "current_sha256": "2becb840f17d626a69c4cb87014353b40489e69356d237badb960a5d9632a305",
+          "status": "different"
         },
         {
           "source": "npu/fpga/ego1/build.py",
@@ -1800,8 +2178,8 @@
         }
       ],
       "source_hash_counts": {
-        "match": 81,
-        "different": 5
+        "match": 76,
+        "different": 10
       },
       "frozen_files": [
         {
@@ -2160,6 +2538,1169 @@
           "status": "match"
         }
       ]
+    },
+    {
+      "file": "ego1_sba_20261115/.gitattributes",
+      "sha256": "e97602ab9cac70102245345c5ab0fc9830df8b17f1072b188265a662a3a547ae",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "* -text -whitespace"
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/asic-running-200.json",
+      "sha256": "7913a6c6db2766a972357efcc6bc614a3ad23009f16e4da30dafc21105d469b9",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv",
+          "recorded_sha256": "332faa387f4351b65d76af6233e847846ec864fc901ae440e624bc2f32d7dfe8",
+          "current_sha256": "3fee39d262ef44bff6ee00b591fe08830e5e35cdd1b9e5eb9eb06da6f6525805",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv",
+          "recorded_sha256": "094187ebc720b8636efc7779349b334db00af03a986db8798cd9f5a707b758d7",
+          "current_sha256": "33d7c06b0fef3ae2c8814b040abe3cdaa23065cf12643de20e8275f44f97abe1",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv",
+          "recorded_sha256": "e5f46fa1ef236a07aa331ce610989a2a9efc68f4593857c459f94261ab7cb2c6",
+          "current_sha256": "ae738f408ba2ade41bfcf0488c8f611a2c39b26915191890dac907b8a7a518e5",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv",
+          "recorded_sha256": "8680aaeb726e7f7de4b465f3100d05b4b71b5cef7699185718f3ffd3f17cd1f4",
+          "current_sha256": "afc32fcae21f6cbb834c5ee602a1aaee1b518fc436a86d4fe1b97942473d35c8",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv",
+          "recorded_sha256": "0f4fc3c88b5eccc4265f1f60ac8b77f9086d72581c685c24d8bc74d1795913d2",
+          "current_sha256": "c46075cb09de0e773c91da62d02497673945b7a3e5de176363e5b5e118f82eea",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv",
+          "recorded_sha256": "dd77fdf15cadd86d842971de8f764dcaabcd80c9458b7aad9c8f1b3f1a7af227",
+          "current_sha256": "7eb340f76c76d18f4ac3b6d1d61433c7372118d24f57f83a6ceae82cdbf51c2d",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv",
+          "recorded_sha256": "da2692cdedf40e09b348a01243aa61ae1e5b4b74e08b17e447d8b9d9b3e4fae6",
+          "current_sha256": "717fc6e7ec754807440f346d9b8bb930da302fffd294550e30ceae78009f4e87",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv",
+          "recorded_sha256": "2399c31b486a335c58a638269fa24df646b0ab7c46d29b6b5aaa2d7c4d988ca0",
+          "current_sha256": "0bf54e372850c1af22264711d311d943718dc4c8d918e47cc98e9a8d07461d44",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv",
+          "recorded_sha256": "81e19fb19a281a2e41136786401395c39ae8886dab0acf1f0e0a3831e31589d5",
+          "current_sha256": "08cc968a5b26b5a68ad2c548755e6b3b0d07a7ad75a3f11e92bc1bab71eeb7c6",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv",
+          "recorded_sha256": "67e301adc9acd9651d6f0344854888fc2fa608007a5e11dde68ac5df32266dd2",
+          "current_sha256": "cff163332b28e84904955e88691f973a47f90a4209b3f0ae0d2afe94f6a49921",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv",
+          "recorded_sha256": "da8f621e9e5f1a498c8bffb1cfc30d9400a76ce04c1b945587c5dd4b165a1c23",
+          "current_sha256": "3720278ce00b5591a1a63fe5515528dd4223a35070303e58cf2e48bd0b56c8c1",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv",
+          "recorded_sha256": "e2ed229b88574e71f1e51a70093d675a7ae99b7a612be491d6a08a71e9d1cc27",
+          "current_sha256": "51322d03a0479f16a4acb66cccee48003e2e224c02a7d3188cbaea9b2f8b2756",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv",
+          "recorded_sha256": "60112bbb94ba37ab32892cf5f25dfca3adafd3fa7bb851cf4f2cdc68ba6b7c23",
+          "current_sha256": "83d9f70bab3b514062a7a79a581919afd5de466167dfcd08733c773f36ba094a",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv",
+          "recorded_sha256": "9c84d4d8c1646c8694387cdaab0575363c07ea6c7c88ebbb37c8f4dbb7a28c5e",
+          "current_sha256": "fa60eaab03518e8e145a3f0a626bc7945e79265e8322ce874a6c8f6996f0e10b",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv",
+          "recorded_sha256": "d266438d463564250bf37cd1e9451b574f91134237927072e4b37a0eb185311a",
+          "current_sha256": "f9a9e098336d85bf662a88337f88195fec531951596cc2492c80bbeb4ea82898",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv",
+          "recorded_sha256": "464265b51e72cfc3c4d05eee14795f8ecf132d10bba4074c14b5fe9bfa7f3147",
+          "current_sha256": "cf047a8b7654f2cb0d36050c41b57cf95bf0a0a21f5dea346d38aa0da57c24fe",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv",
+          "recorded_sha256": "d8810cbcf8b45cc912e0fc34e596046a8b1cbb4854eeb3bee145f5260e2c63b8",
+          "current_sha256": "4ed3f367d8469c1e70a9735fd20e81c36ce10c9d70fb5dfaad2a12c6978ad683",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv",
+          "recorded_sha256": "a3773746875bf4c0cba18089533c4f95f0a791713b3016fb793e2444285adb76",
+          "current_sha256": "8cd0f6cf01479bf255385047b22254367b138a294f5e5ab0913505c8df83a918",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv",
+          "recorded_sha256": "64432dca4fe89e05c5361f7423bbc3473ae2799b58ff54df7a87d5c64c732b33",
+          "current_sha256": "ad8a13c8314b9a3c28228db2844466c9d750460d6afa8f6299a7229d80f8dd47",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv",
+          "recorded_sha256": "a273c9b1e97a9d72225bba2b8bb2e20451b66f2772e17b49b0624c1a27846d64",
+          "current_sha256": "50d1b4d325694f4e898d5b2f2e7b26a7e631a5abdd1cd283500c900b079275ab",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv",
+          "recorded_sha256": "e352c40abe2121e4f8097729a84d343a8b35ea3a20988ca02515a62461c04295",
+          "current_sha256": "807cf3fb86fe7060cdb1fa21dfbc843220b09a4d694d23ad4bc1cdd3e7118264",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv",
+          "recorded_sha256": "45aac71dd7ba9d58dd552d9dcfa8ab4daf6a718459616d3fcfc52fb320a3eb19",
+          "current_sha256": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv",
+          "recorded_sha256": "c0234b6228532cf1234b070a2fa01e7001f85969d6d7bed15368219256b38014",
+          "current_sha256": "6eca8d4c2e299adcc498417220478360cc22898ba9037cdad6a1b81e80373c7b",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv",
+          "recorded_sha256": "c4c4e53ab0b71f944f3d36bd69faae289b8189490f3115a83d01adc8e425d8b9",
+          "current_sha256": "11035bcbb28447fa5a3e40d5cad4f257e763f75e49664ce8098ab6247a9a57cb",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv",
+          "recorded_sha256": "466b12aebb9cc6a389e5189667c1c6904cfb06a471a7839ed80f9ae6c566af33",
+          "current_sha256": "27931c8004e4d266c6ea02c9d5c19968c67d7e6ab86e57da4088531b13c8c48f",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv",
+          "recorded_sha256": "d1f11381b78e89f33ca5ccd404a3e3278f9abfc02b63777faeb991bc10f8a922",
+          "current_sha256": "db90df2f8737aff29d73b3d242dd33aeb6750ae69ae7eb8e118b531180945d7f",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv",
+          "recorded_sha256": "7206745d0764ff24f383b491accbb9ac6cb27e274a3f5fa4e50745471e3d6f0b",
+          "current_sha256": "858b172963e17529de0b40a5be6ddfdadfc60bdca967819e4fc558b0ed6d7b87",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv",
+          "recorded_sha256": "d1ad108c16a80a24403eeadc8ea3cd20f28701b4e8cd6d4302dba6feea3dc91d",
+          "current_sha256": "6a78a0d77d32e6795f63e5149f77b98320ce504c67c44a2e359c9aea70989224",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv",
+          "recorded_sha256": "ea73da23681836a141c47b21c8785e720e837acc9d10ac74c741523fee18854b",
+          "current_sha256": "e2cec8f3d273748783275c60b1ec89101336608638d7e7783b03dd6b9dbb0345",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv",
+          "recorded_sha256": "b6184048b55a978723b5df88bb71e16ff2474d245f44af1f738b8f13e2303d86",
+          "current_sha256": "6e12f673e05380e34a35c38d8ee8b6878935d96b6f2dfda72c67f8a6e92a6e4e",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv",
+          "recorded_sha256": "365ea3c8bb180d48ceb4137a21e2b5451b7bab1b784ab8657dd98dc9f78a03f6",
+          "current_sha256": "1510df315721b370c2d86b1c1d134a3ff6beefba2d072de7a4a611e3ecffb753",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv",
+          "recorded_sha256": "e0033cf9e38c4a63ebec3cd31ebd3ac7cbb1509faff191c5d7c17e6385296742",
+          "current_sha256": "6b646e6aa931f8ab56b85ee27549a422450b456270a54d68a4130329823226b6",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv",
+          "recorded_sha256": "b6d199e1398f3ce0a10e51490ef96588496b3cfd5b85a6a3803325eb033df498",
+          "current_sha256": "d910cbd0751f38d349e8975de22b43d0a2937f9e905b0d9b82894fd83c53fe8a",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv",
+          "recorded_sha256": "f12f1ebaba063039ac3d92fc5daa019931a482ff878e95483818fb360c975154",
+          "current_sha256": "c2a0787c07bcd6c198b6338c4c6ee372b4bce96ec4a4def467ff0ae03da4e43a",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv",
+          "recorded_sha256": "9002df7002145d5e8c8f221b680416e26bd8b82edc75296ca723c7320e30b1b3",
+          "current_sha256": "98b246d9ada45a7073d217d5c3bbc86941ee76bb00e7e0edda61d3bbec83728e",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv",
+          "recorded_sha256": "c08b7411f21bbfda94127777c18610e0d51a1c866957da9ce58b80c264b9f3b5",
+          "current_sha256": "e2d1cc9bc433a093938f2d4e4268c611f9a9bf199101e85114d417ff04597626",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv",
+          "recorded_sha256": "4471fc83880ae5026d295b98576a8c54bb186f9b365dfdf2b235870744404dc0",
+          "current_sha256": "24df51d9cb33f5c8760a8cfbc7931aafc94c2ab0523c7df55b2635e7778af16f",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv",
+          "recorded_sha256": "61617042d886f60018b2effcd6d871580c453faaccb3668029b8477685a7ad07",
+          "current_sha256": "857962513fc5bd3eb3d6b28c55fdfb15ef53f8ce8a59173a7d583efb8caee66f",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv",
+          "recorded_sha256": "c6f2b0f2273a26c134d7ddde6d29c18698042623b4f70287e3090b6a5d89c6a5",
+          "current_sha256": "6a0cf2f15c69886ad5497222aa203f6f5b1fdd004b32a4ab87b36a0960ba2254",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv",
+          "recorded_sha256": "f133668887acae65ff68df6f14216793c7f5372f5c4849ec09a3f6ae5551efa0",
+          "current_sha256": "2b0a58e5c2f758dbe5f6e8f786c547da5508ce466007517434e2f7d817b758ed",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv",
+          "recorded_sha256": "ba71335fdc2fd86c7d8d5a09f81f3677743abd71caa5016fc9b8e915400795dd",
+          "current_sha256": "7a2dbeded21929832b40fc8d068b35b7281c75a63c426feed207127d4da08e4e",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv",
+          "recorded_sha256": "b64ee004bebf2d808cd5aedd1346c6020e36d4de64f964cbb512b7e11e3b6f55",
+          "current_sha256": "a2fcbe6b783659ebecaf25d105f30c68af9b68c2850b833af64a2cec3ec29262",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv",
+          "recorded_sha256": "a4b93f90bceb0f1345ab556bd8ed8e0510186981c9c14180fd90fe052e515eee",
+          "current_sha256": "66e6078ea3b3acd3ceea4b974c0488d25e02324935532de1f2d39cdc34c875a0",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv",
+          "recorded_sha256": "0ca0e541a7989dc96707ae89d2875ee25b8ceaa8c2fd4c447a6d6fbac3c55f90",
+          "current_sha256": "cd04d46afbf778ff3f1573bdd390784e5461a09b33fd670fa126ae7d3c433e89",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv",
+          "recorded_sha256": "de71deacdef21a22aa1733e92fd16530ec330de83aae5a9d5fa03738d2c1c854",
+          "current_sha256": "1cf012a83b54472931ad9944e7774e311222641a0aa026229c19467f90bf5448",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv",
+          "recorded_sha256": "b0d9341cc231d72333b196748a3500c32f3335b6e24092f8565dce776720aeed",
+          "current_sha256": "2467f6b3c2745e687edad1a0c88ab5267b4ba8642c91e1fc0f282cf4223e5dc3",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/common/npu_addr_pkg.sv",
+          "recorded_sha256": "1569fa7ecda0f49b3e2e4e235a117ccb0e29ad5b5fff7ab40a382e9e64db3209",
+          "current_sha256": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_stream_pkg.sv",
+          "recorded_sha256": "773da72bb666e39190a61fb811561d2f565b3d2d527f1a5a03cb4c306c9b5f63",
+          "current_sha256": "d4c1b89c87098ac9adce72ab60ea9a1d4401d074ffe835fc109ab0f82d8e8d72",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/common/npu_rr_select.sv",
+          "recorded_sha256": "cc86ac011d238db6793ac9d4c6d21531f726a82db87ac2a5e50530e6b98fa944",
+          "current_sha256": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/common/npu_clock_gate.sv",
+          "recorded_sha256": "813bf2ec21db06f92adf7bb763fee9ccac89a404613ac8e278294ad672cb3289",
+          "current_sha256": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_cnn.sv",
+          "recorded_sha256": "5d59bbbf7a0431fba412627b08c598969f2f0fc80124a1ece99d78e83d144f6b",
+          "current_sha256": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_cnn_mac.sv",
+          "recorded_sha256": "b1df61b06b659f040efc81532a320df368e9b25adf3d7225fe69d40e66251861",
+          "current_sha256": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/top/npu_core.sv",
+          "recorded_sha256": "d8a799dbe59a12493bf243748b04b897339dcd793bec8d9241b419123bb71fc3",
+          "current_sha256": "b0e5fd6949aa58f15299185e7f40f09e46d2920781c4ba6c77c2c1b50b35f7e0",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/interconnect/npu_data_regfile.sv",
+          "recorded_sha256": "8d08c8affba68937588ad03abb512161ea9ef2b0f4c96688c0d51020f9c68cdd",
+          "current_sha256": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/debug/npu_debug_boot.sv",
+          "recorded_sha256": "bd19d7faafcfd5a2cfae552574c58e0b0eeeefa42b122ce5431222d47ac15fa1",
+          "current_sha256": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/debug/npu_jtag_debug.sv",
+          "recorded_sha256": "4a2e36cea2ab4bcb667b2d62cf414b14cb4eb20a3275f2a0d309f9f1dafb18d4",
+          "current_sha256": "1bbcb4cd30213a282c53b812fd969cdb1c4b89d703b9799ac58df73296469464",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/matrix/npu_matmul.sv",
+          "recorded_sha256": "e7b6dd88fd29df2229fdfab95ee6e08fea27dbd403f3f90f23522e4088f70e71",
+          "current_sha256": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/matrix/npu_matrix_stream.sv",
+          "recorded_sha256": "ad966e72bdc062f2771457d29bae856158a89decb086105b980b51c6f230f1d1",
+          "current_sha256": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/control/npu_mmio.sv",
+          "recorded_sha256": "31fc6d9bb51b4b37f1da2babbc157f6944bca8dd7e64f5deedfacdaa7b885cf2",
+          "current_sha256": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_stream.sv",
+          "recorded_sha256": "908cbb663623c5c539b18a07e2c9839dea4b652566fc595d281d5f34137bb2c0",
+          "current_sha256": "292658bd3818c0af4ab0f48bd7168032bd39c7b03d9870a73917713228b4d787",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_stream_control.sv",
+          "recorded_sha256": "859222aaf5fcabf1593d45b92f55e578e8afa5f1b25249ab5b292ded50107125",
+          "current_sha256": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_stream_engine.sv",
+          "recorded_sha256": "9da8f5d94a4dea6657a35af494ab842caa019117c482d2f86a59a0c94b878345",
+          "current_sha256": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/vector/npu_vector.sv",
+          "recorded_sha256": "107a4c1c8bf1acd5bfea43653cffbafa1bd194ec456debe662fdd63989d56735",
+          "current_sha256": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/vector/npu_vector_stream.sv",
+          "recorded_sha256": "2d456902f186de61fb68635cdb76a5dea6433e93f088c4d382cc40a21055c34f",
+          "current_sha256": "808debe76f7d6ca9373867aa61f1ca94357bac3adeee2ba75d6cf66d5435b77a",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/interconnect/xbar.sv",
+          "recorded_sha256": "a2c8695d1a6fcd981586718a2c1df9fa36630775a0beb4d86e402114da1b662c",
+          "current_sha256": "56ddd8c8e5dc450c0376c2bf5eb239416b4c3f8e9cbcfd87d65f73ca3fae5067",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/interconnect/xbar_stream.sv",
+          "recorded_sha256": "f1a153ea194eb6359945e477a478a6dbe2eadbdaa01cc999f9b569354cae52ab",
+          "current_sha256": "7130b04866115782928cd4d5ba94d91e5aa990394e2a559e2513735fe4ee4b34",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/interconnect/npu_multi_read.sv",
+          "recorded_sha256": "26ee3ff432e0b332d96caaa5ca33bb24becd7c2418333410d7e100c3f1f9ce14",
+          "current_sha256": "f99b25b6f2004093ea6c681548f2afcf3f7edee8116bd3c53637f4508f9b1342",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/quant/npu_shared_quant.sv",
+          "recorded_sha256": "5501e0b14f8d5efe53d43b4f0b97756084eb3d0a21f6f1a5efb3663aa01f624a",
+          "current_sha256": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/common/npu_store_pack.sv",
+          "recorded_sha256": "4ef804ab574409402a4e4b4eb81c8715d6fdc3f55a24f8c7e46e4eb0dabaf8cf",
+          "current_sha256": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
+          "status": "different"
+        },
+        {
+          "source": "npu/fpga/ego1/tb_validation.sv",
+          "recorded_sha256": "a73b35918689e71701574595a30f191ba68d979ba29378317a126cf79c9b82c8",
+          "current_sha256": "5a60b453b0ce4dcea698702083b1a43295feb2647e105c539804a6208c830f07",
+          "status": "different"
+        },
+        {
+          "source": "npu/tb/db_jtag_tasks.svh",
+          "recorded_sha256": "676d28e694e9115f4a75f0bec8ccb8a71c83f91252dfbc409becd4cdeb4a0b66",
+          "current_sha256": "220e2617385913779c8530dc82ff5632f444c0f9438df1dc9e4482fdf750ac5b",
+          "status": "different"
+        }
+      ],
+      "source_hash_counts": {
+        "different": 71
+      }
+    },
+    {
+      "file": "ego1_sba_20261115/asic-running-200.txt",
+      "sha256": "992d3a8d527a471126d52cb12f388db48a39bd78a23f56b81457c703add9d66f",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Notice: timing checks disabled with +notimingcheck at run-time",
+        "Chronologic VCS simulator copyright 1991-2020",
+        "Contains Synopsys proprietary information.",
+        "Compiler version Q-2020.03-SP2-7_Full64; Runtime version Q-2020.03-SP2-7_Full64;  Nov 16 06:52 2026",
+        "",
+        "Warning-[RT-NCMUCS] No condition matches in statement",
+        "/home/almalinux/ego1-sba-53655b5-20261115/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv, 419",
+        "  No condition matches in 'unique case' statement. 'default' specification is ",
+        "  missing, inside tb_validation.dut.i_core.i_cpu.core_i.load_store_unit_i, at ",
+        "  time 0ps.",
+        "",
+        ""
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/cdc.rpt",
+      "sha256": "147b36e9e62e1789859dadbdf8f33c12ea1c269d9bd062955aeefc097d61fdfc",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.",
+        "-------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        "| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023",
+        "| Date         : Sun Nov 15 22:58:34 2026",
+        "| Host         : LAPTOP-L4U4N8ER running 64-bit major release  (build 9200)",
+        "| Command      : report_cdc -details -file C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-53655b5-10m-20261115/reports/cdc.rpt",
+        "| Design       : ego1_soc_top",
+        "| Device       : 7a35t-csg324",
+        "| Speed File   : -1  PRODUCTION 1.23 2018-06-13",
+        "| Design State : Routed",
+        "-------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        ""
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/check_timing.rpt",
+      "sha256": "8a5c99d774e76158f530b857adfe8637d02e1b501f5a79964eccb654d9b48fdb",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.",
+        "------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        "| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023",
+        "| Date         : Sun Nov 15 22:58:37 2026",
+        "| Host         : LAPTOP-L4U4N8ER running 64-bit major release  (build 9200)",
+        "| Command      : check_timing -verbose -file C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-53655b5-10m-20261115/reports/check_timing.rpt",
+        "| Design       : ego1_soc_top",
+        "| Device       : 7a35t-csg324",
+        "| Speed File   : -1  PRODUCTION 1.23 2018-06-13",
+        "| Design State : Routed",
+        "------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        ""
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/clock_interaction.rpt",
+      "sha256": "6f2abd4b71786ebb558300134c3033466081c990ddede9c31ff25c0cc8e9a6d3",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.",
+        "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        "| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023",
+        "| Date         : Sun Nov 15 22:58:34 2026",
+        "| Host         : LAPTOP-L4U4N8ER running 64-bit major release  (build 9200)",
+        "| Command      : report_clock_interaction -file C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-53655b5-10m-20261115/reports/clock_interaction.rpt",
+        "| Design       : ego1_soc_top",
+        "| Device       : 7a35t-csg324",
+        "| Speed File   : -1  PRODUCTION 1.23 2018-06-13",
+        "| Design State : Routed",
+        "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        ""
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/drc.rpt",
+      "sha256": "9906203645504fd51a48ca5f6aecc9210e53c0e59c448a1a492851d02a8fe11f",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.",
+        "----------------------------------------------------------------------------------------------------------------------------------------------------",
+        "| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023",
+        "| Date         : Sun Nov 15 22:58:42 2026",
+        "| Host         : LAPTOP-L4U4N8ER running 64-bit major release  (build 9200)",
+        "| Command      : report_drc -file C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-53655b5-10m-20261115/reports/drc.rpt",
+        "| Design       : ego1_soc_top",
+        "| Device       : xc7a35tcsg324-1",
+        "| Speed File   : -1",
+        "| Design State : Fully Routed",
+        "----------------------------------------------------------------------------------------------------------------------------------------------------",
+        ""
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/fpga-running-200.json",
+      "sha256": "dc40be8f2a780874200e0de32dce7bd138eed8908c68be87d7b459ad849c8983",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv",
+          "recorded_sha256": "332faa387f4351b65d76af6233e847846ec864fc901ae440e624bc2f32d7dfe8",
+          "current_sha256": "3fee39d262ef44bff6ee00b591fe08830e5e35cdd1b9e5eb9eb06da6f6525805",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv",
+          "recorded_sha256": "094187ebc720b8636efc7779349b334db00af03a986db8798cd9f5a707b758d7",
+          "current_sha256": "33d7c06b0fef3ae2c8814b040abe3cdaa23065cf12643de20e8275f44f97abe1",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv",
+          "recorded_sha256": "e5f46fa1ef236a07aa331ce610989a2a9efc68f4593857c459f94261ab7cb2c6",
+          "current_sha256": "ae738f408ba2ade41bfcf0488c8f611a2c39b26915191890dac907b8a7a518e5",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv",
+          "recorded_sha256": "8680aaeb726e7f7de4b465f3100d05b4b71b5cef7699185718f3ffd3f17cd1f4",
+          "current_sha256": "afc32fcae21f6cbb834c5ee602a1aaee1b518fc436a86d4fe1b97942473d35c8",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv",
+          "recorded_sha256": "0f4fc3c88b5eccc4265f1f60ac8b77f9086d72581c685c24d8bc74d1795913d2",
+          "current_sha256": "c46075cb09de0e773c91da62d02497673945b7a3e5de176363e5b5e118f82eea",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv",
+          "recorded_sha256": "dd77fdf15cadd86d842971de8f764dcaabcd80c9458b7aad9c8f1b3f1a7af227",
+          "current_sha256": "7eb340f76c76d18f4ac3b6d1d61433c7372118d24f57f83a6ceae82cdbf51c2d",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv",
+          "recorded_sha256": "da2692cdedf40e09b348a01243aa61ae1e5b4b74e08b17e447d8b9d9b3e4fae6",
+          "current_sha256": "717fc6e7ec754807440f346d9b8bb930da302fffd294550e30ceae78009f4e87",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv",
+          "recorded_sha256": "2399c31b486a335c58a638269fa24df646b0ab7c46d29b6b5aaa2d7c4d988ca0",
+          "current_sha256": "0bf54e372850c1af22264711d311d943718dc4c8d918e47cc98e9a8d07461d44",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv",
+          "recorded_sha256": "81e19fb19a281a2e41136786401395c39ae8886dab0acf1f0e0a3831e31589d5",
+          "current_sha256": "08cc968a5b26b5a68ad2c548755e6b3b0d07a7ad75a3f11e92bc1bab71eeb7c6",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv",
+          "recorded_sha256": "67e301adc9acd9651d6f0344854888fc2fa608007a5e11dde68ac5df32266dd2",
+          "current_sha256": "cff163332b28e84904955e88691f973a47f90a4209b3f0ae0d2afe94f6a49921",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv",
+          "recorded_sha256": "da8f621e9e5f1a498c8bffb1cfc30d9400a76ce04c1b945587c5dd4b165a1c23",
+          "current_sha256": "3720278ce00b5591a1a63fe5515528dd4223a35070303e58cf2e48bd0b56c8c1",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv",
+          "recorded_sha256": "e2ed229b88574e71f1e51a70093d675a7ae99b7a612be491d6a08a71e9d1cc27",
+          "current_sha256": "51322d03a0479f16a4acb66cccee48003e2e224c02a7d3188cbaea9b2f8b2756",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv",
+          "recorded_sha256": "60112bbb94ba37ab32892cf5f25dfca3adafd3fa7bb851cf4f2cdc68ba6b7c23",
+          "current_sha256": "83d9f70bab3b514062a7a79a581919afd5de466167dfcd08733c773f36ba094a",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv",
+          "recorded_sha256": "9c84d4d8c1646c8694387cdaab0575363c07ea6c7c88ebbb37c8f4dbb7a28c5e",
+          "current_sha256": "fa60eaab03518e8e145a3f0a626bc7945e79265e8322ce874a6c8f6996f0e10b",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv",
+          "recorded_sha256": "d266438d463564250bf37cd1e9451b574f91134237927072e4b37a0eb185311a",
+          "current_sha256": "f9a9e098336d85bf662a88337f88195fec531951596cc2492c80bbeb4ea82898",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv",
+          "recorded_sha256": "464265b51e72cfc3c4d05eee14795f8ecf132d10bba4074c14b5fe9bfa7f3147",
+          "current_sha256": "cf047a8b7654f2cb0d36050c41b57cf95bf0a0a21f5dea346d38aa0da57c24fe",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv",
+          "recorded_sha256": "d8810cbcf8b45cc912e0fc34e596046a8b1cbb4854eeb3bee145f5260e2c63b8",
+          "current_sha256": "4ed3f367d8469c1e70a9735fd20e81c36ce10c9d70fb5dfaad2a12c6978ad683",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv",
+          "recorded_sha256": "a3773746875bf4c0cba18089533c4f95f0a791713b3016fb793e2444285adb76",
+          "current_sha256": "8cd0f6cf01479bf255385047b22254367b138a294f5e5ab0913505c8df83a918",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv",
+          "recorded_sha256": "64432dca4fe89e05c5361f7423bbc3473ae2799b58ff54df7a87d5c64c732b33",
+          "current_sha256": "ad8a13c8314b9a3c28228db2844466c9d750460d6afa8f6299a7229d80f8dd47",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv",
+          "recorded_sha256": "a273c9b1e97a9d72225bba2b8bb2e20451b66f2772e17b49b0624c1a27846d64",
+          "current_sha256": "50d1b4d325694f4e898d5b2f2e7b26a7e631a5abdd1cd283500c900b079275ab",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv",
+          "recorded_sha256": "e352c40abe2121e4f8097729a84d343a8b35ea3a20988ca02515a62461c04295",
+          "current_sha256": "807cf3fb86fe7060cdb1fa21dfbc843220b09a4d694d23ad4bc1cdd3e7118264",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/soc/rtl/mem/sram_ff.sv",
+          "recorded_sha256": "1bd0872748ec505d5eb18cb94c6a5660ae3d5c48990d12cb1c6cbbb111f774d5",
+          "current_sha256": "1bd0872748ec505d5eb18cb94c6a5660ae3d5c48990d12cb1c6cbbb111f774d5",
+          "status": "match"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv",
+          "recorded_sha256": "45aac71dd7ba9d58dd552d9dcfa8ab4daf6a718459616d3fcfc52fb320a3eb19",
+          "current_sha256": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv",
+          "recorded_sha256": "c0234b6228532cf1234b070a2fa01e7001f85969d6d7bed15368219256b38014",
+          "current_sha256": "6eca8d4c2e299adcc498417220478360cc22898ba9037cdad6a1b81e80373c7b",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv",
+          "recorded_sha256": "c4c4e53ab0b71f944f3d36bd69faae289b8189490f3115a83d01adc8e425d8b9",
+          "current_sha256": "11035bcbb28447fa5a3e40d5cad4f257e763f75e49664ce8098ab6247a9a57cb",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv",
+          "recorded_sha256": "466b12aebb9cc6a389e5189667c1c6904cfb06a471a7839ed80f9ae6c566af33",
+          "current_sha256": "27931c8004e4d266c6ea02c9d5c19968c67d7e6ab86e57da4088531b13c8c48f",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv",
+          "recorded_sha256": "d1f11381b78e89f33ca5ccd404a3e3278f9abfc02b63777faeb991bc10f8a922",
+          "current_sha256": "db90df2f8737aff29d73b3d242dd33aeb6750ae69ae7eb8e118b531180945d7f",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv",
+          "recorded_sha256": "7206745d0764ff24f383b491accbb9ac6cb27e274a3f5fa4e50745471e3d6f0b",
+          "current_sha256": "858b172963e17529de0b40a5be6ddfdadfc60bdca967819e4fc558b0ed6d7b87",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv",
+          "recorded_sha256": "d1ad108c16a80a24403eeadc8ea3cd20f28701b4e8cd6d4302dba6feea3dc91d",
+          "current_sha256": "6a78a0d77d32e6795f63e5149f77b98320ce504c67c44a2e359c9aea70989224",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv",
+          "recorded_sha256": "ea73da23681836a141c47b21c8785e720e837acc9d10ac74c741523fee18854b",
+          "current_sha256": "e2cec8f3d273748783275c60b1ec89101336608638d7e7783b03dd6b9dbb0345",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv",
+          "recorded_sha256": "b6184048b55a978723b5df88bb71e16ff2474d245f44af1f738b8f13e2303d86",
+          "current_sha256": "6e12f673e05380e34a35c38d8ee8b6878935d96b6f2dfda72c67f8a6e92a6e4e",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv",
+          "recorded_sha256": "365ea3c8bb180d48ceb4137a21e2b5451b7bab1b784ab8657dd98dc9f78a03f6",
+          "current_sha256": "1510df315721b370c2d86b1c1d134a3ff6beefba2d072de7a4a611e3ecffb753",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv",
+          "recorded_sha256": "e0033cf9e38c4a63ebec3cd31ebd3ac7cbb1509faff191c5d7c17e6385296742",
+          "current_sha256": "6b646e6aa931f8ab56b85ee27549a422450b456270a54d68a4130329823226b6",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv",
+          "recorded_sha256": "b6d199e1398f3ce0a10e51490ef96588496b3cfd5b85a6a3803325eb033df498",
+          "current_sha256": "d910cbd0751f38d349e8975de22b43d0a2937f9e905b0d9b82894fd83c53fe8a",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv",
+          "recorded_sha256": "f12f1ebaba063039ac3d92fc5daa019931a482ff878e95483818fb360c975154",
+          "current_sha256": "c2a0787c07bcd6c198b6338c4c6ee372b4bce96ec4a4def467ff0ae03da4e43a",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv",
+          "recorded_sha256": "9002df7002145d5e8c8f221b680416e26bd8b82edc75296ca723c7320e30b1b3",
+          "current_sha256": "98b246d9ada45a7073d217d5c3bbc86941ee76bb00e7e0edda61d3bbec83728e",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv",
+          "recorded_sha256": "c08b7411f21bbfda94127777c18610e0d51a1c866957da9ce58b80c264b9f3b5",
+          "current_sha256": "e2d1cc9bc433a093938f2d4e4268c611f9a9bf199101e85114d417ff04597626",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv",
+          "recorded_sha256": "4471fc83880ae5026d295b98576a8c54bb186f9b365dfdf2b235870744404dc0",
+          "current_sha256": "24df51d9cb33f5c8760a8cfbc7931aafc94c2ab0523c7df55b2635e7778af16f",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv",
+          "recorded_sha256": "61617042d886f60018b2effcd6d871580c453faaccb3668029b8477685a7ad07",
+          "current_sha256": "857962513fc5bd3eb3d6b28c55fdfb15ef53f8ce8a59173a7d583efb8caee66f",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv",
+          "recorded_sha256": "c6f2b0f2273a26c134d7ddde6d29c18698042623b4f70287e3090b6a5d89c6a5",
+          "current_sha256": "6a0cf2f15c69886ad5497222aa203f6f5b1fdd004b32a4ab87b36a0960ba2254",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv",
+          "recorded_sha256": "f133668887acae65ff68df6f14216793c7f5372f5c4849ec09a3f6ae5551efa0",
+          "current_sha256": "2b0a58e5c2f758dbe5f6e8f786c547da5508ce466007517434e2f7d817b758ed",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv",
+          "recorded_sha256": "ba71335fdc2fd86c7d8d5a09f81f3677743abd71caa5016fc9b8e915400795dd",
+          "current_sha256": "7a2dbeded21929832b40fc8d068b35b7281c75a63c426feed207127d4da08e4e",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv",
+          "recorded_sha256": "b64ee004bebf2d808cd5aedd1346c6020e36d4de64f964cbb512b7e11e3b6f55",
+          "current_sha256": "a2fcbe6b783659ebecaf25d105f30c68af9b68c2850b833af64a2cec3ec29262",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv",
+          "recorded_sha256": "a4b93f90bceb0f1345ab556bd8ed8e0510186981c9c14180fd90fe052e515eee",
+          "current_sha256": "66e6078ea3b3acd3ceea4b974c0488d25e02324935532de1f2d39cdc34c875a0",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv",
+          "recorded_sha256": "de71deacdef21a22aa1733e92fd16530ec330de83aae5a9d5fa03738d2c1c854",
+          "current_sha256": "1cf012a83b54472931ad9944e7774e311222641a0aa026229c19467f90bf5448",
+          "status": "different"
+        },
+        {
+          "source": "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv",
+          "recorded_sha256": "b0d9341cc231d72333b196748a3500c32f3335b6e24092f8565dce776720aeed",
+          "current_sha256": "2467f6b3c2745e687edad1a0c88ab5267b4ba8642c91e1fc0f282cf4223e5dc3",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/common/npu_addr_pkg.sv",
+          "recorded_sha256": "1569fa7ecda0f49b3e2e4e235a117ccb0e29ad5b5fff7ab40a382e9e64db3209",
+          "current_sha256": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_stream_pkg.sv",
+          "recorded_sha256": "773da72bb666e39190a61fb811561d2f565b3d2d527f1a5a03cb4c306c9b5f63",
+          "current_sha256": "d4c1b89c87098ac9adce72ab60ea9a1d4401d074ffe835fc109ab0f82d8e8d72",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/common/npu_rr_select.sv",
+          "recorded_sha256": "cc86ac011d238db6793ac9d4c6d21531f726a82db87ac2a5e50530e6b98fa944",
+          "current_sha256": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/common/npu_clock_gate.sv",
+          "recorded_sha256": "813bf2ec21db06f92adf7bb763fee9ccac89a404613ac8e278294ad672cb3289",
+          "current_sha256": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_cnn.sv",
+          "recorded_sha256": "5d59bbbf7a0431fba412627b08c598969f2f0fc80124a1ece99d78e83d144f6b",
+          "current_sha256": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_cnn_mac.sv",
+          "recorded_sha256": "b1df61b06b659f040efc81532a320df368e9b25adf3d7225fe69d40e66251861",
+          "current_sha256": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/top/npu_core.sv",
+          "recorded_sha256": "d8a799dbe59a12493bf243748b04b897339dcd793bec8d9241b419123bb71fc3",
+          "current_sha256": "b0e5fd6949aa58f15299185e7f40f09e46d2920781c4ba6c77c2c1b50b35f7e0",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/interconnect/npu_data_regfile.sv",
+          "recorded_sha256": "8d08c8affba68937588ad03abb512161ea9ef2b0f4c96688c0d51020f9c68cdd",
+          "current_sha256": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/debug/npu_debug_boot.sv",
+          "recorded_sha256": "bd19d7faafcfd5a2cfae552574c58e0b0eeeefa42b122ce5431222d47ac15fa1",
+          "current_sha256": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/debug/npu_jtag_debug.sv",
+          "recorded_sha256": "4a2e36cea2ab4bcb667b2d62cf414b14cb4eb20a3275f2a0d309f9f1dafb18d4",
+          "current_sha256": "1bbcb4cd30213a282c53b812fd969cdb1c4b89d703b9799ac58df73296469464",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/matrix/npu_matmul.sv",
+          "recorded_sha256": "e7b6dd88fd29df2229fdfab95ee6e08fea27dbd403f3f90f23522e4088f70e71",
+          "current_sha256": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/matrix/npu_matrix_stream.sv",
+          "recorded_sha256": "ad966e72bdc062f2771457d29bae856158a89decb086105b980b51c6f230f1d1",
+          "current_sha256": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/control/npu_mmio.sv",
+          "recorded_sha256": "31fc6d9bb51b4b37f1da2babbc157f6944bca8dd7e64f5deedfacdaa7b885cf2",
+          "current_sha256": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/top/npu_soc.sv",
+          "recorded_sha256": "42e6890f46bae348625a571c409fa43e321ce1e355cba69e6671759324dff245",
+          "current_sha256": "07c69dfc0e5306a38268c247dff927735eca9381b250a88ec581c5963508a5c0",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_stream.sv",
+          "recorded_sha256": "908cbb663623c5c539b18a07e2c9839dea4b652566fc595d281d5f34137bb2c0",
+          "current_sha256": "292658bd3818c0af4ab0f48bd7168032bd39c7b03d9870a73917713228b4d787",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_stream_control.sv",
+          "recorded_sha256": "859222aaf5fcabf1593d45b92f55e578e8afa5f1b25249ab5b292ded50107125",
+          "current_sha256": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/cnn/npu_stream_engine.sv",
+          "recorded_sha256": "9da8f5d94a4dea6657a35af494ab842caa019117c482d2f86a59a0c94b878345",
+          "current_sha256": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/vector/npu_vector.sv",
+          "recorded_sha256": "107a4c1c8bf1acd5bfea43653cffbafa1bd194ec456debe662fdd63989d56735",
+          "current_sha256": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/vector/npu_vector_stream.sv",
+          "recorded_sha256": "2d456902f186de61fb68635cdb76a5dea6433e93f088c4d382cc40a21055c34f",
+          "current_sha256": "808debe76f7d6ca9373867aa61f1ca94357bac3adeee2ba75d6cf66d5435b77a",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/interconnect/xbar.sv",
+          "recorded_sha256": "a2c8695d1a6fcd981586718a2c1df9fa36630775a0beb4d86e402114da1b662c",
+          "current_sha256": "56ddd8c8e5dc450c0376c2bf5eb239416b4c3f8e9cbcfd87d65f73ca3fae5067",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/interconnect/xbar_stream.sv",
+          "recorded_sha256": "f1a153ea194eb6359945e477a478a6dbe2eadbdaa01cc999f9b569354cae52ab",
+          "current_sha256": "7130b04866115782928cd4d5ba94d91e5aa990394e2a559e2513735fe4ee4b34",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/interconnect/npu_multi_read.sv",
+          "recorded_sha256": "26ee3ff432e0b332d96caaa5ca33bb24becd7c2418333410d7e100c3f1f9ce14",
+          "current_sha256": "f99b25b6f2004093ea6c681548f2afcf3f7edee8116bd3c53637f4508f9b1342",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/quant/npu_shared_quant.sv",
+          "recorded_sha256": "5501e0b14f8d5efe53d43b4f0b97756084eb3d0a21f6f1a5efb3663aa01f624a",
+          "current_sha256": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
+          "status": "different"
+        },
+        {
+          "source": "npu/rtl/common/npu_store_pack.sv",
+          "recorded_sha256": "4ef804ab574409402a4e4b4eb81c8715d6fdc3f55a24f8c7e46e4eb0dabaf8cf",
+          "current_sha256": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
+          "status": "different"
+        },
+        {
+          "source": "npu/fpga/ego1/cv32e40p_register_file_lutram.sv",
+          "recorded_sha256": "4d55f0e17e2fc35f97be190bfbd962d72f60bb5855e2cb19ba07fb3f818cf43c",
+          "current_sha256": "b2acdca17b1be8104d32a87861b8d88744161a86c8daa05ffa3cdc0defa3f94f",
+          "status": "different"
+        },
+        {
+          "source": "npu/fpga/ego1/ego1_soc_top.sv",
+          "recorded_sha256": "18c70ea3d62dfd29e769c719673cb5fecaf49a1d3cff27702aa70254a1069a39",
+          "current_sha256": "95109cb4cf3f7ec9b1f9c8751ce2b1204083f102315e2045df8676c9ea6fa841",
+          "status": "different"
+        },
+        {
+          "source": "npu/fpga/ego1/sim_clock_primitives.sv",
+          "recorded_sha256": "0e0f677fd068147614de0e65d14ff2237e74f9e1f0f81e915ab3aa3cfb175784",
+          "current_sha256": "97710476343ed9d0349c764a1c018e692ba0bb77aa870992eb8bdfae6555a1b5",
+          "status": "different"
+        },
+        {
+          "source": "npu/fpga/ego1/tb_validation.sv",
+          "recorded_sha256": "a73b35918689e71701574595a30f191ba68d979ba29378317a126cf79c9b82c8",
+          "current_sha256": "5a60b453b0ce4dcea698702083b1a43295feb2647e105c539804a6208c830f07",
+          "status": "different"
+        },
+        {
+          "source": "npu/tb/db_jtag_tasks.svh",
+          "recorded_sha256": "676d28e694e9115f4a75f0bec8ccb8a71c83f91252dfbc409becd4cdeb4a0b66",
+          "current_sha256": "220e2617385913779c8530dc82ff5632f444c0f9438df1dc9e4482fdf750ac5b",
+          "status": "different"
+        }
+      ],
+      "source_hash_counts": {
+        "different": 74,
+        "match": 1
+      }
+    },
+    {
+      "file": "ego1_sba_20261115/fpga-running-200.txt",
+      "sha256": "1e785cde60de7165335380f3672422dedda16f96eae7fd7513659664ee22c837",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Chronologic VCS simulator copyright 1991-2020",
+        "Contains Synopsys proprietary information.",
+        "Compiler version Q-2020.03-SP2-7_Full64; Runtime version Q-2020.03-SP2-7_Full64;  Nov 16 06:55 2026",
+        "",
+        "Warning-[RT-NCMUCS] No condition matches in statement",
+        "/home/almalinux/ego1-sba-53655b5-20261115/external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv, 419",
+        "  No condition matches in 'unique case' statement. 'default' specification is ",
+        "  missing, inside ",
+        "  tb_validation.dut.i_soc.i_core.i_cpu.core_i.load_store_unit_i, at time 0ps.",
+        "",
+        "",
+        "Warning-[RT-NCMUCS] No condition matches in statement"
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/implementation_pass.txt",
+      "sha256": "abd6377251eb373459f645b9dffdf1ed49b3b753028a26fd7f4edda45225a1c0",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Vivado 2023.2; xc7a35tcsg324-1; 10 MHz",
+        "setup_slack_ns=45.764",
+        "hold_slack_ns=0.030",
+        "default_resource_drc_restored=1"
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/methodology.rpt",
+      "sha256": "7d5a39c93b6ce922abd4187217bc34bcf05bd8a1e691892c16a8de9c898391b2",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.",
+        "--------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        "| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023",
+        "| Date         : Sun Nov 15 22:58:47 2026",
+        "| Host         : LAPTOP-L4U4N8ER running 64-bit major release  (build 9200)",
+        "| Command      : report_methodology -file C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-53655b5-10m-20261115/reports/methodology.rpt",
+        "| Design       : ego1_soc_top",
+        "| Device       : xc7a35tcsg324-1",
+        "| Speed File   : -1",
+        "| Design State : Fully Routed",
+        "--------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        ""
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/route_status.rpt",
+      "sha256": "01afe5dddb572f8920c0f647bf97e9900900e1d04608d1a8b61a7a1586444389",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Design Route Status",
+        "                                               :      # nets :",
+        "   ------------------------------------------- : ----------- :",
+        "   # of logical nets.......................... :       44978 :",
+        "       # of nets not needing routing.......... :       10954 :",
+        "           # of internally routed nets........ :       10828 :",
+        "           # of nets with no loads............ :         126 :",
+        "       # of routable nets..................... :       34024 :",
+        "           # of fully routed nets............. :       34024 :",
+        "       # of nets with routing errors.......... :           0 :",
+        "   ------------------------------------------- : ----------- :",
+        ""
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/source_origin.json",
+      "sha256": "24e7d38177ab45433bd94d9cbc021cf01e822257b17431d930a33b369f0a0949",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [],
+      "source_hash_counts": {}
+    },
+    {
+      "file": "ego1_sba_20261115/timing_routed.rpt",
+      "sha256": "e82b27b5c782ec3074ecf7026b05993d6e62577d5eb0bd6b64d78b7a8cfa5c31",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.",
+        "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        "| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023",
+        "| Date         : Sun Nov 15 22:58:34 2026",
+        "| Host         : LAPTOP-L4U4N8ER running 64-bit major release  (build 9200)",
+        "| Command      : report_timing_summary -delay_type min_max -report_unconstrained -file C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-53655b5-10m-20261115/reports/timing_routed.rpt",
+        "| Design       : ego1_soc_top",
+        "| Device       : 7a35t-csg324",
+        "| Speed File   : -1  PRODUCTION 1.23 2018-06-13",
+        "| Design State : Routed",
+        "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        ""
+      ]
+    },
+    {
+      "file": "ego1_sba_20261115/utilization_routed.rpt",
+      "sha256": "603e43a9a010999d2e9b4c4edbf1d4a6ef60040b50f8b3d13a3dd93889862947",
+      "classification": "historical-snapshot",
+      "note": "Raw report excerpt; use its parent run or summary for version, stage and scope.",
+      "report_header": [
+        "Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.",
+        "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        "| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023",
+        "| Date         : Sun Nov 15 22:58:30 2026",
+        "| Host         : LAPTOP-L4U4N8ER running 64-bit major release  (build 9200)",
+        "| Command      : report_utilization -hierarchical -file C:/Users/zhujunan/Desktop/tapeout/mynpu-ego1-sba-20261115/npu/build/ego1-sba-53655b5-10m-20261115/reports/utilization_routed.rpt",
+        "| Design       : ego1_soc_top",
+        "| Device       : xc7a35tcsg324-1",
+        "| Speed File   : -1",
+        "| Design State : Routed",
+        "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+        ""
+      ]
+    },
+    {
+      "file": "ego1_sba_preparation_20261115.json",
+      "sha256": "7be6bb04c38b45539d3e78a53e85366204d7a9408897ca7f8bafb8e8ae585364",
+      "classification": "historical-snapshot",
+      "note": "Earlier experiment/baseline; not a current whole-design result.",
+      "source_hash_observations": [
+        {
+          "source": "npu/fpga/ego1/jtag_validation.py",
+          "recorded_sha256": "18cd2672fce8aab1825666c9a425cef1b490340a1bdbbbadf26ae13146691ec3",
+          "current_sha256": "8a4051b0a5c9309067b301d10e263cf870a77df7406446808b200b5f47ed3f8e",
+          "status": "different"
+        },
+        {
+          "source": "npu/fpga/ego1/package_validation.py",
+          "recorded_sha256": "d20e83994e84662e3ddf72026c6fac5557bf2862a5fb5e87717beb6c4fd87b4a",
+          "current_sha256": "2becb840f17d626a69c4cb87014353b40489e69356d237badb960a5d9632a305",
+          "status": "different"
+        },
+        {
+          "source": "npu/fpga/ego1/simulate_validation.py",
+          "recorded_sha256": "8064151392503c8613c338841b64d2c0e4e8b234b8d2e5d9c1e97075297100de",
+          "current_sha256": "d04fbb93255c0aca724573d3bac6cc47bb74a4cf92a268b36dfd4c1ab55812ed",
+          "status": "different"
+        },
+        {
+          "source": "npu/fpga/ego1/tb_validation.sv",
+          "recorded_sha256": "a73b35918689e71701574595a30f191ba68d979ba29378317a126cf79c9b82c8",
+          "current_sha256": "5a60b453b0ce4dcea698702083b1a43295feb2647e105c539804a6208c830f07",
+          "status": "different"
+        }
+      ],
+      "source_hash_counts": {
+        "different": 4
+      }
     },
     {
       "file": "ego1_validation_preparation.json",
