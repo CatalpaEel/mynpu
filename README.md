@@ -1,6 +1,6 @@
 # mynpu
 
-> 外部Host接口已删除，SoC仿真与板级访问统一走[JTAG Debug Module SBA](npu/docs/jtag.md)。当前main不包含GPIO；完整r3后端是接口改动前的冻结基线，ASIC后端和实体板未重验；当前FPGA已完成布局布线并生成bitstream：10MHz、19,925 LUT（95.79%），时序通过，尚未实板验证，见[EGo1实现结果](npu/fpga/ego1/BITSTREAM-20261115.md)。
+> 外部Host接口已删除，SoC仿真与板级访问统一走[JTAG Debug Module SBA](npu/docs/jtag.md)。当前main不包含GPIO；2026-11-18已重跑ASIC完整后端，严格LVS/ERC仍有残项，见[本轮报告](npu/docs/asic-main53655b5-signoff-20261118.md)；实体板未重验；当前FPGA已完成布局布线并生成bitstream：10MHz、19,925 LUT（95.79%），时序通过，尚未实板验证，见[EGo1实现结果](npu/fpga/ego1/BITSTREAM-20261115.md)。
 
 基于 CV32E40P 的整数 NPU，使用独立 Matrix、CNN、Vector 计算单元和软件任务调度。
 本文描述当前默认设计；配置来源为 [build_config.json](npu/build_config.json)，接口以 RTL 和软件头文件为准。
@@ -56,21 +56,23 @@ python3.12 npu/scripts/run_vcs.py --suite jtag --tag my_jtag
 python3.12 npu/scripts/run_vcs.py --suite workloadcpu --tag my_workloads
 ```
 
-## ASIC 完整后端结果（GPIO加入前）
+## ASIC 完整后端结果（2026-11-18）
 
-已有完整物理验证的冻结版本为 **RF 1R1W，1950µm，r3，2026-11-10**：
+当前源码（53655b5加Genus端口语法兼容修复）已完成 **1950µm、9信号PAD、最终r1** 后端：
 
 | 指标 | 结果与口径 |
 | --- | --- |
 | 工艺 / 系统频率 | TSMC 180nm / 50 MHz |
 | Die / Seal Ring外框 | 1950×1950 / 1980×1980 µm |
-| 综合cell面积 | 2.569286 mm²，含两块SRAM，不含PAD/CTS/布线 |
-| PNR核心非filler面积 | 2.632349 mm²，含SRAM，不含外围IO与core filler |
-| 布线后setup / hold WNS | +0.468 / +0.018 ns |
+| 综合cell面积 | 2.569738 mm²，含两块SRAM，不含PAD/CTS/布线 |
+| PNR核心非filler面积 | 2.634323 mm²，含SRAM，不含外围IO与core filler |
+| 布线后setup / hold WNS | +0.457 / +0.020 ns |
 | 布线后JTAG/MNIST功能回归 | 34项通过，零延迟、未回标SDF |
 
-[完整报告](npu/docs/rf1r1w-die1950-signoff.md)保留了检查口径：课程规则排除后DRC为0；LVS在教学PR容差下CORRECT，严格PR参数偏差及ERC残项仍待评审。
+[本轮完整报告](npu/docs/asic-main53655b5-signoff-20261118.md)保留了检查口径：课程规则排除后DRC为0；LVS在教学PR容差下CORRECT，严格PR参数偏差及ERC残项仍待评审。
 没有完成Dummy后PEX/STA、多角或IR/EM签核，不能据此宣称正式投片签核全部通过。
+
+后端复现从[完整GUI教程](npu/docs/backend-gui-lab.md)和[工作区生成工具](npu/eda/tsmc180/gui_lab/README.md)开始；脚本、结果和旧版参考的分工见[后端文件入口](npu/eda/tsmc180/README.md)。
 
 ## 项目导航
 

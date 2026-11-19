@@ -1,0 +1,9 @@
+{
+  "run": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261118-main53655b5-fullchip-r1",
+  "scope": "Executed 1950um physical ECO snapshots for this netlist; inspect fresh violations before reuse",
+  "sha256": {
+    "export_wb_final.tcl": "e814b7e6d56065d571e59834b0674abeeeb58221f9815237f7352ae5a6d864d1",
+    "cleanup_external_pad_routes.tcl": "8b50572270270d8920acade3fc08fb32f50e1b81d743a08edbb8b66b3457d843",
+    "fix_current_bond_spacing.tcl": "b044d035985ae39b2406500bbe5bc110f3498dfd9a26f622d6f458faba8edb32"
+  }
+}

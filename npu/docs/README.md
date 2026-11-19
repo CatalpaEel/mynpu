@@ -3,6 +3,12 @@
 [项目首页](../../README.md)描述当前默认版本；[源码导航](../rtl/README.md)和[build_config.json](../build_config.json)是实现入口。
 本次移除已撤回实验、旧ABI迁移和重复阶段面积文档；原文仍可通过Git历史获取。当前版本机器验证报告保留在`../reports/`，旧版本数据已删除。
 
+## 后端入口
+
+- [完整GUI复跑教程](backend-gui-lab.md)：新工作区中从Genus、Innovus到Virtuoso/Calibre逐阶段执行。
+- [工作区生成工具](../eda/tsmc180/gui_lab/README.md)：准备独立输入和Tcl，不启动EDA任务。
+- [最新实际执行报告](asic-main53655b5-signoff-20261118.md)：2026-11-18结果，严格LVS/ERC残项保留。
+
 ## 后端专题教程
 
 - [面积优化与DRC修复简报](backend-area-drc-brief.md)：设计减面积、Genus low/high实测、SRAM halo/cutRow作用及具体DRC修法。
@@ -14,6 +20,8 @@
 - [完整流程、参数与问题处理记录](backend-rf1r1w-r3-full-process.md)：综合压面积、两轮hold、原生/Calibre/WB修复、Seal Ring/Dummy、LVS/ERC与未解决项。
 
 ## 当前证据
+
+- [2026-11-18当前源码完整后端复跑](asic-main53655b5-signoff-20261118.md)：最新综合/PNR、hold与WB修复、最终Calibre和严格LVS/ERC残项。
 
 - [JTAG-only仿真与Host移除](jtag-only-simulation.md)：CPU运行态SBA竞争、DM错误回传、子字访问和计时口径。
 

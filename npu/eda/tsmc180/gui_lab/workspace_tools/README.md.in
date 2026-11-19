@@ -1,0 +1,31 @@
+# 独立ASIC后端GUI练习工作区
+
+工作区：`/home/s2400012841/chip-fullstack-2026/mynpu-backend-gui-20261119`
+
+分支：`lab/backend-gui-20261119`，基于main53655b5，复制最新未提交的Genus端口兼容修复。原工作区与旧版运行数据库不变。**这里只完成准备与静态预检，没有运行综合、布局布线或签核。**
+
+从[逐步GUI教程](GUI-TUTORIAL.md)开始。核心综合Tcl已生成在`runs/core/`；PNR与ECO的批处理/GUI Tcl模板在`templates/pnr/`；真实新核心综合完成后执行`prepare-chip`，才会在`runs/chip/`生成连接新网表的工程。没有借用旧版综合网表冒充新运行。
+
+```bash
+cd /home/s2400012841/chip-fullstack-2026/mynpu-backend-gui-20261119
+python3.12 backend_lab/lab.py preflight
+backend_lab/bin/open_genus_core.sh
+```
+
+在打开的Genus GUI命令行依次运行教程中的四个`source`。GUI启动脚本只打开工具，不自动执行耗时步骤。
+
+| 入口 | 用途 |
+| --- | --- |
+| `GUI-TUTORIAL.md` | GUI逐阶段命令、观察项、报告及验收条件 |
+| `lab.py` | 准备、预检、批处理备选、签核入口；`--help`查看命令 |
+| `config.json` | 18ns综合/20ns报告、1950µm die、PDK及宏路径 |
+| `source_origin.json` | 原工作区、Git基线、复制文件与RTL哈希 |
+| `bin/` | 打开Genus、Innovus、Virtuoso的GUI，不自动运行流程 |
+| `templates/pnr/` | 待新网表生成后使用的Tcl模板，勿在此目录直接运行 |
+| `runs/core/` | 已冻结的71个综合输入及分阶段GUI Tcl |
+| `runs/signoff/` | 空的签核工程、私有技术库/Seal Ring参考和规则；无本设计结果 |
+| `screenshots/` | 留给你保存实际运行截图，当前无截图 |
+
+`private/`与`runs/`被Git忽略，包含本机工艺参考或生成数据，不推送PDK、OA数据库和运行产物。不要移动工作区后直接运行：冻结的Tcl有绝对路径，需要重新准备。
+
+最近参考结果：综合2.569738mm²；PNR核心2.634323mm²；50MHz setup/hold +0.457/+0.020ns。它们是11月18日参考数据，**不是本练习已获得的结果**。严格LVS IO电阻属性和ERC残项见[参考报告](../npu/docs/asic-main53655b5-signoff-20261118.md)。

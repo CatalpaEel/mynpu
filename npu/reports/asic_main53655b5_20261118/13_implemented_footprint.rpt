@@ -1,0 +1,10 @@
+# Placed bounding-box areas; standard includes clock/tie/tap/antenna support, excludes core fillers.
+# io_other is a sum of rectangles, not a union; IO/bond pads intentionally overlap.
+standard_count 80817
+standard_area_um2 1831435.6032
+sram_count 2
+sram_area_um2 802887.1815
+fillers_count 32956
+fillers_area_um2 207747.1424
+io_other_count 322
+io_other_area_um2 1006515.2

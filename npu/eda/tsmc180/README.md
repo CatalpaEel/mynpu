@@ -1,6 +1,22 @@
 # TSMC180 ASIC 流程
 
-> 当前main不含GPIO；外部Host已删除，当前物理PPA尚未重跑。
+> 当前main不含GPIO、外部Host。2026-11-18已重跑完整后端：综合2.569738mm²、PNR核心2.634323mm²、50MHz +0.457/+0.020ns；详见[本轮报告](../../docs/asic-main53655b5-signoff-20261118.md)。严格LVS/ERC残项保留。下文2026-11-10 r3作为历史基线。
+
+## 文件入口
+
+| 想做什么 | 入口 |
+| --- | --- |
+| 自己从GUI跑一轮 | [完整GUI教程](../../docs/backend-gui-lab.md) |
+| 创建独立工作区 | [gui_lab/](gui_lab/README.md)，不启动EDA计算 |
+| 查看本次ASIC复跑过程 | [2026-11-18执行记录](../../docs/asic-main53655b5-signoff-20261118.md) |
+| 查看最新数字与原始报告 | [报告索引](../../reports/README.md) |
+| 维护主PNR流程 | `fullchip/pnr_*.tcl`及`run_fullchip.py` |
+| 查看本次已验证ECO | [verified_main53655b5_20261118/](verified_main53655b5_20261118/README.md) |
+| 学习旧版每组命令与GUI变化 | [专题教程](../../docs/backend-tcl-gui-tutorial.md)，其数值为旧r3 |
+
+综合、网表、OA/Innovus数据库与PDK都在独立运行目录，不放到脚本目录。`gui_lab/workspace_tools`是工作区模板，实际运行器在生成的`backend_lab/`中使用。
+
+## 历史r3基线
 
 完整物理基线为 **2026-11-10 RF 1R1W、1950µm、最终r3**：
 [最终后端报告](../../docs/rf1r1w-die1950-signoff.md)、[布局布线机器报告](../../reports/rf1r1w_die1950_fullchip_validation.json)、[Lab 5机器报告](../../reports/lab5_rf1r1w_die1950_validation.json)。

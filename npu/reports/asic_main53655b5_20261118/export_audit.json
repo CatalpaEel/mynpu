@@ -1,0 +1,55 @@
+{
+  "export_integrity_passed": true,
+  "scope": "File integrity, structure references and named interfaces; not DRC/LVS or SDF backannotation",
+  "def_units_per_um": 2000,
+  "die_um": [
+    0.0,
+    0.0,
+    1950.0,
+    1950.0
+  ],
+  "def_components": 114097,
+  "top_ports": [
+    "VDD",
+    "VDDPST",
+    "VSS",
+    "VSSPST",
+    "boot_ready_i",
+    "clk_i",
+    "cpu_debug_halted_o",
+    "npu_irq_o",
+    "rst_ni",
+    "tck_i",
+    "td_i",
+    "td_o",
+    "tms_i"
+  ],
+  "gds_structure_count": 697,
+  "gds_undefined_references": [],
+  "gds_dbu_um": 0.0004999999999999999,
+  "gds_instance_counts": {
+    "RA1SHD_2048x32M8": 2,
+    "PDDW0204CDG": 9,
+    "PVDD1CDG": 8,
+    "PVSS1CDG": 8,
+    "PVDD2CDG": 4,
+    "PVSS2CDG": 4,
+    "PVDD2POC": 4,
+    "PCORNER": 4,
+    "PAD60LU_OBV": 37
+  },
+  "spef_net_count": 79615,
+  "spef_end_count": 79615,
+  "sdf_cell_count": 70871,
+  "ordinary_io_supply_term_count": 12,
+  "files": {
+    "mynpu_asic_top.def": 87684624,
+    "mynpu_asic_top.flat_lvs.v": 25215454,
+    "mynpu_asic_top.hier_postpnr.v": 12536120,
+    "mynpu_asic_top.sdc": 2236,
+    "mynpu_asic_top.spef.gz": 33202497,
+    "mynpu_asic_top.sdf.gz": 16109464,
+    "mynpu_asic_top.lef": 5113,
+    "mynpu_asic_top.gds.gz": 14227826
+  }
+}

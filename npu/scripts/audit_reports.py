@@ -10,6 +10,9 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / 'npu/reports'
 CURRENT = {
+    'asic_main53655b5_20261118_validation.json': 'Current ASIC rerun source identity and summary: full PNR and Lab5; strict LVS/ERC limitations retained.',
+    'main53655b5_20261118_r1_fullchip_validation.json': 'Current final 1950um PNR: core 2.634323mm2, 50MHz setup/hold +0.457/+0.020ns.',
+    'lab5_main53655b5_20261118_r1_validation.json': 'Current final Lab5: course-excluded DRC, antenna and WB zero, teaching LVS correct; strict PR/ERC remain.',
     'ego1_merge_validation_20261114.json': 'Current local EGo1/JTAG-only integration: dual-backend functional tests and Vivado 2025.2 RTL elaboration; not full implementation or new board verification.',
     'jtag-only-validation.json': 'Current JTAG-only RTL, running CPU/NPU/SBA concurrency, macro and board-wrapper functional simulation; no new PPA or physical board test.',
     'rf1r1w-validation.json': 'Current RF functionality, MNIST and synthesis; PNR limitations inside are the original pre-PNR snapshot.',
@@ -18,6 +21,7 @@ CURRENT = {
     'ego1_preboard_validation.json': 'Current board functional preparation only; no Vivado implementation or board test.',
     'backend_source_audit.json': 'Source identity audit only; no new PPA measurement.',
 }
+LIVE_ASIC = {'asic_main53655b5_20261118_validation.json', 'main53655b5_20261118_r1_fullchip_validation.json', 'lab5_main53655b5_20261118_r1_validation.json'}
 TODAY = datetime.now(timezone.utc).date().isoformat()
 CACHE = {}
 
@@ -100,12 +104,18 @@ for name in sorted(set(paths)):
     p = ROOT / name
     if p.name in {'README.md', 'report_inventory.json'} or not p.is_file():
         continue
-    entry = {'file': p.name, 'sha256': digest(p), 'classification':
+    entry = {'file': p.relative_to(REPORTS).as_posix(), 'sha256': digest(p), 'classification':
              'current-scoped' if p.name in CURRENT else 'historical-snapshot',
              'note': CURRENT.get(p.name, 'Earlier experiment/baseline; not a current whole-design result.')}
-    if p.name in CURRENT and p.name not in {'jtag-only-validation.json','ego1_merge_validation_20261114.json'}:
+    if p.name in CURRENT and p.name not in LIVE_ASIC | {'jtag-only-validation.json','ego1_merge_validation_20261114.json'}:
         entry['classification'] = 'pre-jtag-only-baseline'
         entry['note'] = 'Frozen evidence before Host removal and SBA changes; not current RTL PPA. ' + entry['note']
+    if p.parent.name == 'asic_main53655b5_20261118':
+        entry['classification'] = 'current-supporting-evidence'
+        entry['note'] = 'Raw report for the 2026-11-18 ASIC run; individual files can show intermediate stages. Use the final JSON index.'
+    if p.name == 'ego1_merge_validation_20261114.json':
+        entry['classification'] = 'historical-snapshot'
+        entry['note'] = 'Frozen EGo1 merge before shared RTL LUT optimization and Genus syntax fix; not latest ASIC PPA.'
     if p.name == 'jtag-only-validation.json':
         entry['classification'] = 'pre-ego1-merge-baseline'
         entry['note'] = 'Frozen main before the configurable EGo1 wrapper merge; shared chip RTL remains unchanged, but this is not the new wrapper validation.'
@@ -120,7 +130,7 @@ for name in sorted(set(paths)):
             checks = source_checks(obj)
             entry['source_hash_observations'] = checks
             entry['source_hash_counts'] = dict(Counter(c['status'] for c in checks))
-            if p.name in {'rf1r1w_die1950_fullchip_validation.json', 'lab5_rf1r1w_die1950_validation.json'}:
+            if p.name in {'rf1r1w_die1950_fullchip_validation.json', 'lab5_rf1r1w_die1950_validation.json', 'main53655b5_20261118_r1_fullchip_validation.json', 'lab5_main53655b5_20261118_r1_validation.json'}:
                 base = Path(obj['run'])
                 entry['frozen_files'] = file_checks(obj.get('report_sha256', {}), base)
                 entry['frozen_files'] += file_checks(obj.get('artifacts_sha256', {}), base)
@@ -136,7 +146,7 @@ for name in sorted(set(paths)):
                     entry['frozen_design_source_checks'] = file_checks(source['source_sha256'], ROOT)
                     entry['frozen_design_source_counts'] = dict(Counter(c['status'] for c in entry['frozen_design_source_checks']))
                     entry['configuration_matches'] = all(source[k] == v for k, v in json.loads((ROOT/'npu/build_config.json').read_text()).items())
-            if p.name in {'jtag-only-validation.json','ego1_merge_validation_20261114.json'}:
+            if p.name in {'jtag-only-validation.json','ego1_merge_validation_20261114.json','asic_main53655b5_20261118_validation.json'}:
                 entry['frozen_files'] = file_checks(obj['evidence_sha256'], ROOT)
                 entry['frozen_file_counts'] = dict(Counter(c['status'] for c in entry['frozen_files']))
             if p.name == 'ego1_preboard_validation.json':
@@ -147,7 +157,7 @@ for name in sorted(set(paths)):
     else:
         text = p.read_text(errors='replace')[:2500]
         entry['report_header'] = text.splitlines()[:12]
-        entry['note'] = 'Legacy Vivado 2025.2 OOC report from 2026-10-04; not current FPGA or ASIC implementation.'
+        entry['note'] = 'Raw report excerpt; use its parent run or summary for version, stage and scope.'
     entries.append(entry)
 
 inventory = {'checked_date': TODAY, 'git_commit': subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
@@ -157,7 +167,10 @@ inventory = {'checked_date': TODAY, 'git_commit': subprocess.check_output(['git'
 lines = ['# 报告索引与版本审计', '', TODAY + '。报告是冻结证据，文件名不带日期也不表示当前版本；不修改原报告里的历史数值或当时结论。', '',
 '## 当前采用的入口', '', '| 报告 | 适用范围 |', '| --- | --- |']
 labels = {
- 'ego1_merge_validation_20261114.json':'当前本地集成：FPGA/ASIC各20帧、CPU RF 40000检查、Vivado 2025.2 RTL展开；未做新PPA/板测。',
+ 'asic_main53655b5_20261118_validation.json':'2026-11-18当前ASIC完整复跑与源码哈希；严格LVS/ERC残项保留。',
+ 'main53655b5_20261118_r1_fullchip_validation.json':'当前最终PNR：核心2.634323mm²、50MHz +0.457/+0.020ns；核心物理检查通过。',
+ 'lab5_main53655b5_20261118_r1_validation.json':'当前最终Lab5：课程排除外DRC/天线/WB为0，教学LVS CORRECT，严格PR/ERC未关闭。',
+ 'ego1_merge_validation_20261114.json':'2026-11-14合并时冻结集成：FPGA/ASIC各20帧、CPU RF 40000检查、Vivado 2025.2 RTL展开；未做新PPA/板测。',
  'jtag-only-validation.json':'合并前JTAG-only冻结功能验证：无GPIO版，含不停机CPU/NPU/SBA竞争、宏模型及EGo1壳层；未重跑PPA/实体板。',
  'rf1r1w-validation.json':'RF功能、21,008周期MNIST及综合2.569286mm²；内部“未跑PNR”是当时快照，后续见r3。',
  'rf1r1w_die1950_fullchip_validation.json':'最终r3布局布线；核心非filler 2.632349mm²、50MHz +0.468/+0.018ns。',
@@ -165,11 +178,11 @@ labels = {
  'ego1_preboard_validation.json':'EGo1功能仿真38项；尚无本版Vivado综合/实现/实体板结果。',
  'backend_source_audit.json':'70个ASIC输入、24个项目RTL与默认配置核对。'}
 for name, label in labels.items():
-    lines.append(f'| [{name}]({name}) | ' + ('JTAG-only改动前冻结证据：' if name not in {'jtag-only-validation.json','ego1_merge_validation_20261114.json'} else '') + label + ' |')
+    lines.append(f'| [{name}]({name}) | ' + ('JTAG-only改动前冻结证据：' if name not in LIVE_ASIC | {'jtag-only-validation.json','ego1_merge_validation_20261114.json'} else '') + label + ' |')
 lines += ['', '## 旧版FPGA归档', '',
 '[2026-11-14旧版实板报告](ego1_board_validation_20261114.json)与[构建试验](ego1_validation_preparation.json)适用于afb74fd/03e2870。归档10MHz镜像在halt/resume流程下通过2021次推理，不代表当前合并后设计通过实体板测；见[固定版本](../fpga/ego1/versions/ego1-10mhz-20261114/README.md)。', '',
 '## 版本判读', '',
-'当前main不含GPIO，Host接口已删除；当前本地集成结果见ego1_merge_validation_20261114；合并前功能结果见jtag-only-validation。旧r3物理检查仅为冻结基线，不代表本次改动后的PPA或签核。',
+'当前不含GPIO、Host；最新ASIC完整复跑见2026-11-18的三个当前报告，含70份源码哈希与最终产物校验。旧r3与EGo1合并验证保留为历史证据。',
 '原始当前报告中的对照字段与阶段追踪作为证据保留；首页指标只使用当前最终结果。',
 '审计详细记录每份JSON的已记录源哈希比对，以及最终PNR/Lab5产物完整性。部分哈希一致不等于整份报告对应当前设计；缺少证据时不推断通过。',
 '输入版本一致也不等于检查全部通过：最终Lab5仍保留ERC及严格PR限制。', '',
@@ -177,7 +190,7 @@ lines += ['', '## 旧版FPGA归档', '',
 '## 全量清单', '', '| 文件 | 定位 | 源哈希观察：一致/不同/缺失 |', '| --- | --- | --- |']
 for e in entries:
     c=e.get('source_hash_counts',{})
-    label='当前范围' if e['classification']=='current-scoped' else '历史快照' if e['classification']=='historical-snapshot' else 'GPIO加入前冻结证据' if e['classification']=='pre-gpio-baseline' else 'JTAG-only改动前冻结证据' if e['classification']=='pre-jtag-only-baseline' else 'EGo1合并前冻结证据' if e['classification']=='pre-ego1-merge-baseline' else '解析失败'
+    label='本轮报告摘录' if e['classification']=='current-supporting-evidence' else '当前范围' if e['classification']=='current-scoped' else '历史快照' if e['classification']=='historical-snapshot' else 'GPIO加入前冻结证据' if e['classification']=='pre-gpio-baseline' else 'JTAG-only改动前冻结证据' if e['classification']=='pre-jtag-only-baseline' else 'EGo1合并前冻结证据' if e['classification']=='pre-ego1-merge-baseline' else '解析失败'
     observation='/'.join(str(c.get(k,0)) for k in ['match','different','missing']) if c else '无可直接比对的源哈希'
     lines.append(f"| [{e['file']}]({e['file']}) | {label} | {observation} |")
 (REPORTS/'README.md').write_text('\n'.join(lines)+'\n')

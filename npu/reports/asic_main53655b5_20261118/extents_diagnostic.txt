@@ -1,0 +1,10 @@
+top=((-15.0 -15.0) (1975.001 1965.0))
+shape type="label" layer="TEXT" purpose="drawing" bbox=((1950.0 458.619) (1970.429 460.0)) text="i_pad_cpu_debug_halted_o"
+shape type="label" layer="TEXT" purpose="drawing" bbox=((1950.0 258.619) (1968.238 260.0)) text="bond_i_pad_right_vdd_1"
+shape type="label" layer="TEXT" purpose="drawing" bbox=((1950.0 358.619) (1968.048 360.0)) text="bond_i_pad_right_vss_1"
+shape type="label" layer="TEXT" purpose="drawing" bbox=((1950.0 648.619) (1968.381 650.0)) text="bond_i_pad_right_vdd_2"
+shape type="label" layer="TEXT" purpose="drawing" bbox=((1950.0 748.619) (1968.191 750.0)) text="bond_i_pad_right_vss_2"
+shape type="label" layer="TEXT" purpose="drawing" bbox=((1950.0 1248.619) (1967.763 1250.0)) text="bond_i_pad_right_vddio"
+shape type="label" layer="TEXT" purpose="drawing" bbox=((1950.0 1348.619) (1967.572 1350.0)) text="bond_i_pad_right_vssio"
+shape type="label" layer="TEXT" purpose="drawing" bbox=((1950.0 1448.619) (1966.572 1450.0)) text="bond_i_pad_right_poc"
+shape type="label" layer="TEXT" purpose="drawing" bbox=((1950.0 458.619) (1975.001 460.0)) text="bond_i_pad_cpu_debug_halted_o"

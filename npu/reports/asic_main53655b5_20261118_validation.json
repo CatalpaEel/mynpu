@@ -1,0 +1,203 @@
+{
+  "date": "2026-11-18",
+  "git_base": "53655b5aff75b21021c3aadcd66d0d57b9c2e52e",
+  "local_rtl_change": "Remove unsupported input-port defaults in dm_top/dm_sba; all used instances explicitly wire error input",
+  "source_sha256": {
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_pkg.sv": "3fee39d262ef44bff6ee00b591fe08830e5e35cdd1b9e5eb9eb06da6f6525805",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_apu_core_pkg.sv": "33d7c06b0fef3ae2c8814b040abe3cdaa23065cf12643de20e8275f44f97abe1",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include/cv32e40p_fpu_pkg.sv": "ae738f408ba2ade41bfcf0488c8f611a2c39b26915191890dac907b8a7a518e5",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cf_math_pkg.sv": "afc32fcae21f6cbb834c5ee602a1aaee1b518fc436a86d4fe1b97942473d35c8",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_pkg.sv": "c46075cb09de0e773c91da62d02497673945b7a3e5de176363e5b5e118f82eea",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/tc_clk.sv": "7eb340f76c76d18f4ac3b6d1d61433c7372118d24f57f83a6ceae82cdbf51c2d",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/pulp_clk_cells.sv": "717fc6e7ec754807440f346d9b8bb930da302fffd294550e30ceae78009f4e87",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/cluster_clk_cells.sv": "0bf54e372850c1af22264711d311d943718dc4c8d918e47cc98e9a8d07461d44",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v3.sv": "08cc968a5b26b5a68ad2c548755e6b3b0d07a7ad75a3f11e92bc1bab71eeb7c6",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/fifo_v2.sv": "cff163332b28e84904955e88691f973a47f90a4209b3f0ae0d2afe94f6a49921",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/common_cells/cdc_2phase.sv": "3720278ce00b5591a1a63fe5515528dd4223a35070303e58cf2e48bd0b56c8c1",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen_bypass.sv": "51322d03a0479f16a4acb66cccee48003e2e224c02a7d3188cbaea9b2f8b2756",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/clk_rst/rstgen.sv": "83d9f70bab3b514062a7a79a581919afd5de466167dfcd08733c773f36ba094a",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/debug_rom.sv": "fa60eaab03518e8e145a3f0a626bc7945e79265e8322ce874a6c8f6996f0e10b",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_csrs.sv": "f9a9e098336d85bf662a88337f88195fec531951596cc2492c80bbeb4ea82898",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_mem.sv": "cf047a8b7654f2cb0d36050c41b57cf95bf0a0a21f5dea346d38aa0da57c24fe",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_sba.sv": "4ed3f367d8469c1e70a9735fd20e81c36ce10c9d70fb5dfaad2a12c6978ad683",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dm_top.sv": "8cd0f6cf01479bf255385047b22254367b138a294f5e5ab0913505c8df83a918",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_cdc.sv": "ad8a13c8314b9a3c28228db2844466c9d750460d6afa8f6299a7229d80f8dd47",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag_tap.sv": "50d1b4d325694f4e898d5b2f2e7b26a7e631a5abdd1cd283500c900b079275ab",
+    "external/lab3-ST/SoC_cv32e40p/soc/rtl/debug/dmi_jtag.sv": "807cf3fb86fe7060cdb1fa21dfbc843220b09a4d694d23ad4bc1cdd3e7118264",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_aligner.sv": "c78cd8c09fee10e45536dc5b8d1fb17c3a130e2270168279fcaa43a19580e4f3",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu.sv": "6eca8d4c2e299adcc498417220478360cc22898ba9037cdad6a1b81e80373c7b",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_alu_div.sv": "11035bcbb28447fa5a3e40d5cad4f257e763f75e49664ce8098ab6247a9a57cb",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_apu_disp.sv": "27931c8004e4d266c6ea02c9d5c19968c67d7e6ab86e57da4088531b13c8c48f",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_compressed_decoder.sv": "db90df2f8737aff29d73b3d242dd33aeb6750ae69ae7eb8e118b531180945d7f",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_controller.sv": "858b172963e17529de0b40a5be6ddfdadfc60bdca967819e4fc558b0ed6d7b87",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_core.sv": "6a78a0d77d32e6795f63e5149f77b98320ce504c67c44a2e359c9aea70989224",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_cs_registers.sv": "e2cec8f3d273748783275c60b1ec89101336608638d7e7783b03dd6b9dbb0345",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_decoder.sv": "6e12f673e05380e34a35c38d8ee8b6878935d96b6f2dfda72c67f8a6e92a6e4e",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ex_stage.sv": "1510df315721b370c2d86b1c1d134a3ff6beefba2d072de7a4a611e3ecffb753",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_ff_one.sv": "6b646e6aa931f8ab56b85ee27549a422450b456270a54d68a4130329823226b6",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_fifo.sv": "d910cbd0751f38d349e8975de22b43d0a2937f9e905b0d9b82894fd83c53fe8a",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_hwloop_regs.sv": "c2a0787c07bcd6c198b6338c4c6ee372b4bce96ec4a4def467ff0ae03da4e43a",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_id_stage.sv": "98b246d9ada45a7073d217d5c3bbc86941ee76bb00e7e0edda61d3bbec83728e",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_if_stage.sv": "e2d1cc9bc433a093938f2d4e4268c611f9a9bf199101e85114d417ff04597626",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_int_controller.sv": "24df51d9cb33f5c8760a8cfbc7931aafc94c2ab0523c7df55b2635e7778af16f",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_load_store_unit.sv": "857962513fc5bd3eb3d6b28c55fdfb15ef53f8ce8a59173a7d583efb8caee66f",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_mult.sv": "6a0cf2f15c69886ad5497222aa203f6f5b1fdd004b32a4ab87b36a0960ba2254",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_obi_interface.sv": "2b0a58e5c2f758dbe5f6e8f786c547da5508ce466007517434e2f7d817b758ed",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_popcnt.sv": "7a2dbeded21929832b40fc8d068b35b7281c75a63c426feed207127d4da08e4e",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_buffer.sv": "a2fcbe6b783659ebecaf25d105f30c68af9b68c2850b833af64a2cec3ec29262",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_prefetch_controller.sv": "66e6078ea3b3acd3ceea4b974c0488d25e02324935532de1f2d39cdc34c875a0",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_register_file_ff.sv": "cd04d46afbf778ff3f1573bdd390784e5461a09b33fd670fa126ae7d3c433e89",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_sleep_unit.sv": "1cf012a83b54472931ad9944e7774e311222641a0aa026229c19467f90bf5448",
+    "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/rtl/cv32e40p_top.sv": "2467f6b3c2745e687edad1a0c88ab5267b4ba8642c91e1fc0f282cf4223e5dc3",
+    "npu/rtl/common/npu_addr_pkg.sv": "612a7a63431b4427a48e023b92089361b87ee0364aa5613b28aeb8278ea4a0dd",
+    "npu/rtl/cnn/npu_stream_pkg.sv": "d4c1b89c87098ac9adce72ab60ea9a1d4401d074ffe835fc109ab0f82d8e8d72",
+    "npu/rtl/common/npu_rr_select.sv": "9c3c27855ad22072d056e8e0368d15131163b7f556727a072ff8163f5e53e81e",
+    "npu/rtl/common/npu_clock_gate.sv": "339f0672d15904ac6a598f823ba7abd9cecab5a674379ae67616e3a9811e4f96",
+    "npu/rtl/cnn/npu_cnn.sv": "3825139df57f451aca88a268df912e5962f05ee8412793915a0c17d75fad1ebf",
+    "npu/rtl/cnn/npu_cnn_mac.sv": "1ef28af26c02d4c97a79e1ba54d0c8433519366f96f919c10ca9745cc31c0f1c",
+    "npu/rtl/top/npu_core.sv": "b0e5fd6949aa58f15299185e7f40f09e46d2920781c4ba6c77c2c1b50b35f7e0",
+    "npu/rtl/interconnect/npu_data_regfile.sv": "6432b4ae7a05f664e95dfdf83cfdecd61e4e4e560de18b44077d63dbebac7b2c",
+    "npu/rtl/debug/npu_debug_boot.sv": "9f9072acde86cce141a0b71c1eea8d5b4f6d8e03c3fe71eddf4b9cebb1077dc5",
+    "npu/rtl/debug/npu_jtag_debug.sv": "1bbcb4cd30213a282c53b812fd969cdb1c4b89d703b9799ac58df73296469464",
+    "npu/rtl/matrix/npu_matmul.sv": "51e84506f721817e8dc781fdf323d36e46ca9a4c826591d6f9f521e74ad60a64",
+    "npu/rtl/matrix/npu_matrix_stream.sv": "d5e328936d5dab28172e028bf1f044a89647486c9df1e527ab097878a8564608",
+    "npu/rtl/control/npu_mmio.sv": "b1970acc8aba56993a696fdf5297b2f322ee19883ecfe71c85f3f77f1b3f7d5c",
+    "npu/rtl/cnn/npu_stream.sv": "292658bd3818c0af4ab0f48bd7168032bd39c7b03d9870a73917713228b4d787",
+    "npu/rtl/cnn/npu_stream_control.sv": "a124b6b5462f42af03f92b9eacad62a155f8876103fa27f98a0fbdc948dec8e5",
+    "npu/rtl/cnn/npu_stream_engine.sv": "989a85339b07415b5023467f693d00d321f21b393cc592d0b60a237dd8018905",
+    "npu/rtl/vector/npu_vector.sv": "90c087bbf895e1997a5d1932e13099f25c0ae2469ea56d75a7ea18805c67590a",
+    "npu/rtl/vector/npu_vector_stream.sv": "808debe76f7d6ca9373867aa61f1ca94357bac3adeee2ba75d6cf66d5435b77a",
+    "npu/rtl/interconnect/xbar.sv": "56ddd8c8e5dc450c0376c2bf5eb239416b4c3f8e9cbcfd87d65f73ca3fae5067",
+    "npu/rtl/interconnect/xbar_stream.sv": "7130b04866115782928cd4d5ba94d91e5aa990394e2a559e2513735fe4ee4b34",
+    "npu/rtl/interconnect/npu_multi_read.sv": "f99b25b6f2004093ea6c681548f2afcf3f7edee8116bd3c53637f4508f9b1342",
+    "npu/rtl/quant/npu_shared_quant.sv": "63635e71dff972e2d23b04a248d064071b1d6dfe4e2002a2b44f333bd19aafc2",
+    "npu/rtl/common/npu_store_pack.sv": "6bbb4f606c0796b379f934c052189cb2f8e1177a6b14316e73824f992fe72bce",
+    "npu/rtl/top/npu_soc.sv": "07c69dfc0e5306a38268c247dff927735eca9381b250a88ec581c5963508a5c0"
+  },
+  "source_manifest_sha256": "f881ccad489a10397b2667b8b9a2cec26669aa96a833cb5d99f5f773ddbfeec9",
+  "runs": {
+    "synthesis": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261118-main53655b5-core-r1",
+    "pnr": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261118-main53655b5-fullchip-r1",
+    "lab5": "/home/s2400012841/chip-fullstack-2026/eda-runs/20261118-main53655b5-lab5-r1"
+  },
+  "configuration": {
+    "synth_period_ns": 18,
+    "report_period_ns": 20,
+    "effort": "high",
+    "clock_gating": true,
+    "die_um": [
+      1950,
+      1950
+    ],
+    "sealring_outer_um": [
+      1980,
+      1980
+    ],
+    "rf_bytes": 256,
+    "queues": [
+      4,
+      4,
+      4
+    ],
+    "stream_fifo_channels": 4,
+    "stream_fifo_words": 8,
+    "signal_pads": 9,
+    "gpio": false,
+    "host": false
+  },
+  "results": {
+    "synth_cell_area_mm2": 2.569737805,
+    "pnr_core_nonfiller_area_mm2": 2.6343227846999997,
+    "setup_wns_ns": 0.457,
+    "hold_wns_ns": 0.02,
+    "native_drc": 0,
+    "core_pg_issues": 0,
+    "native_io_rail_notices": 2,
+    "calibre_drc_after_course_exclusions": 0,
+    "antenna_expanded": 0,
+    "wb_expanded": 0,
+    "lvs_teaching_correct": true,
+    "lvs_strict_correct": false,
+    "erc": [
+      {
+        "rule": "mnpg",
+        "hierarchical": 4,
+        "expanded": 832
+      },
+      {
+        "rule": "floating.nxwell_float",
+        "hierarchical": 1,
+        "expanded": 72
+      },
+      {
+        "rule": "floating.psub_float",
+        "hierarchical": 1,
+        "expanded": 1
+      },
+      {
+        "rule": "npvss49",
+        "hierarchical": 1,
+        "expanded": 72
+      }
+    ],
+    "core_physical_closure": true,
+    "course_checks_except_erc_review_passed": true,
+    "course_acceptance_passed": false,
+    "foundry_signoff_passed": false
+  },
+  "regressions": {
+    "rtl_jtagrunning": {
+      "result": "npu/build/vcs-asic-signoff-20261118-jtagrunning/result.json",
+      "sha256": "aaabfd94525d04a99a1b33ce5fb4f07dbc90568cf533b3e59a473f2f4ba9fc56",
+      "passed": true
+    },
+    "core_jtag": {
+      "result": "npu/build/gate-signoff20261118-jtag/result.json",
+      "sha256": "0bf3bfc8397993947ac6a12d4193a0b5d81e57bfbb885eeb3f461443ed81c5be",
+      "passed": true
+    },
+    "core_latency": {
+      "result": "npu/build/gate-signoff20261118-latency/result.json",
+      "sha256": "f93ebe315f6ff63360836716d5a061f9b032ff939403b4cd494ed9bb88985c34",
+      "passed": true
+    },
+    "chip_final": {
+      "result": "npu/build/chip-signoff20261118-r1-final/result.json",
+      "sha256": "02102f32108bcf51df9f6fb4a0dbd6eda47a2b1f11298c5db68ffb8272dff6fa",
+      "passed": true
+    }
+  },
+  "evidence_sha256": {
+    "npu/reports/asic_main53655b5_20261118/synth_area.rpt": "713dd8e59d19fb6d95a528e168fda976319a70d99a45add5c465d912c64f11be",
+    "npu/reports/asic_main53655b5_20261118/13_final_signal.rpt": "ca01b562cbedbe80d5a856ddbbf93ad9d22aa85b32bf6f6617d82ed50edcf5c4",
+    "npu/reports/asic_main53655b5_20261118/postCTS_holdFix_hold_check.rpt": "920982710b9774b97da8292c99ad3d2046181bb413a37e8774f9ed0e4e0c72f6",
+    "npu/reports/asic_main53655b5_20261118/postCTS_hold.rpt": "0e4860bc0ccd1e174b6411631c45c3a12c86c98646977059b32849ef95fbb264",
+    "npu/reports/asic_main53655b5_20261118/postRoute_hold.rpt": "cebe4ab215a476324fc42655bfea43ae3ced17f0960f1a4c4c5a7debaa549a4a",
+    "npu/reports/asic_main53655b5_20261118/synth_unresolved.rpt": "a8a87babbdb01d17a151725b930736ba1ec926d9d33075f8604383bf57a035b1",
+    "npu/reports/asic_main53655b5_20261118/lvs_strict_report.rpt": "9935ca708b88ceee969280bc5bbb0ae109ff9eadd55c06d57dec71eccbbe8959",
+    "npu/reports/asic_main53655b5_20261118/drc_post_summary.rpt": "fa2eab666bdb9f6aa1706090821b48f596c45ae8968801ea7cd50eca2233ecf8",
+    "npu/reports/asic_main53655b5_20261118/antenna_summary.rpt": "6df0cff39d832d2b2c283e3ed6cf2a83c92c73d884a5d2dcfbaa215fab16a718",
+    "npu/reports/asic_main53655b5_20261118/lvs_erc.summary": "3921e3bae40ce4dcf46b307fc78c5f4d8da844680f2c9d482c39a29d272cd24c",
+    "npu/reports/asic_main53655b5_20261118/sealring_poc.txt": "90c8e01c1cbd1e17d4e8dd5e51a5333be49931622e558c1e2d5913d373c1dd73",
+    "npu/reports/asic_main53655b5_20261118/13_final_place.rpt": "6289de5dc3be092191cd8fe3c75d1cbf4ad4424fb694e8e1587d59b573b85337",
+    "npu/reports/asic_main53655b5_20261118/extents_diagnostic.txt": "e89f6c19b1133c18183f43cb0f358ee2523e740b4ccbca56a63bbb332c7777db",
+    "npu/reports/asic_main53655b5_20261118/lvs_report.rpt": "23dcef3dd1d849f66a6ab1a3dbe9f3b459d7a019bda3f7291df38878cc8f0659",
+    "npu/reports/asic_main53655b5_20261118/final_hold.rpt": "89d8afe422a54cb84ee66fe4ed89b0e5e40af54cf2a4ccda2e8ee1f9170cdb5c",
+    "npu/reports/asic_main53655b5_20261118/wb_summary.rpt": "4ace3b4efb989cc39f24535fc5001f521ea99cd7f029b47733584175988af70b",
+    "npu/reports/asic_main53655b5_20261118/export_audit.json": "da9c44651d36e73d1346a892e6fec34c2d77a51d5d337646a7cd7d1af4ee6f94",
+    "npu/reports/asic_main53655b5_20261118/synth_timing.rpt": "cd32e0f55a5cacb28b0ecb77d4ee2c7ca8acedb40446a45a6694f03014b438db",
+    "npu/reports/asic_main53655b5_20261118/final_setup.rpt": "5357793a08cc6439cb5604389e88c1d3cb94b946878c090480d9c87a9b0a2731",
+    "npu/reports/asic_main53655b5_20261118/13_implemented_footprint.rpt": "d38d3322102c83551a3b1d2ed780c23664812ed7c884a8405d38f159484e8697",
+    "npu/reports/asic_main53655b5_20261118/13_final_drc.rpt": "c5b71fa400acadc109a156c94f4e6f12758fea89dc9b351c33f015910845db04",
+    "npu/reports/asic_main53655b5_20261118/13_final_pg.rpt": "f4752abf55646ce642f8a402c3a6a0e72a48a5210fdb2475010201ce4ae443f3",
+    "npu/reports/asic_main53655b5_20261118/13_final_antenna.rpt": "a5fe24290f614bfa4e8d341316dbbe1ad691c0ea2488a52822af09d69ee1502b",
+    "npu/reports/asic_main53655b5_20261118/synth_qor.rpt": "6f09b0cd3ed328abb2b211af7c2827ab2ece7751b31856b9b3b865880a200d26"
+  },
+  "limitations": [
+    "Strict IO PR resistor mismatch retained; teaching tolerance 3.48 percent",
+    "ERC IO/substrate findings require review",
+    "TT single corner; no postDummy PEX/STA, multi-corner or IR/EM",
+    "Gate simulation without SDF; no new board testing",
+    "Scan-chain diagnostic IMPSP-9099 retained during placement; scan test not implemented"
+  ]
+}
