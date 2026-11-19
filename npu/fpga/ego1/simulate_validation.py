@@ -26,6 +26,8 @@ def main():
     p.add_argument("--seed", type=int, default=20261113)
     p.add_argument("--clock-mhz", type=int, choices=(10,25,50), default=50)
     p.add_argument("--cpu-rf-lutram", action="store_true")
+    p.add_argument("--running-access", action="store_true",
+                   help="Assert no CPU halt during all inference and SBA input/output traffic")
     p.add_argument("--out", type=Path, required=True)
     a = p.parse_args()
     if a.frames<2 or a.boots<1:
@@ -64,13 +66,14 @@ def main():
     cmd=["vcs","-full64","-sverilog","-timescale=1ns/1ps","-top","tb_validation",
          f"-pvalue+tb_validation.FRAMES={a.frames}",f"-pvalue+tb_validation.BOOTS={a.boots}",
          f"-pvalue+tb_validation.BOARD_MHZ={a.clock_mhz}",
+         f"-pvalue+tb_validation.RUNNING_ACCESS={int(a.running_access)}",
          "+incdir+"+str(NPU / "tb"),"+incdir+"+str(out),
          "+incdir+"+str(NPU.parent / "external/lab3-ST/SoC_cv32e40p/cpu_cv32e40p/include"),
          *defines,*map(str,files),"-o",str(out / "simv")]
     result={"passed":False,"memory":a.memory,"frames_per_boot":a.frames,"boots":a.boots,
             "cpu_rf_implementation":"lutram_lvt" if a.cpu_rf_lutram else "flipflop",
             "clock_hz":a.clock_mhz*1000000,
-            "seed":a.seed,"source_sha256":before,
+            "seed":a.seed,"running_access":a.running_access,"source_sha256":before,
             "scope":"JTAG-only CPU-in-loop functional simulation; not physical board or timing signoff",
             "macro_timing_checks_disabled":a.memory=="asic"}
     try:
@@ -85,6 +88,11 @@ def main():
         if not match or "Fatal:" in text or int(match[1])!=a.frames*a.boots:
             raise RuntimeError("Missing/invalid success marker")
         result.update(frames_checked=int(match[1]),checks=int(match[3]))
+        if a.running_access:
+            traffic=re.search(r"RUNNING ACCESS PASS sba=(\d+) overlap=(\d+) fetch=(\d+) npu=(\d+)",text)
+            if not traffic or not all(int(n)>0 for n in traffic.groups()):
+                raise RuntimeError("Missing running CPU/SBA/NPU overlap evidence")
+            result["running_traffic"]=dict(zip(("sba_grants","overlap_grants","cpu_fetch_grants","npu_grants"),map(int,traffic.groups())))
         result["changed_during_run"]=[str(f) for f in inputs if hashlib.sha256(f.read_bytes()).hexdigest()!=before[str(f)]]
         if result["changed_during_run"]:raise RuntimeError("Inputs changed during simulation")
         result["passed"]=True

@@ -1,0 +1,131 @@
+{
+  "client_date": "2026-11-15",
+  "base_commit": "53655b5aff75b21021c3aadcd66d0d57b9c2e52e",
+  "branch": "fpga/ego1-sba-validation-20261115",
+  "status": "ready_for_physical_running_sba_validation",
+  "physical_board_tested": false,
+  "shared_chip_rtl_changed_locally": false,
+  "old_physical_board_result_does_not_apply": true,
+  "upstream_changes": [
+    "Host removed; SBA master remains independent",
+    "DM error and 8/16/32-bit access handling",
+    "FPGA one-hot interconnect and FIFO mapping"
+  ],
+  "root_cause_of_previous_board_failure_confirmed": false,
+  "host_checks": {
+    "passed": true,
+    "tests": 16,
+    "running_mode_forbids_explicit_halt": true,
+    "runtime_dmstatus_checks": true,
+    "auto_fallback_to_halt": false,
+    "memory_access": "OpenOCD sysbus only"
+  },
+  "fpga_build": {
+    "path": "npu/build/ego1-sba-53655b5-10m-20261115",
+    "source_origin": "npu/build/ego1-sba-53655b5-10m-20261115/source_origin.json",
+    "source_manifest_sha256": "e488b7e873ee550e6c556baa7a90f7101807f3d2b049a1ed817e73596ba4b0d2",
+    "tool": "Vivado 2023.2",
+    "part": "xc7a35tcsg324-1",
+    "clock_hz": 10000000,
+    "compiled_sources_match_base_commit": true,
+    "compiled_source_count": 72,
+    "final_default_drc_required": true,
+    "implementation_passed": true,
+    "bitstream_generated": true,
+    "setup_slack_ns": 45.764,
+    "hold_slack_ns": 0.03,
+    "resources": {
+      "luts": 20048,
+      "ffs": 13167,
+      "ramb36": 4,
+      "dsps": 56
+    },
+    "routing_errors": 0,
+    "fully_routed_nets": 34024,
+    "default_drc_errors": 0,
+    "default_drc_warnings": 283,
+    "default_resource_check_restored": true,
+    "artifacts": {
+      "ego1_mynpu.bit": {
+        "sha256": "da0d5d534a868326fdc14be013a6d52419a6a17a0295f0c044edd7e266ad9188",
+        "size_bytes": 2192120
+      },
+      "ego1_mynpu.mcs": {
+        "sha256": "3e5cc76e561c0ff8c4103da508804efec9fa43ae49397cae4a594b05c1c04dc8",
+        "size_bytes": 6165628
+      },
+      "implementation_pass.txt": {
+        "sha256": "abd6377251eb373459f645b9dffdf1ed49b3b753028a26fd7f4edda45225a1c0",
+        "size_bytes": 117
+      }
+    },
+    "cdc_report": {
+      "CDC-2_warning": 2,
+      "CDC-7_critical_async_reset": 19,
+      "CDC-15_warning": 263,
+      "signoff_claimed": false
+    }
+  },
+  "simulations": [
+    {
+      "memory": "asic",
+      "frames_checked": 200,
+      "boots": 2,
+      "checks": 11006,
+      "clock_hz": 50000000,
+      "running_access": true,
+      "running_traffic": {
+        "sba_grants": 44206,
+        "overlap_grants": 43573,
+        "cpu_fetch_grants": 13234274,
+        "npu_grants": 1766400
+      },
+      "evidence": "npu/reports/ego1_sba_20261115/asic-running-200.json",
+      "sha256": "7913a6c6db2766a972357efcc6bc614a3ad23009f16e4da30dafc21105d469b9",
+      "macro_timing_checks_disabled": true
+    },
+    {
+      "memory": "fpga",
+      "frames_checked": 200,
+      "boots": 2,
+      "checks": 11006,
+      "clock_hz": 10000000,
+      "running_access": true,
+      "running_traffic": {
+        "sba_grants": 57806,
+        "overlap_grants": 53934,
+        "cpu_fetch_grants": 3985536,
+        "npu_grants": 1766400
+      },
+      "evidence": "npu/reports/ego1_sba_20261115/fpga-running-200.json",
+      "sha256": "dc40be8f2a780874200e0de32dce7bd138eed8908c68be87d7b459ad849c8983",
+      "macro_timing_checks_disabled": false
+    }
+  ],
+  "board_plan": {
+    "cpu_access": "running",
+    "initial_reset_load_halt_allowed": true,
+    "runtime_explicit_debug_control_allowed": false,
+    "planned_smoke_frames": 1,
+    "planned_reload_boots": 20,
+    "planned_continuous_frames": 2000,
+    "inputs": "ten known golden inputs in seeded random order; not full MNIST"
+  },
+  "hardware_usb_observed": "No board or FT232H enumerated during preparation",
+  "limitations": [
+    "No new physical board result yet",
+    "Simulation does not prove old OpenOCD/board failure root cause",
+    "ASIC functional macro model only; timing checks disabled as requested",
+    "CDC structural report has remaining reset/handshake items; not CDC signoff"
+  ],
+  "board_kit": "npu/build/ego1-sba-board-kit-53655b5-20261115",
+  "host_source_sha256": {
+    "npu/fpga/ego1/jtag_validation.py": "18cd2672fce8aab1825666c9a425cef1b490340a1bdbbbadf26ae13146691ec3",
+    "npu/fpga/ego1/package_validation.py": "d20e83994e84662e3ddf72026c6fac5557bf2862a5fb5e87717beb6c4fd87b4a",
+    "npu/fpga/ego1/simulate_validation.py": "8064151392503c8613c338841b64d2c0e4e8b234b8d2e5d9c1e97075297100de",
+    "npu/fpga/ego1/tb_validation.sv": "a73b35918689e71701574595a30f191ba68d979ba29378317a126cf79c9b82c8"
+  },
+  "upstream_main_rechecked": "53655b5aff75b21021c3aadcd66d0d57b9c2e52e",
+  "followup_board_validation": "npu/reports/ego1_board_20261116/validation.json",
+  "followup_status": "2026-11-16: 2021 physical-board inferences passed with CPU running and OpenOCD physical addressing"
+}

@@ -1,14 +1,21 @@
 # mynpu
 
-> 外部Host接口已删除，SoC仿真与板级访问统一走[JTAG Debug Module SBA](npu/docs/jtag.md)。当前main不包含GPIO；2026-11-18已重跑ASIC完整后端，严格LVS/ERC仍有残项，见[本轮报告](npu/docs/asic-main53655b5-signoff-20261118.md)；实体板未重验；当前FPGA已完成布局布线并生成bitstream：10MHz、19,925 LUT（95.79%），时序通过，尚未实板验证，见[EGo1实现结果](npu/fpga/ego1/BITSTREAM-20261115.md)。
+当前固定实板版本：[ego1-10mhz-20261116](npu/fpga/ego1/versions/ego1-10mhz-20261116/README.md)，
+硬件源码为 `53655b5`，PC物理地址访问修正为 `824c109`。
+Vivado 2023.2 的10MHz镜像已在EGo1实板通过2021次推理，JTAG 100kHz，运行阶段不暂停CPU。
+bit/MCS、源码、程序/模型及原始记录均已归档；固定标签为 `ego1-board-running-10mhz-20261116`。
+实板priv错误的定位与PC配置修正见[运行态板测记录](npu/fpga/ego1/SBA-RUNNING-20261116.md)。
+后续main源码变更需要另行验证，不能自动沿用该固定版本的结论。
+
+> 外部Host接口已删除，SoC仿真与板级访问统一走[JTAG Debug Module SBA](npu/docs/jtag.md)，主线不包含GPIO。2026-11-18已用53655b5加Genus端口兼容修复重跑ASIC后端，严格LVS/ERC残项见[本轮报告](npu/docs/asic-main53655b5-signoff-20261118.md)。另一次Vivado 2025.2的19,925 LUT实现属于独立历史运行，见[该次实现结果](npu/fpga/ego1/BITSTREAM-20261115.md)；本次实测镜像使用Vivado 2023.2，为20,048 LUT。
 
 基于 CV32E40P 的整数 NPU，使用独立 Matrix、CNN、Vector 计算单元和软件任务调度。
 本文描述当前默认设计；配置来源为 [build_config.json](npu/build_config.json)，接口以 RTL 和软件头文件为准。
 
-已本地合入 **`fpga/ego1-board-20261114-afb74fd` 的板级工具与冻结归档**，集成情况见[合并验证](npu/fpga/ego1/MERGE-20261114.md)。
+历史 **`fpga/ego1-board-20261114-afb74fd` 的板级工具与冻结归档**已保留，集成情况见[合并验证](npu/fpga/ego1/MERGE-20261114.md)。
 其中旧板测SoC基线为`afb74fd`、硬件源码对应`03e2870`；当前JTAG-only开发设计与它不同。
-EGo1 / XC7A35T：10MHz系统、100kHz外接JTAG，使用CPU暂停/恢复流程通过2021次推理。
-源码、镜像、PC程序、原始记录及限制见[固定上板版本说明](npu/fpga/ego1/versions/ego1-10mhz-20261114/README.md)。
+旧归档在10MHz系统、100kHz外接JTAG下，使用CPU暂停/恢复流程通过2021次推理。
+其源码、镜像、PC程序、原始记录及限制见[旧固定上板版本说明](npu/fpga/ego1/versions/ego1-10mhz-20261114/README.md)。
 
 ## 设计架构
 

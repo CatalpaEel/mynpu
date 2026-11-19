@@ -1,12 +1,14 @@
-> 最新实现：当前本地LUT优化版已完成Vivado 2025.2布局布线并生成bitstream，10MHz下19925 LUT（95.79%），setup +45.659ns、hold +0.018ns；详见[实现结果](BITSTREAM-20261115.md)。尚未实板验证。
+> 当前已验证的固定版本为 [ego1-10mhz-20261116](versions/ego1-10mhz-20261116/README.md)：硬件 `53655b5`，10MHz系统、100kHz JTAG、2021次实板推理全部通过，运行阶段不暂停CPU。源码、bit/MCS及配套程序均在版本目录，标签为 `ego1-board-running-10mhz-20261116`。实板priv错误已修正为OpenOCD物理地址访问，见[SBA-RUNNING-20261116.md](SBA-RUNNING-20261116.md)。本次2023.2镜像为20048 LUT，setup +45.764ns/hold +0.030ns。
+>
+> 上游2025.2实现：19925 LUT，setup +45.659ns、hold +0.018ns；详见[上游实现结果](BITSTREAM-20261115.md)。这是另一份镜像及工具运行记录。
 
 > 本地集成说明（2026-11-14）：开发代码已合入无GPIO、无Host的JTAG-only主线。`versions/ego1-10mhz-20261114`是旧`afb74fd`硬件/板测的冻结归档，其旧Host端口只存在于归档源码，不参与当前编译；不能将归档镜像当成合并后设计的bitstream。
 > 当前服务器已安装Vivado 2025.2，推荐用`~/tools/bin/vivado`兼容启动器；下面历史板测使用Vivado 2023.2。新的合并验证见[集成报告](MERGE-20261114.md)。
 
 # EGo1 板级 Vivado 工程
 
-已发布上板分支：`fpga/ego1-board-20261114-afb74fd`。
-**本次实板验证的固定版本见 [ego1-10mhz-20261114](versions/ego1-10mhz-20261114/README.md)**，
+历史上板分支：`fpga/ego1-board-20261114-afb74fd`。
+**2026-11-14历史实板验证的固定版本见 [ego1-10mhz-20261114](versions/ego1-10mhz-20261114/README.md)**，
 包含实际构建的源码快照、bit/MCS、配套输入/程序和原始测试记录。
 SoC 基线为 `afb74fd`，冻结硬件源码对应 `03e2870`；不代表后续 `main` 已通过本次板测。
 

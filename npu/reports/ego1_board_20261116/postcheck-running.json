@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "no_cpu_halt_or_reset": true,
+  "last_batch_frames": 1000,
+  "dmstatus": "0x30c82",
+  "result": "0x600d0001",
+  "matrix_completed": 13000,
+  "cnn_completed": 212000,
+  "expected_matrix_completed": 13000,
+  "expected_cnn_completed": 212000,
+  "sbcs": "0x20150407"
+}

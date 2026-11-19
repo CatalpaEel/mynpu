@@ -1,0 +1,13 @@
+{
+  "client_date": "2026-11-15",
+  "base_commit": "53655b5aff75b21021c3aadcd66d0d57b9c2e52e",
+  "local_validation_branch": "fpga/ego1-sba-validation-20261115",
+  "hardware_compiled_sources_match_base_commit": true,
+  "compiled_source_count": 72,
+  "source_manifest_sha256": "e488b7e873ee550e6c556baa7a90f7101807f3d2b049a1ed817e73596ba4b0d2",
+  "tool": "Vivado 2023.2",
+  "clock_hz": 10000000,
+  "host_tb_changes_only": true,
+  "physical_board_tested": false,
+  "note": "New build of 53655b5; separate from old 20261114 board kit and colleague Vivado 2025.2 artifacts."
+}

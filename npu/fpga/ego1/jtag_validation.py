@@ -7,6 +7,7 @@ import hashlib
 import json
 from pathlib import Path
 import random
+import re
 import socket
 import struct
 import time
@@ -23,6 +24,9 @@ class OpenOCD:
         self.sock.settimeout(timeout)
 
     def command(self, command):
+        if getattr(self, "running_access_active", False) and re.search(
+                r"(?:^|;)\s*(?:halt|resume|reset)\b|dmi_write\s+0x10\b", command):
+            raise RuntimeError("Debug control is forbidden during running-access validation")
         wrapped = 'if {[catch {' + command + '} __ego1_r]} {format "ERR %s" $__ego1_r} else {format "OK %s" $__ego1_r}'
         self.sock.sendall(wrapped.encode() + b"\x1a")
         data = bytearray()
@@ -57,6 +61,7 @@ class OpenOCD:
         self.command("riscv dmi_write 0x10 3; sleep 10")
         self.command("riscv dmi_write 0x10 0x80000001; sleep 10; halt")
         self.command("riscv set_mem_access sysbus")
+        self.command("riscv virt2phys_mode off")
         # Conservative host delay retained from board bring-up. Its necessity
         # and the cause of running-access failures have not been established.
         time.sleep(0.5)
@@ -80,6 +85,12 @@ class OpenOCD:
         # Use explicit target control throughout this board test. Disabling
         # background polling alone did not resolve running-access failures.
         self.command("resume; poll off")
+
+    def assert_running(self):
+        status = int(self.command("riscv dmi_read 0x11"), 0)
+        # DMSTATUS: any/all halted [9:8], any/all running [11:10].
+        if status & 0x300 or status & 0xC00 != 0xC00:
+            raise RuntimeError(f"Hart is not running: DMSTATUS={status:#x}")
 
     def close(self):
         self.sock.close()
@@ -109,7 +120,7 @@ def upload(io, address, payload, chunk_words=64, verify=True, halt_cpu=False):
             io.command("halt")
             time.sleep(0.005)
         io.write(address + i * 4, block)
-        readback = io.read(address + i * 4, len(block))
+        readback = io.read(address + i * 4, len(block)) if verify else None
         if halt_cpu:
             io.command("resume")
         if verify and readback != block:
@@ -168,19 +179,38 @@ def check_output(folder, sample, words):
     return max(range(10), key=got.__getitem__)
 
 
-def single(io, folder, manifest, sample, timeout):
+def runtime_read(io, address, count=1, cpu_access="halt", resume=True):
+    return (io.read(address, count) if cpu_access == "running" else
+            halted_read(io, address, count, resume=resume))
+
+
+def runtime_write(io, address, words, cpu_access="halt"):
+    if cpu_access == "running":
+        io.write(address, words)
+    else:
+        halted_write(io, address, words)
+
+
+def single(io, folder, manifest, sample, timeout, cpu_access="halt"):
+    io.running_access_active = False
     io.reset()
     upload(io, SRAM, (folder / f"sram{sample}.bin").read_bytes())
     io.start(manifest["entry"])
-    wait_value(io, RESULT, PASS, timeout, halt_cpu=True)
-    words = halted_read(io, manifest["single_output"], 3, resume=False)
+    io.running_access_active = cpu_access == "running"
+    if io.running_access_active:
+        io.assert_running()
+    wait_value(io, RESULT, PASS, timeout, halt_cpu=cpu_access == "halt")
+    words = runtime_read(io, manifest["single_output"], 3, cpu_access, resume=False)
     prediction = check_output(folder, sample, words)
-    if halted_read(io, 0x80001F00, resume=False)[0] != prediction:
+    if runtime_read(io, 0x80001F00, cpu_access=cpu_access, resume=False)[0] != prediction:
         raise RuntimeError("CPU argmax mismatch")
+    if io.running_access_active:
+        io.assert_running()
     return prediction
 
 
-def continuous(io, folder, manifest, runs, timeout, rng, record):
+def continuous(io, folder, manifest, runs, timeout, rng, record, cpu_access="halt"):
+    io.running_access_active = False
     io.reset()
     upload(io, SRAM, (folder / "stream_sram.bin").read_bytes())
     stream = manifest["stream"]
@@ -188,36 +218,46 @@ def continuous(io, folder, manifest, runs, timeout, rng, record):
     io.write(mail, [0] * 16)
     io.write(mail + 24, [runs])
     io.start(manifest["entry"])
+    io.running_access_active = cpu_access == "running"
     for frame in range(runs):
+        if io.running_access_active:
+            io.assert_running()
         sample = rng.randrange(10)
         slot = frame % 2
         seq = frame + 1
         # Only reuse a slot after its previous output was consumed. READY is
         # published last; DONE is the CPU's commit of the complete output packet.
-        halted_write(io, stream["output_packets"] + slot * 16, [0xDEADC0DE] * 4)
+        runtime_write(io, stream["output_packets"] + slot * 16, [0xDEADC0DE] * 4, cpu_access)
         payload = (folder / f"input{sample}.bin").read_bytes()
-        upload(io, stream["input_slots"][slot], payload, halt_cpu=True)
+        upload(io, stream["input_slots"][slot], payload, halt_cpu=cpu_access == "halt")
         time.sleep(rng.uniform(0, 0.01))
         began = time.monotonic()
-        halted_write(io, mail + slot * 4, [seq])
-        wait_value(io, mail + 8 + slot * 4, seq, timeout, halt_cpu=True)
-        words = halted_read(io, stream["output_packets"] + slot * 16, 4, resume=False)
+        runtime_write(io, mail + slot * 4, [seq], cpu_access)
+        wait_value(io, mail + 8 + slot * 4, seq, timeout, halt_cpu=cpu_access == "halt")
+        words = runtime_read(io, stream["output_packets"] + slot * 16, 4, cpu_access, resume=False)
         prediction = check_output(folder, sample, words)
-        argmax = halted_read(io, mail + 16 + slot * 4, resume=False)[0]
+        argmax = runtime_read(io, mail + 16 + slot * 4, cpu_access=cpu_access, resume=False)[0]
         if words[3] != prediction or argmax != prediction:
             raise RuntimeError("CPU packet/mailbox argmax mismatch")
-        if halted_read(io, mail + 8 + slot * 4, resume=False)[0] != seq:
+        if runtime_read(io, mail + 8 + slot * 4, cpu_access=cpu_access, resume=False)[0] != seq:
             raise RuntimeError("DONE sequence changed while reading output")
-        io.command("resume")
+        if cpu_access == "halt":
+            io.command("resume")
+        else:
+            io.assert_running()
         record({"frame": frame, "sample": sample, "slot": slot, "sequence": seq,
                 "prediction": prediction, "host_roundtrip_s": time.monotonic() - began})
-    wait_value(io, RESULT, PASS, timeout, halt_cpu=True)
+    wait_value(io, RESULT, PASS, timeout, halt_cpu=cpu_access == "halt")
+    if io.running_access_active:
+        io.assert_running()
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--assets", type=Path, required=True)
     p.add_argument("--mode", choices=("smoke", "reload", "continuous"), default="smoke")
+    p.add_argument("--cpu-access", choices=("halt", "running"), default="halt",
+                   help="running forbids explicit halt/resume after initial boot; no automatic fallback")
     p.add_argument("--runs", type=int, default=1000)
     p.add_argument("--boots", type=int, default=1)
     p.add_argument("--seed", type=int, default=20261113)
@@ -231,7 +271,9 @@ def main():
     args.out.mkdir(parents=True, exist_ok=False)
     rng = random.Random(args.seed)
     result = {"passed": False, "scope": "physical board via external JTAG/SBA; set only after execution",
-              "mode": args.mode, "seed": args.seed, "boots_requested": args.boots,
+              "mode": args.mode, "cpu_access": args.cpu_access,
+              "memory_access": "OpenOCD sysbus only", "seed": args.seed, "boots_requested": args.boots,
+              "address_translation": "off; physical addresses",
               "frames_checked": 0, "boot_checks": 0,
               "manifest_sha256": hashlib.sha256((args.assets / "manifest.json").read_bytes()).hexdigest()}
     io = None
@@ -248,10 +290,10 @@ def main():
             for boot in range(args.boots):
                 if args.mode == "continuous":
                     continuous(io, args.assets, manifest, args.runs, args.timeout, rng,
-                               lambda item: record(dict(item, boot=boot)))
+                               lambda item: record(dict(item, boot=boot)), args.cpu_access)
                 else:
                     sample = boot % 10
-                    prediction = single(io, args.assets, manifest, sample, args.timeout)
+                    prediction = single(io, args.assets, manifest, sample, args.timeout, args.cpu_access)
                     record(dict(boot=boot, sample=sample, prediction=prediction))
                 result["boot_checks"] += 1
             result["passed"] = True

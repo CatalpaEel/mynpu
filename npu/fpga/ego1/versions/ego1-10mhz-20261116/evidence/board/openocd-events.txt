@@ -1,0 +1,34 @@
+adapter speed: 100 kHz
+Info : JTAG tap: mynpu.cpu tap/device found: 0x00000001 (mfg: 0x000 (<invalid>), part: 0x0000, ver: 0x0)
+Info : [mynpu.cpu] datacount=2 progbufsize=8
+Info : [mynpu.cpu] Examined RISC-V core
+Info : [mynpu.cpu]  XLEN=32, misa=0x40001104
+Info : [mynpu.cpu] Examination succeed
+Info : [mynpu.cpu] starting gdb server on 3333
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Error: [mynpu.cpu] Failed to read priv register.
+Error: [mynpu.cpu] Failed to read priv register.
+Error: [mynpu.cpu] Failed to read priv register.
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!
+Info : [mynpu.cpu] Hart unexpectedly reset!

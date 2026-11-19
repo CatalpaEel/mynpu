@@ -8,7 +8,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 from jtag_validation import (OpenOCD, PASS, FAIL, RESULT, check_output, upload,
-                             validate_assets, wait_value)
+                             validate_assets, wait_value, runtime_read, runtime_write)
 
 
 class Memory:
@@ -25,6 +25,46 @@ class Memory:
 
 
 class ValidationTests(unittest.TestCase):
+    def test_physical_sysbus_configured_before_reset_memory_reads(self):
+        io = object.__new__(OpenOCD)
+        io.command = Mock()
+        capabilities = {0x40000000:0x4E505532,0x40000040:0x00020002,
+                        0x40000050:0x00020020,0x40000058:0x56504733,
+                        0x40000060:0x00040008,0x4000006C:0x00040404,
+                        0x40000070:0x00070000,0x40000654:0x53443935}
+        def read(address):
+            commands = [c.args[0] for c in io.command.call_args_list]
+            self.assertIn('riscv set_mem_access sysbus', commands)
+            self.assertIn('riscv virt2phys_mode off', commands)
+            return [capabilities.get(address,0)]
+        io.read = read
+        with patch('jtag_validation.time.sleep'):
+            io.reset()
+
+    def test_running_memory_access_has_no_cpu_control(self):
+        # Memory intentionally has no command(): a hidden halt/resume fails.
+        io = Memory()
+        runtime_write(io, 0x80001000, [0x11223344], "running")
+        self.assertEqual(runtime_read(io, 0x80001000, cpu_access="running"), [0x11223344])
+        upload(io, 0x80001004, b'\x55\x66\x77\x88', halt_cpu=False)
+        self.assertEqual(io.read(0x80001004), [0x88776655])
+
+    def test_running_phase_rejects_explicit_debug_control(self):
+        io = object.__new__(OpenOCD)
+        io.running_access_active = True
+        for command in ('halt', 'resume; poll off', 'reset halt', 'riscv dmi_write 0x10 3'):
+            with self.assertRaisesRegex(RuntimeError, 'forbidden'):
+                io.command(command)
+
+    def test_running_state_checks_dmstatus(self):
+        io = object.__new__(OpenOCD)
+        io.command = Mock(return_value='0xc82')
+        io.assert_running()
+        for status in ('0x382', '0x3082', '0x82'):
+            io.command.return_value = status
+            with self.assertRaisesRegex(RuntimeError, 'not running'):
+                io.assert_running()
+
     def test_full_upload_and_bank_boundary(self):
         io = Memory()
         payload = bytes(range(256))*64
